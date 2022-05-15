@@ -19,6 +19,7 @@ public class StringP extends Setting implements Check, VariableWork {
         int end = line.indexOf(":");
         String key = line.substring(start, end).strip();
         String value = line.substring(end+1);
+        value = scannerP.start(value);
         SM.put(key, value);
     }
 }

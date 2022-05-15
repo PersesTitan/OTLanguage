@@ -3,6 +3,7 @@ package Variable;
 import item.Check;
 import item.Setting;
 import item.VariableWork;
+import print.ScannerP;
 
 public class CharacterP extends Setting implements Check, VariableWork {
 
@@ -19,6 +20,7 @@ public class CharacterP extends Setting implements Check, VariableWork {
         int end = line.indexOf(":");
         String key = line.substring(start, end).strip();
         String value = line.substring(end+1);
+        value = scannerP.start(value);
         CM.put(key, value.charAt(0));
     }
 }

@@ -1,8 +1,9 @@
 package print;
 
 import item.Check;
+import item.PrintWork;
 
-public class Println implements Check {
+public class Println implements Check, PrintWork {
 
     private static final String SPECIFIED = "ㅆㅁㅆ";
 
@@ -13,5 +14,12 @@ public class Println implements Check {
     @Override
     public boolean check(String line) {
         return line.strip().startsWith(SPECIFIED);
+    }
+
+    @Override
+    public void start(String line) {
+        String value = "";
+
+        System.out.println(value);
     }
 }
