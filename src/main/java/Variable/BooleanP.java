@@ -1,9 +1,10 @@
 package Variable;
 
 import item.Check;
+import item.Setting;
 import item.VariableWork;
 
-public class BooleanP implements Check, VariableWork {
+public class BooleanP extends Setting implements Check, VariableWork {
 
     private static final String SPECIFIED = "ㅇㅂㅇ";
 
@@ -14,6 +15,10 @@ public class BooleanP implements Check, VariableWork {
 
     @Override
     public void start(String line) {
-
+        int start = line.indexOf(SPECIFIED) + SPECIFIED.length();
+        int end = line.indexOf(":");
+        String key = line.substring(start, end).strip();
+        String value = line.substring(end+1);
+        BM.put(key, Boolean.valueOf(value));
     }
 }
