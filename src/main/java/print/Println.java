@@ -4,7 +4,7 @@ import item.Check;
 
 public class Println implements Check {
 
-    private final String SPECIFIED = "ㅆㅁㅆ";
+    private static final String SPECIFIED = "ㅆㅁㅆ";
 
     /**
      * @param line 1줄 받아오기

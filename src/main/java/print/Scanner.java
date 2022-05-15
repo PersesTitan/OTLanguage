@@ -4,7 +4,7 @@ import item.Check;
 
 public class Scanner implements Check {
 
-    private final String SPECIFIED = "ㅅㅇㅅ";
+    private static final String SPECIFIED = "ㅅㅇㅅ";
 
     /**
      * @param line 1줄 받아오기
