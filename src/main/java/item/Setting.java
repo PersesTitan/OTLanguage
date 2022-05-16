@@ -1,6 +1,8 @@
 package item;
 
 import Variable.Variable;
+import print.Print;
+import print.Println;
 import print.ScannerP;
 import Variable.*;
 
@@ -11,26 +13,38 @@ import java.util.Map;
 import java.util.Set;
 
 public class Setting {
-    protected ScannerP scannerP = new ScannerP();
-    protected Variable variable = new Variable();
+    protected final ScannerP scannerP = new ScannerP();
+    protected final Print print = new Print();
+    protected final Println println = new Println();
 
-    protected BooleanP booleanP = new BooleanP();
-    protected CharacterP characterP = new CharacterP();
-    protected DoubleP doubleP = new DoubleP();
-    protected FloatP floatP = new FloatP();
-    protected IntegerP integerP = new IntegerP();
-    protected LongP longP = new LongP();
-    protected StringP stringP = new StringP();
+    protected final Variable variable = new Variable();
+    protected final BooleanP booleanP = new BooleanP();
+    protected final CharacterP characterP = new CharacterP();
+    protected final DoubleP doubleP = new DoubleP();
+    protected final FloatP floatP = new FloatP();
+    protected final IntegerP integerP = new IntegerP();
+    protected final LongP longP = new LongP();
+    protected final StringP stringP = new StringP();
 
-    public Set<String> set = new HashSet<>();
-    public Map<String, Integer> IM = new HashMap<>();
-    public Map<String, Long> LM = new HashMap<>();
-    public Map<String, Boolean> BM = new HashMap<>();
-    public Map<String, String> SM = new HashMap<>();
-    public Map<String, Character> CM = new HashMap<>();
-    public Map<String, Float> FM = new HashMap<>();
-    public Map<String, Double> DM = new HashMap<>();
+    /*===========================================*/
+    //변수 이름 저장하는 장소
+    //n번째 위치와 라인의 값을 저장하는 곳
+    public final Set<String> set = new HashSet<>();
+    public static final Map<Integer, String> idLine = new HashMap<>();
+    public final Map<String, Integer> IM = new HashMap<>();
+    public final Map<String, Long> LM = new HashMap<>();
+    public final Map<String, Boolean> BM = new HashMap<>();
+    public final Map<String, String> SM = new HashMap<>();
+    public final Map<String, Character> CM = new HashMap<>();
+    public final Map<String, Float> FM = new HashMap<>();
+    public final Map<String, Double> DM = new HashMap<>();
 
+    /**
+     * @param SPECIFIED 타입 받아오기
+     * @param line 한 줄값 받아오기
+     * @return key, value 값을 반환함
+     * @throws Exception 변수가 이미 존재하면 에러 반환함
+     */
     public KeyValueItem setKeyValue(String SPECIFIED, String line) throws Exception {
         int start = line.indexOf(SPECIFIED) + SPECIFIED.length();
         int end = line.indexOf(":");
@@ -46,10 +60,8 @@ public class Setting {
      * @return 변수에 저장된 값을 반환함
      */
     protected String checkValue(String word) {
-        if (BM.containsKey(word)) {
-            if (BM.get(word)) return "ㅇㅇ";
-            else return "ㄴㄴ";
-        } else if (CM.containsKey(word)) return CM.get(word).toString();
+        if (BM.containsKey(word)) return BM.get(word) ? "ㅇㅇ" : "ㄴㄴ";
+        else if (CM.containsKey(word)) return CM.get(word).toString();
         else if (DM.containsKey(word)) return DM.get(word).toString();
         else if (FM.containsKey(word)) return FM.get(word).toString();
         else if (IM.containsKey(word)) return IM.get(word).toString();

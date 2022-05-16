@@ -9,41 +9,6 @@ import java.util.List;
 
 public class Account {
     /**
-     * 두 값을 합을 구함
-     * @param a 첫 번째 값
-     * @param b 두 번째 값
-     * @return 더한 값
-     */
-    public double sum(String a, String b) {
-        double a1 = Double.parseDouble(a);
-        double b1 = Double.parseDouble(b);
-        return a1 + b1;
-    }
-
-    public double sum(int a, int b) {
-        return a + b;
-    }
-
-    public double sum(float a, float b) {
-        return a + b;
-    }
-
-    public double sum(double a, double b) {
-        return a + b;
-    }
-
-    /**
-     * @param a 첫 번째 값
-     * @param b 두 번째 값
-     * @return 계산 후 값
-     */
-    public double minus(String a, String b) {
-        double a1 = Double.parseDouble(a);
-        double b1 = Double.parseDouble(b);
-        return a1 + b1;
-    }
-
-    /**
      * @param line 라인 받아오기
      * @return 쪼갠 후 값을 리턴
      * @throws Exception 기호를 읽을 수 없으면 에러 발생

@@ -1,4 +1,5 @@
 import Calculation.Account;
+import item.Setting;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 
-public class Main {
-    static int count = 0;
+public class Main extends Setting {
+
     public static void main(String[] args) throws Exception {
 
 //        args = new String[1];
@@ -19,15 +20,19 @@ public class Main {
 ////        BufferedReader reader = new BufferedReader(new FileReader(args[0], StandardCharsets.UTF_8));
 //        String readerString;
 //
-//        count = 0;
-//        StringBuilder text;
-//        StringBuilder builder = new StringBuilder("");
-//        try (BufferedReader reader = new BufferedReader(new FileReader(args[0], StandardCharsets.UTF_8))){
-//            while ((text = new StringBuilder(reader.readLine())) != null) {
-//                builder.append(text);
-//            }
-//        }
-//        pause();
+        int count = 0; String text;
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(args[0], StandardCharsets.UTF_8))){
+            while ((text = reader.readLine()) != null) {
+                idLine.put(count, text);
+                builder.append(text).append("\n");
+                count++;
+            }
+        }
+
+        String total = builder.toString();
+
+        pause();
     }
 
     private static void pause() throws IOException {
