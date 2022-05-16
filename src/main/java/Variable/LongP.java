@@ -1,6 +1,7 @@
 package Variable;
 
 import item.Check;
+import item.KeyValue;
 import item.Setting;
 import item.VariableWork;
 
@@ -14,12 +15,11 @@ public class LongP extends Setting implements Check, VariableWork {
     }
 
     @Override
-    public void start(String line) {
-        int start = line.indexOf(SPECIFIED) + SPECIFIED.length();
-        int end = line.indexOf(":");
-        String key = line.substring(start, end).strip();
-        String value = line.substring(end+1);
-        value = scannerP.start(value);
+    public void start(String line) throws Exception {
+        KeyValue keyValue = setKeyValue(SPECIFIED, line);
+        String key = keyValue.getKey();
+        String value = keyValue.getValue();
         LM.put(key, Long.valueOf(value));
+        set.add(key);
     }
 }

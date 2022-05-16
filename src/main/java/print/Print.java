@@ -2,8 +2,9 @@ package print;
 
 import item.Check;
 import item.PrintWork;
+import item.Setting;
 
-public class Print implements Check, PrintWork {
+public class Print extends Setting implements Check, PrintWork {
 
     private static final String SPECIFIED = "ㅅㅁㅅ";
 
@@ -18,8 +19,9 @@ public class Print implements Check, PrintWork {
 
     @Override
     public void start(String line) {
-        String value = "";
+        int start = line.indexOf(SPECIFIED) + SPECIFIED.length();
+        line = line.substring(start).strip();
 
-        System.out.print(value);
+        System.out.print(line);
     }
 }

@@ -1,5 +1,5 @@
 package item;
 
 public interface VariableWork {
-    void start(String line);
+    void start(String line) throws Exception;
 }
