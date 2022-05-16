@@ -12,6 +12,7 @@ public class Println extends Setting implements Check, PrintWork {
     private static final String SPECIFIED = "ㅆㅁㅆ";
 
     /**
+     * 시작이 ㅆㅁㅆ일때 true 를 반환함
      * @param line 1줄 받아오기
      * @return 만약 처음이 ㅆㅁㅆ 이면 println
      */

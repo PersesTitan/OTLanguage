@@ -1,7 +1,6 @@
 package print;
 
 import item.Check;
-import item.PrintWork;
 
 import java.util.Scanner;
 

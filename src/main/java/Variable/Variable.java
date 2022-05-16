@@ -24,6 +24,11 @@ public class Variable extends Setting implements Check {
         return list;
     }
 
+    /**
+     * 공백 단위로 쪼갠 뒤
+     * @param line 첫 번째 줄 받아오기
+     * @return 변수가 존재시 값을 받아옴
+     */
     @Override
     public boolean check(String line) {
         String[] keys = line.split(" ");

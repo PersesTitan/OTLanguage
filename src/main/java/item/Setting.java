@@ -1,12 +1,12 @@
 package item;
 
 import Variable.Variable;
+import org.jetbrains.annotations.NotNull;
 import print.Print;
 import print.Println;
 import print.ScannerP;
 import Variable.*;
 
-import javax.swing.text.StyledEditorKit;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -27,17 +27,17 @@ public class Setting {
     protected final StringP stringP = new StringP();
 
     /*===========================================*/
-    //변수 이름 저장하는 장소
     //n번째 위치와 라인의 값을 저장하는 곳
-    public final Set<String> set = new HashSet<>();
+    //변수 이름 저장하는 장소
     public static final Map<Integer, String> idLine = new HashMap<>();
-    public final Map<String, Integer> IM = new HashMap<>();
-    public final Map<String, Long> LM = new HashMap<>();
-    public final Map<String, Boolean> BM = new HashMap<>();
-    public final Map<String, String> SM = new HashMap<>();
-    public final Map<String, Character> CM = new HashMap<>();
-    public final Map<String, Float> FM = new HashMap<>();
-    public final Map<String, Double> DM = new HashMap<>();
+    public static final Set<String> set = new HashSet<>();
+    public static final Map<String, Integer> IM = new HashMap<>();
+    public static final Map<String, Long> LM = new HashMap<>();
+    public static final Map<String, Boolean> BM = new HashMap<>();
+    public static final Map<String, String> SM = new HashMap<>();
+    public static final Map<String, Character> CM = new HashMap<>();
+    public static final Map<String, Float> FM = new HashMap<>();
+    public static final Map<String, Double> DM = new HashMap<>();
 
     /**
      * @param SPECIFIED 타입 받아오기
@@ -59,7 +59,7 @@ public class Setting {
      * @param word key 값을 받아옴
      * @return 변수에 저장된 값을 반환함
      */
-    protected String checkValue(String word) {
+    protected String checkValue(@NotNull String word) {
         if (BM.containsKey(word)) return BM.get(word) ? "ㅇㅇ" : "ㄴㄴ";
         else if (CM.containsKey(word)) return CM.get(word).toString();
         else if (DM.containsKey(word)) return DM.get(word).toString();
