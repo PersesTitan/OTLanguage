@@ -19,6 +19,10 @@ public class ScannerP implements Check {
         return line.contains(SPECIFIED);
     }
 
+    /**
+     * @param line 라인 받아 오기
+     * @return scanner 가 존재하지 않을때까지 받아오기
+     */
     public String start(String line) {
         Scanner scanner = new Scanner(System.in);
         if (check(line)) {

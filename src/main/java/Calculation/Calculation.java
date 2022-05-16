@@ -21,7 +21,6 @@ public class Calculation extends Setting implements Check {
         int end = line.indexOf(")");
         line = line.substring(start, end);
         line = getVar(line);
-
         line = line.replace(" ", "");
         return calculation(line);
     }
@@ -42,7 +41,7 @@ public class Calculation extends Setting implements Check {
      */
     private String getVar(String line) {
         if (line.contains(":")) {
-            String[] words = line.split("[\\-|\\+|\\/|\\*]");
+            String[] words = line.split("[\\-|+|/|*]");
             for (String word : words) {
                 if (!word.isBlank() && word.startsWith(":") && checkVar(word)) {
                     line = line.replace(word, checkValue(word.substring(1)));
@@ -52,6 +51,11 @@ public class Calculation extends Setting implements Check {
         } return line;
     }
 
+    /**
+     * (:ㅇㅁㅁ) -> ㅇㅁㅁ
+     * @param word 글자를 받아옴
+     * @return 변수가 이미존재하는지 확인함.
+     */
     private boolean checkVar(String word) {
         return set.contains(word.substring(1));
     }

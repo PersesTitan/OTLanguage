@@ -1,9 +1,13 @@
 package print;
 
+import Variable.Variable;
 import item.Check;
 import item.PrintWork;
+import item.Setting;
 
-public class Println implements Check, PrintWork {
+import java.util.List;
+
+public class Println extends Setting implements Check, PrintWork {
 
     private static final String SPECIFIED = "ㅆㅁㅆ";
 
@@ -16,10 +20,18 @@ public class Println implements Check, PrintWork {
         return line.strip().startsWith(SPECIFIED);
     }
 
+    /**
+     * @param line 줄을 받아옴
+     */
     @Override
     public void start(String line) {
-        String value = "";
-
-        System.out.println(value);
+        /* -- ㅆㅁㅆ 제거 -- */
+        int start = line.indexOf(SPECIFIED) + SPECIFIED.length();
+        line = line.substring(start);
+        if (variable.check(line)) {
+            List<String> lists = variable.getVar(line);
+            for (String list : lists)
+                line = line.replaceFirst(list, checkValue(list));
+        } System.out.println(line);
     }
 }

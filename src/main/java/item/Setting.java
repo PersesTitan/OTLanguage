@@ -1,7 +1,10 @@
 package item;
 
+import Variable.Variable;
 import print.ScannerP;
+import Variable.*;
 
+import javax.swing.text.StyledEditorKit;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -9,6 +12,15 @@ import java.util.Set;
 
 public class Setting {
     protected ScannerP scannerP = new ScannerP();
+    protected Variable variable = new Variable();
+
+    protected BooleanP booleanP = new BooleanP();
+    protected CharacterP characterP = new CharacterP();
+    protected DoubleP doubleP = new DoubleP();
+    protected FloatP floatP = new FloatP();
+    protected IntegerP integerP = new IntegerP();
+    protected LongP longP = new LongP();
+    protected StringP stringP = new StringP();
 
     public Set<String> set = new HashSet<>();
     public Map<String, Integer> IM = new HashMap<>();
