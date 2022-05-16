@@ -19,14 +19,14 @@ public class Setting {
     public Map<String, Float> FM = new HashMap<>();
     public Map<String, Double> DM = new HashMap<>();
 
-    public KeyValue setKeyValue(String SPECIFIED, String line) throws Exception {
+    public KeyValueItem setKeyValue(String SPECIFIED, String line) throws Exception {
         int start = line.indexOf(SPECIFIED) + SPECIFIED.length();
         int end = line.indexOf(":");
         String key = line.substring(start, end).strip();
         if (set.contains(key)) throw new Exception("이미 존재하는 변수 이름 입니다.");
         String value = line.substring(end+1);
         value = scannerP.start(value);
-        return new KeyValue(key, value);
+        return new KeyValueItem(key, value);
     }
 
     /**

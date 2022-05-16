@@ -1,7 +1,7 @@
 package Variable;
 
 import item.Check;
-import item.KeyValue;
+import item.KeyValueItem;
 import item.Setting;
 import item.VariableWork;
 
@@ -20,7 +20,7 @@ public class StringP extends Setting implements Check, VariableWork {
      */
     @Override
     public void start(String line) throws Exception {
-        KeyValue keyValue = setKeyValue(SPECIFIED, line);
+        KeyValueItem keyValue = setKeyValue(SPECIFIED, line);
         String key = keyValue.getKey();
         String value = keyValue.getValue();
         SM.put(key, value);

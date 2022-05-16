@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class KeyValue {
+public class KeyValueItem {
     String key;
     String value;
 }
