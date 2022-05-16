@@ -3,7 +3,9 @@ package Calculation;
 import item.Check;
 import item.Setting;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Calculation extends Setting implements Check {
 
@@ -17,38 +19,58 @@ public class Calculation extends Setting implements Check {
         long count1 = Arrays.stream(lines).filter(view->view.equals("(")).count();
         long count2 = Arrays.stream(lines).filter(view->view.equals(")")).count();
         if (count1 != count2) throw new Exception("괄호의 짝이 일치 하지 않습니다.");
-        int start = line.lastIndexOf("(");
-        int end = line.indexOf(")");
+        int start = line.indexOf("(");
+        int end = line.lastIndexOf(")") + 1;
         line = line.substring(start, end);
         line = getVar(line);
         line = line.replace(" ", "");
         return calculation(line);
     }
 
-    private String calculation(String line) {
+    /**
+     * @param line 라인 받아오기
+     * @return 계산후에 값을 반환함 괄호가 존재하면 재귀
+     * @throws Exception 예러 발생시 에러 발생
+     */
+    private String calculation(String line) throws Exception {
         if (check(line)) {
-            int start = line.lastIndexOf("(");
-            int end = line.indexOf(")") + 1;
-            String value = line.substring(start, end);
+            int start1 = line.lastIndexOf("(");
+            int end1 = line.indexOf(")") + 1;
+            //괄호를 포함하지 않은 값
+            //변수에 있는 값 가겨오는 작업
+            String value = line.substring(start1 + 1, end1 - 1);
             line = line.replace(value, getVar(value));
+            int start2 = line.lastIndexOf("(");
+            int end2 = line.indexOf(")") + 1;
+            //괄호를 포함하는 값
+            //괄호를 포함하지 않는 값
+            String value1 = line.substring(start2, end2);
+            String value2 = line.substring(start2+1, end2-1);
+            String calBefore = String.valueOf(account.account(value2));
+            line = line.replace(value1, calBefore);
             return calculation(line);
         } else return line;
     }
 
     /**
-     * @param line 라인 값을 받아 오기
+     * @param lines 라인 값을 받아 오기
      * @return : 없어질때 까지 line 값 반환
      */
-    private String getVar(String line) {
-        if (line.contains(":")) {
-            String[] words = line.split("[\\-|+|/|*]");
-            for (String word : words) {
-                if (!word.isBlank() && word.startsWith(":") && checkVar(word)) {
-                    line = line.replace(word, checkValue(word.substring(1)));
-                    return getVar(line);
-                }
-            }
-        } return line;
+    private String getVar(String lines) {
+        //괄호 제거
+        final String[] line = {lines.substring(1, lines.length() - 1)};
+        if (!line[0].contains(":") && line[0].isBlank()) return line[0];
+        else {
+            String[] words = line[0].split(" ");
+            List<String> list = new ArrayList<>(Arrays.asList(words));
+            list.stream().filter(v -> !v.isBlank())
+                .filter(v -> v.contains(":"))
+                .forEach(v -> {
+                    int start = v.indexOf(":") + 1;
+                    String word = v.substring(start);
+                    line[0] = line[0].replace(":"+word, checkValue(word));
+                });
+        } return line[0];
     }
 
     /**

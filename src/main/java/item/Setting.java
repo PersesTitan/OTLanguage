@@ -1,5 +1,6 @@
 package item;
 
+import Calculation.Account;
 import Variable.Variable;
 import org.jetbrains.annotations.NotNull;
 import print.Print;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Setting {
+    protected final Account account = new Account();
     protected final ScannerP scannerP = new ScannerP();
     protected final Print print = new Print();
     protected final Println println = new Println();
