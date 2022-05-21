@@ -15,6 +15,7 @@ public class Calculation extends Setting implements Check {
      * @throws Exception 괄호 짝이 일치하지 않을때
      */
     public String start(String line) throws Exception {
+        //1개씩 짤라서 함
         String[] lines = line.split("(?<!^)");
         long count1 = Arrays.stream(lines).filter(view->view.equals("(")).count();
         long count2 = Arrays.stream(lines).filter(view->view.equals(")")).count();
@@ -34,25 +35,29 @@ public class Calculation extends Setting implements Check {
      */
     private String calculation(String line) throws Exception {
         if (check(line)) {
-            int start1 = line.lastIndexOf("(");
-            int end1 = line.indexOf(")") + 1;
-            //괄호를 포함하지 않은 값
-            //변수에 있는 값 가겨오는 작업
-            String value = line.substring(start1 + 1, end1 - 1);
-            line = line.replace(value, getVar(value));
-            int start2 = line.lastIndexOf("(");
-            int end2 = line.indexOf(")") + 1;
-            //괄호를 포함하는 값
-            //괄호를 포함하지 않는 값
-            String value1 = line.substring(start2, end2);
-            String value2 = line.substring(start2+1, end2-1);
-            String calBefore = String.valueOf(account.account(value2));
-            line = line.replace(value1, calBefore);
-            return calculation(line);
+            if (line.contains(":")) {
+                int start1 = line.lastIndexOf("(");
+                int end1 = line.indexOf(")") + 1;
+                //괄호를 포함한 값
+                //변수에 있는 값 가겨오는 작업
+                String value = line.substring(start1, end1);
+                line = line.replace(value, getVar(value));
+            } else {
+                int start2 = line.lastIndexOf("(");
+                int end2 = line.indexOf(")") + 1;
+                //괄호를 포함하는 값
+                //괄호를 포함하지 않는 값
+                String value1 = line.substring(start2, end2);
+                String value2 = line.substring(start2+1, end2-1);
+                String calBefore = String.valueOf(account.account(value2));
+                line = line.replace(value1, calBefore);
+            } return calculation(line);
         } else return line;
     }
 
     /**
+     * 괄호를 포함하는 값이 넘어옴
+     * 이후 괄호를 제거하고 계산을 함
      * @param lines 라인 값을 받아 오기
      * @return : 없어질때 까지 line 값 반환
      */
@@ -65,6 +70,7 @@ public class Calculation extends Setting implements Check {
             List<String> list = new ArrayList<>(Arrays.asList(words));
             list.stream().filter(v -> !v.isBlank())
                 .filter(v -> v.contains(":"))
+                .filter(this::checkVar)
                 .forEach(v -> {
                     int start = v.indexOf(":") + 1;
                     String word = v.substring(start);
@@ -73,13 +79,26 @@ public class Calculation extends Setting implements Check {
         } return line[0];
     }
 
+    private boolean checkSign(String line) {
+        boolean bool = line.contains("ㅇ+ㅇ") || line.contains("ㅇ-ㅇ");
+        bool = bool || line.contains("ㅇ*ㅇ") || line.contains("ㅇ/ㅇ");
+        return bool || line.contains("ㅇ%ㅇ");
+    }
+
     /**
+     * 시작이 : 일때 :를 제거함
+     * : 이 포함 되어 있을때 : 위치를 얻은 뒤 이후의 값을 반환
+     * 위 조건이 없을 시에는 변수 이름이 존재하는지 확인함
      * (:ㅇㅁㅁ) -> ㅇㅁㅁ
      * @param word 글자를 받아옴
      * @return 변수가 이미존재하는지 확인함.
      */
     private boolean checkVar(String word) {
-        return set.contains(word.substring(1));
+        if (word.startsWith(":")) return set.contains(word.substring(1));
+        else if (word.contains(":")) {
+            int start = word.indexOf(":");
+            return set.contains(word.substring(start));
+        } else return set.contains(word);
     }
 
     @Override

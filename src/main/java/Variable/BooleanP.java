@@ -34,7 +34,7 @@ public class BooleanP extends Setting implements Check, VariableWork {
         if (line.equals("true") || line.equals("false")) return Boolean.parseBoolean(line);
         else {
             String[] sign = line.split("false|true");
-            String[] bools = line.split("ㄲ|ㄸ");
+            String[] bools = line.split("[ㄲㄸ]");
             assert sign.length+1 == bools.length;
             boolean bool = Boolean.parseBoolean(bools[0]);
             for (int i = 0; i<sign.length; i++) {

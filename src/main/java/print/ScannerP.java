@@ -3,10 +3,12 @@ package print;
 import item.Check;
 
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class ScannerP implements Check {
-
     private static final String SPECIFIED = "ㅅㅇㅅ";
+    private final String patternText = "\\b(ㅅㅇㅅ)\\b";
+    private final Pattern pattern = Pattern.compile(patternText);
 
     /**
      * ex) ㅇㅅㅇ 11:ㅅㅇㅅ
@@ -15,7 +17,7 @@ public class ScannerP implements Check {
      */
     @Override
     public boolean check(String line) {
-        return line.contains(SPECIFIED);
+        return pattern.matcher(line).find();
     }
 
     /**

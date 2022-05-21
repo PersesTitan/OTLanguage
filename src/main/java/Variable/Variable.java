@@ -4,9 +4,14 @@ import item.Check;
 import item.Setting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Variable extends Setting implements Check {
+    // :[한국어 or 영어 or 숫자][공백] 형태
+    private final String text = ":([ㄱ-ㅎㅏ-ㅣ가-힣]|\\w)\\b";
+    private final Pattern pattern = Pattern.compile(text);
 
     /**
      * 변수 :[변수명][공백] 을 변수 값으로 대체함
@@ -31,12 +36,12 @@ public class Variable extends Setting implements Check {
      */
     @Override
     public boolean check(String line) {
-        String[] keys = line.split(" ");
-        for (String key : keys) {
-            if (!key.isBlank() && key.contains(":")) {
-                int start = key.indexOf(":")+1;
-                return set.contains(key.substring(start));
-            }
-        } return false;
+        if (line == null || line.isEmpty()) return false;
+        boolean bool = pattern.matcher(line).find();
+        var lines = line.split(" ");
+        return bool || Arrays.stream(lines)
+                .filter(v -> !v.isEmpty())
+                .filter(v -> v.startsWith(":"))
+                .anyMatch(v -> set.contains(v.substring(1)));
     }
 }
