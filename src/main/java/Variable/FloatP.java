@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class FloatP extends Setting implements Check, VariableWork {
     private static final String SPECIFIED = "ㅇㅅㅇ";
-    private final String patternText = "\\n\\s*ㅇㅅㅇ\\s|^\\sㅇㅅㅇ\\s";
+    private final String patternText = "\\n\\s*ㅇㅅㅇ\\s|^\\s*ㅇㅅㅇ\\s";
     private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
