@@ -4,8 +4,6 @@ import item.Check;
 import item.PrintWork;
 import item.Setting;
 
-import java.util.List;
-
 public class Print extends Setting implements Check, PrintWork {
 
     private static final String SPECIFIED = "ㅅㅁㅅ";

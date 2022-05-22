@@ -1,11 +1,8 @@
 package print;
 
-import Variable.Variable;
 import item.Check;
 import item.PrintWork;
 import item.Setting;
-
-import java.util.List;
 
 public class Println extends Setting implements Check, PrintWork {
 
