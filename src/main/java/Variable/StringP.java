@@ -6,7 +6,6 @@ import item.Setting;
 import item.VariableWork;
 
 public class StringP extends Setting implements Check, VariableWork {
-
     private static final String SPECIFIED = "ㅇㅁㅇ";
 
     @Override

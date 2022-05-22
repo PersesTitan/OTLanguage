@@ -1,5 +1,6 @@
 package Calculation;
 
+import item.ActivityItem;
 import item.Check;
 import item.Setting;
 

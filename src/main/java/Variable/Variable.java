@@ -17,16 +17,21 @@ public class Variable extends Setting implements Check {
      * 변수 :[변수명][공백] 을 변수 값으로 대체함
      * @param line 한줄을 받아옴
      */
-    public List<String> getVar(String line) {
-        List<String> list = new ArrayList<>();
-        String[] words = line.split(" ");
-        for (String word : words) {
-            if (!word.isBlank() && word.contains(":")) {
-                int start = word.indexOf(":") + 1;
-                list.add(word.substring(start));
+    public String getVar(String line) {
+        int count = 0;
+        int begin;
+        while((begin = line.indexOf(":", count)) != -1) {
+            String copyLine = line.substring(begin);
+            int end = copyLine.indexOf(" ");
+            if (end == -1) end = copyLine.length();
+            String key = copyLine.substring(1, end);
+            if (set.contains(key)) {
+                String value = ":"+key;
+                line = line.replaceFirst(value, checkValue(key));
             }
+            count++;
         }
-        return list;
+        return line;
     }
 
     /**

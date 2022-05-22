@@ -1,33 +1,13 @@
 package item;
 
-import Calculation.Account;
-import Variable.Variable;
 import org.jetbrains.annotations.NotNull;
-import print.Print;
-import print.Println;
-import print.ScannerP;
-import Variable.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class Setting {
-    protected final Account account = new Account();
-    protected final ScannerP scannerP = new ScannerP();
-    protected final Print print = new Print();
-    protected final Println println = new Println();
-
-    protected final Variable variable = new Variable();
-    protected final BooleanP booleanP = new BooleanP();
-    protected final CharacterP characterP = new CharacterP();
-    protected final DoubleP doubleP = new DoubleP();
-    protected final FloatP floatP = new FloatP();
-    protected final IntegerP integerP = new IntegerP();
-    protected final LongP longP = new LongP();
-    protected final StringP stringP = new StringP();
-
+public class Setting implements ActivityItem {
     /*===========================================*/
     //n번째 위치와 라인의 값을 저장하는 곳
     //변수 이름 저장하는 장소
@@ -40,6 +20,21 @@ public class Setting {
     public static final Map<String, Character> CM = new HashMap<>();
     public static final Map<String, Float> FM = new HashMap<>();
     public static final Map<String, Double> DM = new HashMap<>();
+
+    /**
+     * 변수 초기화시키는 작업
+     */
+    public void varClear() {
+        idLine.clear();
+        set.clear();
+        IM.clear();
+        LM.clear();
+        BM.clear();
+        SM.clear();
+        CM.clear();
+        FM.clear();
+        DM.clear();
+    }
 
     /**
      * @param SPECIFIED 타입 받아오기
