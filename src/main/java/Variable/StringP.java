@@ -5,12 +5,16 @@ import item.KeyValueItem;
 import item.Setting;
 import item.VariableWork;
 
+import java.util.regex.Pattern;
+
 public class StringP extends Setting implements Check, VariableWork {
     private static final String SPECIFIED = "ㅇㅁㅇ";
+    private final String patternText = "\\n\\s*ㅇㅁㅇ\\s|^\\s*ㅇㅁㅇ\\s";
+    private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
     public boolean check(String line) {
-        return line.strip().startsWith(SPECIFIED);
+        return pattern.matcher(line).find();
     }
 
     /**

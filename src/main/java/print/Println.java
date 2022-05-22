@@ -4,9 +4,12 @@ import item.Check;
 import item.PrintWork;
 import item.Setting;
 
-public class Println extends Setting implements Check, PrintWork {
+import java.util.regex.Pattern;
 
+public class Println extends Setting implements Check, PrintWork {
     private static final String SPECIFIED = "ㅆㅁㅆ";
+    private final String patternText = "\\n\\s*ㅆㅁㅆ\\s|^\\s*ㅆㅁㅆ\\s";
+    private final Pattern pattern = Pattern.compile(patternText);
 
     /**
      * 시작이 ㅆㅁㅆ일때 true 를 반환함
@@ -15,7 +18,7 @@ public class Println extends Setting implements Check, PrintWork {
      */
     @Override
     public boolean check(String line) {
-        return line.strip().startsWith(SPECIFIED);
+        return pattern.matcher(line).find();
     }
 
     /**
