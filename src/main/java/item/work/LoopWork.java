@@ -1,5 +1,5 @@
 package item.work;
 
 public interface LoopWork {
-    void start(String line);
+    void start(String line) throws Exception;
 }

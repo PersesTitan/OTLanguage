@@ -17,8 +17,16 @@ public class If extends Setting implements Check, LoopWork {
     }
 
     @Override
-    public void start(String line) {
+    public void start(String line) throws Exception {
         //?ㅅ? 제거 작업
-
+        line = line.strip().substring(SPECIFIED.length());
+        line = line.replace("ㅇㅇ", "true");
+        line = line.replace("ㄴㄴ", "");
+        line = line.replace(" ", "");
+        if (changeBool(line)) {
+            //동작 적는 곳
+        } else {
+            //false 일때의 동작
+        }
     }
 }
