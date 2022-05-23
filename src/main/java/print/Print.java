@@ -1,7 +1,7 @@
 package print;
 
 import item.Check;
-import item.PrintWork;
+import item.work.PrintWork;
 import item.Setting;
 
 import java.util.regex.Pattern;

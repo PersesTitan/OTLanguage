@@ -2,6 +2,7 @@ package item;
 
 import Calculation.Account;
 import Variable.*;
+import loop.If;
 import print.Print;
 import print.Println;
 import print.ScannerP;
@@ -20,4 +21,5 @@ public interface ActivityItem {
     Variable variable = new Variable();
 
     Account account = new Account();
+    If ifp = new If();
 }

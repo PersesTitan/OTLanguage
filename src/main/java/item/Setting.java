@@ -24,7 +24,7 @@ public class Setting implements ActivityItem {
     /**
      * 변수 초기화시키는 작업
      */
-    public void varClear() {
+    public static void varClear() {
         idLine.clear();
         set.clear();
         IM.clear();

@@ -5,11 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
-import java.util.StringTokenizer;
-
 
 public class Main extends Setting implements ActivityItem {
 
@@ -23,19 +19,15 @@ public class Main extends Setting implements ActivityItem {
         if (!args[0].toLowerCase(Locale.ROOT).endsWith(".otl")) throw new Exception("확장자를 확인해주세요.");
         int count = 0;
         String text;
-//        StringBuilder builder = new StringBuilder();
-
+        varClear();
         System.out.println("================출력================");
         try (BufferedReader reader = new BufferedReader(new FileReader(args[0], StandardCharsets.UTF_8))) {
             while ((text = reader.readLine()) != null) {
-                idLine.put(count, text);
-                start(text);
-//                builder.append(text).append("\n");
+                idLine.put(count, text+" ");
+                start(text+" ");
                 count++;
             }
         }
-//        String total = builder.toString();
-
         pause();
     }
 
@@ -49,16 +41,17 @@ public class Main extends Setting implements ActivityItem {
         if (!line.isBlank()) {
             if (variable.check(line)) line = variable.getVar(line);
             if (scannerP.check(line)) line = scannerP.start(line);
+            if (ifp.check(line)) ifp.start(line);
 
             if (print.check(line)) print.start(line);
             else if (println.check(line)) println.start(line);
-            else if (booleanP.check(line)) booleanP.start(line);
-            else if (characterP.check(line)) characterP.start(line);
-            else if (doubleP.check(line)) doubleP.start(line);
-            else if (floatP.check(line)) floatP.start(line);
-            else if (integerP.check(line)) integerP.start(line);
-            else if (longP.check(line)) longP.start(line);
-            else if (stringP.check(line)) stringP.start(line);
+            else if (booleanP.check(line)) booleanP.start(line.strip());
+            else if (characterP.check(line)) characterP.start(line.strip());
+            else if (doubleP.check(line)) doubleP.start(line.strip());
+            else if (floatP.check(line)) floatP.start(line.strip());
+            else if (integerP.check(line)) integerP.start(line.strip());
+            else if (longP.check(line)) longP.start(line.strip());
+            else if (stringP.check(line)) stringP.start(line.strip());
         }
     }
 

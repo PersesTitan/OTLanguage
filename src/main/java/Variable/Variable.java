@@ -3,9 +3,7 @@ package Variable;
 import item.Check;
 import item.Setting;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class Variable extends Setting implements Check {
@@ -26,7 +24,7 @@ public class Variable extends Setting implements Check {
             if (end == -1) end = copyLine.length();
             String key = copyLine.substring(1, end);
             if (set.contains(key)) {
-                String value = ":"+key;
+                String value = ":"+key+" ";
                 line = line.replaceFirst(value, checkValue(key));
             }
             count++;
