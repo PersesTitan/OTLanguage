@@ -41,7 +41,7 @@ public class Main extends Setting implements ActivityItem {
         if (!line.isBlank()) {
             if (variable.check(line)) line = variable.getVar(line);
             if (scannerP.check(line)) line = scannerP.start(line);
-            if (ifp.check(line)) ifp.start(line);
+//            if (ifp.check(line)) ifp.start(line);
 
             if (print.check(line)) print.start(line);
             else if (println.check(line)) println.start(line);

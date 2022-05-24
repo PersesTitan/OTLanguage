@@ -27,8 +27,15 @@ public class ScannerP implements Check {
     public String start(String line) {
         Scanner scanner = new Scanner(System.in);
         if (check(line)) {
-            line = line.replaceFirst(SPECIFIED, scanner.next());
+            line = line.replaceFirst(checkBlank(line), scanner.next());
             return start(line);
         } else return line;
+    }
+
+    private String checkBlank(String line) {
+        if (line.contains(" " + SPECIFIED + " ")) return " " + SPECIFIED + " ";
+        else if (line.contains(" " + SPECIFIED)) return " " + SPECIFIED;
+        else if (line.contains(SPECIFIED + " ")) return SPECIFIED + " ";
+        else return SPECIFIED;
     }
 }

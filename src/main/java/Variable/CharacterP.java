@@ -23,8 +23,8 @@ public class CharacterP extends Setting implements Check, VariableWork {
         KeyValueItem keyValue = setKeyValue(SPECIFIED, line);
         String key = keyValue.getKey();
         String value = keyValue.getValue();
-        if (!varCheck.check(value, VarType.Character))
-            throw new Exception(typeErrorMessage);
+        //char 형인지 확인
+        if (!varCheck.check(value, VarType.Character)) throw new Exception(typeErrorMessage);
         CM.put(key, value.charAt(0));
         set.add(key);
     }
