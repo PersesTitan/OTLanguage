@@ -17,6 +17,7 @@ public class StringP extends Setting implements Check, VariableWork {
         return pattern.matcher(line).find();
     }
 
+
     /**
      * @param line 라인 값 받아 오기
      * @throws Exception 변수를 찾을 수 없을 시 에러 발생
@@ -24,7 +25,6 @@ public class StringP extends Setting implements Check, VariableWork {
     @Override
     public void start(String line) throws Exception {
         KeyValueItem keyValue = setKeyValue(SPECIFIED, line);
-        assert keyValue == null;
         String key = keyValue.getKey();
         String value = keyValue.getValue();
         SM.put(key, value);
