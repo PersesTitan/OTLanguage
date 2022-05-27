@@ -24,6 +24,7 @@ public class StringP extends Setting implements Check, VariableWork {
     @Override
     public void start(String line) throws Exception {
         KeyValueItem keyValue = setKeyValue(SPECIFIED, line);
+        assert keyValue == null;
         String key = keyValue.getKey();
         String value = keyValue.getValue();
         SM.put(key, value);
