@@ -44,6 +44,7 @@ public class Setting implements ActivityItem {
      */
     public KeyValueItem setKeyValue(String SPECIFIED, String line) throws Exception {
         int start = line.indexOf(SPECIFIED) + SPECIFIED.length();
+        if (line.substring(start).isBlank()) throw new Exception("초기값이 존재 하지 않습니다.");
         int end = line.indexOf(":");
         String key = line.substring(start, end).strip();
         if (set.contains(key)) throw new Exception("이미 존재하는 변수 이름 입니다.");
