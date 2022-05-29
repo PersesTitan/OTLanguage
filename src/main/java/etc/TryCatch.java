@@ -15,6 +15,10 @@ public class TryCatch implements Check {
     }
 
     public void start(String line) {
+        try {
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
