@@ -40,27 +40,27 @@ public class Account {
             if (value.endsWith("+")) value = value.substring(0, value.lastIndexOf("+"));
             double d = Double.parseDouble(numbers.get(i));
             switch (value) {
-                case "ㅇ+ㅇ" -> total += d;
-                case "ㅇ-ㅇ" -> total -= d;
-                case "ㅇ*ㅇ" -> total *= d;
-                case "ㅇ/ㅇ" -> total /= d;
-                case "ㅇ%ㅇ" -> total %= d;
-                case "ㅇ+ㅇ-" -> total += (-d);
-                case "ㅇ-ㅇ-" -> total -= (-d);
-                case "ㅇ*ㅇ-" -> total *= (-d);
-                case "ㅇ/ㅇ-" -> total /= (-d);
-                case "ㅇ%ㅇ-" -> total %= (-d);
-                case "-ㅇ+ㅇ" -> total = (-total) + d;
-                case "-ㅇ-ㅇ" -> total = (-total) - d;
-                case "-ㅇ*ㅇ" -> total = (-total) * d;
-                case "-ㅇ/ㅇ" -> total = (-total) / d;
-                case "-ㅇ%ㅇ" -> total = (-total) % d;
-                case "-ㅇ+ㅇ-" -> total = (-total) + (-d);
-                case "-ㅇ-ㅇ-" -> total = (-total) - (-d);
-                case "-ㅇ*ㅇ-" -> total = (-total) * (-d);
-                case "-ㅇ/ㅇ-" -> total = (-total) / (-d);
-                case "-ㅇ%ㅇ-" -> total = (-total) % (-d);
-                default -> throw new Exception(value + "는 계산식이 아닙니다.");
+                case "ㅇ+ㅇ": total += d; break;
+                case "ㅇ-ㅇ": total -= d; break;
+                case "ㅇ*ㅇ": total *= d; break;
+                case "ㅇ/ㅇ": total /= d; break;
+                case "ㅇ%ㅇ": total %= d; break;
+                case "ㅇ+ㅇ-": total += (-d); break;
+                case "ㅇ-ㅇ-": total -= (-d); break;
+                case "ㅇ*ㅇ-": total *= (-d); break;
+                case "ㅇ/ㅇ-": total /= (-d); break;
+                case "ㅇ%ㅇ-": total %= (-d); break;
+                case "-ㅇ+ㅇ": total = (-total) + d; break;
+                case "-ㅇ-ㅇ": total = (-total) - d; break;
+                case "-ㅇ*ㅇ": total = (-total) * d; break;
+                case "-ㅇ/ㅇ": total = (-total) / d; break;
+                case "-ㅇ%ㅇ": total = (-total) % d; break;
+                case "-ㅇ+ㅇ-": total = (-total) + (-d); break;
+                case "-ㅇ-ㅇ-": total = (-total) - (-d); break;
+                case "-ㅇ*ㅇ-": total = (-total) * (-d); break;
+                case "-ㅇ/ㅇ-": total = (-total) / (-d); break;
+                case "-ㅇ%ㅇ-": total = (-total) % (-d); break;
+                default: throw new Exception(value + "는 계산식이 아닙니다.");
             }
         } return total;
     }
