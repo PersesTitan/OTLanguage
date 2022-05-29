@@ -44,6 +44,7 @@ public class Setting implements ActivityItem {
      */
     public KeyValueItem setKeyValue(String SPECIFIED, String line) throws Exception {
         int start = line.indexOf(SPECIFIED) + SPECIFIED.length();
+        if (line.substring(start).isBlank()) throw new Exception("초기값이 존재 하지 않습니다.");
         int end = line.indexOf(":");
         String key = line.substring(start, end).strip();
         if (set.contains(key)) throw new Exception("이미 존재하는 변수 이름 입니다.");
@@ -64,5 +65,24 @@ public class Setting implements ActivityItem {
         else if (IM.containsKey(word)) return IM.get(word).toString();
         else if (LM.containsKey(word)) return LM.get(word).toString();
         else return SM.getOrDefault(word, "");
+    }
+
+    /**
+     * @param line boolean 식을 받은 뒤 값을 계산하는 식입니다.
+     * @return bool 계산 후 반환하는 값
+     */
+    public boolean changeBool(String line) throws Exception {
+        if (line.equals("true") || line.equals("false")) return Boolean.parseBoolean(line);
+        else {
+            String[] sign = line.split("false|true");
+            String[] bools = line.split("[ㄲㄸ]");
+            assert sign.length+1 == bools.length;
+            boolean bool = Boolean.parseBoolean(bools[0]);
+            for (int i = 0; i<sign.length; i++) {
+                if (varCheck.check(sign[i], VarType.Boolean)) throw new Exception(typeErrorMessage);
+                if (sign[i].equals("ㄲ")) bool = bool && Boolean.parseBoolean(sign[i+1]);
+                else bool = bool || Boolean.parseBoolean(sign[i+1]);
+            } return bool;
+        }
     }
 }

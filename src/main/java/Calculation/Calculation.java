@@ -7,8 +7,19 @@ import item.Setting;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Calculation extends Setting implements Check {
+
+    private final String SPECIFIED1 = "\\n\\s*(ㅇ\\+ㅇ|ㅇ-ㅇ|ㅇ\\*ㅇ|ㅇ/ㅇ|ㅇ%ㅇ)\\s";
+    private final String SPECIFIED2 = "^\\s*(ㅇ\\+ㅇ|ㅇ-ㅇ|ㅇ\\*ㅇ|ㅇ/ㅇ|ㅇ%ㅇ)\\s";
+    private final Pattern pattern1 = Pattern.compile(SPECIFIED1);
+    private final Pattern pattern2 = Pattern.compile(SPECIFIED2);
+
+    private boolean checkSign(String line) {
+        boolean bool = pattern1.matcher(line).find();
+        return  bool || pattern2.matcher(line).find();
+    }
 
     /**
      * @param line 한 줄을 받아옴
@@ -78,12 +89,6 @@ public class Calculation extends Setting implements Check {
                     line[0] = line[0].replace(":"+word, checkValue(word));
                 });
         } return line[0];
-    }
-
-    private boolean checkSign(String line) {
-        boolean bool = line.contains("ㅇ+ㅇ") || line.contains("ㅇ-ㅇ");
-        bool = bool || line.contains("ㅇ*ㅇ") || line.contains("ㅇ/ㅇ");
-        return bool || line.contains("ㅇ%ㅇ");
     }
 
     /**

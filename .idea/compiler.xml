@@ -11,6 +11,6 @@
         <module name="OTLanguage.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="18" />
+    <bytecodeTargetLevel target="11" />
   </component>
 </project>

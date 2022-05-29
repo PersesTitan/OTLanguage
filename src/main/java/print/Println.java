@@ -27,10 +27,8 @@ public class Println extends Setting implements Check, PrintWork {
     @Override
     public void start(String line) {
         /* -- ㅆㅁㅆ 제거 -- */
-        int start;
-        if (line.startsWith(SPECIFIED + " "))
-            start = line.indexOf(SPECIFIED)+SPECIFIED.length()+1;
-        else start = line.indexOf(SPECIFIED) + SPECIFIED.length();
+        int start = line.indexOf(SPECIFIED)+SPECIFIED.length();
+        if (line.strip().startsWith(SPECIFIED + " ")) start += 1;
         line = line.substring(start);
         System.out.println(line);
     }
