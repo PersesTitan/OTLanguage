@@ -4,6 +4,7 @@ import item.Check;
 import item.Setting;
 import item.work.LoopWork;
 
+import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 public class If extends Setting implements Check, LoopWork {
@@ -20,9 +21,12 @@ public class If extends Setting implements Check, LoopWork {
     public void start(String line) throws Exception {
         //?ㅅ? 제거 작업
         line = line.strip().substring(SPECIFIED.length());
+        StringTokenizer tokenizer = new StringTokenizer(line);
+        while(tokenizer.hasMoreTokens()) {
+            
+        }
         line = line.replace("ㅇㅇ", "true");
-        line = line.replace("ㄴㄴ", "");
-        line = line.replace(" ", "");
+        line = line.replace("ㄴㄴ", "false");
         if (changeBool(line)) {
             //동작 적는 곳
         } else {
