@@ -2,6 +2,8 @@ package item;
 
 import Calculation.Account;
 import Variable.*;
+import etc.TryCatch;
+import etc.TryCatchPrint;
 import loop.If;
 import print.Print;
 import print.Println;
@@ -22,6 +24,9 @@ public interface ActivityItem {
     LongP longP = new LongP();
     StringP stringP = new StringP();
     Variable variable = new Variable();
+
+    TryCatch tryCatch = new TryCatch();
+    TryCatchPrint tryCatchPrint = new TryCatchPrint();
 
     Account account = new Account();
     If ifp = new If();

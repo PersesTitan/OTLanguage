@@ -26,7 +26,7 @@ public class Calculation extends Setting implements Check {
      * @return 개산 후의 값을 반환함
      * @throws Exception 괄호 짝이 일치하지 않을때
      */
-    public String start(String line) throws Exception {
+    public String cutting(String line) throws Exception {
         //1개씩 짤라서 함
         String[] lines = line.split("(?<!^)");
         long count1 = Arrays.stream(lines).filter(view->view.equals("(")).count();
@@ -92,10 +92,10 @@ public class Calculation extends Setting implements Check {
     }
 
     /**
-     * 시작이 : 일때 :를 제거함
-     * : 이 포함 되어 있을때 : 위치를 얻은 뒤 이후의 값을 반환
-     * 위 조건이 없을 시에는 변수 이름이 존재하는지 확인함
-     * (:ㅇㅁㅁ) -> ㅇㅁㅁ
+     * 시작이 : 일때 :를 제거함 <br>
+     * : 이 포함 되어 있을때 : 위치를 얻은 뒤 이후의 값을 반환 <br>
+     * 위 조건이 없을 시에는 변수 이름이 존재하는지 확인함 <br>
+     * (:ㅇㅁㅁ) -> ㅇㅁㅁ <br>
      * @param word 글자를 받아옴
      * @return 변수가 이미존재하는지 확인함.
      */

@@ -22,6 +22,32 @@ public class Setting implements ActivityItem {
     public static final Map<String, Double> DM = new HashMap<>();
 
     /**
+     * 변수 감시시에 변수 변경 <br>
+     * scanner 감지하였을때 입력 받음 <br>
+     * @param line 라인 받아오기
+     */
+    protected void start(String line) throws Exception {
+        if (!line.isBlank()) {
+            if (tryCatch.check(line)) tryCatch.start(line);
+            else if (tryCatchPrint.check(line)) tryCatchPrint.start(line);
+            else {
+                if (variable.check(line)) line = variable.getVar(line);
+                if (scannerP.check(line)) line = scannerP.start(line);
+
+                if (print.check(line)) print.start(line);
+                else if (println.check(line)) println.start(line);
+                else if (booleanP.check(line)) booleanP.start(line.strip());
+                else if (characterP.check(line)) characterP.start(line.strip());
+                else if (doubleP.check(line)) doubleP.start(line.strip());
+                else if (floatP.check(line)) floatP.start(line.strip());
+                else if (integerP.check(line)) integerP.start(line.strip());
+                else if (longP.check(line)) longP.start(line.strip());
+                else if (stringP.check(line)) stringP.start(line.strip());
+            }
+        }
+    }
+
+    /**
      * 변수 초기화시키는 작업
      */
     public static void varClear() {
