@@ -1,5 +1,14 @@
 package item.work;
 
 public interface LoopWork {
-    void start(String line) throws Exception;
+    boolean check(String total);
+
+    default int countBlank(String line) {
+        int count = 0;
+        for (int i = 0; i < line.length(); i++) {
+            if (line.charAt(i) != ' ') break;
+            count++;
+        }
+        return count;
+    }
 }

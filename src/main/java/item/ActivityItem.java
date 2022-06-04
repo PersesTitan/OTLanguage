@@ -4,6 +4,7 @@ import Calculation.Account;
 import Variable.*;
 import etc.TryCatch;
 import etc.TryCatchPrint;
+import loop.For;
 import loop.If;
 import print.Print;
 import print.Println;
@@ -29,5 +30,6 @@ public interface ActivityItem {
     TryCatchPrint tryCatchPrint = new TryCatchPrint();
 
     Account account = new Account();
-    If ifp = new If();
+    If ifP = new If();
+    For forP = new For();
 }
