@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class Setting implements ActivityItem {
+    public final static Map<String, String> uuidMap = new HashMap<>();
     public final StringBuffer total = new StringBuffer();
     public final Map<Integer, String> idLine = new HashMap<>();
     /*===========================================*/
