@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class KeyValueItem {
-    String key;
-    String value;
+    String key;     //or Start
+    String value;   //or End
 }
