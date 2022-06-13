@@ -27,9 +27,12 @@ public class Main extends Setting implements ActivityItem {
         try (BufferedReader reader = new BufferedReader(new FileReader(args[0], StandardCharsets.UTF_8))) {
             while ((text = reader.readLine()) != null) {
                 idLine.put(count, text);
+                total.append(text);
                 start(text);
                 count++;
             }
+
+
         }
         pause();
     }

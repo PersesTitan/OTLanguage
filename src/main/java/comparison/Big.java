@@ -3,7 +3,7 @@ package comparison;
 import item.ActivityItem;
 import item.Check;
 import item.KeyValueItem;
-import item.VarType;
+import item.kind.VarType;
 import item.work.ComparisonWork;
 
 import java.util.ArrayList;

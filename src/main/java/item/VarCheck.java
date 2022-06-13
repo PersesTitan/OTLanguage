@@ -1,5 +1,6 @@
 package item;
 
+import item.kind.VarType;
 import org.jetbrains.annotations.NotNull;
 
 public class VarCheck {
