@@ -8,8 +8,8 @@ import item.work.VariableWork;
 import java.util.regex.Pattern;
 
 public class BooleanP extends Setting implements Check, VariableWork {
-    private static final String SPECIFIED = "ㅇㅂㅇ";
-    private final String patternText = "\\n\\s*ㅇㅂㅇ\\s|^\\s*ㅇㅂㅇ\\s";
+    public static final String SPECIFIED = "ㅇㅂㅇ";
+    public static final String patternText = "(\\n|^)\\s*ㅇㅂㅇ\\s";
     private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
