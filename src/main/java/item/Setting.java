@@ -9,8 +9,9 @@ import java.util.*;
 
 public class Setting implements ActivityItem {
     public final static Map<String, String> uuidMap = new HashMap<>();
-    public final StringBuffer total = new StringBuffer();
     public final Map<Integer, String> idLine = new HashMap<>();
+    public final StringBuffer total = new StringBuffer();
+    public final Stack<Integer> stack = new Stack<>();
     /*===========================================*/
     public final Set<String> set = new HashSet<>();
     public final Map<String, Integer> IM = new HashMap<>();
