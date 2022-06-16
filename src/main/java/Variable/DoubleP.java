@@ -9,8 +9,8 @@ import item.work.VariableWork;
 import java.util.regex.Pattern;
 
 public class DoubleP extends Setting implements Check, VariableWork {
-    private static final String SPECIFIED = "ㅇㅆㅇ";
-    private final String patternText = "\\n\\s*ㅇㅆㅇ\\s|^\\s*ㅇㄱㅇ\\s";
+    public static final String SPECIFIED = "ㅇㅆㅇ";
+    public static final String patternText = "(\\n|^)\\s*ㅇㅆㅇ\\s";
     private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
