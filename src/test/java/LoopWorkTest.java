@@ -4,20 +4,15 @@ import org.junit.jupiter.api.Test;
 
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoopWorkTest implements LoopWork {
 
+
+
     public static void main(String[] args) throws Exception {
-        String testTotal = "adsaf\n" +
-                "{asfs{afsfs\n" +
-                "}\n" +
-                "asfs{sf{f\n" +
-                "  saf\n" +
-                "}af}af}a\n" +
-                "fs{af}s\n" +
-                "" +
-                "" +
-                "f{sfsf}af\n";
+        String testTotal = "dd";
+
         Bracket bracket = new Bracket();
         String pr = bracket.bracket(testTotal);
 
@@ -28,6 +23,8 @@ public class LoopWorkTest implements LoopWork {
             System.out.println(s);
             System.out.println(bracket.check(s));
         }
+
+
     }
 
     @Override
