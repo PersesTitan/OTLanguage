@@ -4,6 +4,7 @@ import Calculation.Account;
 import Variable.*;
 import etc.TryCatch;
 import etc.TryCatchPrint;
+import loop.Bracket;
 import loop.For;
 import loop.If;
 import print.Print;
@@ -32,4 +33,6 @@ public interface ActivityItem {
     Account account = new Account();
     If ifP = new If();
     For forP = new For();
+
+    Bracket bracket = new Bracket();
 }
