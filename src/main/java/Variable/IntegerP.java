@@ -9,8 +9,8 @@ import item.work.VariableWork;
 import java.util.regex.Pattern;
 
 public class IntegerP extends Setting implements Check, VariableWork {
-    private static final String SPECIFIED = "ㅇㅈㅇ";
-    private final String patternText = "\\n\\s*ㅇㅈㅇ\\s|^\\s*ㅇㅈㅇ\\s";
+    public static final String SPECIFIED = "ㅇㅈㅇ";
+    public static final String patternText = "(\\n|^)\\s*ㅇㅈㅇ\\s";
     private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
