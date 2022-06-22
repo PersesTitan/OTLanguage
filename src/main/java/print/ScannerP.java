@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class ScannerP implements Check {
     private static final String SPECIFIED = "ㅅㅇㅅ";
-    private final String patternText = "\\sㅅㅇㅅ\\s|^\\s*ㅅㅇㅅ\\s";
+    private final String patternText = "\\sㅅㅇㅅ(\\s|$)";
     private final Pattern pattern = Pattern.compile(patternText);
 
     /**
