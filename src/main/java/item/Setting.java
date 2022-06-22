@@ -9,21 +9,22 @@ import java.util.*;
 
 public class Setting implements ActivityItem {
     public final static Map<String, String> uuidMap = new HashMap<>();
-    public final Map<Integer, String> idLine = new HashMap<>();
-    public final StringBuffer total = new StringBuffer();
-    public final Stack<Integer> stack = new Stack<>();
+    public final static Map<Integer, String> idLine = new HashMap<>();
+    public final static StringBuffer total = new StringBuffer();
+    public final static Stack<Integer> stack = new Stack<>();
     /*===========================================*/
-    public final Set<String> set = new HashSet<>();
-    public final Map<String, Integer> IM = new HashMap<>();
-    public final Map<String, Long> LM = new HashMap<>();
-    public final Map<String, Boolean> BM = new HashMap<>();
-    public final Map<String, String> SM = new HashMap<>();
-    public final Map<String, Character> CM = new HashMap<>();
-    public final Map<String, Float> FM = new HashMap<>();
-    public final Map<String, Double> DM = new HashMap<>();
+    public final static Set<String> set = new HashSet<>();
+    public final static Map<String, Integer> IM = new HashMap<>();
+    public final static Map<String, Long> LM = new HashMap<>();
+    public final static Map<String, Boolean> BM = new HashMap<>();
+    public final static Map<String, String> SM = new HashMap<>();
+    public final static Map<String, Character> CM = new HashMap<>();
+    public final static Map<String, Float> FM = new HashMap<>();
+    public final static Map<String, Double> DM = new HashMap<>();
     /*===========================================*/
-    public final Map<String, String> IFM = new HashMap<>();
-    public final Map<String, String> FORM = new HashMap<>();
+    public final static Map<String, String> IFM = new HashMap<>();
+    public final static Map<String, String> FORM = new HashMap<>();
+
 
     /**
      * 변수 감시시에 변수 변경 <br>
@@ -67,6 +68,9 @@ public class Setting implements ActivityItem {
     public void varClear() {
         total.setLength(0);
         idLine.clear();
+
+        stack.clear();
+        uuidMap.clear();
 
         set.clear();
         IM.clear();
