@@ -4,12 +4,12 @@ import item.Check;
 import item.Setting;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Variable extends Setting implements Check {
     // :[한국어 or 영어 or 숫자][공백] 형태
-    // :([ㄱ-ㅎㅏ-ㅣ가-힣]|\\w)\\b";
-    private final String text = ":\\S|\\w\\b";
+    private final String text = ":\\S+ ";
     private final Pattern pattern = Pattern.compile(text);
 
     /**
@@ -17,26 +17,12 @@ public class Variable extends Setting implements Check {
      * @param line 한줄을 받아옴
      */
     public String getVar(String line) {
-        int count = 0;
-        int begin;
-
-//        while(pattern.matcher(line).find()) {
-//            String origin = pattern.matcher(line).group(count);
-//            String key = origin.strip().substring(1);
-//            if (set.contains(key))
-//                line = line.replaceFirst(origin, checkValue(key));
-//        }
-
-        while((begin = line.indexOf(":", count)) != -1) {
-            String copyLine = line.substring(begin);
-            int end = copyLine.indexOf(" ");
-            if (end == -1) end = copyLine.length();
-            String key = copyLine.substring(1, end);
-            if (set.contains(key)) {
-                String value = ":"+key+" ";
-                line = line.replaceFirst(value, checkValue(key));
-            }
-            count++;
+        Matcher m = pattern.matcher(line);
+        while(m.find()) {
+            String origin = m.group();
+            String key = origin.strip().substring(1);
+            if (set.contains(key))
+                line = line.replaceFirst(origin, checkValue(key));
         }
         return line;
     }

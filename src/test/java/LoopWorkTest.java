@@ -1,14 +1,7 @@
 import item.work.LoopWork;
 import loop.Bracket;
-import org.junit.jupiter.api.Test;
-
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class LoopWorkTest implements LoopWork {
-
-
 
     public static void main(String[] args) throws Exception {
         String testTotal = "dd";
@@ -23,8 +16,6 @@ public class LoopWorkTest implements LoopWork {
             System.out.println(s);
             System.out.println(bracket.check(s));
         }
-
-
     }
 
     @Override
