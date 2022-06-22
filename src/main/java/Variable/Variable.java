@@ -8,9 +8,7 @@ import java.util.regex.Pattern;
 
 public class Variable extends Setting implements Check {
     // :[한국어 or 영어 or 숫자][공백] 형태
-//    :([ㄱ-ㅎㅏ-ㅣ가-힣]|\\w)\\b";
-
-
+    // :([ㄱ-ㅎㅏ-ㅣ가-힣]|\\w)\\b";
     private final String text = ":\\S|\\w\\b";
     private final Pattern pattern = Pattern.compile(text);
 
@@ -52,8 +50,6 @@ public class Variable extends Setting implements Check {
     public boolean check(String line) {
         if (line == null || line.isEmpty()) return false;
         boolean bool = pattern.matcher(line).find();
-
-
 
         var lines = line.split(" ");
         return bool || Arrays.stream(lines)
