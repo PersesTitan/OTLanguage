@@ -11,26 +11,9 @@ import java.util.regex.Pattern;
 
 public class If extends Setting implements Check, LoopWork {
     private static final String SPECIFIED = "?ㅅ?";
-    private final String patternText = "\\n\\s*\\?ㅅ\\?\\s|^\\s*\\?ㅅ\\?\\s";
-    private final Pattern pattern = Pattern.compile(patternText);
-
-//    @Override
-//    public boolean check(String total) {
-//        return pattern.matcher(total).find();
-//    }
-
-//    public void getLoop(String total) {
-//        while (check(total)) {
-//            LoopPosition loopPosition = countPattern(total);
-//            String start = total.substring(loopPosition.getStart());
-//            int end = endPattern.matcher(start).end();
-//            String random = " ".repeat(Math.max(0, loopPosition.getBlank())) +
-//                    UUID.randomUUID();
-//            String cut = total.substring(loopPosition.getStart(), end);
-//            total = total.replace(cut, random);
-//            getLoop(total);
-//        }
-//    }
+    //시작 또는 줄바꿈 [공백] ?ㅅ? [공백 1개 이상]
+    static final String patternText = "(\\n|^)\\s*\\?ㅅ\\?\\s+";
+    private static final Pattern pattern = Pattern.compile(patternText);
 
     @Override
     public void start(String line) throws Exception {
@@ -51,6 +34,6 @@ public class If extends Setting implements Check, LoopWork {
 
     @Override
     public boolean check(String line) {
-        return false;
+        return pattern.matcher(line).find();
     }
 }
