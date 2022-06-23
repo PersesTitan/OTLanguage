@@ -6,9 +6,9 @@ import item.Setting;
 import java.util.regex.Pattern;
 
 public class For extends Setting implements Check {
-    private static final String SPECIFIED = "^^";
-    private final String patternText = "\\n\\s*\\^\\^\\s|^\\s*\\^\\^\\s";
-    private final Pattern pattern = Pattern.compile(patternText);
+    //[숫자]^[숫자]^[숫자]
+    static final String patternText = "(\\n|^\\s)\\d\\^\\d\\^\\d(\\s|$)";
+    private static final Pattern pattern = Pattern.compile(patternText);
 
     @Override
     public boolean check(String line) {
