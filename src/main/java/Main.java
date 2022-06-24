@@ -32,10 +32,10 @@ public class Main extends Setting implements ActivityItem {
                 count++;
             }
 
-            String total = Setting.total.toString();
             //괄호 -> 고유 아이디로 전환
-            bracket.bracket(total);
-
+            //괄호 계산
+            String total = Setting.total.toString();
+            total = bracket.bracket(total);
         }
         pause();
     }
