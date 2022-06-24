@@ -4,17 +4,17 @@ import item.Check;
 import item.Setting;
 
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class Bracket extends Setting implements Check {
 
     private final static char left = '{';
     private final static char right = '}';
 
-    //괄호가 존재하면 아이디로 데체
+    //괄호가 존재하면 아이디로 대체
     public String bracket(String total) throws Exception {
         stack.clear();
         for (int i = 0; i < total.length(); i++) {
-
             if (total.charAt(i) == left) {
                 stack.add(i);
             }
@@ -26,17 +26,26 @@ public class Bracket extends Setting implements Check {
                 String bl = total.substring(start, i+1);
 
                 total = total.replace(bl, uuid.concat("\n"));
-                i = start;
+                i = start + uuid.length();
                 uuidMap.put(uuid, bl);
             }
         }
         return total;
     }
 
+//    private String deleteEnter(String total) {
+//        String forPatternText = For.patternText + "\\s*\\n+\\s*" + left;
+//        String ifPatternText = If.patternText + "\\s*\\n+\\s*" + left;
+//        Pattern forPattern = Pattern.compile(forPatternText);
+//
+//    }
+
+    //uuid 가 존재하는지 체크함
     @Override
     public boolean check(String line) {
         if (uuidMap.isEmpty()) return false;
-        return uuidMap.entrySet().stream()
+        return uuidMap.entrySet()
+                .stream()
                 .anyMatch(v -> line.contains(v.getKey()));
     }
 }
