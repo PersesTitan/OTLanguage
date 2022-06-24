@@ -4,6 +4,7 @@ import item.Check;
 import item.Setting;
 
 import java.util.UUID;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Bracket extends Setting implements Check {
@@ -14,6 +15,9 @@ public class Bracket extends Setting implements Check {
     //괄호가 존재하면 아이디로 대체
     public String bracket(String total) throws Exception {
         stack.clear();
+
+        total = deleteEnter(total);
+
         for (int i = 0; i < total.length(); i++) {
             if (total.charAt(i) == left) {
                 stack.add(i);
@@ -25,7 +29,7 @@ public class Bracket extends Setting implements Check {
                 int start = stack.pop();
                 String bl = total.substring(start, i+1);
 
-                total = total.replace(bl, uuid.concat("\n"));
+                total = total.replace(bl, " " + uuid.concat("\n"));
                 i = start + uuid.length();
                 uuidMap.put(uuid, bl);
             }
@@ -33,12 +37,29 @@ public class Bracket extends Setting implements Check {
         return total;
     }
 
-//    private String deleteEnter(String total) {
-//        String forPatternText = For.patternText + "\\s*\\n+\\s*" + left;
-//        String ifPatternText = If.patternText + "\\s*\\n+\\s*" + left;
-//        Pattern forPattern = Pattern.compile(forPatternText);
-//
-//    }
+    private String deleteEnter(String total) {
+        total = setMatcher(total, For.patternText);
+        total = setMatcher(total, If.patternText);
+
+        return total;
+    }
+
+    private String setMatcher(String total, String text) {
+        String patternText = text + "\\s*\\n+\\s*\\" + left;
+        Pattern pattern = Pattern.compile(patternText);
+        Matcher matcher = pattern.matcher(total);
+
+        //?ㅅ?
+        Pattern p = Pattern.compile(text);
+        while (matcher.find()) {
+            String group = matcher.group();
+            Matcher m = p.matcher(group);
+            if (m.find())
+                total = total.replace(group, m.group().strip().concat(Character.toString(left)));
+        }
+
+        return total;
+    }
 
     //uuid 가 존재하는지 체크함
     @Override
