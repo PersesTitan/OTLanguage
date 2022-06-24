@@ -2,7 +2,6 @@ package item;
 
 import item.kind.LoopType;
 import item.kind.VarType;
-import loop.For;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -31,7 +30,7 @@ public class Setting implements ActivityItem {
      * scanner 감지하였을때 입력 받음 <br>
      * @param line 라인 받아오기
      */
-    protected void start(String line) throws Exception {
+    public void start(String line) throws Exception {
         if (!line.isBlank()) {
             if (tryCatch.check(line)) tryCatch.start(line);
             else if (tryCatchPrint.check(line)) tryCatchPrint.start(line);
