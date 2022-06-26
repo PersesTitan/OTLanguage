@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class For extends Setting implements Check {
     //[숫자]^[숫자]^[숫자]
-    static final String patternText = "(\\n|^\\s)[\\d\\-.]+\\^[\\d\\-.]+\\^[\\d\\-.]+(\\s|$)";
+    static final String patternText = "(\\n|^\\s*)[\\d\\-.]+\\^[\\d\\-.]+\\^[\\d\\-.]+(\\s*|$)";
     private static final Pattern pattern = Pattern.compile(patternText);
 
     public void start(String lines) throws Exception {
