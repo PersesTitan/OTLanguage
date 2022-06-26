@@ -40,13 +40,13 @@ public class Setting implements ActivityItem {
 
                 if (print.check(line)) print.start(line);
                 else if (println.check(line)) println.start(line);
-                else if (booleanP.check(line)) booleanP.start(line.strip());
-                else if (characterP.check(line)) characterP.start(line.strip());
-                else if (doubleP.check(line)) doubleP.start(line.strip());
-                else if (floatP.check(line)) floatP.start(line.strip());
-                else if (integerP.check(line)) integerP.start(line.strip());
-                else if (longP.check(line)) longP.start(line.strip());
-                else if (stringP.check(line)) stringP.start(line.strip());
+                else if (booleanP.check(line)) booleanP.start(line);
+                else if (characterP.check(line)) characterP.start(line);
+                else if (doubleP.check(line)) doubleP.start(line);
+                else if (floatP.check(line)) floatP.start(line);
+                else if (integerP.check(line)) integerP.start(line);
+                else if (longP.check(line)) longP.start(line);
+                else if (stringP.check(line)) stringP.start(line);
             }
         }
     }
