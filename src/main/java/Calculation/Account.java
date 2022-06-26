@@ -60,11 +60,6 @@ public class Account {
         return "0";
     }
 
-    /**
-     * @param line 라인 받아오기
-     * @return 쪼갠 후 값을 리턴
-     * @throws Exception 기호를 읽을 수 없으면 에러 발생
-     */
 //    public double account(@NotNull String line) throws Exception {
 //        String[] number = line.split("ㅇ\\+ㅇ|ㅇ-ㅇ|ㅇ\\*ㅇ|ㅇ/ㅇ|ㅇ%ㅇ");
 //        String[] sing = line.split("[0-9]|\\.");
