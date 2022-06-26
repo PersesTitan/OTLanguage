@@ -12,8 +12,7 @@ import java.util.Locale;
 public class Main extends Setting implements ActivityItem {
 
     public static void main(String[] args) throws Exception {
-//        args = new String[1];
-//        args[0] = "./hello.otl";
+//        args = new String[1]; args[0] = "./hello.otl";
         new Main(args);
     }
 
@@ -30,6 +29,7 @@ public class Main extends Setting implements ActivityItem {
                 idLine.put(count, text);
                 total.append(text);
                 count++;
+//                start(text);
             }
 
             //괄호 -> 고유 아이디로 전환
