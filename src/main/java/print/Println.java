@@ -1,12 +1,11 @@
 package print;
 
-import item.Check;
 import item.work.PrintWork;
 import item.Setting;
 
 import java.util.regex.Pattern;
 
-public class Println extends Setting implements Check, PrintWork {
+public class Println extends Setting implements PrintWork {
     private static final String SPECIFIED = "ㅆㅁㅆ";
     private final String patternText = "(\\n|^)\\s*ㅆㅁㅆ\\s";
     private final Pattern pattern = Pattern.compile(patternText);
