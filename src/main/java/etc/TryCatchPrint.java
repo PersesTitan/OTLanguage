@@ -7,7 +7,8 @@ import java.util.regex.Pattern;
 
 public class TryCatchPrint extends Setting implements Check {
     private static final String SPECIFIED = "ㅜㅆㅜ";
-    private final Pattern pattern = Pattern.compile("\\n\\s*ㅜㅆㅜ\\s|^\\s*ㅜㅆㅜ\\s");
+    private final String PATTERN = "(\\n|^)\\s*ㅜㅆㅜ\\s";
+    private final Pattern pattern = Pattern.compile(PATTERN);
 
     @Override
     public boolean check(String line) throws Exception {
