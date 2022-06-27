@@ -1,13 +1,12 @@
 package Variable;
 
-import item.Check;
 import item.Setting;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Variable extends Setting implements Check {
+public class Variable extends Setting {
     // :[한국어 or 영어 or 숫자][공백] 형태
     private final String text = ":\\S+ ";
     private final Pattern pattern = Pattern.compile(text);
@@ -32,7 +31,6 @@ public class Variable extends Setting implements Check {
      * @param line 첫 번째 줄 받아오기
      * @return 변수가 존재시 값을 받아옴
      */
-    @Override
     public boolean check(String line) {
         if (line == null || line.isEmpty()) return false;
         boolean bool = pattern.matcher(line).find();
