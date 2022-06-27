@@ -1,15 +1,12 @@
 package loop;
 
-import item.Check;
 import item.Setting;
-import item.work.LoopPosition;
 import item.work.LoopWork;
 
 import java.util.StringTokenizer;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
-public class If extends Setting implements Check, LoopWork {
+public class If extends Setting implements LoopWork {
     private static final String SPECIFIED = "?ㅅ?";
     //시작 또는 줄바꿈 [공백] ?ㅅ? [공백 1개 이상]
     static final String patternText = "(\\n|^)\\s*\\?ㅅ\\?\\s+";
