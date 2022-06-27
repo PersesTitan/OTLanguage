@@ -1,13 +1,14 @@
 package Calculation;
 
 import item.Setting;
+import item.work.Check;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class Calculation extends Setting {
+public class Calculation extends Setting implements Check {
 
     private final String SPECIFIED1 = "\\n\\s*(ㅇ\\+ㅇ|ㅇ-ㅇ|ㅇ\\*ㅇ|ㅇ/ㅇ|ㅇ%ㅇ)\\s";
     private final String SPECIFIED2 = "^\\s*(ㅇ\\+ㅇ|ㅇ-ㅇ|ㅇ\\*ㅇ|ㅇ/ㅇ|ㅇ%ㅇ)\\s";
@@ -105,6 +106,7 @@ public class Calculation extends Setting {
         } else return set.contains(word);
     }
 
+    @Override
     public boolean check(String line) {
         return line.contains("(") || line.contains(")");
     }
