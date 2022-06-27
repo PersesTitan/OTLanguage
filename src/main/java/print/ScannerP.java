@@ -1,11 +1,11 @@
 package print;
 
-import item.Check;
+import item.work.PrintWork;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class ScannerP implements Check {
+public class ScannerP {
     private static final String SPECIFIED = "ㅅㅇㅅ";
     private final String patternText = "\\sㅅㅇㅅ(\\s|$)";
     private final Pattern pattern = Pattern.compile(patternText);
@@ -15,7 +15,6 @@ public class ScannerP implements Check {
      * @param line 1줄 받아오기
      * @return 만약 ㅅㅇㅅ 을 포함하면
      */
-    @Override
     public boolean check(String line) {
         return pattern.matcher(line).find();
     }
