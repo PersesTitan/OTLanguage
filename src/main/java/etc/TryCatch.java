@@ -1,7 +1,7 @@
 package etc;
 
-import item.Check;
 import item.Setting;
+import item.work.Check;
 
 import java.util.regex.Pattern;
 
