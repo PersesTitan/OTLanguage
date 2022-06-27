@@ -1,13 +1,12 @@
 package Variable;
 
-import item.Check;
 import item.KeyValueItem;
 import item.Setting;
 import item.work.VariableWork;
 
 import java.util.regex.Pattern;
 
-public class BooleanP extends Setting implements Check, VariableWork {
+public class BooleanP extends Setting implements VariableWork {
     public static final String SPECIFIED = "ㅇㅂㅇ";
     public static final String patternText = "(\\n|^)\\s*ㅇㅂㅇ\\s";
     private final Pattern pattern = Pattern.compile(patternText);
