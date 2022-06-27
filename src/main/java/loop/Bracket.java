@@ -1,12 +1,13 @@
 package loop;
 
 import item.Setting;
+import item.work.Check;
 
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Bracket extends Setting {
+public class Bracket extends Setting implements Check {
 
     private final static char left = '{';
     private final static char right = '}';
@@ -61,6 +62,7 @@ public class Bracket extends Setting {
     }
 
     //uuid 가 존재하는지 체크함
+    @Override
     public boolean check(String line) {
         if (uuidMap.isEmpty()) return false;
         return uuidMap.entrySet()
