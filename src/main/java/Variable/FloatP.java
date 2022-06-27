@@ -1,6 +1,5 @@
 package Variable;
 
-import item.Check;
 import item.KeyValueItem;
 import item.Setting;
 import item.kind.VarType;
@@ -8,7 +7,7 @@ import item.work.VariableWork;
 
 import java.util.regex.Pattern;
 
-public class FloatP extends Setting implements Check, VariableWork {
+public class FloatP extends Setting implements VariableWork {
     public static final String SPECIFIED = "ㅇㅅㅇ";
     public static final String patternText = "(\\n|^)\\s*ㅇㅅㅇ\\s";
     private final Pattern pattern = Pattern.compile(patternText);
