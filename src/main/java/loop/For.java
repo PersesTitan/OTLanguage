@@ -1,9 +1,8 @@
 package loop;
 
-import item.Check;
 import item.Setting;
+import item.work.Check;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
