@@ -1,5 +1,7 @@
 package item.work;
 
+import item.LoopPosition;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
