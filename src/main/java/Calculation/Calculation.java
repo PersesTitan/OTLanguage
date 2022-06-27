@@ -1,7 +1,5 @@
 package Calculation;
 
-import item.ActivityItem;
-import item.Check;
 import item.Setting;
 
 import java.util.ArrayList;
@@ -9,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class Calculation extends Setting implements Check {
+public class Calculation extends Setting {
 
     private final String SPECIFIED1 = "\\n\\s*(ㅇ\\+ㅇ|ㅇ-ㅇ|ㅇ\\*ㅇ|ㅇ/ㅇ|ㅇ%ㅇ)\\s";
     private final String SPECIFIED2 = "^\\s*(ㅇ\\+ㅇ|ㅇ-ㅇ|ㅇ\\*ㅇ|ㅇ/ㅇ|ㅇ%ㅇ)\\s";
@@ -107,7 +105,6 @@ public class Calculation extends Setting implements Check {
         } else return set.contains(word);
     }
 
-    @Override
     public boolean check(String line) {
         return line.contains("(") || line.contains(")");
     }
