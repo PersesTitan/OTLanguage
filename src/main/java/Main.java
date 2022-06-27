@@ -1,5 +1,9 @@
 import item.ActivityItem;
+import item.LoopPosition;
 import item.Setting;
+import item.work.LoopWork;
+import item.work.PrintWork;
+import print.Print;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
