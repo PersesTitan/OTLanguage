@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class Big implements Check, ComparisonWork, ActivityItem {
     private static final String SPECIFIED = "ㅇ<ㅇ";
-    private final String patternText = "\\s*ㅇ<ㅇ\\s";
+    private final String patternText = "[\\S+.-]\\s*ㅇ<ㅇ\\s*[\\S+.-]";
     private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
