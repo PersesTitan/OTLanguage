@@ -1,7 +1,6 @@
 package comparison;
 
 import item.ActivityItem;
-import item.Check;
 import item.KeyValueItem;
 import item.kind.VarType;
 import item.work.ComparisonWork;
@@ -12,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class Big implements Check, ComparisonWork, ActivityItem {
+public class Big implements ComparisonWork, ActivityItem {
     private static final String SPECIFIED = "ㅇ<ㅇ";
     private final String patternText = "[\\S+.-]\\s*ㅇ<ㅇ\\s*[\\S+.-]";
     private final Pattern pattern = Pattern.compile(patternText);
