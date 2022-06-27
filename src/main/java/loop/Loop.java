@@ -1,6 +1,6 @@
 package loop;
 
-import item.work.LoopPosition;
+import item.LoopPosition;
 import item.work.LoopWork;
 
 import java.util.UUID;
