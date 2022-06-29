@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class Big implements ComparisonWork, ActivityItem {
     private static final String SPECIFIED = "ㅇ<ㅇ";
-    private final String patternText = "[\\S+.-]\\s*ㅇ<ㅇ\\s*[\\S+.-]";
+    private final String patternText = "-?\\d+\\.?\\d*\\s*ㅇ<ㅇ\\s*-?\\d+\\.?\\d*";
     private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
