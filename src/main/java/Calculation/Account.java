@@ -60,52 +60,6 @@ public class Account {
         return "0";
     }
 
-//    public double account(@NotNull String line) throws Exception {
-//        String[] number = line.split("ㅇ\\+ㅇ|ㅇ-ㅇ|ㅇ\\*ㅇ|ㅇ/ㅇ|ㅇ%ㅇ");
-//        String[] sing = line.split("[0-9]|\\.");
-//        List<String> numbers = new ArrayList<>(Arrays.asList(number));
-//        List<String> sings = new ArrayList<>(Arrays.asList(sing));
-//        numbers.removeAll(Collections.singletonList(""));
-//        numbers.removeAll(Collections.singletonList(null));
-//        sings.removeAll(Collections.singletonList(""));
-//        sings.removeAll(Collections.singletonList(null));
-//        return account(numbers, sings);
-//    }
-
-//    public double account(@NotNull List<String> numbers, @NotNull List<String> sings) throws Exception {
-//        assert sings.size() + 1 == numbers.size();
-//        double total = Double.parseDouble(numbers.get(0));
-//        for (int i = 1; i<numbers.size(); i++) {
-//            String value = sings.get(i-1);
-//            if (value.startsWith("+")) value = value.substring(1);
-//            if (value.endsWith("+")) value = value.substring(0, value.lastIndexOf("+"));
-//            double d = Double.parseDouble(numbers.get(i));
-//            switch (value) {
-//                case "ㅇ+ㅇ": total += d; break;
-//                case "ㅇ-ㅇ": total -= d; break;
-//                case "ㅇ*ㅇ": total *= d; break;
-//                case "ㅇ/ㅇ": total /= d; break;
-//                case "ㅇ%ㅇ": total %= d; break;
-//                case "ㅇ+ㅇ-": total += (-d); break;
-//                case "ㅇ-ㅇ-": total -= (-d); break;
-//                case "ㅇ*ㅇ-": total *= (-d); break;
-//                case "ㅇ/ㅇ-": total /= (-d); break;
-//                case "ㅇ%ㅇ-": total %= (-d); break;
-//                case "-ㅇ+ㅇ": total = (-total) + d; break;
-//                case "-ㅇ-ㅇ": total = (-total) - d; break;
-//                case "-ㅇ*ㅇ": total = (-total) * d; break;
-//                case "-ㅇ/ㅇ": total = (-total) / d; break;
-//                case "-ㅇ%ㅇ": total = (-total) % d; break;
-//                case "-ㅇ+ㅇ-": total = (-total) + (-d); break;
-//                case "-ㅇ-ㅇ-": total = (-total) - (-d); break;
-//                case "-ㅇ*ㅇ-": total = (-total) * (-d); break;
-//                case "-ㅇ/ㅇ-": total = (-total) / (-d); break;
-//                case "-ㅇ%ㅇ-": total = (-total) % (-d); break;
-//                default: throw new Exception(value + "는 계산식이 아닙니다.");
-//            }
-//        } return total;
-//    }
-
     private void stack(String line) throws Exception {
         Stack<Integer> stack = new Stack<>();
         for (int i = 0; i<line.length(); i++) {
