@@ -15,6 +15,8 @@ public class Big implements ComparisonWork, ActivityItem {
     private static final String SPECIFIED = "ㅇ<ㅇ";
     private final String patternText = "-?\\d+\\.?\\d*\\s*ㅇ<ㅇ\\s*-?\\d+\\.?\\d*";
     private final Pattern pattern = Pattern.compile(patternText);
+    private final static char left = '(';
+    private final static char right = ')';
 
     @Override
     public boolean check(String line) throws Exception {
