@@ -1,8 +1,10 @@
 package Variable;
 
 import item.Setting;
+import item.kind.VarType;
 
 import java.util.Arrays;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
