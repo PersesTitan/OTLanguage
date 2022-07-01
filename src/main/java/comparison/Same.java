@@ -9,8 +9,8 @@ public class Same implements ComparisonWork {
     private final static Pattern pattern = Pattern.compile(PATTERN);
 
     @Override
-    public boolean start(String line) throws Exception {
-        return false;
+    public String start(String line) throws Exception {
+        return null;
     }
 
     @Override
