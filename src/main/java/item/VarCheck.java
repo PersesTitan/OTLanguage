@@ -20,6 +20,8 @@ public class VarCheck {
     }
 
     private boolean isBoolean(String line) {
+        line = line.replace("ㅇㅇ", "true");
+        line = line.replace("ㄴㄴ", "false");
         if (line.isBlank()) return false;
         return line.equals("false") || line.equals("true");
     }
