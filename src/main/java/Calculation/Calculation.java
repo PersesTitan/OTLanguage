@@ -42,9 +42,8 @@ public class Calculation extends Setting implements Check {
     /**
      * @param line 라인 받아오기
      * @return 계산후에 값을 반환함 괄호가 존재하면 재귀
-     * @throws Exception 예러 발생시 에러 발생
      */
-    private String calculation(String line) throws Exception {
+    private String calculation(String line) {
         if (check(line)) {
             if (line.contains(":")) {
                 int start1 = line.lastIndexOf("(");
