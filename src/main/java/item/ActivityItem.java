@@ -1,9 +1,14 @@
 package item;
 
 import Calculation.Account;
+import Calculation.Calculation;
 import Variable.*;
+import comparison.Comparison;
+import comparison.ComparisonBool;
+import comparison.StringComparison;
 import etc.TryCatch;
 import etc.TryCatchPrint;
+import item.work.ComparisonWork;
 import loop.Bracket;
 import loop.For;
 import loop.If;
@@ -26,6 +31,7 @@ public interface ActivityItem {
     LongP longP = new LongP();
     StringP stringP = new StringP();
     Variable variable = new Variable();
+    SetVariable setVariable = new SetVariable();
 
     TryCatch tryCatch = new TryCatch();
     TryCatchPrint tryCatchPrint = new TryCatchPrint();
@@ -34,5 +40,11 @@ public interface ActivityItem {
     If ifP = new If();
     For forP = new For();
 
+    Calculation calculation = new Calculation();
+    ComparisonWork comparison = new Comparison();
+    ComparisonWork comparisonBool = new ComparisonBool();
+    ComparisonWork stringComparison = new StringComparison();
+
+    //시작할때 실행
     Bracket bracket = new Bracket();
 }
