@@ -22,7 +22,7 @@ public class IntegerP extends Setting implements VariableWork {
         KeyValueItem keyValue = setKeyValue(SPECIFIED, line);
         String key = keyValue.getKey();
         String value = keyValue.getValue();
-        if (!varCheck.check(line, VarType.Integer)) throw new Exception(typeErrorMessage);
+        if (!varCheck.check(value, VarType.Integer)) throw new Exception(typeErrorMessage);
         IM.put(key, Integer.valueOf(value));
         set.add(key);
     }
