@@ -21,14 +21,9 @@ public class For extends Setting implements Check {
                 .collect(Collectors.toList());
 
         String key = list.get(1);
-        String value;
-        if (!uuidMap.containsKey(key)) {
-            value = key + "\n";
-        } else {
-            if (list.size() != 2) throw new Exception("문법 오류 발생하였습니다.");
-            //괄호 제거 작업
-            value = uuidMap.get(key).substring(1, uuidMap.get(key).length()-1).strip();
-        }
+        if (!uuidMap.containsKey(key) || list.size() != 2) throw new Exception("문법 오류 발생하였습니다.");
+        //괄호 제거 작업
+        String value = uuidMap.get(key).substring(1, uuidMap.get(key).length()-1).strip();
 
         List<Double> numbers = Arrays.stream(list.get(0).split("\\^"))
                 .mapToDouble(Double::parseDouble)
