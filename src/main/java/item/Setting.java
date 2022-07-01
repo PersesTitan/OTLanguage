@@ -25,31 +25,56 @@ public class Setting implements ActivityItem {
     public final static Map<String, String> FORM = new HashMap<>();
 
 
+    public void start(String line) throws Exception {
+        if (line.isBlank()) return;
+        if (variable.check(line)) line = variable.getVar(line);
+        if (scannerP.check(line)) line = scannerP.start(line);
+        if (account.check(line)) line = account.start(line);
+        if (comparison.check(line)) line = comparison.start(line);
+        if (stringComparison.check(line)) line = stringComparison.start(line);
+        if (comparisonBool.check(line)) line = comparisonBool.start(line);
+
+        if (bracket.check(line)) {
+            if (ifP.check(line)) ifP.start(line);
+            else if (forP.check(line)) forP.start(line);
+        } else if (print.check(line)) print.start(line);
+        else if (println.check(line)) println.start(line);
+        else if (booleanP.check(line)) booleanP.start(line);
+        else if (characterP.check(line)) characterP.start(line);
+        else if (doubleP.check(line)) doubleP.start(line);
+        else if (floatP.check(line)) floatP.start(line);
+        else if (integerP.check(line)) integerP.start(line);
+        else if (longP.check(line)) longP.start(line);
+        else if (stringP.check(line)) stringP.start(line);
+
+        if (setVariable.check(line)) setVariable.start(line);
+    }
+
     /**
      * 변수 감시시에 변수 변경 <br>
      * scanner 감지하였을때 입력 받음 <br>
      * @param line 라인 받아오기
      */
-    public void start(String line) throws Exception {
-        if (!line.isBlank()) {
-            if (tryCatch.check(line)) tryCatch.start(line);
-            else if (tryCatchPrint.check(line)) tryCatchPrint.start(line);
-            else {
-                if (variable.check(line)) line = variable.getVar(line);
-                if (scannerP.check(line)) line = scannerP.start(line);
-
-                if (print.check(line)) print.start(line);
-                else if (println.check(line)) println.start(line);
-                else if (booleanP.check(line)) booleanP.start(line);
-                else if (characterP.check(line)) characterP.start(line);
-                else if (doubleP.check(line)) doubleP.start(line);
-                else if (floatP.check(line)) floatP.start(line);
-                else if (integerP.check(line)) integerP.start(line);
-                else if (longP.check(line)) longP.start(line);
-                else if (stringP.check(line)) stringP.start(line);
-            }
-        }
-    }
+//    public void start(String line) throws Exception {
+//        if (!line.isBlank()) {
+//            if (tryCatch.check(line)) tryCatch.start(line);
+//            else if (tryCatchPrint.check(line)) tryCatchPrint.start(line);
+//            else {
+//                if (variable.check(line)) line = variable.getVar(line);
+//                if (scannerP.check(line)) line = scannerP.start(line);
+//
+//                if (print.check(line)) print.start(line);
+//                else if (println.check(line)) println.start(line);
+//                else if (booleanP.check(line)) booleanP.start(line);
+//                else if (characterP.check(line)) characterP.start(line);
+//                else if (doubleP.check(line)) doubleP.start(line);
+//                else if (floatP.check(line)) floatP.start(line);
+//                else if (integerP.check(line)) integerP.start(line);
+//                else if (longP.check(line)) longP.start(line);
+//                else if (stringP.check(line)) stringP.start(line);
+//            }
+//        }
+//    }
 
     /**
      * @param text 텍스트 확인하는 라인
@@ -105,7 +130,7 @@ public class Setting implements ActivityItem {
      * @param word key 값을 받아옴
      * @return 변수에 저장된 값을 반환함
      */
-    protected String checkValue(@NotNull String word) {
+    protected String  checkValue(@NotNull String word) {
         if (BM.containsKey(word)) return BM.get(word) ? "ㅇㅇ" : "ㄴㄴ";
         else if (CM.containsKey(word)) return CM.get(word).toString();
         else if (DM.containsKey(word)) return DM.get(word).toString();
