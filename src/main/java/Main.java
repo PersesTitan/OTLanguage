@@ -1,9 +1,5 @@
 import item.ActivityItem;
-import item.LoopPosition;
 import item.Setting;
-import item.work.LoopWork;
-import item.work.PrintWork;
-import print.Print;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -16,7 +12,7 @@ import java.util.Locale;
 public class Main extends Setting implements ActivityItem {
 
     public static void main(String[] args) throws Exception {
-//        args = new String[1]; args[0] = "./hello.otl";
+        args = new String[1]; args[0] = "./hello.otl";
         new Main(args);
     }
 
@@ -31,15 +27,15 @@ public class Main extends Setting implements ActivityItem {
         try (BufferedReader reader = new BufferedReader(new FileReader(path, StandardCharsets.UTF_8))) {
             while ((text = reader.readLine()) != null) {
                 idLine.put(count, text);
-                total.append(text);
+                total.append(text).append("\n");
                 count++;
-//                start(text);
             }
 
             //괄호 -> 고유 아이디로 전환
             //괄호 계산
             String total = Setting.total.toString();
             total = bracket.bracket(total);
+            for (String line : total.split("\\n")) start(line);
         }
         pause();
     }
@@ -60,7 +56,7 @@ public class Main extends Setting implements ActivityItem {
 
     private void pause() {
         try {
-            System.out.println("\n=================================");
+            System.out.println("\n==================================");
             System.out.println("종료 : Enter");
             System.in.read();
         } catch (Exception ignored) {}
