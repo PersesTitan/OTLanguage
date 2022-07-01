@@ -1,12 +1,13 @@
 package Calculation;
 
+import item.work.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Account {
+public class Account implements Check {
     //숫자 기호 숫자
     private final String patternText = "-?\\d+\\.?\\d*\\s*(ㅇ\\+ㅇ|ㅇ-ㅇ|ㅇ\\*ㅇ|ㅇ/ㅇ|ㅇ%ㅇ)\\s*-?\\d+\\.?\\d*";
     private final String singText = "ㅇ\\+ㅇ|ㅇ-ㅇ|ㅇ\\*ㅇ|ㅇ/ㅇ|ㅇ%ㅇ";
@@ -18,16 +19,18 @@ public class Account {
     private static final char right = ')';
 
     //숫자 기호 숫자가 없어질때까지 반복
-    public String account(String line) {
+    public String account(String line) throws Exception {
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
             String value = matcher.group();
             Matcher singMatcher = singPattern.matcher(value);
-            Matcher numberMatcher = numberPattern.matcher(value);
-            String number1 = numberMatcher.group(0);
-            String number2 = numberMatcher.group(1);
-            String sing = singMatcher.group();
-            line = line.replaceFirst(value, check(number1, number2, sing));
+            if (singMatcher.find()) {
+                String sing = singMatcher.group();
+                StringTokenizer stringTokenizer = new StringTokenizer(value, sing);
+                String number1 = stringTokenizer.nextToken().strip();
+                String number2 = stringTokenizer.nextToken().strip();
+                line = line.replace(value, check(number1, number2, sing));
+            } else throw new Exception("문법 오류");
         }
         return line;
     }
@@ -60,7 +63,7 @@ public class Account {
         return "0";
     }
 
-    private void stack(String line) throws Exception {
+    private String stack(String line) throws Exception {
         Stack<Integer> stack = new Stack<>();
         for (int i = 0; i<line.length(); i++) {
             if (line.charAt(i) == left) {
@@ -74,5 +77,16 @@ public class Account {
                 i = start;
             }
         }
+
+        return account(line);
+    }
+
+    @Override
+    public boolean check(String line) throws Exception {
+        return pattern.matcher(line).find();
+    }
+
+    public String start(String line) throws Exception {
+        return stack(line);
     }
 }
