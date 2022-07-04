@@ -43,7 +43,7 @@ public class Calculation extends Setting implements Check {
      * @param line 라인 받아오기
      * @return 계산후에 값을 반환함 괄호가 존재하면 재귀
      */
-    private String calculation(String line) {
+    private String calculation(String line) throws Exception {
         if (check(line)) {
             if (line.contains(":")) {
                 int start1 = line.lastIndexOf("(");
