@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SetVariable extends Setting implements Check {
-    private final String MATCHER = "\\S+\\s*:\\s*\\S+";
+    private final String MATCHER = "\\S+: \\S+";
     private final Pattern pattern = Pattern.compile(MATCHER);
 
     public void start(String line) throws Exception {
@@ -19,7 +19,6 @@ public class SetVariable extends Setting implements Check {
             String key = stringTokenizer.nextToken().strip();
             String value = stringTokenizer.nextToken().strip();
 
-            if (!set.contains(key)) throw new Exception("존재하지 않는 변수 입니다.");
             if (BM.containsKey(key)) {
                 if (!varCheck.check(value, VarType.Boolean)) throw new Exception("타입 오류 발생");
                 else BM.put(key, value.equals("ㅇㅇ"));
