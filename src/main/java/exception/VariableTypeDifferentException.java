@@ -17,8 +17,4 @@ public class VariableTypeDifferentException extends RuntimeException {
     public VariableTypeDifferentException(Throwable cause) {
         super(cause);
     }
-
-    protected VariableTypeDifferentException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }
