@@ -1,8 +1,8 @@
 package item;
 
-import Calculation.Account;
-import Calculation.Calculation;
-import Variable.*;
+import calculation.Account;
+import calculation.Calculation;
+import variable.*;
 import comparison.Comparison;
 import comparison.ComparisonBool;
 import comparison.StringComparison;

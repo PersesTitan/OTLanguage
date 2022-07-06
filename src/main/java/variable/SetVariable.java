@@ -1,4 +1,4 @@
-package Variable;
+package variable;
 
 import item.Setting;
 import item.kind.VarType;
