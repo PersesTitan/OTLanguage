@@ -1,14 +1,15 @@
-package Variable;
+package variable;
 
 import item.KeyValueItem;
 import item.Setting;
+import item.kind.VarType;
 import item.work.VariableWork;
 
 import java.util.regex.Pattern;
 
-public class BooleanP extends Setting implements VariableWork {
-    public static final String SPECIFIED = "ㅇㅂㅇ";
-    public static final String patternText = "(\\n|^)\\s*ㅇㅂㅇ\\s";
+public class DoubleP extends Setting implements VariableWork {
+    public static final String SPECIFIED = "ㅇㅆㅇ";
+    public static final String patternText = "(\\n|^)\\s*ㅇㅆㅇ\\s";
     private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
@@ -21,10 +22,8 @@ public class BooleanP extends Setting implements VariableWork {
         KeyValueItem keyValue = setKeyValue(SPECIFIED, line);
         String key = keyValue.getKey();
         String value = keyValue.getValue();
-        value = value.replace("ㅇㅇ", "true");
-        value = value.replace("ㄴㄴ", "false");
-        value = value.replace(" ", "");
-        BM.put(key, changeBool(value));
+        if (!varCheck.check(value, VarType.Double)) throw new Exception(typeErrorMessage);
+        DM.put(key, Double.valueOf(value));
         set.add(key);
     }
 }

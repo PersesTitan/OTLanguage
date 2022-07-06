@@ -1,4 +1,4 @@
-package Variable;
+package variable;
 
 import item.KeyValueItem;
 import item.Setting;
@@ -7,9 +7,9 @@ import item.work.VariableWork;
 
 import java.util.regex.Pattern;
 
-public class FloatP extends Setting implements VariableWork {
-    public static final String SPECIFIED = "ㅇㅅㅇ";
-    public static final String patternText = "(\\n|^)\\s*ㅇㅅㅇ\\s";
+public class CharacterP extends Setting implements VariableWork {
+    public static final String SPECIFIED = "ㅇㄱㅇ";
+    public static final String patternText = "(\\n|^)\\s*ㅇㄱㅇ\\s";
     private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
@@ -22,8 +22,9 @@ public class FloatP extends Setting implements VariableWork {
         KeyValueItem keyValue = setKeyValue(SPECIFIED, line);
         String key = keyValue.getKey();
         String value = keyValue.getValue();
-        if (!varCheck.check(value, VarType.Float)) throw new Exception(typeErrorMessage);
-        FM.put(key, Float.valueOf(value));
+        //char 형인지 확인
+        if (!varCheck.check(value, VarType.Character)) throw new Exception(typeErrorMessage);
+        CM.put(key, value.charAt(0));
         set.add(key);
     }
 }

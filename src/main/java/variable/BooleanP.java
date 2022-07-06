@@ -1,4 +1,4 @@
-package Variable;
+package variable;
 
 import item.KeyValueItem;
 import item.Setting;
@@ -6,9 +6,9 @@ import item.work.VariableWork;
 
 import java.util.regex.Pattern;
 
-public class StringP extends Setting implements VariableWork {
-    public static final String SPECIFIED = "ㅇㅁㅇ";
-    public static final String patternText = "(\\n|^)\\s*ㅇㅁㅇ\\s";
+public class BooleanP extends Setting implements VariableWork {
+    public static final String SPECIFIED = "ㅇㅂㅇ";
+    public static final String patternText = "(\\n|^)\\s*ㅇㅂㅇ\\s";
     private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
@@ -16,17 +16,15 @@ public class StringP extends Setting implements VariableWork {
         return pattern.matcher(line).find();
     }
 
-
-    /**
-     * @param line 라인 값 받아 오기
-     * @throws Exception 변수를 찾을 수 없을 시 에러 발생
-     */
     @Override
     public void start(String line) throws Exception {
         KeyValueItem keyValue = setKeyValue(SPECIFIED, line);
         String key = keyValue.getKey();
         String value = keyValue.getValue();
-        SM.put(key, value);
+        value = value.replace("ㅇㅇ", "true");
+        value = value.replace("ㄴㄴ", "false");
+        value = value.replace(" ", "");
+        BM.put(key, changeBool(value));
         set.add(key);
     }
 }
