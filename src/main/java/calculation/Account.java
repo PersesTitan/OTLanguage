@@ -1,7 +1,6 @@
-package Calculation;
+package calculation;
 
 import item.work.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.regex.Matcher;
