@@ -3,6 +3,7 @@ package comparison;
 import item.work.ComparisonWork;
 
 import java.util.Stack;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,48 +22,55 @@ public class ComparisonBool implements ComparisonWork {
 
     @Override
     public String start(String line) throws Exception {
-        return stack(line);
+        return checkRun(line);
     }
 
+    //괄호 있는지 확인 하고 계산
+    private String checkRun(String line) throws Exception {
+        line = notChange(line);
+        if (line.contains("(") || line.contains(")")) {
+            line = stack(line);
+            line = notChange(line);
+        }
+        return cut(line);
+    }
+
+
+    //ㅇㅇ ㄸ ㄴㄴ => ㅇㅇ
+    private String cut(String line) throws Exception {
+        Matcher matcher = pattern.matcher(line);
+        while (matcher.find()) {
+            String value = matcher.group();
+            StringTokenizer tokenizer = new StringTokenizer(value, "ㄸㄲ", true);
+            try {
+                String text1 = tokenizer.nextToken().strip();
+                String sing = tokenizer.nextToken();
+                String text2 = tokenizer.nextToken().strip();
+                boolean b1 = text1.equals("ㅇㅇ");
+                boolean b2 = text2.equals("ㅇㅇ");
+                boolean b = sing.equals("ㄸ") ? (b1 || b2) : (b1 && b2);
+                line = line.replaceFirst(value, b ? "ㅇㅇ" : "ㄴㄴ");
+            } catch (Exception ignored) {
+                throw new Exception("문법 오류 발생");
+            }
+        }
+        return line;
+    }
+
+    //====================================================================================
     private String stack(String line) throws Exception {
         Stack<Integer> stack = new Stack<>();
-        line = notChange(line);
         for (int i = 0; i<line.length(); i++) {
             if (line.charAt(i) == left) stack.add(i);
             else if (line.charAt(i) == right) {
                 if (stack.isEmpty()) throw new Exception("괄호 짝이 일치하지 않습니다.");
                 int start = stack.pop();
                 String bool = line.substring(start, i+1);
-                line = line.replaceFirst(bool, comparison(line));
+                line = line.replace(bool, cut(bool.substring(1, bool.length()-1)));
                 i = start;
             }
         }
         return line;
-    }
-
-    // ㅇㅇ ㄸ ㅇㅇ 를 따로 분리시키는 작업
-    private String comparison(String line) {
-        line = notChange(line);
-        Matcher matcher = pattern.matcher(line);
-        while (matcher.find()) {
-            String value = matcher.group();
-            Matcher singMatch = this.singPattern.matcher(value);
-            Matcher boolMatch = this.boolPattern.matcher(value);
-            String sing = singMatch.group();
-            String bool1 = boolMatch.group(0);
-            String bool2 = boolMatch.group(1);
-            line = line.replaceFirst(value, check(bool1, bool2, sing));
-            notChange(line);
-        }
-        return line;
-    }
-
-    //ㅇㅇ ㄴㄴ ㄸ ㄲ 를 계산하고 반환하는 작업
-    private String check(String b1, String b2, String sing) {
-        boolean bool1 = b1.equals("ㅇㅇ");
-        boolean bool2 = b2.equals("ㅇㅇ");
-        if (sing.equals("ㄸ")) return bool1 || bool2 ? "ㅇㅇ" : "ㄴㄴ";
-        else return bool1 && bool2 ? "ㅇㅇ" : "ㄴㄴ";
     }
 
     //ㅇㄴ(ㅇㅇ|ㄴㄴ) ㅇㄴㅇㅇ, ㅇㄴㄴㄴ 변경
