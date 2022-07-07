@@ -27,6 +27,14 @@ public class Setting implements ActivityItem {
 
     public void start(String line) throws Exception {
         if (line.isBlank()) return;
+        if (priorityPrint.check(line)) {
+            priorityPrint.start(line);
+            return;
+        } else if (priorityPrintln.check(line)) {
+            priorityPrintln.start(line);
+            return;
+        }
+
         if (variable.check(line)) line = variable.getVar(line);
         if (scannerP.check(line)) line = scannerP.start(line);
         if (account.check(line)) line = account.start(line);
