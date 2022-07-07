@@ -5,7 +5,7 @@ import item.Setting;
 
 import java.util.regex.Pattern;
 
-public class Print extends Setting implements PrintWork {
+public class Print implements PrintWork {
     private static final String SPECIFIED = "ㅅㅁㅅ";
     private final String patternText = "(\\n|^)\\s*ㅅㅁㅅ($|\\s)";
     private final Pattern pattern = Pattern.compile(patternText);
