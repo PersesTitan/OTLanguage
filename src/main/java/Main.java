@@ -1,5 +1,5 @@
-import item.ActivityItem;
-import item.Setting;
+import origin.item.ActivityItem;
+import origin.item.Setting;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -12,7 +12,7 @@ import java.util.Locale;
 public class Main extends Setting implements ActivityItem {
 
     public static void main(String[] args) throws Exception {
-//        args = new String[1]; args[0] = "./hello.otl";
+        args = new String[1]; args[0] = "./hello.otl";
         new Main(args);
     }
 
@@ -23,7 +23,6 @@ public class Main extends Setting implements ActivityItem {
         int count = 0;
         varClear();
         String text;
-        System.out.println("================출력================");
         try (BufferedReader reader = new BufferedReader(new FileReader(path, StandardCharsets.UTF_8))) {
             while ((text = reader.readLine()) != null) {
                 idLine.put(count, text);
@@ -56,7 +55,6 @@ public class Main extends Setting implements ActivityItem {
 
     private void pause() {
         try {
-            System.out.println("\n==================================");
             System.out.println("종료 : Enter");
             System.in.read();
         } catch (Exception ignored) {}
