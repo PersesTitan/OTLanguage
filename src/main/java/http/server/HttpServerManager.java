@@ -1,6 +1,8 @@
 package http.server;
 
 import com.sun.net.httpserver.HttpServer;
+import http.handler.HttpGetHandler;
+import http.handler.HttpPostHandler;
 import http.items.Temporary;
 
 import java.io.IOException;
