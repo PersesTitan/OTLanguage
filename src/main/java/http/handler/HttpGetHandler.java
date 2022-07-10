@@ -12,15 +12,14 @@ public class HttpGetHandler {
 
     public String handle(HttpExchange exchange) throws IOException {
         Map<String, Object> parameters = new HashMap<>();
-        URI requestUri = exchange.getRequestURI();
-        String query = requestUri.getRawQuery();
-        UriParser uriParser = new UriParser();
+        var requestUri = exchange.getRequestURI();
+        var query = requestUri.getRawQuery();
+        var uriParser = new UriParser();
         uriParser.parsesQuery(query, parameters);
         Temporary.GET.putAll(parameters);
 
-        StringBuilder response = new StringBuilder();
-        parameters.forEach((key, value) -> response.append(key).append("=").append(value).append("&"));
-        int responseSize = response.toString().length();
-        return responseSize<=0 ? "" : response.substring(0, responseSize-1).strip();
+        var response = new StringBuilder();
+        parameters.forEach((key, value) -> response.append(key).append("=").append(value).append(" "));
+        return response.toString();
     }
 }
