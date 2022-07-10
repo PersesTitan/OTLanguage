@@ -76,7 +76,6 @@ public class Account implements Check {
                 i = start;
             }
         }
-
         return account(line);
     }
 
