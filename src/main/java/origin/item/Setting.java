@@ -4,6 +4,9 @@ import http.items.Temporary;
 import origin.item.kind.LoopType;
 import origin.item.kind.VarType;
 import org.jetbrains.annotations.NotNull;
+import origin.variable.GetVariable;
+import origin.variable.MakeVariable;
+import origin.variable.VariableRepository;
 
 import java.util.*;
 
@@ -25,6 +28,7 @@ public class Setting implements ActivityItem {
     public final static Map<String, String> IFM = new HashMap<>();
     public final static Map<String, String> FORM = new HashMap<>();
 
+    GetVariable getVariable = new GetVariable();
 
     public void start(String line) throws Exception {
         if (line.isBlank()) return;
@@ -36,7 +40,8 @@ public class Setting implements ActivityItem {
             return;
         }
 
-        if (variable.check(line)) line = variable.getVar(line);
+        if (getVariable.check(line)) line = getVariable.getVariable(line);
+//        if (variable.check(line)) line = variable.getVar(line);
         if (scannerP.check(line)) line = scannerP.start(line);
         if (account.check(line)) line = account.start(line);
         if (comparison.check(line)) line = comparison.start(line);
@@ -48,13 +53,16 @@ public class Setting implements ActivityItem {
             else if (forP.check(line)) forP.start(line);
         } else if (print.check(line)) print.start(line);
         else if (println.check(line)) println.start(line);
-        else if (booleanP.check(line)) booleanP.start(line);
-        else if (characterP.check(line)) characterP.start(line);
-        else if (doubleP.check(line)) doubleP.start(line);
-        else if (floatP.check(line)) floatP.start(line);
-        else if (integerP.check(line)) integerP.start(line);
-        else if (longP.check(line)) longP.start(line);
-        else if (stringP.check(line)) stringP.start(line);
+
+
+
+//        if (booleanP.check(line)) booleanP.start(line);
+//        else if (characterP.check(line)) characterP.start(line);
+//        else if (doubleP.check(line)) doubleP.start(line);
+//        else if (floatP.check(line)) floatP.start(line);
+//        else if (integerP.check(line)) integerP.start(line);
+//        else if (longP.check(line)) longP.start(line);
+//        else if (stringP.check(line)) stringP.start(line);
 
         if (setVariable.check(line)) setVariable.start(line);
 
