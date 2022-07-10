@@ -1,3 +1,4 @@
+import http.server.Server;
 import origin.item.ActivityItem;
 import origin.item.Setting;
 
@@ -6,8 +7,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
+import java.util.*;
 
 public class Main extends Setting implements ActivityItem {
 
@@ -55,8 +57,10 @@ public class Main extends Setting implements ActivityItem {
 
     private void pause() {
         try {
-            System.out.println("종료 : Enter");
             System.in.read();
-        } catch (Exception ignored) {}
+        } catch (IOException ignored) {} finally {
+            if (Server.httpServerManager != null) Server.httpServerManager.stop();
+        }
+        System.exit(0);
     }
 }
