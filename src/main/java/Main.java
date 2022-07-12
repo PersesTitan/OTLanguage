@@ -1,18 +1,20 @@
-import item.ActivityItem;
-import item.Setting;
+import http.server.Server;
+import origin.item.ActivityItem;
+import origin.item.Setting;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
+import java.util.*;
 
 public class Main extends Setting implements ActivityItem {
 
     public static void main(String[] args) throws Exception {
-//        args = new String[1]; args[0] = "./hello.otl";
+        args = new String[1]; args[0] = "./hello.otl";
         new Main(args);
     }
 
@@ -23,7 +25,6 @@ public class Main extends Setting implements ActivityItem {
         int count = 0;
         varClear();
         String text;
-        System.out.println("================출력================");
         try (BufferedReader reader = new BufferedReader(new FileReader(path, StandardCharsets.UTF_8))) {
             while ((text = reader.readLine()) != null) {
                 idLine.put(count, text);
@@ -56,9 +57,10 @@ public class Main extends Setting implements ActivityItem {
 
     private void pause() {
         try {
-            System.out.println("\n==================================");
-            System.out.println("종료 : Enter");
             System.in.read();
-        } catch (Exception ignored) {}
+        } catch (IOException ignored) {} finally {
+            if (Server.httpServerManager != null) Server.httpServerManager.stop();
+        }
+        System.exit(0);
     }
 }
