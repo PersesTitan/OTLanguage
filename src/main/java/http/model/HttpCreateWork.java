@@ -1,6 +1,6 @@
-package origin.extend;
+package http.model;
 
-public interface ClassWork {
+public interface HttpCreateWork {
     boolean check(String line);
     void start(String line);
 }
