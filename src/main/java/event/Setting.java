@@ -21,6 +21,7 @@ import origin.consol.define.PriorityPrintWork;
 import origin.loop.controller.For;
 import origin.loop.controller.If;
 import origin.loop.model.LoopWork;
+import origin.thead.controller.Sleep;
 import origin.variable.controller.MakeVariable;
 import origin.variable.define.VariableType;
 import origin.variable.model.Repository;
@@ -51,6 +52,11 @@ public class Setting implements Controller, Repository {
     }
 
     //시작할때 변수 이름 및 매소드 새팅 생성
+
+    /**
+     * 저장소
+     * @see Repository
+     */
     public void firstStart() {
         Setting.total.setLength(0);
         HttpRepository.pathMap.clear();
