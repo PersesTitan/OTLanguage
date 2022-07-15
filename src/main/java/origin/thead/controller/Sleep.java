@@ -6,8 +6,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Sleep implements ThreadWork {
-    private final String patternText = "^\\s*ㅡ_ㅡ\\s*\\d+";
-    private final Pattern pattern = Pattern.compile(patternText);
+//    private final String patternText = "^\\s*ㅡ_ㅡ\\s*\\d+";
+//    private final Pattern pattern = Pattern.compile(patternText);
+    private final Pattern pattern;
+
+    public Sleep(String pattern) {
+        this.pattern = Pattern.compile(pattern);
+    }
 
     @Override
     public boolean check(String line) {
