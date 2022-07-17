@@ -3,8 +3,7 @@ package pattern;
 import java.util.regex.Pattern;
 
 public interface MakePatternWork {
-    default boolean check(String line, Pattern pattern) {
-        return pattern.matcher(line).find();
-    }
+    boolean check(String line);
+    Pattern getPattern();
     void start(String line);
 }
