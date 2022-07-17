@@ -1,7 +1,7 @@
 package http.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import http.items.Temporary;
+import http.items.HttpRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +18,9 @@ public class HttpPostHandler {
         var query = br.readLine();
         var uriParse = new UriParser();
         uriParse.parsesQuery(query, parameters);
-        Temporary.POST.putAll(parameters);
+        //경로를 키 값으로 저장
+        String path = exchange.getRequestURI().getPath();
+        HttpRepository.POST.get(path).putAll(parameters);
 
         var response = new StringBuilder();
         parameters.forEach((key, value) -> response.append(key).append("=").append(value).append(" "));
