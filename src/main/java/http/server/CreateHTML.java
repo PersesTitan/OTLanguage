@@ -1,6 +1,7 @@
 package http.server;
 
-import http.items.Temporary;
+import http.items.HttpRepository;
+import origin.variable.model.Repository;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CreateHTML implements Temporary {
+public class CreateHTML implements HttpRepository, Repository {
     //{{ :[변수이름] }}
     private final String patternText = "\\{\\{\\s*:\\S+\\s*}}";
     private final Pattern pattern = Pattern.compile(patternText);
@@ -32,7 +33,8 @@ public class CreateHTML implements Temporary {
         if (matcher.find()) {
             String variable = matcher.group();
             String var = variable.substring(2, variable.length()-2).strip().substring(1);
-            if (portMap.containsKey(var)) line = line.replaceAll(patternText, portMap.get(var));
+            if (partMap.containsKey(var))
+                line = line.replaceAll(patternText, partMap.get(var));
         }
         return line;
     }
