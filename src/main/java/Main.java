@@ -1,47 +1,40 @@
+import event.Setting;
+import http.items.Color;
 import http.server.Server;
-import origin.item.ActivityItem;
-import origin.item.Setting;
+import origin.exception.FileFailException;
+import origin.exception.FileFailMessage;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Locale;
 
-public class Main extends Setting implements ActivityItem {
-
-    public static void main(String[] args) throws Exception {
+public class Main extends Setting {
+    public static void main(String[] args) {
         args = new String[1]; args[0] = "./hello.otl";
         new Main(args);
     }
 
-    private Main(String[] args) throws Exception {
+    private Main(String[] args) {
         String path = args.length <= 0 ? showGUI() : args[0];
-        if (!new File(path).canRead()) throw new Exception("파일을 읽을 수 없습니다.");
-        if (!path.toLowerCase(Locale.ROOT).endsWith(".otl")) throw new Exception("확장자를 확인해주세요.");
-        int count = 0;
-        varClear();
+        if (!new File(path).canRead()) throw new FileFailException(FileFailMessage.doNotReadFile);
+        if (!path.toLowerCase(Locale.ROOT).endsWith(".otl")) throw new FileFailException(FileFailMessage.notMatchExtension);
+        firstStart();
+
         String text;
         try (BufferedReader reader = new BufferedReader(new FileReader(path, StandardCharsets.UTF_8))) {
-            while ((text = reader.readLine()) != null) {
-                idLine.put(count, text);
-                total.append(text).append("\n");
-                count++;
+            while ((text = reader.readLine()) != null) Setting.total.append(text).append("\n");
+            //괄호 -> 고유 아이디로 전환 //괄호 계산
+            String total = bracket.bracket(Setting.total.toString());
+            for (String line : total.split("\\n")) {
+                start(line); // 실행 메소드
             }
-
-            //괄호 -> 고유 아이디로 전환
-            //괄호 계산
-            String total = Setting.total.toString();
-            total = bracket.bracket(total);
-            for (String line : total.split("\\n")) start(line);
-        }
+        } catch (IOException ignored) {}
         pause();
     }
 
-    private String showGUI() throws Exception {
+    private String showGUI() {
         final JFrame frame = new JFrame();
         final String[] extensions = {"otl"};
         final JFileChooser chooser = new JFileChooser();
@@ -52,7 +45,7 @@ public class Main extends Setting implements ActivityItem {
         int open = chooser.showOpenDialog(frame.getParent());
         if (open == JFileChooser.OPEN_DIALOG)
             return chooser.getSelectedFile().getPath();
-        else throw new Exception("파일이 존재하지 않습니다.");
+        else throw new FileFailException(FileFailMessage.doNotFindFile);
     }
 
     private void pause() {
