@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 //변수를 불러와서 대치하는 작업
 public class GetVariable implements Repository {
     //:변수명( )
-    String patternText = ":[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9_-]+( )";
+    String patternText = ":[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9_-]+[ _]";
     Pattern pattern = Pattern.compile(patternText);
 
     public boolean check(String line) {
@@ -19,7 +19,9 @@ public class GetVariable implements Repository {
     public String start(String line) {
         Matcher matcher = pattern.matcher(line);
         if (matcher.find()) {
-            String key = matcher.group().substring(1).trim(); //:변수명 => 변수명
+            String group = matcher.group();
+            int pos = group.length();
+            String key = group.substring(1, pos-1); //:변수명 => 변수명
             for (String keys : repository.keySet()) {
                 if (repository.get(keys).containsKey(key))
                     line = line.replaceAll(patternText, repository.get(keys).get(key).toString());
