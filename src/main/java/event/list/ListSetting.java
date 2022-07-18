@@ -1,5 +1,7 @@
 package event.list;
 
+import origin.exception.IndexException;
+import origin.exception.IndexMessage;
 import origin.variable.controller.list.ListVariable;
 import origin.variable.define.VariableCheck;
 import origin.variable.model.Repository;
@@ -71,7 +73,8 @@ public interface ListSetting extends Repository {
                 for (String key : repository.keySet()) {
                     if (repository.get(key).containsKey(variableName)) {
                         List<Object> list = (List<Object>) repository.get(key).get(variableName);
-                        list.remove(pos);
+                        if (list.size() > pos) list.remove(pos);
+                        else throw new IndexException(IndexMessage.removeError);
                         return null;
                     }
                 }
