@@ -17,7 +17,6 @@ public interface Repository {
     List<LoopWork> loopWorks = new ArrayList<>(); //루프 메소드 저장
     List<HttpWork> httpWorks = new ArrayList<>(); //Http
     List<RandomWork> randomWorks = new ArrayList<>(); //램던 메소드 저장
-//    List<HttpMoveWork> httpMoveWorks = new ArrayList<>(); //경로 이동 저장소 등록 메소드
 
     Map<String, Map<String, Object>> repository = new HashMap<>(); //변수 저장
     Set<String> set = new HashSet<>(); //변수명 저장
