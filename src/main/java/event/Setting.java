@@ -21,7 +21,7 @@ import origin.consol.define.PriorityPrintWork;
 import origin.loop.controller.For;
 import origin.loop.controller.If;
 import origin.loop.model.LoopWork;
-import origin.thead.controller.Sleep;
+import origin.variable.controller.MakeListVariable;
 import origin.variable.controller.MakeVariable;
 import origin.variable.define.VariableType;
 import origin.variable.model.Repository;
@@ -35,15 +35,18 @@ public class Setting implements Controller, Repository {
         if (line.isBlank()) return;
         for (PriorityPrintWork work : priorityPrintWorks) {if (work.check(line)) {work.start(line); return;}} //강제 출력
         if (getVariable.check(line)) line = getVariable.start(line); //변수 불러오기
+        if (getListVariable.check(line)) line = getListVariable.start(line); //리스트 변수 가져오기
         if (httpGetPost.check(line)) line = httpGetPost.start(line); //post, get 으로 받은 값 대치
         if (consoleScanner.check(line)) line = consoleScanner.start(line); //값 읽기
         for (RandomWork work : randomWorks) {if (work.check(line)) line = work.start(line);} //램던 값 불러오기
         for (CalculationWork work : calculationWorks) {if (work.check(line)) line = work.start(line);} //게산 (숫자, 블린)
+
         for (LoopWork work : loopWorks) {if (work.check(line)) {work.start(line); return;}} //for, if
         for (PrintWork work : printWorks) {if (work.check(line)) {work.start(line);return;}} //출력하는 동작
         for (VariableWork work : variableWorks) {if (work.check(line)) {work.start(line); return;}} //변수 정의하는 동작
-//        for (HttpMoveWork work : httpMoveWorks) {if (work.check(line)) {work.move(line);return;}} //http 이동을 등록하는 메소드
+        if (setListVariable.check(line)) {setListVariable.start(line);return;} //리스트에 값 넣기
         if (setVariable.check(line)) {setVariable.start(line);return;} //변수 값 넣기
+        if (deleteListVariable.check(line)) {if (deleteListVariable.start(line) == null) return;} //리스트에 값 삭제
 
         //http
         if (portVariable.check(line)) {portVariable.start(line);return;}
@@ -54,23 +57,12 @@ public class Setting implements Controller, Repository {
     //시작할때 변수 이름 및 매소드 새팅 생성
 
     /**
-     * 저장소
+     * 저장소 <br>
      * @see Repository
+     * @see Controller
      */
     public void firstStart() {
-        Setting.total.setLength(0);
-        HttpRepository.pathMap.clear();
-        HttpRepository.POST.clear();
-        HttpRepository.GET.clear();
-        HttpRepository.partMap.clear();
-        variableWorks.clear();
-        priorityPrintWorks.clear();
-        printWorks.clear();
-        calculationWorks.clear();
-        loopWorks.clear();
-        httpWorks.clear();
-        randomWorks.clear();
-//        httpMoveWorks.clear();
+        reset();
 
         variableWorks.add(new MakeVariable("ㅇㅈㅇ", VariableType.Integer));
         variableWorks.add(new MakeVariable("ㅇㅉㅇ", VariableType.Long));
@@ -79,6 +71,14 @@ public class Setting implements Controller, Repository {
         variableWorks.add(new MakeVariable("ㅇㄱㅇ", VariableType.Character));
         variableWorks.add(new MakeVariable("ㅇㅅㅇ", VariableType.Float));
         variableWorks.add(new MakeVariable("ㅇㅆㅇ", VariableType.Double));
+
+        variableWorks.add(new MakeListVariable("ㄹㅈㄹ", VariableType.Integer));
+        variableWorks.add(new MakeListVariable("ㄹㅉㄹ", VariableType.Long));
+        variableWorks.add(new MakeListVariable("ㄹㅂㄹ", VariableType.Boolean));
+        variableWorks.add(new MakeListVariable("ㄹㅁㄹ", VariableType.String));
+        variableWorks.add(new MakeListVariable("ㄹㄱㄹ", VariableType.Character));
+        variableWorks.add(new MakeListVariable("ㄹㅅㄹ", VariableType.Float));
+        variableWorks.add(new MakeListVariable("ㄹㅆㄹ", VariableType.Double));
 
         priorityPrintWorks.add(new PriorityPrint());
         priorityPrintWorks.add(new PriorityPrintln());
@@ -103,7 +103,20 @@ public class Setting implements Controller, Repository {
         randomWorks.add(new RandomInteger());
         randomWorks.add(new RandomLong());
 
-//        httpMoveWorks.add(new MoveGetHttp());
-//        httpMoveWorks.add(new MovePostHttp());
+    }
+
+    private void reset() {
+        Setting.total.setLength(0);
+        HttpRepository.pathMap.clear();
+        HttpRepository.POST.clear();
+        HttpRepository.GET.clear();
+        HttpRepository.partMap.clear();
+        variableWorks.clear();
+        priorityPrintWorks.clear();
+        printWorks.clear();
+        calculationWorks.clear();
+        loopWorks.clear();
+        httpWorks.clear();
+        randomWorks.clear();
     }
 }
