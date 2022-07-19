@@ -1,17 +1,55 @@
 package origin.variable.define;
 
+import origin.variable.model.Repository;
+
+import java.util.List;
+
 public class VariableCheck {
     private final static VariableCheck variableCheck = new VariableCheck();
+
+    public static void setValue(String var, Object value) {
+        for (String key : Repository.repository.keySet()) {
+            if (Repository.repository.get(key).containsKey(var))
+                Repository.repository.get(key).put(var, value);
+        }
+    }
+
+    public static List<Object> getArray(String var) {
+        for (String key : Repository.repository.keySet()) {
+            if (Repository.repository.get(key).containsKey(var)) {
+                return (List<Object>) Repository.repository.get(key).get(var);
+            }
+        }
+        return null;
+    }
+
+    public static String getCheck(String varName) {
+        for (String key : Repository.repository.keySet()) {
+            if (Repository.repository.get(key).containsKey(varName))
+                return key;
+        }
+        return "  ";
+    }
+
+    //변수명 받아오기
+    public static boolean check(String varName) {
+        for (String key : Repository.repository.keySet()) {
+            // key = ㅇㅁㅇ, ㄹㅁㄹ, ㄹㅉㄹ, ...
+            if (Repository.repository.get(key).containsKey(varName))
+                return check(varName, key);
+        }
+        return false;
+    }
 
     //line : 값 받아오기, var : 값 ㅇㅁㅇ, ㅇㅈㅇ 등
     public static boolean check(String line, String var) {
         char c = var.charAt(1);
-        if (c == 'ㅈ') return check(line, VariableType.Integer);
-        else if (c == 'ㅉ') return check(line, VariableType.Long);
-        else if (c == 'ㅂ') return check(line, VariableType.Boolean);
-        else if (c == 'ㄱ') return check(line, VariableType.Character);
-        else if (c == 'ㅅ') return check(line, VariableType.Float);
-        else if (c == 'ㅆ') return check(line, VariableType.Double);
+        if (c == 'ㅈ' || c == 'i') return check(line, VariableType.Integer);
+        else if (c == 'ㅉ' || c == 'I') return check(line, VariableType.Long);
+        else if (c == 'ㅂ' || c == 'b') return check(line, VariableType.Boolean);
+        else if (c == 'ㄱ' || c == 'c') return check(line, VariableType.Character);
+        else if (c == 'ㅅ' || c == 'f') return check(line, VariableType.Float);
+        else if (c == 'ㅆ' || c == 'F') return check(line, VariableType.Double);
         else return check(line, VariableType.String);
     }
 
