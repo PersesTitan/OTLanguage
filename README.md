@@ -11,27 +11,27 @@
 ### !ㅅㅁㅅ! [출력 내용]
 - 설명 : 출력내용을 (변수, 입력에 영향없이) 강제로 줄바꿈없는 출력을 합니다.
 - 버전 : Ver-1.2.0
-- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#규칙)
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ### !ㅆㅁㅆ! [출력 내용]
 - 설명 : 출력내용을 (변수, 입력에 영향없이) 강제로 줄바꿈을 하는 출력을 합니다.
 - 버전 : Ver-1.2.0
-- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#규칙)
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ### ㅅㅁㅅ [출력 내용]
 - 설명 : 줄바꿈이 없는 출력을 합니다.
 - 버전 : Ver-1.0.0
-- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#규칙)
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ### ㅆㅁㅆ [출력 내용]
 - 설명 : 줄바꿈이 존재하는 출력을 합니다.
 - 버전 : Ver-1.0.0
-- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#규칙)
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ### ㅅㅇㅅ
 - 설명 : 입력을 받는 기능
 - 버전 : Ver-1.0.0
-- 규칙 : [위치 상관없음](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#규칙)
+- 규칙 : [위치 상관없음](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ## 변수
 ### ㅇㅈㅇ [변수명]:[초기값]
