@@ -73,9 +73,9 @@
 ### ㄹㅈㄹ [변수명]
 - 설명 : **정수** 타입의 리스트를 선업합니다. (List<Integer>)
 - 버전 : Ver-2.1.0
-- 규칙 : -
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
   
 ### ㄹㅉㄹ [변수명]
 - 설명 : **쩡수** 타입의 리스트를 선업합니다. (List<Long>)
 - 버전 : Ver-2.1.0
-- 규칙 : -
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
