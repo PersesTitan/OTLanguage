@@ -1,14 +1,14 @@
 package http.server;
 
 import com.sun.net.httpserver.HttpServer;
-import http.handler.HttpGetHandler;
-import http.handler.HttpPostHandler;
-import http.items.Temporary;
+import http.items.Color;
+import http.items.HttpRepository;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 
-public class HttpServerManager implements Temporary {
+public class HttpServerManager implements HttpRepository {
     private static String DEF_HOST = "localhost";
     private static final int DEF_PORT = 9090;
     private HttpServer server;
@@ -33,9 +33,13 @@ public class HttpServerManager implements Temporary {
         System.out.printf("URL http://%s:%d/%n", host, port);
         try {
             server = HttpServer.create(new InetSocketAddress(host, port), 0);
-            Temporary.pathMap.forEach((k, v) -> server.createContext(k, new RootHandler()));
+            HttpRepository.pathMap.forEach((k, v) -> {
+                server.createContext(k, new RootHandler());
+                POST.put(k, new HashMap<>());
+                GET.put(k, new HashMap<>());
+            });
         } catch (IOException e) {
-            System.out.println("서버 생성에 실패하였습니다.");
+            System.out.printf("%s서버 생성에 실패하였습니다.%s\n", Color.RED, Color.RESET);
         }
     }
 }

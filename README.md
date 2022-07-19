@@ -1,55 +1,81 @@
 # OTLanguage
-한글 이모티콘으로 이루어진 난해한 언어입니다. OTL...
+![](https://github.com/OTLanguage/.github/blob/main/banner.png?raw=true)
 
 # 문법
 
-### 변수 타입
-  - ㅇㅈㅇ (정수) Integer
-  - ㅇㅉㅇ (쩡수) Long
-  - ㅇㅂㅇ (블린) Boolean
-  - ㅇㅁㅇ (문자) String
-  - ㅇㄱㅇ (글자) Character
-  - ㅇㅅㅇ (실수) Float
-  - ㅇㅆㅇ (씰수) Double
+> ### 규칙
+> 무조건 맨 앞 : 해당라인 시작할때 사용해야함 <br>
+> 위치 상관없음 : 앞, 뒤 구분자 및 위치에 상관없이 무조건 실행 됨 <br>
 
-### 출력
-  - ㅅㅁㅅ (출력) Print
-  - ㅆㅁㅆ (출력+줄바꿈) Println
+## 콘솔
+### !ㅅㅁㅅ! [출력 내용]
+- 설명 : 출력내용을 (변수, 입력에 영향없이) 강제로 줄바꿈없는 출력을 합니다.
+- 버전 : Ver-1.2.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-### 입력
-  - ㅅㅇㅅ (입력) Scanner
+### !ㅆㅁㅆ! [출력 내용]
+- 설명 : 출력내용을 (변수, 입력에 영향없이) 강제로 줄바꿈을 하는 출력을 합니다.
+- 버전 : Ver-1.2.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-### Boolean타입
-  - ㅇㅇ (참) true
-  - ㄴㄴ (거짓) false
+### ㅅㅁㅅ [출력 내용]
+- 설명 : 줄바꿈이 없는 출력을 합니다.
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-### 불 논리
-  - ㄸ (또는) or
-  - ㄲ (그리고) and
+### ㅆㅁㅆ [출력 내용]
+- 설명 : 줄바꿈이 존재하는 출력을 합니다.
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-### 연산자
-  - ㅇ+ㅇ (더하기) +
-  - ㅇ-ㅇ (빼기) -
-  - ㅇ/ㅇ (나누기) /
-  - ㅇ*ㅇ (곱하기) *
-  - ㅇ%ㅇ (나머지) %
+### ㅅㅇㅅ
+- 설명 : 입력을 받는 기능
+- 버전 : Ver-1.0.0
+- 규칙 : [위치 상관없음](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-# 변수
+## 변수
+### ㅇㅈㅇ [변수명]:[초기값]
+- 설명 : **정수** 타입의 변수를 선업합니다. (Integer)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-  ### 변수 정의하기 ([변수 타입] [변수명]:[초기값])
+### ㅇㅉㅇ [변수명]:[초기값]
+- 설명 : **쩡수** 타입의 변수를 선업합니다. (Long)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-```otl
-예제) 
-ㅇㅁㅇ 변수명:안녕하세요.
-```
-  ### 변수 불러오기(:[변수명])
+### ㅇㅂㅇ [변수명]:[초기값]
+- 설명 : **블린** 타입의 변수를 선업합니다. (Boolean)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+
+### ㅇㅁㅇ [변수명]:[초기값]
+- 설명 : **문자** 타입의 변수를 선업합니다. (String)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+
+### ㅇㄱㅇ [변수명]:[초기값]
+- 설명 : **글자** 타입의 변수를 선업합니다. (Character)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+
+### ㅇㅅㅇ [변수명]:[초기값]
+- 설명 : **실수** 타입의 변수를 선업합니다. (Float)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+
+### ㅇㅆㅇ [변수명]:[초기값]
+- 설명 : **씰수** 타입의 변수를 선업합니다. (Double)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+
+## 리스트
+### ㄹㅈㄹ [변수명]
+- 설명 : **정수** 타입의 리스트를 선업합니다. (List<Integer>)
+- 버전 : Ver-2.1.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
   
-```otl
-예제)
-ㅇㅁㅇ 변수명:안녕하세요.
-//변수 불러오기
-ㅅㅁㅅ :변수명
-
-출력) 
-안녕하세요.
-```
+### ㄹㅉㄹ [변수명]
+- 설명 : **쩡수** 타입의 리스트를 선업합니다. (List<Long>)
+- 버전 : Ver-2.1.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
