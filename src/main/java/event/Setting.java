@@ -19,6 +19,7 @@ import origin.consol.controller.PriorityPrintln;
 import origin.consol.define.PrintWork;
 import origin.consol.define.PriorityPrintWork;
 import origin.loop.controller.For;
+import origin.loop.controller.ForEach;
 import origin.loop.controller.If;
 import origin.loop.model.LoopWork;
 import origin.variable.controller.MakeListVariable;
@@ -72,6 +73,14 @@ public class Setting implements Controller, Repository {
         variableWorks.add(new MakeVariable("ㅇㅅㅇ", VariableType.Float));
         variableWorks.add(new MakeVariable("ㅇㅆㅇ", VariableType.Double));
 
+        variableWorks.add(new MakeVariable("oio", VariableType.Integer));
+        variableWorks.add(new MakeVariable("oIo", VariableType.Long));
+        variableWorks.add(new MakeVariable("obo", VariableType.Boolean));
+        variableWorks.add(new MakeVariable("oCo", VariableType.String));
+        variableWorks.add(new MakeVariable("oco", VariableType.Character));
+        variableWorks.add(new MakeVariable("ofo", VariableType.Float));
+        variableWorks.add(new MakeVariable("oFo", VariableType.Double));
+
         variableWorks.add(new MakeListVariable("ㄹㅈㄹ", VariableType.Integer));
         variableWorks.add(new MakeListVariable("ㄹㅉㄹ", VariableType.Long));
         variableWorks.add(new MakeListVariable("ㄹㅂㄹ", VariableType.Boolean));
@@ -79,6 +88,14 @@ public class Setting implements Controller, Repository {
         variableWorks.add(new MakeListVariable("ㄹㄱㄹ", VariableType.Character));
         variableWorks.add(new MakeListVariable("ㄹㅅㄹ", VariableType.Float));
         variableWorks.add(new MakeListVariable("ㄹㅆㄹ", VariableType.Double));
+
+        variableWorks.add(new MakeListVariable("lil", VariableType.Integer));
+        variableWorks.add(new MakeListVariable("lIl", VariableType.Long));
+        variableWorks.add(new MakeListVariable("lbl", VariableType.Boolean));
+        variableWorks.add(new MakeListVariable("lCl", VariableType.String));
+        variableWorks.add(new MakeListVariable("lcl", VariableType.Character));
+        variableWorks.add(new MakeListVariable("lfl", VariableType.Float));
+        variableWorks.add(new MakeListVariable("lFl", VariableType.Double));
 
         priorityPrintWorks.add(new PriorityPrint());
         priorityPrintWorks.add(new PriorityPrintln());
@@ -93,6 +110,7 @@ public class Setting implements Controller, Repository {
 
         loopWorks.add(new For());
         loopWorks.add(new If());
+        loopWorks.add(new ForEach());
 
         httpWorks.add(new HTMLVariable());
         httpWorks.add(new StartServer());
