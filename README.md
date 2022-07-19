@@ -35,22 +35,36 @@
 
 ## 변수
 ### ㅇㅈㅇ [변수명]:[초기값]
+- 설명 : **정수** 타입의 변수를 선업합니다. (Integer)
 - 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ### ㅇㅉㅇ [변수명]:[초기값]
+- 설명 : **쩡수** 타입의 변수를 선업합니다. (Long)
 - 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ### ㅇㅂㅇ [변수명]:[초기값]
+- 설명 : **블린** 타입의 변수를 선업합니다. (Boolean)
 - 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ### ㅇㅁㅇ [변수명]:[초기값]
+- 설명 : **문자** 타입의 변수를 선업합니다. (String)
 - 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ### ㅇㄱㅇ [변수명]:[초기값]
+- 설명 : **글자** 타입의 변수를 선업합니다. (Character)
 - 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ### ㅇㅅㅇ [변수명]:[초기값]
+- 설명 : **실수** 타입의 변수를 선업합니다. (Float)
 - 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
 
 ### ㅇㅆㅇ [변수명]:[초기값]
+- 설명 : **씰수** 타입의 변수를 선업합니다. (Double)
 - 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage/edit/master/README.md#%EA%B7%9C%EC%B9%99)
