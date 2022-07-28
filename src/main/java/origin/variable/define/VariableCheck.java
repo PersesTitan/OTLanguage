@@ -7,6 +7,7 @@ import java.util.List;
 public class VariableCheck {
     private final static VariableCheck variableCheck = new VariableCheck();
 
+    // 변수값을 넣는 과정
     public static void setValue(String var, Object value) {
         for (String key : Repository.repository.keySet()) {
             if (Repository.repository.get(key).containsKey(var))
@@ -23,6 +24,7 @@ public class VariableCheck {
         return null;
     }
 
+    // ㅇㅁㅇ, ㅇㄱㅇ, ㅇㅅㅇ 인지 반환
     public static String getCheck(String varName) {
         for (String key : Repository.repository.keySet()) {
             if (Repository.repository.get(key).containsKey(varName))
