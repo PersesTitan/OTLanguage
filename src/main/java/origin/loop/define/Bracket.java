@@ -38,7 +38,7 @@ public class Bracket implements Repository {
 
                 total = total.replace(bl, " " + uuid.concat("\n"));
                 i = start + uuid.length();
-                uuidMap.put(uuid, bl);
+                uuidMap.put(uuid, bl.strip().substring(1, bl.length()-1));
             }
         }
         return total;
