@@ -1,5 +1,6 @@
 package event;
 
+import event.db.DBSetting;
 import http.controller.HTMLVariable;
 import http.controller.StartServer;
 import http.items.Color;
@@ -31,13 +32,23 @@ import origin.variable.model.VariableWork;
 public class Setting implements Controller, Repository {
     public final static StringBuffer total = new StringBuffer();
     public static String path = "";
+    //상속
+    private final static DBSetting dBSetting = new DBSetting();
 
+    /**
+     * 상속 <br>
+     * @see event.db.DBSetting
+     */
     public void start(String line) {
         if (line.isBlank()) return;
         for (PriorityPrintWork work : priorityPrintWorks) {if (work.check(line)) {work.start(line); return;}} //강제 출력
         if (getVariable.check(line)) line = getVariable.start(line); //변수 불러오기
+        if (dBSetting.check(line)) {String l = DBSetting.start(line);if (l == null) return;else line = l;} //DB 클래스
         if (getListVariable.check(line)) line = getListVariable.start(line); //리스트 변수 가져오기
-        if (httpGetPost.check(line)) line = httpGetPost.start(line); //post, get 으로 받은 값 대치
+        if (httpGetPost.check(line)) {
+            httpGetPost.start(line); //post, get 으로 받은 값 대치
+            return;
+        }
         if (consoleScanner.check(line)) line = consoleScanner.start(line); //값 읽기
         for (RandomWork work : randomWorks) {if (work.check(line)) line = work.start(line);} //램던 값 불러오기
         for (CalculationWork work : calculationWorks) {if (work.check(line)) line = work.start(line);} //게산 (숫자, 블린)
@@ -64,6 +75,7 @@ public class Setting implements Controller, Repository {
      */
     public void firstStart() {
         reset();
+        dBSetting.firstStart();
 
         variableWorks.add(new MakeVariable("ㅇㅈㅇ", VariableType.Integer));
         variableWorks.add(new MakeVariable("ㅇㅉㅇ", VariableType.Long));
