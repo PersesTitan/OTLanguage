@@ -14,6 +14,7 @@ public class SetVariable implements Repository {
     Pattern pattern = Pattern.compile(patternText);
 
     public boolean check(String line) {
+        Pattern pattern = Pattern.compile(patternText + "[^:]+");
         return pattern.matcher(line).find();
     }
 
