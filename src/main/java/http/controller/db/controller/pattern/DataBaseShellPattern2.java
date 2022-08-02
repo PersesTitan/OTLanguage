@@ -2,6 +2,7 @@ package http.controller.db.controller.pattern;
 
 import http.controller.db.define.DataBaseWork;
 import http.controller.db.define.SelectWork;
+import http.controller.db.place.DataBasePlace;
 import origin.exception.MatchException;
 import origin.exception.MatchMessage;
 
@@ -16,9 +17,10 @@ public abstract class DataBaseShellPattern2 implements SelectWork {
 
     //[클래스명][메소드명]인자갯수...
     public DataBaseShellPattern2(String className, String methodName, int count) {
+        DataBasePlace.methodName.add(methodName);
         this.className = className;
         this.count = count;
-        this.patternText = className + "::" + methodName + "\\[[^\\[\\]]+]".repeat(Math.max(0, count));
+        this.patternText = className + "~" + methodName + "\\[[^\\[\\]]+]".repeat(Math.max(0, count));
         pattern = Pattern.compile(patternText);
     }
 
