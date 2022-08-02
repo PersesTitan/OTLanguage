@@ -1,6 +1,8 @@
 package http.controller.db.controller.pattern;
 
+import http.controller.db.DatabaseSetting;
 import http.controller.db.define.DataBaseWork;
+import http.controller.db.place.DataBasePlace;
 import origin.exception.MatchException;
 import origin.exception.MatchMessage;
 
@@ -15,9 +17,10 @@ public abstract class DataBaseShellPattern1 implements DataBaseWork {
 
     //[클래스명][메소드명]인자갯수...
     public DataBaseShellPattern1(String className, String methodName, int count) {
+        DataBasePlace.methodName.add(methodName);
         this.className = className;
         this.count = count;
-        this.patternText = "^\\s*" + className + "::" + methodName + "\\[[^\\[\\]]+]".repeat(Math.max(0, count)) + "\\s*$";
+        this.patternText = "^\\s*" + className + "~" + methodName + "\\[[^\\[\\]]+]".repeat(Math.max(0, count)) + "\\s*$";
         pattern = Pattern.compile(patternText);
     }
 
