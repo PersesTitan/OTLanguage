@@ -2,20 +2,39 @@ package origin.variable.define;
 
 import origin.variable.model.Repository;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-public class VariableCheck {
-    private final static VariableCheck variableCheck = new VariableCheck();
+public interface VariableCheck {
+    //VariableKind 를 반환하는 메소드
+    static VariableKind checkVariableKind(String var) {
+        char c = var.charAt(0);
+        if (c == 'l' || c == 'ㄹ') return VariableKind.LIST;
+        else return VariableKind.ORIGIN;
+    }
+
+    //VariableType 을 반환하는 메소드
+    static VariableType checkVariableType(String var) {
+        char c = var.charAt(1);
+        if (c == 'ㅈ' || c == 'i') return VariableType.Integer;
+        else if (c == 'ㅉ' || c == 'I') return VariableType.Long;
+        else if (c == 'ㅂ' || c == 'b') return VariableType.Boolean;
+        else if (c == 'ㄱ' || c == 'c') return VariableType.Character;
+        else if (c == 'ㅅ' || c == 'f') return VariableType.Float;
+        else if (c == 'ㅆ' || c == 'F') return VariableType.Double;
+        else return VariableType.String;
+    }
 
     // 변수값을 넣는 과정
-    public static void setValue(String var, Object value) {
+    static void setValue(String var, Object value) {
         for (String key : Repository.repository.keySet()) {
             if (Repository.repository.get(key).containsKey(var))
                 Repository.repository.get(key).put(var, value);
         }
     }
 
-    public static List<Object> getArray(String var) {
+    static List<Object> getArray(String var) {
         for (String key : Repository.repository.keySet()) {
             if (Repository.repository.get(key).containsKey(var)) {
                 return (List<Object>) Repository.repository.get(key).get(var);
@@ -25,7 +44,7 @@ public class VariableCheck {
     }
 
     // ㅇㅁㅇ, ㅇㄱㅇ, ㅇㅅㅇ 인지 반환
-    public static String getCheck(String varName) {
+    static String getCheck(String varName) {
         for (String key : Repository.repository.keySet()) {
             if (Repository.repository.get(key).containsKey(varName))
                 return key;
@@ -34,7 +53,7 @@ public class VariableCheck {
     }
 
     //변수명 받아오기
-    public static boolean check(String varName) {
+    static boolean check(String varName) {
         for (String key : Repository.repository.keySet()) {
             // key = ㅇㅁㅇ, ㄹㅁㄹ, ㄹㅉㄹ, ...
             if (Repository.repository.get(key).containsKey(varName))
@@ -43,29 +62,49 @@ public class VariableCheck {
         return false;
     }
 
-    //line : 값 받아오기, var : 값 ㅇㅁㅇ, ㅇㅈㅇ 등
-    public static boolean check(String line, String var) {
-        char c = var.charAt(1);
-        if (c == 'ㅈ' || c == 'i') return check(line, VariableType.Integer);
-        else if (c == 'ㅉ' || c == 'I') return check(line, VariableType.Long);
-        else if (c == 'ㅂ' || c == 'b') return check(line, VariableType.Boolean);
-        else if (c == 'ㄱ' || c == 'c') return check(line, VariableType.Character);
-        else if (c == 'ㅅ' || c == 'f') return check(line, VariableType.Float);
-        else if (c == 'ㅆ' || c == 'F') return check(line, VariableType.Double);
-        else return check(line, VariableType.String);
+    //리스트 타입이 일치하는지 확인
+    // variable : 리스트 타입, value : [값1, 값2, 값3, ...]
+    static boolean checkList(VariableType variableType, String value) {
+        value = value.trim();
+        if (value.startsWith("[") && value.endsWith("]")) {
+            String[] values = value.substring(1, value.length()-1).split(",");
+            if (values.length == 0) return true;
+            return Arrays.stream(values)
+                    .allMatch(v -> check(v.trim(), variableType));
+        } else return check(value, variableType);
     }
 
-    public static boolean check(String line, VariableType varType) {
-        if (varType.equals(VariableType.Boolean)) return variableCheck.isBoolean(line);
-        else if (varType.equals(VariableType.Character)) return variableCheck.isCharacter(line);
-        else if (varType.equals(VariableType.Double)) return variableCheck.isDouble(line);
-        else if (varType.equals(VariableType.Float)) return variableCheck.isFloat(line);
-        else if (varType.equals(VariableType.Integer)) return variableCheck.isInteger(line);
-        else if (varType.equals(VariableType.Long)) return variableCheck.isLong(line);
+    //해당 저장소에 값이 존재하는지 확인
+    static boolean check(String varName, Map<String, Map<String, Object>> repository) {
+        for (String key : repository.keySet()) {
+            if (repository.get(key).containsKey(varName)) {
+                return check(varName, key);
+            }
+        }
+        return false;
+    }
+
+    //line : 값 받아오기
+    //var : 값 ㅇㅁㅇ, ㅇㅈㅇ 등
+    static boolean check(String line, String var) {
+        //리스트인지 확인함
+        VariableType variableType = checkVariableType(var);
+        if (checkVariableKind(var).equals(VariableKind.LIST))
+            return checkList(variableType, line);
+        else return check(line, variableType);
+    }
+
+    static boolean check(String line, VariableType varType) {
+        if (varType.equals(VariableType.Boolean)) return isBoolean(line);
+        else if (varType.equals(VariableType.Character)) return isCharacter(line);
+        else if (varType.equals(VariableType.Double)) return isDouble(line);
+        else if (varType.equals(VariableType.Float)) return isFloat(line);
+        else if (varType.equals(VariableType.Integer)) return isInteger(line);
+        else if (varType.equals(VariableType.Long)) return isLong(line);
         else return varType.equals(VariableType.String);
     }
 
-    private boolean isBoolean(String line) {
+    static boolean isBoolean(String line) {
         line = line.strip();
         line = line.replace("ㅇㅇ", "true");
         line = line.replace("ㄴㄴ", "false");
@@ -73,7 +112,7 @@ public class VariableCheck {
         return line.equals("false") || line.equals("true");
     }
 
-    private boolean isCharacter(String line) {
+    static boolean isCharacter(String line) {
         try {
             return line.length() == 1;
         } catch (Exception e) {
@@ -81,7 +120,7 @@ public class VariableCheck {
         }
     }
 
-    private boolean isDouble(String line) {
+    static boolean isDouble(String line) {
         try {
             Double.parseDouble(line);
             return true;
@@ -90,7 +129,7 @@ public class VariableCheck {
         }
     }
 
-    private boolean isFloat(String line) {
+    static boolean isFloat(String line) {
         try {
             Float.parseFloat(line);
             return true;
@@ -99,7 +138,7 @@ public class VariableCheck {
         }
     }
 
-    private boolean isInteger(String line) {
+    static boolean isInteger(String line) {
         try {
             Integer.parseInt(line);
             return true;
@@ -108,7 +147,7 @@ public class VariableCheck {
         }
     }
 
-    private boolean isLong(String line) {
+    static boolean isLong(String line) {
         try {
             Long.parseLong(line);
             return true;
