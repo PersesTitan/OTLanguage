@@ -8,8 +8,13 @@ import java.util.regex.Pattern;
 
 public class RandomBoolean implements RandomWork {
     private final Random random = new Random();
-    private final String patternText = "\\d+\\s*@ㅂ@\\s*\\d+|@ㅂ@";
-    private final Pattern pattern = Pattern.compile(patternText);
+    private final String patternText;
+    private final Pattern pattern;
+
+    public RandomBoolean(String patternText) {
+        this.patternText = ":"+patternText+"[_ ]";
+        this.pattern = Pattern.compile(this.patternText);
+    }
 
     @Override
     public boolean check(String line) {
