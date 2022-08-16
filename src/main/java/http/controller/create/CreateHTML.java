@@ -1,6 +1,5 @@
 package http.controller.create;
 
-import http.model.HttpCreateWork;
 import pattern.MakePatternWork;
 
 import java.util.regex.Pattern;
