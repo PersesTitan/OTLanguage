@@ -11,6 +11,7 @@ import origin.consol.controller.ConsoleScanner;
 import origin.loop.define.Bracket;
 import origin.variable.controller.GetVariable;
 import origin.variable.controller.SetVariable;
+import origin.variable.controller.map.GetMapVariable;
 import system.start.Finish;
 import system.work.FinishWork;
 
@@ -18,6 +19,7 @@ public interface Controller extends ListSetting {
     //변수
     GetVariable getVariable = new GetVariable();
     SetVariable setVariable = new SetVariable();
+    GetMapVariable getMapVariable = new GetMapVariable(); // 맵 값 가져오기
     ConsoleScanner consoleScanner = new ConsoleScanner("ㅅㅇㅅ"); //출력, 입력
     Bracket bracket = new Bracket(); //괄호를 토큰으로 변환
     PortVariable portVariable = new PortVariable(); //html 전용 변수
