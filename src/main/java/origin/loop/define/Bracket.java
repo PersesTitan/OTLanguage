@@ -1,5 +1,6 @@
 package origin.loop.define;
 
+import event.Setting;
 import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 import origin.exception.MatchException;
 import origin.exception.MatchMessage;
@@ -77,7 +78,7 @@ public class Bracket implements Repository {
 
     // uuid\n=>변수명 -> uuid 변수명
     public String delete(String total) {
-        String patternText = "(\\n\\s*)+=>\\s*~*[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9_-]+";
+        String patternText = "(\\n\\s*)+=>\\s*~*"+ Setting.variableStyle;
         Matcher matcher = Pattern.compile(patternText).matcher(total);
         while (matcher.find()) {
             String group = matcher.group().strip();
