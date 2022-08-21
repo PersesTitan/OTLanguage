@@ -1,0 +1,20 @@
+[
+  {
+    "name": "웹 변수",
+    "rescue": "<ㅇㅅㅇ>",
+    "grammar": "<ㅇㅅㅇ> [변수명]:[초기값]",
+    "version": "2.1.0",
+    "explanation": "HTML 변수를 정의합니다.",
+    "example": "&lt;ㅇㅅㅇ&gt; 변수:안녕하세요.<br>(HTML) &lt;p&gt;{{ :변수 }}&lt;/p&gt;",
+    "print": "안녕하세요."
+  },
+  {
+    "name": "HTML 등록",
+    "rescue": "[경로] <ㅇㅅㅇ< [HTML파일 경로]",
+    "grammar": "<ㅇㅅㅇ<",
+    "version": "2.1.0",
+    "explanation": "HTML파일을 등록하는 합니다.",
+    "example": "/ &lt;ㅇㅅㅇ&lt; index.html",
+    "print": ""
+  }
+]
