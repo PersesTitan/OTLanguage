@@ -1,12 +1,14 @@
 package custom.tool;
 
+import event.Setting;
+
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CustomGetVariable {
     private final String countPattern = "^~*";
-    private final String patternText = ":~*[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9_-]+[ _]";
+    private final String patternText = ":~*"+ Setting.variableStyle+"[ _]";
     private final Pattern pattern = Pattern.compile(patternText);
 
     public boolean check(String line) {
