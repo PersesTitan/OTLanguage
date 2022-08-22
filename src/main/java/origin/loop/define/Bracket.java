@@ -1,5 +1,7 @@
 package origin.loop.define;
 
+import event.Setting;
+import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 import origin.exception.MatchException;
 import origin.exception.MatchMessage;
 import origin.loop.model.LoopWork;
@@ -37,11 +39,14 @@ public class Bracket implements Repository {
                 String bl = total.substring(start, i+1);
 
                 total = total.replace(bl, " " + uuid.concat("\n"));
+                total = delete(total); // uuid\n=>변수명 -> uuid=>변수명으로 변경
                 i = start + uuid.length();
                 uuidMap.put(uuid, bl.strip().substring(1, bl.length()-1));
             }
         }
-        return total;
+
+        total = customEnterDelete(total);
+        return ifDelete(total);
     }
 
     private String setMatcher(String total, String text) {
@@ -69,5 +74,30 @@ public class Bracket implements Repository {
         return uuidMap.entrySet()
                 .stream()
                 .anyMatch(v -> line.contains(v.getKey()));
+    }
+
+    // uuid\n=>변수명 -> uuid 변수명
+    public String delete(String total) {
+        String patternText = "(\\n\\s*)+=>\\s*~*"+ Setting.variableStyle;
+        Matcher matcher = Pattern.compile(patternText).matcher(total);
+        while (matcher.find()) {
+            String group = matcher.group().strip();
+            total = total.replaceFirst(patternText, group+"\n");
+        }
+        return total;
+    }
+
+    // ?ㅅ? ㅇㅇ uuid ?ㅈ? ㅇㅇ uuid
+    private String ifDelete(String total) {
+        String patternText = "\\n+\\s*(\\?ㅈ\\?|\\?ㅉ\\?)";
+        Matcher matcher = Pattern.compile(patternText).matcher(total);
+        while (matcher.find())
+            total = total.replaceFirst(patternText, " " + matcher.group().strip() + " ");
+        return total;
+    }
+
+    // ((\n)) => [ ]
+    private String customEnterDelete(String total) {
+        return total.replaceAll("\\(\\((\\s*\\n\\s*)+\\)\\)", "");
     }
 }

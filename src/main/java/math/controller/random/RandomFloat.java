@@ -10,8 +10,13 @@ import java.util.regex.Pattern;
 
 public class RandomFloat implements RandomWork {
     private final Random random = new Random();
-    private final String patternText = "\\d+\\.\\d+\\s*@ㅅ@\\s+\\d+\\.\\d+|@ㅅ@";
-    private final Pattern pattern = Pattern.compile(patternText);
+    private final String patternText;
+    private final Pattern pattern;
+
+    public RandomFloat(String patternText) {
+        this.patternText = ":((\\d+\\.\\d+)\\s*"+patternText+"\\s*(\\d+\\.\\d+)|"+patternText+")[_ ]";
+        this.pattern = Pattern.compile(this.patternText);
+    }
 
     @Override
     public boolean check(String line) {
@@ -23,6 +28,7 @@ public class RandomFloat implements RandomWork {
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
             String gr = matcher.group();
+            gr = gr.substring(1, gr.length()-1);
             if (Pattern.compile("\\d").matcher(gr).find()) {
                 var value = gr.split("@ㅅ@");
                 float num1 = Float.parseFloat(value[0].strip());

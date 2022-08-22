@@ -1,0 +1,110 @@
+[
+  {
+    "name": "더하기 (+)",
+    "rescue": "ㅇ+ㅇ",
+    "grammar": "<숫자> ㅇ+ㅇ <숫자>",
+    "version": "1.0.0",
+    "explanation": "숫자를 더하는 동작을 합니다.",
+    "example": "ㅆㅁㅆ 1 ㅇ+ㅇ 1",
+    "print": "2"
+  },
+  {
+    "name": "빼기 (-)",
+    "rescue": "ㅇ-ㅇ",
+    "grammar": "<숫자> ㅇ-ㅇ <숫자>",
+    "version": "1.0.0",
+    "explanation": "숫자를 빼는 동작을 합니다.",
+    "example": "ㅆㅁㅆ 1 ㅇ-ㅇ 1",
+    "print": "0"
+  },
+  {
+    "name": "나누기 (/)",
+    "rescue": "ㅇ/ㅇ",
+    "grammar": "<숫자> ㅇ/ㅇ <숫자>",
+    "version": "1.0.0",
+    "explanation": "숫자를 나누는 동작을 합니다.",
+    "example": "ㅆㅁㅆ 4 ㅇ/ㅇ 2",
+    "print": "2"
+  },
+  {
+    "name": "곱하기 (*)",
+    "rescue": "ㅇ*ㅇ",
+    "grammar": "<숫자> ㅇ*ㅇ <숫자>",
+    "version": "1.0.0",
+    "explanation": "숫자를 곱하는 동작을 합니다.",
+    "example": "ㅆㅁㅆ 1 ㅇ*ㅇ 1",
+    "print": "1"
+  },
+  {
+    "name": "나머지 (%)",
+    "rescue": "ㅇ%ㅇ",
+    "grammar": "<숫자> ㅇ%ㅇ <숫자>",
+    "version": "1.0.0",
+    "explanation": "숫자의 나머지를 구하는 동작을 합니다.",
+    "example": "ㅆㅁㅆ 5 ㅇ%ㅇ 2",
+    "print": "3"
+  },
+  {
+    "name": "보다 작을때 (>)",
+    "rescue": "ㅇ>ㅇ",
+    "grammar": "<숫자> ㅇ>ㅇ <숫자>",
+    "version": "1.0.0",
+    "explanation": "숫자의 대소비교를 합니다. 블린형으로 반환을 합니다.",
+    "example": "ㅆㅁㅆ 2 ㅇ>ㅇ 1",
+    "print": "ㅇㅇ"
+  },
+  {
+    "name": "보다 클때 (<)",
+    "rescue": "ㅇ<ㅇ",
+    "grammar": "<숫자> ㅇ<ㅇ <숫자>",
+    "version": "1.0.0",
+    "explanation": "숫자의 대소비교를 합니다. 블린형으로 반환을 합니다.",
+    "example": "ㅆㅁㅆ 1 ㅇ<ㅇ 2",
+    "print": "ㅇㅇ"
+  },
+  {
+    "name": "참 (true)",
+    "rescue": "ㅇㅇ",
+    "grammar": "ㅇㅇ",
+    "version": "1.0.0",
+    "explanation": "참을 의미합니다.",
+    "example": "?ㅅ? ㅇㅇ {...}",
+    "print": ""
+  },
+  {
+    "name": "거짓 (false)",
+    "rescue": "ㄴㄴ",
+    "grammar": "ㄴㄴ",
+    "version": "1.0.0",
+    "explanation": "거짓을 의미합니다.",
+    "example": "?ㅅ? ㄴㄴ {...}",
+    "print": ""
+  },
+  {
+    "name": "또는 (or)",
+    "rescue": "ㄸ",
+    "grammar": "ㄸ",
+    "version": "1.0.0",
+    "explanation": "OR 연산자를 의미합니다.",
+    "example": "?ㅅ? ㅇㅇ ㄸ ㅇㅇ {...}",
+    "print": ""
+  },
+  {
+    "name": "그리고 (and)",
+    "rescue": "ㄲ",
+    "grammar": "ㄲ",
+    "version": "1.0.0",
+    "explanation": "AND 연산자를 의미합니다.",
+    "example": "?ㅅ? ㅇㅇ ㄲ ㅇㅇ {...}",
+    "print": ""
+  },
+  {
+    "name": "부정 (not)",
+    "rescue": "ㅇㄴ",
+    "grammar": "ㅇㄴ",
+    "version": "1.0.0",
+    "explanation": "NOT 연산자를 의미합니다.",
+    "example": "?ㅅ? ㅇㄴㅇㅇ {...}",
+    "print": ""
+  }
+]

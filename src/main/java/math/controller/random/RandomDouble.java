@@ -10,8 +10,13 @@ import java.util.regex.Pattern;
 
 public class RandomDouble implements RandomWork {
     private final Random random = new Random();
-    private final String patternText = "\\d+\\.\\d+\\s*@ㅆ@\\s+\\d+\\.\\d+|@ㅆ@";
-    private final Pattern pattern = Pattern.compile(patternText);
+    private final String patternText;
+    private final Pattern pattern;
+
+    public RandomDouble(String patternText) {
+        this.patternText = ":((\\d+\\.\\d+)\\s*"+patternText+"\\s*(\\d+\\.\\d+)|"+patternText+")[_ ]";
+        this.pattern = Pattern.compile(this.patternText);
+    }
 
     @Override
     public boolean check(String line) {
@@ -23,6 +28,7 @@ public class RandomDouble implements RandomWork {
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
             String gr = matcher.group();
+            gr = gr.substring(1, gr.length()-1);
             if (Pattern.compile("\\d").matcher(gr).find()) {
                 var value = gr.split("@ㅆ@");
                 double num1 = Double.parseDouble(value[0].strip());
