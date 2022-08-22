@@ -1,6 +1,7 @@
 package custom.tool;
 
 import event.Controller;
+import event.Setting;
 
 import java.util.Map;
 import java.util.Set;
@@ -9,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class CustomSetVariable {
     private final String countPattern = "^~*";
-    private final String patternText = "^\\s*~*[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9_-]+:";
+    private final String patternText = "^\\s*~*"+ Setting.variableStyle+":";
     private final Pattern pattern = Pattern.compile(patternText);
 
     public boolean check(String line) {
@@ -27,7 +28,7 @@ public class CustomSetVariable {
         if (matcher.find()) {
             String group = matcher.group().strip(); //~~변수명:
             int count = getCount(group); //~ 갯수
-            String variableName = getVariableName(group); //변수명:넣을 값
+            String variableName = getVariableName(line); //변수명:넣을 값
             var repository = switch (count) {
                 case 0 -> repository1;
                 case 1 -> repository2;
@@ -51,7 +52,7 @@ public class CustomSetVariable {
         if (matcher.find()) {
             String group = matcher.group().strip(); //~~변수명:
             int count = getCount(group); //~ 갯수
-            String variableName = getVariableName(group); //변수명:넣을 값
+            String variableName = getVariableName(line); //변수명:넣을 값
             var repository = count==0 ? repository1 : repository2;
             var set = count==0 ? set1 : set2;
             Controller.setVariable.start(variableName, repository, set);
