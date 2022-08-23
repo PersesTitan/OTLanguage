@@ -62,12 +62,12 @@ public class UseCustomClass implements BracketSplit {
         if (Controller.customGetVariableWork.check(line)) { //변수값 가져오기
             line = Controller.customGetVariableWork.start(line, repository, Repository.repository);}
         line = Controller.bracket.bracket(line);
-        line = Setting.startString(line);
+        line = Setting.startString(line, repository, set);
         if (this.defineCustomMethod.check(line)) {this.defineCustomMethod.start(line); return;} // 메소드 생성
         if (Controller.customSetVariableWork.check(line)) { //변수값 업데이트
             Controller.customSetVariableWork.start(line, repository, Repository.repository, set, Repository.set);return;}
         for (VariableWork work : Repository.variableWorks) {//변수 정의하는 동작
             if (work.check(line)) {work.start(line, repository, set); return;}}
-        Setting.start(line);
+        Setting.start(line, repository, set);
     }
 }
