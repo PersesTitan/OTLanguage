@@ -1,5 +1,4 @@
 import event.Setting;
-import http.items.Color;
 import http.server.Server;
 import origin.exception.FileFailException;
 import origin.exception.FileFailMessage;
@@ -12,13 +11,20 @@ import java.util.Locale;
 
 public class Main extends Setting {
     public static void main(String[] args) {
-        args = new String[1]; args[0] = "./hello.otl";
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (Server.httpServerManager != null) Server.httpServerManager.stop();
+        }));
+
+        args = new String[1]; args[0] = "hello.otl";
         new Main(args);
     }
 
     private Main(String[] args) {
+
         String path = args.length <= 0 ? showGUI() : args[0];
-        if (!new File(path).canRead()) throw new FileFailException(FileFailMessage.doNotReadFile);
+        File file = new File(path); //파일 생성
+        Setting.path = file.getAbsolutePath();
+        if (!file.canRead()) throw new FileFailException(FileFailMessage.doNotReadFile);
         if (!path.toLowerCase(Locale.ROOT).endsWith(".otl")) throw new FileFailException(FileFailMessage.notMatchExtension);
         firstStart();
 
@@ -31,6 +37,7 @@ public class Main extends Setting {
                 start(line); // 실행 메소드
             }
         } catch (IOException ignored) {}
+
         pause();
     }
 
@@ -49,11 +56,6 @@ public class Main extends Setting {
     }
 
     private void pause() {
-        try {
-            System.in.read();
-        } catch (IOException ignored) {} finally {
-            if (Server.httpServerManager != null) Server.httpServerManager.stop();
-        }
-        System.exit(0);
+        while (true) {}
     }
 }
