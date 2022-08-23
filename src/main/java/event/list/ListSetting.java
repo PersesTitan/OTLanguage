@@ -1,5 +1,6 @@
 package event.list;
 
+import event.Setting;
 import origin.exception.IndexException;
 import origin.exception.IndexMessage;
 import origin.variable.controller.list.ListVariable;
@@ -12,9 +13,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface ListSetting extends Repository {
-    String setPattern = "^\\s*[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9_-]+:<<";  // [변수명]:<<[값]
-    String getPattern = ":[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9_-]+>>\\d+[ _]"; // :[변수명]>>index[공백]
-    String textPattern = "^\\s*[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9_-]+--\\d+"; // [변수명]--index
+    String setPattern = "^\\s*"+ Setting.variableStyle+":<<";  // [변수명]:<<[값]
+    String getPattern = ":"+Setting.variableStyle+">>\\d+[ _]"; // :[변수명]>>index[공백]
+    String textPattern = "^\\s*"+Setting.variableStyle+"--\\d+"; // [변수명]--index
 
     //[값1, 값2, 값3, ...] 인지 값 인지 확인하는 메소드
     //var = ㄹㅁㄹ, ㄹㄱㄹ, ...
