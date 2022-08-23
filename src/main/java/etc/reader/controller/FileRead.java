@@ -24,7 +24,7 @@ public class FileRead implements FileWork {
     public FileRead(String patternText) {
         this.text = patternText;
         // ㅍㅅㅍ 디렉토리명/파일명.otl
-        this.patternText = "^\\s*" + patternText + "\\s+[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9/\\\\_.-]+";
+        this.patternText = "^\\s*" + patternText + "\\s+[\\s\\S]+";
         this.pattern = Pattern.compile(this.patternText);
     }
 
@@ -38,7 +38,7 @@ public class FileRead implements FileWork {
         String slash = OSSetting.sep(); // 슬래쉬 반환
         Matcher matcher = pattern.matcher(line);
         if (matcher.find()) {
-            String group = matcher.group();
+            String group = matcher.group().replace("~", OSSetting.sep());
             group = group.replaceFirst("^\\s*" + text, "").strip(); // 디렉토리명/파일명.otl
             String path = new File(Setting.path).getParent() + slash + group;
             File file = new File(path);
