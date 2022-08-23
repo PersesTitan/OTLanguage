@@ -4,6 +4,7 @@ import etc.reader.define.FileWork;
 import event.Setting;
 import origin.exception.FileFailException;
 import origin.exception.FileFailMessage;
+import origin.variable.model.Repository;
 import system.start.OSSetting;
 
 import java.io.BufferedReader;
@@ -15,6 +16,8 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static origin.variable.model.Repository.*;
 
 public class FileRead implements FileWork {
     private final String text; // ㅍㅅㅍ
@@ -50,7 +53,7 @@ public class FileRead implements FileWork {
             try (BufferedReader reader = new BufferedReader(new FileReader(path, StandardCharsets.UTF_8))) {
                 while ((text = reader.readLine()) != null) total.append(text).append("\n");
                 String t = Setting.bracket.bracket(total.toString());
-                Arrays.stream(t.split("\\n")).forEach(Setting::start);
+                for (var l : t.split("\\n")) Setting.start(l, repository, set);
             } catch (IOException ignored) {}
         }
         // path../test/hi.otl
