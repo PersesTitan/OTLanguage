@@ -68,13 +68,13 @@ public interface BracketSplit {
             line = Controller.customGetVariableWork.start(line, repository, mainRepository, Repository.repository);}
         line = Controller.bracket.bracket(line);
 
-        line = Setting.startString(line);
+        line = Setting.startString(line, repository, set);
         if (Controller.customSetVariableWork.check(line)) { //변수값 업데이트
             Controller.customSetVariableWork.start(line, repository, mainRepository, Repository.repository,
                     set, mainSet, Repository.set);return;}
         for (VariableWork work : Repository.variableWorks) {//변수 정의하는 동작
             if (work.check(line)) {work.start(line, repository, set); return;}}
-        Setting.start(line);
+        Setting.start(line, repository, set);
     }
 
     // uuid -> { 내용 }
