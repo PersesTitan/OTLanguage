@@ -27,6 +27,29 @@ public class BoolCalculation implements CalculationWork {
         return not.matcher(line).find() || pattern.matcher(line).find();
     }
 
+
+//    private String not(String line) {
+//        String patternText = "ㅇㄴ\\s*(ㅇㅇ|ㄴㄴ)";
+//        Matcher matcher = Pattern.compile(patternText).matcher(line);
+//        while (matcher.find()) {
+//            boolean bool = matcher.group().endsWith("ㅇㅇ");
+//            line = line.replaceFirst(patternText, !bool ? "ㅇㅇ" : "ㄴㄴ");
+//        }
+//        return line;
+//    }
+//
+//    private String or(String line) {
+//        String patternText = "(ㅇㅇ|ㄴㄴ)\\s*ㄸ\\s*(ㅇㅇ|ㄴㄴ)";
+//        Matcher matcher = Pattern.compile(patternText).matcher(line);
+//        while (matcher.find()) {
+//            String group = matcher.group();
+//            boolean bool1 = group.startsWith("ㅇㅇ");
+//            boolean bool2 = group.endsWith("ㅇㅇ");
+//            line = line.replaceFirst(patternText, bool1 || bool2 ? "ㅇㅇ" : "ㄴㄴ");
+//        }
+//        return line;
+//    }
+
     //괄호 있는지 확인 하고 계산
     private String checkRun(String line) {
         line = notChange(line);
