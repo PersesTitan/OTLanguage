@@ -1,56 +1,81 @@
 # OTLanguage
+![](https://github.com/OTLanguage/.github/blob/main/banner.png?raw=true)
 
-<table>
-  <th width="50%" align=center>
-    <img src="https://github.com/OTLanguage/.github/blob/main/banner.png?raw=true"/>  
-  </th>
-  <th width="50%" align=center>
-    이모티콘으로 제작하는 프로그래밍 언어<br><br>
-    이름 유래 <br>
-    절망하는 자세인 OTL 과 언어라는 뜻인 Language가 합쳐져 만들어진 언어입니다.<br>
-    OTL + Language <br><br>
-    <a href="https://github.com/OTLanguage">OTLanguage Github 링크</a>
-  </th>
-</table>
+# 문법
 
+> ### 규칙
+> 무조건 맨 앞 : 해당라인 시작할때 사용해야함 <br>
+> 위치 상관없음 : 앞, 뒤 구분자 및 위치에 상관없이 무조건 실행 됨 <br>
 
-# 제작자
-<div align=left>
-  <a href="https://github.com/PersesTitan">
-  <img src="https://avatars.githubusercontent.com/PersesTitan" width="100px;" alt=""/>
-  <br><b align=center>PersesTitan</b></a>    
-</div>
+## 콘솔
+### !ㅅㅁㅅ! [출력 내용]
+- 설명 : 출력내용을 (변수, 입력에 영향없이) 강제로 줄바꿈없는 출력을 합니다.
+- 버전 : Ver-1.2.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-# 개요
-## 추진 배경
-> 제작하게 된 계기는 실용성이 존재하는 난해한 프로그래밍 언어면 재미 있을 것 같아 제작하게 되었습니다. <br>
-> 동작은 하지만 난해한 프로그래밍 언어인 많큼 실제로 사용할때 읽기가 어렵고 문법도 일부 통일 되지 않거나 기능이 제한적이지만 장난정도의 프로젝트나 심심풀이 정도로 이용되면 좋을 것 같다고 생각 중입니다.
+### !ㅆㅁㅆ! [출력 내용]
+- 설명 : 출력내용을 (변수, 입력에 영향없이) 강제로 줄바꿈을 하는 출력을 합니다.
+- 버전 : Ver-1.2.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-## 확장자
-> OTLanguage는 ```.otl```확장자를 사용합니다.
+### ㅅㅁㅅ [출력 내용]
+- 설명 : 줄바꿈이 없는 출력을 합니다.
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-## 동작환경
-> 문장을 분석하는 (파서)구문 분석기가 Java로 구현되어 있기 때문에 Java가 깔려 있어야 실행이 됩니다.<br>
-> (현재 Java를 설치하지 않고 실행할 방법 찾는 중 입니다.) <br> 
-> 구문 분석기 개발 환경은 Java-17입니다. 버전이 낮으면 호환이 되지 않을 수 있으니 참고해주세요. <br>
-> [오라클 Java-17 다운로드 링크](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) <br>
+### ㅆㅁㅆ [출력 내용]
+- 설명 : 줄바꿈이 존재하는 출력을 합니다.
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-## 특징
-  1. OTLanguage는 1줄씩 문장을 읽어 해석하는 인터프린터 방식의 프로그래밍 언어입니다. <br>
-  2. 기본 타입이 문자열이기 때문에 특수한 경우를 제외하고는 ' 나 " 를 사용하지 않습니다. <br>
-  3. 한글로 프로그램을 만들기 때문에 프로그램을 입력시 문자 깨짐현상 등이 있을 수 있습니다.
+### ㅅㅇㅅ
+- 설명 : 입력을 받는 기능
+- 버전 : Ver-1.0.0
+- 규칙 : [위치 상관없음](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-<br>
+## 변수
+### ㅇㅈㅇ [변수명]:[초기값]
+- 설명 : **정수** 타입의 변수를 선업합니다. (Integer)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
-# 다운로드
-```git에서 코드를 가져와 다운로드하므로 git을 설치해주세요.``` <br>
-[Git 다운로드 링크](https://git-scm.com/downloads)
+### ㅇㅉㅇ [변수명]:[초기값]
+- 설명 : **쩡수** 타입의 변수를 선업합니다. (Long)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
 
- - **MacOS**
-```shell
-curl https://raw.githubusercontent.com/OTLanguage/.github/main/otlmake.sh | sh
-```
- - **Linux**
-  ```shell
-  curl https://raw.githubusercontent.com/OTLanguage/.github/main/otlmake-linux.sh | sh
-```
+### ㅇㅂㅇ [변수명]:[초기값]
+- 설명 : **블린** 타입의 변수를 선업합니다. (Boolean)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+
+### ㅇㅁㅇ [변수명]:[초기값]
+- 설명 : **문자** 타입의 변수를 선업합니다. (String)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+
+### ㅇㄱㅇ [변수명]:[초기값]
+- 설명 : **글자** 타입의 변수를 선업합니다. (Character)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+
+### ㅇㅅㅇ [변수명]:[초기값]
+- 설명 : **실수** 타입의 변수를 선업합니다. (Float)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+
+### ㅇㅆㅇ [변수명]:[초기값]
+- 설명 : **씰수** 타입의 변수를 선업합니다. (Double)
+- 버전 : Ver-1.0.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+
+## 리스트
+### ㄹㅈㄹ [변수명]
+- 설명 : **정수** 타입의 리스트를 선업합니다. (List<Integer>)
+- 버전 : Ver-2.1.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
+  
+### ㄹㅉㄹ [변수명]
+- 설명 : **쩡수** 타입의 리스트를 선업합니다. (List<Long>)
+- 버전 : Ver-2.1.0
+- 규칙 : [무조건 맨 앞](https://github.com/PersesTitan/OTLanguage#%EA%B7%9C%EC%B9%99)
