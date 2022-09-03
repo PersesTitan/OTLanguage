@@ -11,7 +11,8 @@ import java.util.regex.Pattern;
 
 public class PortVariable implements HttpWork, Repository {
     //=(^ㅇㅅㅇ^)= [키]:[값]
-    private final String webVar = "^\\s*<ㅇㅅㅇ> +[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9_-]+:[\\s\\S]+";
+
+    private final String webVar = "^\\s*<ㅇㅅㅇ>\\s+[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9_-]+:[\\s\\S]+";
     private final Pattern pattern = Pattern.compile(webVar);
 
     @Override
