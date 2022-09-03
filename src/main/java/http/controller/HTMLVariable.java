@@ -12,8 +12,13 @@ import java.util.regex.Pattern;
 
 public class HTMLVariable implements HttpWork, HttpRepository {
     //[url 경로] =^ㅇㅅㅇ^= [페이지 경로]
-    private final String webPage = "^\\s*\\S+\\s+<ㅇㅅㅇ<\\s+\\S+";
-    private final Pattern pattern = Pattern.compile(webPage);
+    private final String webPage;
+    private final Pattern pattern;
+
+    public HTMLVariable(String pattern) {
+        this.webPage = "^\\s*\\S+\\s+"+pattern+"\\s+\\S+";
+        this.pattern = Pattern.compile(webPage);
+    }
 
     @Override
     public boolean check(String line) {
