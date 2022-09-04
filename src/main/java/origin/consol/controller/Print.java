@@ -5,8 +5,13 @@ import origin.consol.define.PrintWork;
 import java.util.regex.Pattern;
 
 public class Print implements PrintWork {
-    private final String patternText = "^\\s*ㅅㅁㅅ($|\\s)";
-    private final Pattern pattern = Pattern.compile(patternText);
+    private final String patternText;
+    private final Pattern pattern;
+
+    public Print(String patternText) {
+        this.patternText = "^\\s*"+patternText+"(\\s|$)";
+        this.pattern = Pattern.compile(this.patternText);
+    }
 
     @Override
     public boolean check(String line) {
