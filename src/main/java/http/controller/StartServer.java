@@ -8,8 +8,13 @@ import java.util.regex.Pattern;
 
 public class StartServer implements HttpRepository, HttpWork {
     //=[^ㅇㅅㅇ^]= [숫자]
-    private final String serverPattern = "^\\s*<<ㅇㅅㅇ>>( [0-9]*)?";
-    private final Pattern pattern = Pattern.compile(serverPattern);
+    private final String serverPattern;
+    private final Pattern pattern;
+
+    public StartServer(String patternText) {
+        this.serverPattern = "^\\s*"+patternText+"(\\s+[0-9]*)?";
+        this.pattern = Pattern.compile(serverPattern);
+    }
 
     @Override
     public boolean check(String line) {
