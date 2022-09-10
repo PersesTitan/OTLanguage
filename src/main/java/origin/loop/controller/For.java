@@ -44,7 +44,10 @@ public class For extends Setting implements LoopWork, Repository {
 
         if (third < 0) {
             for (double d = first; d > second; d += third) {
-                for (String l : value.split("\\n")) super.start(l);
+                for (String l : value.split("\\n")) {
+
+                    Setting.start(l);
+                }
             }
         } else if (third > 0){
             for (double d = first; d < second; d += third) {
