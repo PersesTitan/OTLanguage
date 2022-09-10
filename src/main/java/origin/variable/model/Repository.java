@@ -11,6 +11,8 @@ import math.model.RandomWork;
 import origin.consol.define.PrintWork;
 import origin.consol.define.PriorityPrintWork;
 import origin.loop.model.LoopWork;
+import origin.variable.define.generic.GenericDelete;
+import origin.variable.json.controller.json.define.MakeJsonWork;
 import system.work.SystemWork;
 import system.work.ThreadWork;
 
@@ -28,6 +30,8 @@ public interface Repository {
     List<ThreadWork> threadWorks = new ArrayList<>(); //쓰레드 관련 메소드 저장
     List<MousePositionWork> mousePositionWorks = new ArrayList<>(); //마우스 위치 반환
     List<FileWork> fileWorks = new ArrayList<>(); //파일 관련 메소드 저장
+    List<GenericDelete> genericDeletes = new ArrayList<>(); // 삭제 메소드
+    List<MakeJsonWork> makeJsonWorks = new ArrayList<>(); // json 메소드
 
     Map<String, Map<String, Object>> repository = new HashMap<>(); //변수 저장
     Map<String, String> uuidMap = new HashMap<>(); //괄호 값 저장하는 곳
