@@ -20,7 +20,6 @@ public class Main extends Setting {
     }
 
     private Main(String[] args) {
-
         String path = args.length <= 0 ? showGUI() : args[0];
         File file = new File(path); //파일 생성
         Setting.path = file.getAbsolutePath();
