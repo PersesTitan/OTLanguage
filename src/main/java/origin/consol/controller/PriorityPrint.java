@@ -5,8 +5,13 @@ import origin.consol.define.PriorityPrintWork;
 import java.util.regex.Pattern;
 
 public class PriorityPrint implements PriorityPrintWork {
-    private final String PATTERN = "^\\s*!ㅅㅁㅅ!(\\s|$)";
-    private final Pattern pattern = Pattern.compile(PATTERN);
+    private final String PATTERN;
+    private final Pattern pattern;
+
+    public PriorityPrint(String pattern) {
+        this.PATTERN = "^\\s*!ㅅㅁㅅ!(\\s|$)";
+        this.pattern = Pattern.compile(this.PATTERN);
+    }
 
     @Override
     public void start(String line) {
