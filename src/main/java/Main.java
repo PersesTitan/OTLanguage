@@ -1,57 +1,58 @@
-import event.Setting;
-import http.server.Server;
-import origin.exception.FileFailException;
-import origin.exception.FileFailMessage;
+import apply.Setting;
+import apply.sys.make.StartLine;
+import exception.FileException;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
+import java.util.regex.Pattern;
+
+import static apply.sys.item.SystemSetting.extensionCheck;
+import static token.Token.*;
 
 public class Main extends Setting {
-    public static void main(String[] args) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (Server.httpServerManager != null) Server.httpServerManager.stop();
-        }));
+    private final String patternText = START + "[0-9]+ ";
+    private final Pattern pattern = Pattern.compile(patternText);
 
-        args = new String[1]; args[0] = "hello.otl";
-        new Main(args);
+    public static void main(String[] args) {
+//        List<String[]> test = new ArrayList<>() {{
+//            add(new String[]{"test/origin_test.otl"});
+//        }};
+//        test.forEach(v -> {
+//            try {
+//                new Main(v);
+//            } catch (FileException e) {
+//                FileException.printErrorMessage(e, Setting.path);
+//            }
+//        });
+
+        args = new String[]{"hello.otl"};
+
+        try {
+            new Main(args);
+        } catch (FileException e) {
+            FileException.printErrorMessage(e, Setting.path);
+        }
     }
 
     private Main(String[] args) {
-        String path = args.length <= 0 ? showGUI() : args[0];
-        File file = new File(path); //파일 생성
+        if (args.length <= 0) throw FileException.noFindError();
+        File file = new File(args[0]); //파일 생성
         Setting.path = file.getAbsolutePath();
-        if (!file.canRead()) throw new FileFailException(FileFailMessage.doNotReadFile);
-        if (!path.toLowerCase(Locale.ROOT).endsWith(".otl")) throw new FileFailException(FileFailMessage.notMatchExtension);
-        firstStart();
+        if (!file.exists()) throw FileException.pathNoHaveError();
+        else if (!file.isFile()) throw FileException.isNotFileError();
+        else if (!file.canRead()) throw FileException.noReadError();
+        else if (!extensionCheck(file.getName())) throw FileException.rightExtension();
+        Setting.firstStart();
 
         String text;
+        long count = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(path, StandardCharsets.UTF_8))) {
-            while ((text = reader.readLine()) != null) Setting.total.append(text).append("\n");
-            //괄호 -> 고유 아이디로 전환 //괄호 계산
-            String total = bracket.bracket(Setting.total.toString());
-            for (String line : total.split("\\n")) {
-                start(line); // 실행 메소드
-            }
+            while ((text = reader.readLine()) != null) Setting.total.append(++count).append(" ").append(text).append("\n");
+            StartLine.startLine(Setting.total.toString(), path, repository);
         } catch (IOException ignored) {}
-
-        pause();
-    }
-
-    private String showGUI() {
-        final JFrame frame = new JFrame();
-        final String[] extensions = {"otl"};
-        final JFileChooser chooser = new JFileChooser();
-        final FileNameExtensionFilter filter = new FileNameExtensionFilter(".otl", extensions);
-
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        chooser.setFileFilter(filter);
-        int open = chooser.showOpenDialog(frame.getParent());
-        if (open == JFileChooser.OPEN_DIALOG)
-            return chooser.getSelectedFile().getPath();
-        else throw new FileFailException(FileFailMessage.doNotFindFile);
     }
 
     private void pause() {
