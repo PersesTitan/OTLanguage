@@ -1,9 +1,0 @@
-{
-  "version" : "1.0.0",
-  "founder" : "PersesTitan",
-  "link" : "https://gthub.com/OTLanguage",
-  "kind" : "Web Framework",
-  "help" : [
-    "<ㅇㅅㅇ> [변수명]:[초기값] = 웹 변수 등록"
-  ]
-}
