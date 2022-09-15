@@ -48,4 +48,14 @@ public interface MergeToken {
     default String orMerge(Iterable<? extends CharSequence> elements) {
         return "(" + String.join("|", elements) + ")";
     }
+
+    // ACCESS 갯수 세는 로직
+    default int accessCount(String line) {
+        int count = 0;
+        for (int i = 0; i < line.length(); i++) {
+            if (line.charAt(i) == ACCESS.charAt(0)) count++;
+            else break;
+        }
+        return count;
+    }
 }
