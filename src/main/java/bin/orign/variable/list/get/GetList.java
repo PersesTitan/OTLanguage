@@ -13,8 +13,8 @@ import static bin.check.VariableCheck.isListString;
 
 public interface GetList {
     default List<String> getBoolList(String line) {
-        if (!listCheck(line) && isBoolean(line)) return new ArrayList<>(){{ add(line); }};
-        if (!isListBoolean(line)) throw VariableException.typeMatch();
+        if (listCheck(line) && isBoolean(line)) return new ArrayList<>(){{ add(line); }};
+        if (isListBoolean(line)) throw VariableException.typeMatch();
         return Pattern.compile(Token.COMMA)
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
@@ -22,8 +22,8 @@ public interface GetList {
     }
 
     default List<Character> getCharacterList(String line) {
-        if (!listCheck(line) && isCharacter(line)) return new ArrayList<>() {{add(line.charAt(0));}};
-        if (!isListCharacter(line)) throw VariableException.typeMatch();
+        if (listCheck(line) && isCharacter(line)) return new ArrayList<>() {{add(line.charAt(0));}};
+        if (isListCharacter(line)) throw VariableException.typeMatch();
         return Pattern.compile(Token.COMMA)
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
@@ -32,8 +32,8 @@ public interface GetList {
     }
 
     default List<Double> getDoubleList(String line) {
-        if (!listCheck(line) && isDouble(line)) return new ArrayList<>() {{ add(Double.parseDouble(line)); }};
-        if (!isListDouble(line)) throw VariableException.typeMatch();
+        if (listCheck(line) && isDouble(line)) return new ArrayList<>() {{ add(Double.parseDouble(line)); }};
+        if (isListDouble(line)) throw VariableException.typeMatch();
         return Pattern.compile(Token.COMMA)
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
@@ -42,8 +42,8 @@ public interface GetList {
     }
 
     default List<Float> getFlotList(String line) {
-        if (!listCheck(line) && isFloat(line)) return new ArrayList<>() {{ add(Float.parseFloat(line)); }};
-        if (!isListFloat(line)) throw VariableException.typeMatch();
+        if (listCheck(line) && isFloat(line)) return new ArrayList<>() {{ add(Float.parseFloat(line)); }};
+        if (isListFloat(line)) throw VariableException.typeMatch();
         return Pattern.compile(Token.COMMA)
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
@@ -52,8 +52,8 @@ public interface GetList {
     }
 
     default List<Integer> getIntegerList(String line) {
-        if (!listCheck(line) && isInteger(line)) return new ArrayList<>() {{ add(Integer.parseInt(line)); }};
-        if (!isListInteger(line)) throw VariableException.typeMatch();
+        if (listCheck(line) && isInteger(line)) return new ArrayList<>() {{ add(Integer.parseInt(line)); }};
+        if (isListInteger(line)) throw VariableException.typeMatch();
         return Pattern.compile(Token.COMMA)
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
@@ -62,8 +62,8 @@ public interface GetList {
     }
 
     default List<Long> getLongList(String line) {
-        if (!listCheck(line) && isLong(line)) return new ArrayList<>() {{ add(Long.parseLong(line)); }};
-        if (!isListLong(line)) throw VariableException.typeMatch();
+        if (listCheck(line) && isLong(line)) return new ArrayList<>() {{ add(Long.parseLong(line)); }};
+        if (isListLong(line)) throw VariableException.typeMatch();
         return Pattern.compile(Token.COMMA)
                 .splitAsStream(line.substring(1, line.length() - 1))
                 .map(String::trim)
@@ -72,7 +72,7 @@ public interface GetList {
     }
 
     default List<String> getStringList(String line) {
-        if (!listCheck(line)) return new ArrayList<>() {{ add(line); }};
+        if (listCheck(line)) return new ArrayList<>() {{ add(line); }};
         if (!isListString(line)) throw VariableException.typeMatch();
         return Pattern.compile(Token.COMMA)
                 .splitAsStream(line.substring(1, line.length() - 1))
