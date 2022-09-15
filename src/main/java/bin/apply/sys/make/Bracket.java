@@ -12,11 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Bracket implements LoopToken, Token {
-    private final String endPattern = MR + "(" + BLANK + RETURN + ")?";
+    private final String endPattern = "(" + BLANK + orMerge(RETURN, PUTIN) + ")?";
     private final String loopStartPattern =
             orMerge(START, "\\n") + LINE_NUMBER + BLANK + orMerge(LOOP_SET) + "[^\\n]*\\{?(?=\\s*(\\n|$))";
     private final String loopEndPattern =
-            orMerge(START, "\\n") + LINE_NUMBER + BLANK + endPattern + "(?=\\s*(\\n|$))";
+            orMerge(START, "\\n") + LINE_NUMBER + BLANK + MR + "(?=" + BLANK + endPattern + "\\s*(\\n|$))";
     private final Pattern pattern = Pattern.compile(orMerge(loopStartPattern, loopEndPattern));
     private final Stack<Integer> stack = new Stack<>();
 
@@ -36,19 +36,21 @@ public class Bracket implements LoopToken, Token {
 
         if (!(copy.contains("{") && copy.contains("}"))) return copy;
         stack.clear();
-        Matcher matcher = pattern.matcher(total);
+        Matcher matcher = pattern.matcher(copy);
         while (matcher.find()) {
             String group = matcher.group().strip();
-            if (Pattern.compile(endPattern + BLANK + END).matcher(group).find()) {
+            if (Pattern.compile(MR + BLANK + END).matcher(group).find()) {
                 if (stack.isEmpty()) {
                     StartLine.setError(group, total);
                     throw MatchException.bracketMatchError();
                 } else if (stack.size() == 1) {
-                    int start = stack.pop();
-                    int end = matcher.end();
-                    String oldValue = total.substring(start, end);
-                    String newValue = "(" + fileName + "," + (start+1) + "," + (end-1) + ")";
-                    copy = copy.replace(oldValue, newValue);
+                    int start = stack.pop()+1;
+                    int end = matcher.end()-1;
+                    String oldValue = total.substring(start, end).strip();
+                    int oldStart = getLineStart(oldValue);
+                    int oldEnd = getLineEnd(oldValue);
+                    String newValue = " (" + fileName + "," + oldStart + "," + oldEnd + ") ";
+                    copy = copy.replace(total.substring(start-1, end+1), newValue);
                 } else stack.pop();
             } else {
                 if (!group.endsWith("{")) {
@@ -57,6 +59,7 @@ public class Bracket implements LoopToken, Token {
                 } else stack.add(matcher.end()-1);
             }
         }
+
         if (!stack.isEmpty()) getErrorLine(total, stack.pop());
         return new LoopBracket().deleteEnter(copy);
     }
@@ -66,5 +69,17 @@ public class Bracket implements LoopToken, Token {
         String line = lines[lines.length-1];
         StartLine.setError(line, total);
         throw MatchException.bracketMatchError();
+    }
+
+    private int getLineStart(String total) {
+        Matcher matcher = Pattern.compile(START + LINE_NUMBER).matcher(total);
+        if (matcher.find()) return Integer.parseInt(matcher.group().trim());
+        else return 0;
+    }
+
+    private int getLineEnd(String total) {
+        Matcher matcher = Pattern.compile(LINE_NUMBER.trim() + END).matcher(total);
+        if (matcher.find()) return Integer.parseInt(matcher.group().trim());
+        else return total.length();
     }
 }
