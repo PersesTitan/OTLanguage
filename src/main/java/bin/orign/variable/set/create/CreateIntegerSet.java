@@ -46,6 +46,7 @@ public class CreateIntegerSet implements
             if (value.isBlank()) set = new LinkedHashSet<>();
             else {
                 if (value.startsWith(SET_ADD)) set = getIntegerSet(value.substring(SET_ADD.length()));
+                else if (value.startsWith(VARIABLE_PUT)) set = getIntegerSet(value.substring(VARIABLE_PUT.length()));
                 else throw VariableException.noGrammar();
             }
             repositoryArray[0].get(type).put(group, set);
