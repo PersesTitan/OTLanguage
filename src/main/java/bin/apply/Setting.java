@@ -6,7 +6,7 @@ import bin.apply.sys.run.Sleep;
 import bin.math.random.*;
 import bin.orign.console.*;
 import bin.orign.variable.list.create.*;
-import bin.orign.variable.map.create.CreateBooleanMap;
+import bin.orign.variable.map.create.*;
 import bin.orign.variable.origin.create.*;
 import bin.orign.variable.set.create.*;
 import bin.orign.loop.If;
@@ -103,6 +103,12 @@ public class Setting implements Repository {
         startWorks.add(new ListAdd(LIST_ADD));
         // MAP
         startWorks.add(new CreateBooleanMap(MAP_BOOLEAN, repository));
+        startWorks.add(new CreateCharacterMap(MAP_CHARACTER, repository));
+        startWorks.add(new CreateDoubleMap(MAP_DOUBLE, repository));
+        startWorks.add(new CreateFloatMap(MAP_FLOAT, repository));
+        startWorks.add(new CreateIntegerMap(MAP_INTEGER, repository));
+        startWorks.add(new CreateLongMap(MAP_LONG, repository));
+        startWorks.add(new CreateStringMap(MAP_STRING, repository));
 
         startWorks.add(new PrintSpace(PRINT_SPACE));
         startWorks.add(new PrintTap(PRINT_TAP));
