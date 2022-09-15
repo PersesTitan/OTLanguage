@@ -43,6 +43,7 @@ public class CreateBooleanList implements
             if (value.isBlank()) list = new ArrayList<>();
             else {
                 if (value.startsWith(LIST_ADD)) list = getBoolList(value.substring(LIST_ADD.length()));
+                else if (value.startsWith(VARIABLE_PUT)) list = getBoolList(value.substring(VARIABLE_PUT.length()));
                 else throw VariableException.noGrammar();
             }
             repositoryArray[0].get(type).put(group, list);
