@@ -17,7 +17,7 @@ public class ListAdd implements
     private final Pattern pattern;
 
     public ListAdd(String type) {
-        String patternText = startMerge(VARIABLE_NAME, type, "[^" + type + "].+");
+        String patternText = startMerge(VARIABLE_ACCESS, type, "[^" + type + "].*");
         this.pattern = Pattern.compile(patternText);
         this.type = type;
     }
@@ -50,15 +50,6 @@ public class ListAdd implements
             }
         }
         throw VariableException.noDefine();
-    }
-
-    private int accessCount(String line) {
-        int count = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (line.charAt(i) == ACCESS.charAt(0)) count++;
-            else break;
-        }
-        return count;
     }
 
     private List<?> getValues(String type, String value) {
