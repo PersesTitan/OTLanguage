@@ -12,7 +12,8 @@ public interface VariableToken extends Token {
     String VARIABLE_GET_S = ":";
     String VARIABLE_GET_E = "_";
 
-    String FILE_NAME = "[^~]+";
+    String FILE_TYPE = "[^~]+";
+    String FILE_NAME = "[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]+";
 
     // SYSTEM
     String FORCE_QUIT = "ㄲㅌㄲ";
@@ -112,5 +113,12 @@ public interface VariableToken extends Token {
         add(MAP_CHARACTER);
         add(MAP_FLOAT);
         add(MAP_DOUBLE);
+    }};
+
+    List<String> TOTAL_LIST = new ArrayList<>() {{
+        addAll(ORIGIN_LIST);
+        addAll(SET_LIST);
+        addAll(LIST_LIST);
+        addAll(MAP_LIST);
     }};
 }
