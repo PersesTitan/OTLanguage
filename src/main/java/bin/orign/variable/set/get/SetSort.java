@@ -31,9 +31,10 @@ public class SetSort implements StartWork, Token, VariableToken {
                       Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
         int count = accessCount(line);
-        line = line.replaceFirst(START + ACCESS + "+", "");
+        String variableName = line
+                .replaceFirst(START + ACCESS + "+", "")
+                .replaceFirst(type + END, "");
 
-        String variableName = line.replaceFirst(type + END, "");
         if (count > repositoryArray.length) throw VariableException.localNoVariable();
         var repository = repositoryArray[count];
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
@@ -48,14 +49,5 @@ public class SetSort implements StartWork, Token, VariableToken {
             }
         }
         throw VariableException.noDefine();
-    }
-
-    private int accessCount(String line) {
-        int count = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (line.charAt(i) == ACCESS.charAt(0)) count++;
-            else break;
-        }
-        return count;
     }
 }
