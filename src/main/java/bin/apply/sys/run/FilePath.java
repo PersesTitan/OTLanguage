@@ -1,8 +1,6 @@
 package bin.apply.sys.run;
 
-import bin.apply.Setting;
 import bin.apply.sys.item.Separator;
-import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
 import bin.exception.MatchException;
 import bin.exception.VariableException;
@@ -21,7 +19,7 @@ import static bin.apply.sys.item.SystemSetting.extension;
 
 public class FilePath implements Token, LoopToken {
     public final Pattern pattern =
-            Pattern.compile(START + BLANK + FILE + BLANKS + FILE_NAME + "(" + ACCESS + FILE_NAME + ")" + BLANK + END);
+            Pattern.compile(START + BLANK + FILE + BLANKS + FILE_TYPE + "(" + ACCESS + FILE_TYPE + ")" + BLANK + END);
 
     public boolean check(String line) {
         return pattern.matcher(line).find();
