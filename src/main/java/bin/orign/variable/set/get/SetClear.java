@@ -15,7 +15,7 @@ public class SetClear implements
     private final Pattern pattern;
 
     public SetClear(String type) {
-        String patternText = startEndMerge(VARIABLE_NAME, type);
+        String patternText = startEndMerge(VARIABLE_ACCESS, type);
         this.pattern = Pattern.compile(patternText);
         this.type = type;
     }
@@ -49,14 +49,5 @@ public class SetClear implements
             }
         }
         throw VariableException.noDefine();
-    }
-
-    private int accessCount(String line) {
-        int count = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (line.charAt(i) == ACCESS.charAt(0)) count++;
-            else break;
-        }
-        return count;
     }
 }
