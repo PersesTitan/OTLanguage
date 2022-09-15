@@ -46,6 +46,7 @@ public class CreateCharacterSet implements
             if (value.isBlank()) set = new LinkedHashSet<>();
             else {
                 if (value.startsWith(SET_ADD)) set = getCharacterSet(value.substring(SET_ADD.length()));
+                else if (value.startsWith(VARIABLE_PUT)) set = getCharacterSet(value.substring(VARIABLE_PUT.length()));
                 else throw VariableException.noGrammar();
             }
             repositoryArray[0].get(type).put(group, set);
