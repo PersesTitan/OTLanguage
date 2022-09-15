@@ -6,6 +6,7 @@ import bin.token.LoopToken;
 import bin.token.cal.BoolToken;
 import work.StartWork;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,18 +24,11 @@ public class If implements LoopToken, StartWork, BoolToken {
         this.type1 = type1;
         this.type2 = type2;
         this.type3 = type3;
-        String BOOLS = orMerge(TRUE, FALSE);
-        String IF_PatternText = blacksMerge(type1, BOOLS, BRACE_STYLE());
-        String IF_ELSE_PatternText = blackMerge("(", blacksMerge(type2, BOOLS, BRACE_STYLE()), ")*");
-        String ELSE_PatternText = blackMerge("(", blacksMerge(type3, BRACE_STYLE()), ")?");
-        this.IF_Pattern = Pattern.compile(IF_PatternText);
-        this.IF_ELSE_Pattern = Pattern.compile(blackMerge("(", blacksMerge(type2, BOOLS, BRACE_STYLE()), ")"));
-        this.ELSE_Pattern = Pattern.compile(blackMerge("(", blacksMerge(type3, BRACE_STYLE()), ")"));
-        this.pattern = Pattern.compile(startEndMerge(IF_PatternText, IF_ELSE_PatternText, ELSE_PatternText));
     }
 
     @Override
     public boolean check(String line) {
+        makePattern(BRACE_STYLE());
         return pattern.matcher(line).find();
     }
 
@@ -47,6 +41,8 @@ public class If implements LoopToken, StartWork, BoolToken {
             startLine(group, repositoryArray);
         }
     }
+
+//    public static String
 
     private void startLine(String line, Map<String, Map<String, Object>>[] repository) {
         Matcher ifPattern = IF_Pattern.matcher(line);
@@ -92,9 +88,20 @@ public class If implements LoopToken, StartWork, BoolToken {
         String[] values = line.split(COMMA, 3);
         if (values.length != 3) throw MatchException.grammarError();
         else if (!LOOP_TOKEN.containsKey(values[0])) throw MatchException.grammarError();
-        int start = Integer.parseInt(values[1]);
-        int end = Integer.parseInt(values[2]);
-        String total = LOOP_TOKEN.get(values[0]).substring(start, end);
-        StartLine.startLine(total, values[0], repository);
+        String total = LOOP_TOKEN.get(values[0]);
+        int s = total.indexOf("\n" + values[1] + " ");
+        int e = total.indexOf("\n" + values[2] + " ");
+        StartLine.startLine(total.substring(s, e), values[0], repository);
+    }
+
+    // Pattern 만드는 로직
+    private void makePattern(String BRACE_STYLE) {
+        String IF_PatternText = START + BLANK + blacksMerge(type1, BOOL, BRACE_STYLE);
+        String IF_ELSE_PatternText = blackMerge("(", blacksMerge(type2, BOOL, BRACE_STYLE), ")*");
+        String ELSE_PatternText = blackMerge("(", blacksMerge(type3, BRACE_STYLE), ")?");
+        this.IF_Pattern = Pattern.compile(IF_PatternText);
+        this.IF_ELSE_Pattern = Pattern.compile(blackMerge("(", blacksMerge(type2, BOOL, BRACE_STYLE), ")"));
+        this.ELSE_Pattern = Pattern.compile(blackMerge("(", blacksMerge(type3, BRACE_STYLE), ")"));
+        this.pattern = Pattern.compile(startEndMerge(IF_PatternText, IF_ELSE_PatternText, ELSE_PatternText));
     }
 }
