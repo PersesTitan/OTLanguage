@@ -3,6 +3,7 @@ package bin.apply.sys.make;
 import bin.apply.Setting;
 import bin.exception.MatchException;
 import bin.exception.VariableException;
+import bin.token.LoopToken;
 
 import java.io.File;
 import java.util.Map;
@@ -13,9 +14,8 @@ import java.util.regex.Pattern;
 
 import static bin.apply.Controller.bracket;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
-import static bin.token.Token.START;
 
-public class StartLine {
+public class StartLine implements LoopToken {
     private static final String patternText = START + "[0-9]+( |$)";
     private static final Pattern pattern = Pattern.compile(patternText);
 
@@ -39,9 +39,18 @@ public class StartLine {
             MatchException.matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
         }
     }
-    /**
-     * @see bin.apply.sys.run.FilePath
-     */
+
+    @SafeVarargs
+    public static String startLoop(String total, String fileName,
+                                 Map<String, Map<String, Object>>... repository) {
+        for (var line : bracket.bracket(total, fileName, false).split("\\n")) {
+            line = setError(line, total).strip();
+            if (line.equals(BREAK)) return null;
+            else if (line.equals(CONTINUE)) return CONTINUE;
+            else Setting.start(line, errorLine.get(), repository);
+        }
+        return null;
+    }
 
     private static final AtomicLong errorCount = new AtomicLong(0);
     private static final AtomicReference<String> errorLine = new AtomicReference<>("");
