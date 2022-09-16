@@ -4,7 +4,14 @@ import bin.apply.sys.item.Color;
 import bin.apply.sys.run.ForceQuit;
 import bin.apply.sys.run.Sleep;
 import bin.math.random.*;
+import bin.math.sum.list.FloatListSum;
+import bin.math.sum.list.IntegerListSum;
+import bin.math.sum.list.LongListSum;
+import bin.math.sum.set.IntegerSetSum;
+import bin.math.sum.set.LongSetSum;
 import bin.orign.console.*;
+import bin.orign.loop.For;
+import bin.orign.loop.While;
 import bin.orign.variable.list.create.*;
 import bin.orign.variable.map.create.*;
 import bin.orign.variable.origin.create.*;
@@ -17,6 +24,7 @@ import bin.orign.variable.list.get.ListIsEmpty;
 import bin.orign.variable.list.get.ListSort;
 import bin.orign.variable.origin.put.PutVariable;
 import bin.orign.variable.set.get.*;
+import com.carrotsearch.hppc.LongSet;
 
 import java.util.Map;
 
@@ -75,6 +83,11 @@ public class Setting implements Repository {
         returnWorks.add(new Input(SCANNER));
         returnWorks.add(new ListIsEmpty(LIST_ISEMPTY));
         returnWorks.add(new SetIsEmpty(SET_ISEMPTY));
+        returnWorks.add(new IntegerListSum());
+        returnWorks.add(new LongListSum());
+        returnWorks.add(new FloatListSum());
+        returnWorks.add(new IntegerSetSum());
+        returnWorks.add(new LongSetSum());
 
         // ORIGEN
         startWorks.add(new CreateBoolean(BOOL_VARIABLE, repository));
@@ -117,6 +130,8 @@ public class Setting implements Repository {
         startWorks.add(new PutVariable());
         startWorks.add(new Sleep(SLEEP));
         startWorks.add(new If(IF, ELSE_IF, ELSE));
+        startWorks.add(new For());
+        startWorks.add(new While(WHITE));
     }
 
     private static void reset() {
