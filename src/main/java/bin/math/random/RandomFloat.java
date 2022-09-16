@@ -34,7 +34,7 @@ public class RandomFloat implements
         while (matcher.find()) {
             String group = matcher.group();
             group = group.substring(1, group.length()-1);
-            if (Pattern.compile(FLOAT).matcher(group).find()) {
+            if (group.matches(FLOAT)) {
                 String[] values = group.split(type);
                 if (values[0].isBlank()) {
                     float num2 = Float.parseFloat(values[1]);
