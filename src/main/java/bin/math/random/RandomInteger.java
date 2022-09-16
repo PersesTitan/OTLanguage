@@ -35,7 +35,7 @@ public class RandomInteger implements
         while (matcher.find()) {
             String group = matcher.group();
             group = group.substring(1, group.length()-1);
-            if (Pattern.compile(INT).matcher(group).find()) {
+            if (group.matches(INT)) {
                 String[] values = group.split(type);
                 if (values[0].isBlank()) {
                     int num2 = Integer.parseInt(values[1]);
