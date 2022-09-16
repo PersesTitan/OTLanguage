@@ -8,12 +8,12 @@ import bin.exception.MatchException;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
 import bin.token.Token;
-import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 import work.StartWork;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,38 +22,48 @@ import static bin.token.cal.NumberToken.NUMBER;
 
 public class For implements
         Token, StartWork, LoopToken, VariableCheck {
+    private final String patternText;
     private final Pattern pattern;
 
     public For() {
-        String patternText = startEndMerge(
-                blackMerge(NUMBER, FOR, NUMBER, FOR, NUMBER),
-                BLANK, BRACE_STYLE(), BLANK, "(" + PUTIN + ")?");
-        this.pattern = Pattern.compile(patternText);
+        this.patternText = blackMerge(NUMBER, FOR, NUMBER, FOR, NUMBER);
+        this.pattern = Pattern.compile(
+                startEndMerge(patternText, BLANK, BRACE_STYLE(), BLANK, "(" + PUTIN + ")?"));
     }
 
     @Override
     public boolean check(String line) {
-        return false;
+        return pattern.matcher(line).find();
     }
 
     @Override
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
-        if (Pattern.compile(PUTIN + BLANK + END).matcher(line).find()) {
-            // 0 : 숫자^숫자^숫자 (test,0,1)
-            // 1 : ㅇㅈㅇ 변수
-            String[] tokens = line.split(PUTIN, 2);
-            if (tokens.length != 2) throw MatchException.grammarError();
+        Matcher matcher = Pattern.compile(START + patternText).matcher(line.strip());
+        if (matcher.find()) {
+            String group = matcher.group().strip(); // 숫자^숫자^숫자
+            // (test,0,1) or (test,0,1)=>ㅇㅈㅇ 변수
+            line = line.replaceFirst(START + BLANK + patternText, "");
+            String[] tokens = line.split(PUTIN_TOKEN, 2);
 
-            String patternText = BRACE_STYLE();
-            String brace = tokens[0].strip();
-            Matcher matcher = Pattern.compile(patternText).matcher(brace);
-            if (matcher.find()) {
-                String group = matcher.group();
-                brace
+            String[] token = bothEndCut(tokens[0].strip()).split(",", 3);
+            if (token.length != 3) throw MatchException.grammarError();
+            String total = LOOP_TOKEN.get(token[0]);
+            int start = total.indexOf("\n" + token[1] + " ");
+            int end = total.indexOf("\n" + token[2] + " ");
+            total = total.substring(start, end);
+            if (tokens.length == 1) {
+                String[] numbers = group.split(BLANK+FOR+BLANK, 3);
+                if (numbers.length != 3) throw MatchException.grammarError();
+                startFor(group,
+                        getType(numbers[0], numbers[1], numbers[2]),
+                        null, token[0], total, repositoryArray);
+            } else {
+                String[] variables = tokens[1].strip().split(BLANKS, 2);
+                if (variables.length != 2) throw MatchException.grammarError();
+                startFor(group, variables[0], variables[1], token[0],
+                        total, repositoryArray);
             }
-        } else {
-
         }
     }
 
@@ -111,11 +121,19 @@ public class For implements
         }
     }
 
-    private String getType(String value) {
-        if (isInteger(value)) return INT_VARIABLE;
-        else if (isFloat(value)) return FLOAT_VARIABLE;
-        else if (isLong(value)) return LONG_VARIABLE;
-        else if (isDouble(value)) return DOUBLE_VARIABLE;
+    private String getType(String value1, String value2, String value3) {
+        List<VariableType.Origin> vars = List.of(getType(value1), getType(value2), getType(value3));
+        if (vars.contains(VariableType.Origin.Double)) return DOUBLE_VARIABLE;
+        else if (vars.contains(VariableType.Origin.Float)) return FLOAT_VARIABLE;
+        else if (vars.contains(VariableType.Origin.Long)) return LONG_VARIABLE;
+        else return INT_VARIABLE;
+    }
+
+    private VariableType.Origin getType(String value) {
+        if (isInteger(value)) return VariableType.Origin.Integer;
+        else if (isLong(value)) return VariableType.Origin.Long;
+        else if (isFloat(value)) return VariableType.Origin.Float;
+        else if (isDouble(value)) return VariableType.Origin.Double;
         else throw VariableException.typeMatch();
     }
 
@@ -127,7 +145,7 @@ public class For implements
         var rep = repository[0].get(INT_VARIABLE);
         rep.put(variableName, a);
         for (int repValue; (repValue = (int) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
-            if (StartLine.startLoop(total, fileName, repository) == null) break;
+            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
         }
         rep.remove(variableName);
     }
@@ -135,7 +153,9 @@ public class For implements
     private void start(int a, int b, int c,
                        String total, String fileName,
                        Map<String, Map<String, Object>>[] repository) {
-        for (int i = a; i < b; i += c) StartLine.startLoop(total, fileName, repository);
+        for (int i = a; i < b; i += c) {
+            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
+        }
     }
 
     //LONG
@@ -146,7 +166,7 @@ public class For implements
         var rep = repository[0].get(LONG_VARIABLE);
         rep.put(variableName, a);
         for (long repValue; (repValue = (long) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
-            if (StartLine.startLoop(total, fileName, repository) == null) break;
+            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
         }
         rep.remove(variableName);
     }
@@ -154,7 +174,9 @@ public class For implements
     private void start(long a, long b, long c,
                        String total, String fileName,
                        Map<String, Map<String, Object>>[] repository) {
-        for (long i = a; i < b; i += c) StartLine.startLoop(total, fileName, repository);
+        for (long i = a; i < b; i += c) {
+            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
+        }
     }
 
     //FLOAT
@@ -165,7 +187,7 @@ public class For implements
         var rep = repository[0].get(FLOAT_VARIABLE);
         rep.put(variableName, a);
         for (float repValue; (repValue = (float) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
-            if (StartLine.startLoop(total, fileName, repository) == null) break;
+            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
         }
         rep.remove(variableName);
     }
@@ -173,7 +195,9 @@ public class For implements
     private void start(float a, float b, float c,
                        String total, String fileName,
                        Map<String, Map<String, Object>>[] repository) {
-        for (float i = a; i < b; i += c) StartLine.startLoop(total, fileName, repository);
+        for (float i = a; i < b; i += c) {
+            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
+        }
     }
 
     //DOUBLE
@@ -184,7 +208,7 @@ public class For implements
         var rep = repository[0].get(DOUBLE_VARIABLE);
         rep.put(variableName, a);
         for (double repValue; (repValue = (double) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
-            if (StartLine.startLoop(total, fileName, repository) == null) break;
+            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
         }
         rep.remove(variableName);
     }
@@ -192,6 +216,8 @@ public class For implements
     private void start(double a, double b, double c,
                        String total, String fileName,
                        Map<String, Map<String, Object>>[] repository) {
-        for (double i = a; i < b; i += c) StartLine.startLoop(total, fileName, repository);
+        for (double i = a; i < b; i += c) {
+            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
+        }
     }
 }
