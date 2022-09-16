@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.apply.Controller.bracket;
+import static bin.apply.Controller.loopController;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 
 public class StartLine implements LoopToken {
@@ -37,6 +38,7 @@ public class StartLine implements LoopToken {
             VariableException.variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
         } catch (MatchException e) {
             MatchException.matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            e.printStackTrace();
         }
     }
 
@@ -44,12 +46,12 @@ public class StartLine implements LoopToken {
     public static String startLoop(String total, String fileName,
                                  Map<String, Map<String, Object>>... repository) {
         for (var line : bracket.bracket(total, fileName, false).split("\\n")) {
-            line = setError(line, total).strip();
-            if (line.equals(BREAK)) return null;
-            else if (line.equals(CONTINUE)) return CONTINUE;
+            line = loopController.check(setError(line, total).strip());
+
+            if (line.equals(BREAK) || line.equals(CONTINUE)) return line;
             else Setting.start(line, errorLine.get(), repository);
         }
-        return null;
+        return "FINISH";
     }
 
     private static final AtomicLong errorCount = new AtomicLong(0);
