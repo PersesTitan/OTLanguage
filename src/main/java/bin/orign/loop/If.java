@@ -42,8 +42,6 @@ public class If implements LoopToken, StartWork, BoolToken {
         }
     }
 
-//    public static String
-
     private void startLine(String line, Map<String, Map<String, Object>>[] repository) {
         Matcher ifPattern = IF_Pattern.matcher(line);
         if (ifPattern.find()) {
