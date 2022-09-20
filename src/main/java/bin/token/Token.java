@@ -21,6 +21,7 @@ public interface Token extends MergeToken {
     String BL = "\\[";
     String BR = "\\]";
     String BACKSLASH = "\\\\";
+    String PESO = "\\$";
 
     String NO_PATTERN = "(?<=(^|[^\\\\])(\\\\\\\\)?+)";
     String YES_PATTERN = "(?<=(^|[^\\\\])(\\\\\\\\)?+)\\\\";
