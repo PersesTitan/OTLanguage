@@ -8,9 +8,10 @@ import java.util.Set;
 public interface LoopToken extends VariableToken {
     Map<String, String> LOOP_TOKEN = new HashMap<>();
     Set<String> LOOP_SET = new HashSet<>() {{
-        add("[\\s\\S]+" + FOR + "[\\s\\S]+" + FOR + "[\\s\\S]+");
+        add("[^\\^\\n]+" + FOR + "[^\\^\\n]+" + FOR + "[^\\^\\n]+");
         add(IF); add(ELSE_IF);
         add(ELSE); add(SERVER);
+        add(WHITE);
     }};
 
     default String BRACE_STYLE() {
@@ -30,6 +31,7 @@ public interface LoopToken extends VariableToken {
     String ELSE = QUESTION + "ㅉ" + QUESTION;
 
     String FOR = CARET; // ^
+    String WHITE = PESO + "ㅅ" + PESO;
 
     // SERVER
     String SERVER = "ㅅㅂㅅ";
