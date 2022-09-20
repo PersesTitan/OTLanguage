@@ -1,10 +1,12 @@
 package bin.token;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static bin.token.cal.BoolToken.FALSE;
+import static bin.token.cal.NumberToken.NUMBER;
 
 public interface VariableToken extends Token {
-    String VARIABLE_NAME = "[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]+[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]*";
+    String VARIABLE_NAME = "[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]+[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$-]*";
     String VARIABLE_ACCESS = ACCESS + "{0,2}" + VARIABLE_NAME;
     String VARIABLE = ":" + VARIABLE_ACCESS + "_";
     String VARIABLE_SET = VARIABLE_ACCESS + ":";
@@ -19,6 +21,8 @@ public interface VariableToken extends Token {
     String FORCE_QUIT = "ㄲㅌㄲ";
     String SLEEP = "=_=";
     String FILE = "ㅍㅅㅍ";
+
+    String NUMBER_LIST = String.join(BLANK, BL, NUMBER, "(", ",", NUMBER + ")*", BR);
 
     // VARIABLE
     String INT_VARIABLE = "ㅇㅈㅇ";
@@ -44,6 +48,7 @@ public interface VariableToken extends Token {
     String SET_ADD = LESS_SIGN;              // <
     String SET_GET = GREATER_SIGN;           // >
     String SET_ISEMPTY = QUESTION;           // ?
+    String SET_SUM = PLUS;                   // +
 
     // LIST
     String LIST_INTEGER = "ㄹㅈㄹ";
@@ -60,6 +65,7 @@ public interface VariableToken extends Token {
     String LIST_ADD = LESS_SIGN.repeat(2);              // <<
     String LIST_GET = GREATER_SIGN.repeat(2);           // >>
     String LIST_ISEMPTY = QUESTION.repeat(2);           // ??
+    String LIST_SUM = PLUS.repeat(2);                   // ++
 
     String MAP_INTEGER = "ㅈㅈㅈ";
     String MAP_LONG = "ㅈㅉㅈ";
@@ -75,6 +81,7 @@ public interface VariableToken extends Token {
     String MAP_GET = GREATER_SIGN.repeat(3);           // >>>
     String MAP_ISEMPTY = QUESTION.repeat(3);           // ???
 
+    // ORIGIN
     List<String> ORIGIN_LIST = new ArrayList<>() {{
         add(INT_VARIABLE);
         add(LONG_VARIABLE);
@@ -85,6 +92,7 @@ public interface VariableToken extends Token {
         add(DOUBLE_VARIABLE);
     }};
 
+    // SET
     List<String> SET_LIST = new ArrayList<>() {{
         add(SET_INTEGER);
         add(SET_LONG);
@@ -120,5 +128,39 @@ public interface VariableToken extends Token {
         addAll(SET_LIST);
         addAll(LIST_LIST);
         addAll(MAP_LIST);
+    }};
+
+    Map<String, Object> DEFAULT = new HashMap<>() {{
+        put(INT_VARIABLE, 0);
+        put(LONG_VARIABLE, 0);
+        put(BOOL_VARIABLE, FALSE);
+        put(STRING_VARIABLE, "");
+        put(CHARACTER_VARIABLE, ' ');
+        put(FLOAT_VARIABLE, 0.0);
+        put(DOUBLE_VARIABLE, 0.0);
+
+        put(SET_INTEGER, new LinkedHashSet<Integer>());
+        put(SET_LONG, new LinkedHashSet<Long>());
+        put(SET_BOOLEAN, new LinkedHashSet<String>());
+        put(SET_STRING, new LinkedHashSet<String>());
+        put(SET_CHARACTER, new LinkedHashSet<Character>());
+        put(SET_FLOAT, new LinkedHashSet<Float>());
+        put(SET_DOUBLE, new LinkedHashSet<Double>());
+
+        put(LIST_INTEGER, new LinkedList<Integer>());
+        put(LIST_LONG, new LinkedList<Long>());
+        put(LIST_BOOLEAN, new LinkedList<String>());
+        put(LIST_STRING, new LinkedList<String>());
+        put(LIST_CHARACTER, new LinkedList<Character>());
+        put(LIST_FLOAT, new LinkedList<Float>());
+        put(LIST_DOUBLE, new LinkedList<Double>());
+
+        put(MAP_INTEGER, new LinkedHashMap<String, Integer>());
+        put(MAP_LONG, new LinkedHashMap<String, Long>());
+        put(MAP_BOOLEAN, new LinkedHashMap<String, String>());
+        put(MAP_STRING, new LinkedHashMap<String, String>());
+        put(MAP_CHARACTER, new LinkedHashMap<String, Character>());
+        put(MAP_FLOAT, new LinkedHashMap<String, Float>());
+        put(MAP_DOUBLE, new LinkedHashMap<String, Double>());
     }};
 }
