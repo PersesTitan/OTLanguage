@@ -5,7 +5,7 @@ public class VariableException extends RuntimeException {
     private final static String sameVariable = "이미 존재하는 변수명입니다.";
     private final static String localNoVariable = "해당 위치의 변수에 접근할 수 없습니다.";
     private final static String reservedWorks = "예약된 단어를 사용할 수 없습니다.";
-    private final static String noDefine = "정의되지 않은 변수 입니다.";
+    private final static String noDefine = "정의되지 않은 변수 타입 입니다.";
     private final static String noGrammar = "문법이 올바르지 않습니다.";
     private final static String forTypeMatchError = "^^문의 타입으로 유효하지 않습니다.";
 
