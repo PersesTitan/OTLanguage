@@ -5,6 +5,7 @@ import bin.exception.VariableException;
 import bin.token.VariableToken;
 import work.ReturnWork;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -44,20 +45,20 @@ public class ListIsEmpty implements
             int count = countAccess(variables);
             if (count > repositoryArray.length) throw VariableException.localNoVariable();
 
-            List<Object> list = getList(count, variables.toString(), repositoryArray);
+            LinkedList<Object> list = getList(count, variables.toString(), repositoryArray);
             replace(builder, group, list.isEmpty() ? "ㅇㅇ" : "ㄴㄴ");
         }
         return builder.toString();
     }
 
-    private List<Object> getList(int count, String variableName,
-                                 Map<String, Map<String, Object>>[] repositoryArray) {
+    private LinkedList<Object> getList(int count, String variableName,
+                                       Map<String, Map<String, Object>>[] repositoryArray) {
         var repository = repositoryArray[count];
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
             Map<String, Object> values = entry.getValue();
             if (values.containsKey(variableName)) {
                 if (!LIST_LIST.contains(entry.getKey())) throw MatchException.grammarError();
-                return (List<Object>) values.get(variableName);
+                return (LinkedList<Object>) values.get(variableName);
             }
         }
         throw VariableException.noDefine();
