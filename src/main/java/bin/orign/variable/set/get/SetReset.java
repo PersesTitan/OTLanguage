@@ -44,14 +44,14 @@ public class SetReset implements StartWork, LoopToken, GetSet {
             Map<String, Object> values = entry.getValue();
             if (values.containsKey(variableName)) {
                 if (!SET_LIST.contains(entry.getKey())) throw MatchException.grammarError();
-                Set<Object> set = (Set<Object>) values.get(variableName);
+                LinkedHashSet<Object> set = (LinkedHashSet<Object>) values.get(variableName);
                 set.clear();
                 set.addAll(getSet(type, tokens[1].strip()));
             }
         }
     }
 
-    private Set<?> getSet(String type, String value) {
+    private LinkedHashSet<?> getSet(String type, String value) {
         return switch (type) {
             case SET_INTEGER -> getIntegerSet(value);
             case SET_LONG -> getLongSet(value);
