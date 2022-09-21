@@ -7,6 +7,7 @@ import bin.math.random.*;
 import bin.math.sum.list.FloatListSum;
 import bin.math.sum.list.IntegerListSum;
 import bin.math.sum.list.LongListSum;
+import bin.math.sum.set.FloatSetSum;
 import bin.math.sum.set.IntegerSetSum;
 import bin.math.sum.set.LongSetSum;
 import bin.orign.console.*;
@@ -24,8 +25,11 @@ import bin.orign.variable.list.get.ListIsEmpty;
 import bin.orign.variable.list.get.ListSort;
 import bin.orign.variable.origin.put.PutVariable;
 import bin.orign.variable.set.get.*;
-import com.carrotsearch.hppc.LongSet;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 
 import static bin.token.ConsoleToken.*;
@@ -34,6 +38,7 @@ import static bin.token.cal.NumberToken.*;
 
 public class Setting implements Repository {
     public static final StringBuilder total = new StringBuilder();
+    public static String mainPath;
     public static String path;
 
     @SafeVarargs
@@ -64,7 +69,6 @@ public class Setting implements Repository {
         noUse.add(RANDOM_LONG);
 
         priorityWorks.add(new ForceQuit(FORCE_QUIT));
-        priorityWorks.add(new CreateString(STRING_VARIABLE, repository));
         priorityWorks.add(new PriorityPrint(PRIORITY_PRINT));
         priorityWorks.add(new PriorityPrintln(PRIORITY_PRINTLN));
         priorityWorks.add(new PriorityPrintTap(PRIORITY_PRINT_TAP));
@@ -88,6 +92,7 @@ public class Setting implements Repository {
         returnWorks.add(new FloatListSum());
         returnWorks.add(new IntegerSetSum());
         returnWorks.add(new LongSetSum());
+        returnWorks.add(new FloatSetSum());
 
         // ORIGEN
         startWorks.add(new CreateBoolean(BOOL_VARIABLE, repository));
@@ -96,6 +101,7 @@ public class Setting implements Repository {
         startWorks.add(new CreateFloat(FLOAT_VARIABLE, repository));
         startWorks.add(new CreateInteger(INT_VARIABLE, repository));
         startWorks.add(new CreateLong(LONG_VARIABLE, repository));
+        startWorks.add(new CreateString(STRING_VARIABLE, repository));
         // SET
         startWorks.add(new CreateBooleanSet(SET_BOOLEAN, repository));
         startWorks.add(new CreateCharacterSet(SET_CHARACTER, repository));
