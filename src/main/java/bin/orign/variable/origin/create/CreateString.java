@@ -2,6 +2,7 @@ package bin.orign.variable.origin.create;
 
 import bin.apply.Controller;
 import bin.apply.Repository;
+import bin.apply.sys.item.HpMap;
 import bin.exception.VariableException;
 import bin.token.VariableToken;
 import work.StartWork;
@@ -16,7 +17,7 @@ public class CreateString implements StartWork, VariableToken, Controller {
 
     public CreateString(String type, Map<String, Map<String, Object>> repository) {
         String patternText = startMerge(type, BLANKS, VARIABLE_NAME, VARIABLE_PUT);
-        repository.put(type, new HashMap<>());
+        repository.put(type, new HpMap<>());
         this.pattern = Pattern.compile(patternText);
         this.type = type;
     }
@@ -28,9 +29,9 @@ public class CreateString implements StartWork, VariableToken, Controller {
 
     @Override
     public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
-        origen = origen.replaceFirst(startMerge(type, BLANKS), "");
-        String variableName = origen.split(VARIABLE_PUT)[0];  // 변수명
-        String value = origen.replaceFirst(VARIABLE_NAME + VARIABLE_PUT, ""); // 값
+        line = line.replaceFirst(startMerge(type, BLANKS), "");
+        String variableName = line.split(VARIABLE_PUT)[0];  // 변수명
+        String value = line.replaceFirst(VARIABLE_NAME + VARIABLE_PUT, ""); // 값
         if (Repository.noUse.contains(variableName)) throw VariableException.reservedWorks();
         else if (Repository.getSet(repositoryArray[0]).contains(variableName)) throw VariableException.sameVariable();
         repositoryArray[0].get(type).put(variableName, value);
