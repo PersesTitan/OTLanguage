@@ -6,10 +6,7 @@ import bin.token.VariableToken;
 import bin.orign.variable.list.get.GetList;
 import work.StartWork;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,10 +38,11 @@ public class CreateFloatList implements StartWork, VariableToken, GetList {
             else if (Repository.getSet(repositoryArray[0]).contains(group)) throw VariableException.sameVariable();
             // value : 값
             String value = line.replaceFirst(patternText, "").strip();
-            List<Float> list;
-            if (value.isBlank()) list = new ArrayList<>();
+            LinkedList<Float> list;
+            if (value.isBlank()) list = new LinkedList<>();
             else {
                 if (value.startsWith(LIST_ADD)) list = getFlotList(value.substring(LIST_ADD.length()));
+                else if (value.startsWith(VARIABLE_PUT)) list = getFlotList(value.substring(VARIABLE_PUT.length()));
                 else throw VariableException.noGrammar();
             }
             repositoryArray[0].get(type).put(group, list);
