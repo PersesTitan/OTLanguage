@@ -1,6 +1,7 @@
 package bin.orign.variable.set.create;
 
 import bin.apply.Repository;
+import bin.apply.sys.item.HpMap;
 import bin.exception.VariableException;
 import bin.orign.variable.set.get.GetSet;
 import bin.token.VariableToken;
@@ -20,7 +21,7 @@ public class CreateLongSet implements
     private final String type;
 
     public CreateLongSet(String type, Map<String, Map<String, Object>> repository) {
-        repository.put(type, new HashMap<>());
+        repository.put(type, new HpMap<>());
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
         this.pattern = Pattern.compile(patternText);
         this.type = type;
@@ -42,7 +43,7 @@ public class CreateLongSet implements
             else if (Repository.getSet(repositoryArray[0]).contains(group)) throw VariableException.sameVariable();
             // value : 값
             String value = line.replaceFirst(patternText, "").strip();
-            Set<Long> set;
+            LinkedHashSet<Long> set;
             if (value.isBlank()) set = new LinkedHashSet<>();
             else {
                 if (value.startsWith(SET_ADD)) set = getLongSet(value.substring(SET_ADD.length()));
