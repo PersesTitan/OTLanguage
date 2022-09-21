@@ -5,6 +5,7 @@ import bin.exception.VariableException;
 import bin.token.VariableToken;
 import work.StartWork;
 
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -43,7 +44,7 @@ public class SetAdd implements
             var values = entry.getValue();
             if (values.containsKey(variableName)) {
                 if (!SET_LIST.contains(entry.getKey())) throw MatchException.grammarError();
-                Set<Object> set = (Set<Object>) values.get(variableName);
+                LinkedHashSet<Object> set = (LinkedHashSet<Object>) values.get(variableName);
                 if (!isListString(variableValue) && getType(entry.getKey(), variableValue)) set.add(variableValue);
                 else set.addAll(getValues(entry.getKey(), variableValue));
                 return;
@@ -52,7 +53,7 @@ public class SetAdd implements
         throw VariableException.noDefine();
     }
 
-    private Set<?> getValues(String type, String value) {
+    private LinkedHashSet<?> getValues(String type, String value) {
         return switch (type) {
             case SET_INTEGER -> getIntegerSet(value);
             case SET_LONG -> getLongSet(value);
