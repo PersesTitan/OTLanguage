@@ -9,9 +9,7 @@ import bin.token.Token;
 import bin.token.VariableToken;
 import work.StartWork;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +41,7 @@ public class PutVariable implements
             else if (!Repository.getSet(repository).contains(variableName)) throw VariableException.noDefine();
             String varType = getVariableType(repository, variableName); // ㅇㅅㅇ, ㅇㅈㅇ
             if (!getType(varType, value)) throw VariableException.typeMatch();
-            if (ORIGIN_LIST.contains(variableName)) repository.get(varType).put(variableName, value);
+            if (ORIGIN_LIST.contains(varType)) repository.get(varType).put(variableName, value);
             else if (SET_LIST.contains(varType)) {
                 Object ob = repository.get(varType).get(variableName);
                 setSet(varType, ob, value);
@@ -97,32 +95,32 @@ public class PutVariable implements
     private void setSet(String variableType, Object ob, String value) {
         switch (variableType) {
             case SET_INTEGER -> {
-                Set<Integer> set = (Set<Integer>) ob;
+                LinkedHashSet<Integer> set = (LinkedHashSet<Integer>) ob;
                 set.clear();
                 set.addAll(getIntegerSet(value));
             }
             case SET_LONG -> {
-                Set<Long> set = (Set<Long>) ob;
+                LinkedHashSet<Long> set = (LinkedHashSet<Long>) ob;
                 set.clear();
                 set.addAll(getLongSet(value));
             }
             case SET_BOOLEAN -> {
-                Set<String> set = (Set<String>) ob;
+                LinkedHashSet<String> set = (LinkedHashSet<String>) ob;
                 set.clear();
                 set.addAll(getBoolSet(value));
             }
             case SET_STRING -> {
-                Set<String> set = (Set<String>) ob;
+                LinkedHashSet<String> set = (LinkedHashSet<String>) ob;
                 set.clear();
                 set.addAll(getStringSet(value));
             }
             case SET_CHARACTER -> {
-                Set<Character> set = (Set<Character>) ob;
+                LinkedHashSet<Character> set = (LinkedHashSet<Character>) ob;
                 set.clear();
                 set.addAll(getCharacterSet(value));
             }
             case SET_FLOAT -> {
-                Set<Float> set = (Set<Float>) ob;
+                LinkedHashSet<Float> set = (LinkedHashSet<Float>) ob;
                 set.clear();
                 set.addAll(getFlotSet(value));
             }
@@ -132,37 +130,37 @@ public class PutVariable implements
     private void setList(String variableType, Object ob, String value) {
         switch (variableType) {
             case LIST_INTEGER -> {
-                Set<Integer> set = (Set<Integer>) ob;
+                LinkedList<Integer> set = (LinkedList<Integer>) ob;
                 set.clear();
                 set.addAll(getIntegerList(value));
             }
             case LIST_LONG -> {
-                Set<Long> set = (Set<Long>) ob;
+                LinkedList<Long> set = (LinkedList<Long>) ob;
                 set.clear();
                 set.addAll(getLongList(value));
             }
             case LIST_BOOLEAN -> {
-                Set<String> set = (Set<String>) ob;
+                LinkedList<String> set = (LinkedList<String>) ob;
                 set.clear();
                 set.addAll(getBoolList(value));
             }
             case LIST_STRING -> {
-                Set<String> set = (Set<String>) ob;
+                LinkedList<String> set = (LinkedList<String>) ob;
                 set.clear();
                 set.addAll(getStringList(value));
             }
             case LIST_CHARACTER -> {
-                Set<Character> set = (Set<Character>) ob;
+                LinkedList<Character> set = (LinkedList<Character>) ob;
                 set.clear();
                 set.addAll(getCharacterList(value));
             }
             case LIST_FLOAT -> {
-                Set<Float> set = (Set<Float>) ob;
+                LinkedList<Float> set = (LinkedList<Float>) ob;
                 set.clear();
                 set.addAll(getFlotList(value));
             }
             case LIST_DOUBLE -> {
-                Set<Double> set = (Set<Double>) ob;
+                LinkedList<Double> set = (LinkedList<Double>) ob;
                 set.clear();
                 set.addAll(getDoubleList(value));
             }
