@@ -23,7 +23,8 @@ public class Print implements
     }
 
     @Override
-    public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
+    public void start(String line, String origen,
+                      Map<String, Map<String, Object>>[] repositoryArray) {
         System.out.print(line.replaceFirst(this.patternText, ""));
     }
 }
