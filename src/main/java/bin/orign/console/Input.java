@@ -10,9 +10,11 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static bin.apply.Controller.scanner;
+
 public class Input implements
         ReturnWork, ConsoleToken, Token, VariableToken {
-    private final Scanner scanner = new Scanner(System.in);
+//    private final Scanner scanner = new Scanner(System.in);
     private final String patternText;
     private final Pattern pattern;
 
@@ -30,7 +32,7 @@ public class Input implements
     public String start(String line,
                         Map<String, Map<String, Object>>[] repositoryArray) {
         Matcher matcher = pattern.matcher(line);
-        while (matcher.find()) line = line.replaceFirst(patternText, scanner.next());
+        while (matcher.find()) line = line.replaceFirst(patternText, scanner());
         return line;
     }
 }
