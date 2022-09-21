@@ -1,7 +1,9 @@
 package bin.apply.sys.make;
 
 import bin.apply.Setting;
+import bin.exception.ConsoleException;
 import bin.exception.MatchException;
+import bin.exception.ServerException;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
 
@@ -38,7 +40,10 @@ public class StartLine implements LoopToken {
             VariableException.variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
         } catch (MatchException e) {
             MatchException.matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            e.printStackTrace();
+        } catch (ServerException e) {
+            ServerException.serverErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+        } catch (ConsoleException e) {
+            ConsoleException.consoleErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
         }
     }
 
