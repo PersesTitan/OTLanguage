@@ -6,6 +6,7 @@ import bin.token.Token;
 import bin.token.VariableToken;
 import work.StartWork;
 
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -41,7 +42,7 @@ public class SetSort implements StartWork, Token, VariableToken {
             Map<String, Object> values = entry.getValue();
             if (values.containsKey(variableName)) {
                 if (!SET_LIST.contains(entry.getKey())) throw MatchException.grammarError();
-                Set<Object> set = (Set<Object>) values.get(variableName);
+                LinkedHashSet<Object> set = (LinkedHashSet<Object>) values.get(variableName);
                 TreeSet<Object> treeSet = new TreeSet<>(set);
                 set.clear();
                 set.addAll(treeSet);
