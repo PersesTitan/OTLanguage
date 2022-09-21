@@ -4,6 +4,7 @@ import bin.token.ConsoleToken;
 import bin.token.Token;
 import work.StartWork;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -23,7 +24,8 @@ public class Println implements
     }
 
     @Override
-    public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
+    public void start(String line, String origen,
+                      Map<String, Map<String, Object>>[] repositoryArray) {
         System.out.println(line.replaceFirst(this.patternText, ""));
     }
 }
