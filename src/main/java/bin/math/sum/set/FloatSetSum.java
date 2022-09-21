@@ -1,18 +1,19 @@
 package bin.math.sum.set;
 
 import bin.orign.variable.list.get.GetList;
+import bin.orign.variable.set.get.GetSet;
 import bin.token.LoopToken;
 import work.ReturnWork;
 
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FloatSetSum implements ReturnWork, LoopToken, GetList {
+public class FloatSetSum implements ReturnWork, LoopToken, GetSet {
+    private final String value = orMerge(VARIABLE_ACCESS, NUMBER_LIST);
     private final String patternText =
-            VARIABLE_GET_S + VARIABLE_ACCESS + ACCESS + LIST_SUM + VARIABLE_GET_E;
+            VARIABLE_GET_S + value + SET_SUM + VARIABLE_GET_E;
     private final Pattern pattern = Pattern.compile(patternText);
 
     @Override
@@ -27,20 +28,27 @@ public class FloatSetSum implements ReturnWork, LoopToken, GetList {
         while (matcher.find()) {
             String group = matcher.group();
             String groups = bothEndCut(group)
-                    .replaceFirst(ACCESS + SET_SUM + END, "");
+                    .replaceFirst(SET_SUM + END, "");
             if (groups.matches(VARIABLE_ACCESS)) {
-                var repository1 = repositoryArray[accessCount(groups)].get(SET_FLOAT);
-                var repository2 = repositoryArray[accessCount(groups)].get(SET_DOUBLE);
+                int accessCount = accessCount(groups);
+                var repository1 = repositoryArray[accessCount].get(SET_FLOAT);
+                var repository2 = repositoryArray[accessCount].get(SET_DOUBLE);
                 String variableName = groups.replaceAll(ACCESS, "");
                 if (repository1.containsKey(variableName)) {
-                    Set<Float> list = (Set<Float>) repository1.get(variableName);
+                    LinkedHashSet<Float> list = (LinkedHashSet<Float>) repository1.get(variableName);
                     String sum = Double.toString(list.stream().mapToDouble(v -> v).sum());
                     line = line.replace(group, sum);
                 } else if (repository2.containsKey(variableName)) {
-                    Set<Double> list = (Set<Double>) repository2.get(variableName);
+                    LinkedHashSet<Double> list = (LinkedHashSet<Double>) repository2.get(variableName);
                     String sum = Double.toString(list.stream().mapToDouble(v -> v).sum());
                     line = line.replace(group, sum);
                 }
+            } else {
+                try {
+                    LinkedHashSet<Double> list = getDoubleSet(groups);
+                    String sum = Double.toString(list.stream().mapToDouble(v -> v).sum());
+                    line = line.replace(group, sum);
+                } catch (Exception ignored) {}
             }
         }
         return line;
