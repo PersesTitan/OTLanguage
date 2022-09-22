@@ -2,6 +2,7 @@ package bin.orign.variable.origin.create;
 
 import bin.apply.Controller;
 import bin.apply.Repository;
+import bin.apply.sys.item.HpMap;
 import bin.exception.VariableException;
 import bin.token.VariableToken;
 import work.StartWork;
@@ -18,7 +19,7 @@ public class CreateDouble implements StartWork, VariableToken, Controller {
 
     public CreateDouble(String type, Map<String, Map<String, Object>> repository) {
         String patternText = startMerge(type, BLANKS, VARIABLE_NAME, VARIABLE_PUT);
-        repository.put(type, new HashMap<>());
+        repository.put(type, new HpMap<>());
         this.pattern = Pattern.compile(patternText);
         this.type = type;
     }
