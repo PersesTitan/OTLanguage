@@ -5,6 +5,7 @@ import bin.exception.VariableException;
 import bin.token.VariableToken;
 import work.StartWork;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -37,14 +38,14 @@ public class ListClear implements
         getList(count, variableName, repositoryArray).clear();;
     }
 
-    private List<Object> getList(int count, String variableName,
+    private LinkedList<Object> getList(int count, String variableName,
                                Map<String, Map<String, Object>>[] repositoryArray) {
         var repository = repositoryArray[count];
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
             Map<String, Object> values = entry.getValue();
             if (values.containsKey(variableName)) {
                 if (!LIST_LIST.contains(entry.getKey())) throw MatchException.grammarError();
-                return (List<Object>) values.get(variableName);
+                return (LinkedList<Object>) values.get(variableName);
             }
         }
         throw VariableException.noDefine();
