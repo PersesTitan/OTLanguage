@@ -1,6 +1,7 @@
 package bin.orign.variable.list.create;
 
 import bin.apply.Repository;
+import bin.apply.sys.item.HpMap;
 import bin.exception.VariableException;
 import bin.token.VariableToken;
 import bin.orign.variable.list.get.GetList;
@@ -17,7 +18,7 @@ public class CreateBooleanList implements
     private final String type;
 
     public CreateBooleanList(String type, Map<String, Map<String, Object>> repository) {
-        repository.put(type, new HashMap<>());
+        repository.put(type, new HpMap<>());
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
         this.pattern = Pattern.compile(patternText);
         this.type = type;
@@ -39,8 +40,8 @@ public class CreateBooleanList implements
             else if (Repository.getSet(repositoryArray[0]).contains(group)) throw VariableException.sameVariable();
             // value : 값
             String value = line.replaceFirst(patternText, "").strip();
-            List<String> list;
-            if (value.isBlank()) list = new ArrayList<>();
+            LinkedList<String> list;
+            if (value.isBlank()) list = new LinkedList<>();
             else {
                 if (value.startsWith(LIST_ADD)) list = getBoolList(value.substring(LIST_ADD.length()));
                 else if (value.startsWith(VARIABLE_PUT)) list = getBoolList(value.substring(VARIABLE_PUT.length()));
