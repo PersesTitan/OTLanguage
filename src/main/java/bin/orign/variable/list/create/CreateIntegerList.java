@@ -1,15 +1,13 @@
 package bin.orign.variable.list.create;
 
 import bin.apply.Repository;
+import bin.apply.sys.item.HpMap;
 import bin.exception.VariableException;
 import bin.token.VariableToken;
 import bin.orign.variable.list.get.GetList;
 import work.StartWork;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +17,7 @@ public class CreateIntegerList implements StartWork, VariableToken, GetList {
     private final String type;
 
     public CreateIntegerList(String type, Map<String, Map<String, Object>> repository) {
-        repository.put(type, new HashMap<>());
+        repository.put(type, new HpMap<>());
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
         this.pattern = Pattern.compile(patternText);
         this.type = type;
@@ -41,10 +39,11 @@ public class CreateIntegerList implements StartWork, VariableToken, GetList {
             else if (Repository.getSet(repositoryArray[0]).contains(group)) throw VariableException.sameVariable();
             // value : 값
             String value = line.replaceFirst(patternText, "").strip();
-            List<Integer> list;
-            if (value.isBlank()) list = new ArrayList<>();
+            LinkedList<Integer> list;
+            if (value.isBlank()) list = new LinkedList<>();
             else {
                 if (value.startsWith(LIST_ADD)) list = getIntegerList(value.substring(LIST_ADD.length()));
+                else if (value.startsWith(VARIABLE_PUT)) list = getIntegerList(value.substring(VARIABLE_PUT.length()));
                 else throw VariableException.noGrammar();
             }
             repositoryArray[0].get(type).put(group, list);
