@@ -25,7 +25,8 @@ public interface LoopToken extends VariableToken {
     String ARGUMENT = BL + "[^" + BL + BR + "]+" + BR; // [...]
 
     String LINE_NUMBER = "[0-9]+ ";
-    String RETURN = "=>" + BLANK + "\\S+";
+    String RETURN_TOKEN = "=>";
+    String RETURN = RETURN_TOKEN + BLANK + "\\S+";
     String PUTIN_TOKEN = "<=";
     String PUTIN = PUTIN_TOKEN + "(" + String.join("|", TOTAL_LIST) + ")" + BLANKS + VARIABLE_NAME;
 
