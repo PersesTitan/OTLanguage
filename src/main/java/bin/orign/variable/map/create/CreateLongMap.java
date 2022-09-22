@@ -1,6 +1,7 @@
 package bin.orign.variable.map.create;
 
 import bin.apply.Repository;
+import bin.apply.sys.item.HpMap;
 import bin.exception.VariableException;
 import bin.orign.variable.map.get.GetMap;
 import bin.token.VariableToken;
@@ -19,7 +20,7 @@ public class CreateLongMap implements
     private final String type;
 
     public CreateLongMap(String type, Map<String, Map<String, Object>> repository) {
-        repository.put(type, new HashMap<>());
+        repository.put(type, new HpMap<>());
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
         this.pattern = Pattern.compile(patternText);
         this.type = type;
