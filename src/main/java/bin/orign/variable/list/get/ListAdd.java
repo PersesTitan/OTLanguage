@@ -5,6 +5,7 @@ import bin.exception.VariableException;
 import bin.token.VariableToken;
 import work.StartWork;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -43,7 +44,7 @@ public class ListAdd implements
             var values = entry.getValue();
             if (values.containsKey(variableName)) {
                 if (!LIST_LIST.contains(entry.getKey())) throw MatchException.grammarError();
-                List<Object> list = (List<Object>) values.get(variableName);
+                LinkedList<Object> list = (LinkedList<Object>) values.get(variableName);
                 if (!isListString(variableValue) && getType(entry.getKey(), variableValue)) list.add(variableValue);
                 else list.addAll(getValues(entry.getKey(), variableValue));
                 return;
@@ -52,7 +53,7 @@ public class ListAdd implements
         throw VariableException.noDefine();
     }
 
-    private List<?> getValues(String type, String value) {
+    private LinkedList<?> getValues(String type, String value) {
         return switch (type) {
             case SET_INTEGER -> getIntegerList(value);
             case SET_LONG -> getLongList(value);
