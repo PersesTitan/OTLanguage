@@ -50,31 +50,31 @@ public class ListSort implements
     private void getList(String type, Object ob) {
         switch (type) {
             case LIST_INTEGER -> {
-                ArrayList<Integer> list = (ArrayList<Integer>) ob;
+                LinkedList<Integer> list = (LinkedList<Integer>) ob;
                 Collections.sort(list);
             }
             case LIST_LONG -> {
-                ArrayList<Long> list = (ArrayList<Long>) ob;
+                LinkedList<Long> list = (LinkedList<Long>) ob;
                 Collections.sort(list);
             }
             case LIST_BOOLEAN -> {
-                ArrayList<String> list = (ArrayList<String>) ob;
+                LinkedList<String> list = (LinkedList<String>) ob;
                 Collections.sort(list);
             }
             case LIST_CHARACTER -> {
-                ArrayList<Character> list = (ArrayList<Character>) ob;
+                LinkedList<Character> list = (LinkedList<Character>) ob;
                 Collections.sort(list);
             }
             case LIST_FLOAT -> {
-                ArrayList<Float> list = (ArrayList<Float>) ob;
+                LinkedList<Float> list = (LinkedList<Float>) ob;
                 Collections.sort(list);
             }
             case LIST_DOUBLE -> {
-                ArrayList<Double> list = (ArrayList<Double>) ob;
+                LinkedList<Double> list = (LinkedList<Double>) ob;
                 Collections.sort(list);
             }
             default -> {
-                ArrayList<String> list = (ArrayList<String>) ob;
+                LinkedList<String> list = (LinkedList<String>) ob;
                 Collections.sort(list);
             }
         };
