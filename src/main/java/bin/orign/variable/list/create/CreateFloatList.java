@@ -1,6 +1,7 @@
 package bin.orign.variable.list.create;
 
 import bin.apply.Repository;
+import bin.apply.sys.item.HpMap;
 import bin.exception.VariableException;
 import bin.token.VariableToken;
 import bin.orign.variable.list.get.GetList;
@@ -16,7 +17,7 @@ public class CreateFloatList implements StartWork, VariableToken, GetList {
     private final String type;
 
     public CreateFloatList(String type, Map<String, Map<String, Object>> repository) {
-        repository.put(type, new HashMap<>());
+        repository.put(type, new HpMap<>());
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
         this.pattern = Pattern.compile(patternText);
         this.type = type;
