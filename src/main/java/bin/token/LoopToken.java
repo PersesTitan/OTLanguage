@@ -10,8 +10,11 @@ public interface LoopToken extends VariableToken {
     Set<String> LOOP_SET = new HashSet<>() {{
         add("[^\\^\\n]+" + FOR + "[^\\^\\n]+" + FOR + "[^\\^\\n]+");
         add(IF); add(ELSE_IF);
-        add(ELSE); add(SERVER);
-        add(WHITE);
+        add(ELSE); add(WHITE);
+
+        add(POISON + POISON_POST);
+        add(POISON + POISON_GET);
+        add(SERVER);
     }};
 
     default String BRACE_STYLE() {
@@ -19,8 +22,10 @@ public interface LoopToken extends VariableToken {
         return SL + FILE_TYPE + ",[0-9]+,[0-9]+" + SR;
     }
 
+    String ARGUMENT = BL + "[^" + BL + BR + "]+" + BR; // [...]
+
     String LINE_NUMBER = "[0-9]+ ";
-    String RETURN = "=>" + VARIABLE_NAME;
+    String RETURN = "=>" + BLANK + "\\S+";
     String PUTIN_TOKEN = "<=";
     String PUTIN = PUTIN_TOKEN + "(" + String.join("|", TOTAL_LIST) + ")" + BLANKS + VARIABLE_NAME;
 
@@ -35,4 +40,10 @@ public interface LoopToken extends VariableToken {
 
     // SERVER
     String SERVER = "ㅅㅂㅅ";
+
+    // POISON
+    String POISON = "ㅍㅇㅍ";
+    String POISON_POST = "ㅍㅅㅍ";
+    String POISON_GET = "ㄱㅅㄱ";
+    String POISON_START = "ㅅㅌㅅ";
 }
