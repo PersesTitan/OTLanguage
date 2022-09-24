@@ -1,6 +1,11 @@
 package bin.token;
 
+import bin.apply.Repository;
+import bin.exception.MatchException;
+import bin.exception.VariableException;
+
 import java.util.Arrays;
+import java.util.Map;
 
 import static bin.token.Token.*;
 
@@ -57,5 +62,20 @@ public interface MergeToken {
             else break;
         }
         return count;
+    }
+
+    // 변수
+    default void variableDefineError(String variableName, Map<String, Map<String, Object>> repository) {
+        if (variableName.startsWith("["))
+            variableName = variableName.replaceFirst(START + BL + "\\d+" + BR, "");
+        if (Repository.noUse.contains(variableName)) throw VariableException.reservedWorks();
+        else if (Repository.getSet(repository).contains(variableName)) throw VariableException.sameVariable();
+    }
+
+    // 갯수 에러 체크
+    default String[] matchSplitError(String value, String pattern, int count) {
+        String[] values = value.split(pattern, count);
+        if (values.length != count) throw MatchException.grammarError();
+        else return values;
     }
 }
