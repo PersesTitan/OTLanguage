@@ -1,5 +1,8 @@
 package bin.apply.sys.item;
 
+import bin.apply.Repository;
+import bin.exception.VariableException;
+import bin.token.LoopToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,11 +61,9 @@ public class HpMap<V> extends HashMap<String, V> implements Map<String, V> {
             String group = matcher.group();
             int len = group.length();
             int count = Integer.parseInt(group.substring(1, len-1));
-            if (count != 0) {
-                key = key.substring(len);
-                hp.put(key, count);
-            }
-        } else hp.put(key, noCount);
+            if (count != 0) key = key.substring(len);
+        }
+        hp.put(key, noCount);
         return super.put(key, value);
     }
 
