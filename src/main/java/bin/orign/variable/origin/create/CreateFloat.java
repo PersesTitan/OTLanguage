@@ -34,8 +34,7 @@ public class CreateFloat implements StartWork, VariableToken, Controller {
         line = line.replaceFirst(startMerge(type, BLANKS), "");
         String variableName = line.split(VARIABLE_PUT)[0];  // 변수명
         String value = line.replaceFirst(VARIABLE_NAME + VARIABLE_PUT, ""); // 값
-        if (Repository.noUse.contains(variableName)) throw VariableException.reservedWorks();
-        else if (Repository.getSet(repositoryArray[0]).contains(variableName)) throw VariableException.sameVariable();
+        variableDefineError(variableName, repositoryArray[0]);
         if (!isFloat(value)) throw VariableException.typeMatch();
         repositoryArray[0].get(type).put(variableName, value);
     }
