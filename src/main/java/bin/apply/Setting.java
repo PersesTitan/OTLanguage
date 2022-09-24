@@ -25,6 +25,7 @@ import bin.orign.variable.list.get.ListIsEmpty;
 import bin.orign.variable.list.get.ListSort;
 import bin.orign.variable.origin.put.PutVariable;
 import bin.orign.variable.set.get.*;
+import cos.poison.Poison;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -138,6 +139,9 @@ public class Setting implements Repository {
         startWorks.add(new If(IF, ELSE_IF, ELSE));
         startWorks.add(new For());
         startWorks.add(new While(WHITE));
+
+        // POISON
+        startWorks.add(new Poison(POISON));
     }
 
     private static void reset() {
