@@ -38,8 +38,7 @@ public class CreateCharacterMap implements
         if (matcher.find()) {
             // group : VARIABLE_NAME
             String group = matcher.group().replaceFirst("^\\s*" + type + "\\s*", "");
-            if (Repository.noUse.contains(group)) throw VariableException.reservedWorks();
-            else if (Repository.getSet(repositoryArray[0]).contains(group)) throw VariableException.sameVariable();
+            variableDefineError(group, repositoryArray[0]);
             // value : 값
             String value = line.replaceFirst(patternText, "").strip();
             Map<String, Character> map;
