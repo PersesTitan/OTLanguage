@@ -84,9 +84,7 @@ public class For implements
                 case DOUBLE_VARIABLE -> Arrays.stream(tokens).allMatch(VariableCheck::isDouble);
                 default -> false;
             }) throw VariableException.forTypeMatchError();
-
-            if (Repository.noUse.contains(variableName)) throw VariableException.reservedWorks();
-            else if (Repository.getSet(repository[0]).contains(variableName)) throw VariableException.sameVariable();
+            variableDefineError(variableName, repository[0]);
         }
 
         switch (variableType) {
