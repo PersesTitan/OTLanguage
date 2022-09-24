@@ -1,6 +1,6 @@
 package bin.token;
 
-public interface Token extends MergeToken {
+ public interface Token extends MergeToken {
     String START = "^";
     String END = "$";
     String BLANK = "\\s*";
