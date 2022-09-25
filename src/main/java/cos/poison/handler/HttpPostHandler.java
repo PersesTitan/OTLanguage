@@ -23,7 +23,11 @@ public class HttpPostHandler implements HttpHandlerInf {
             uriParser.parsesQuery(query, parameters);
 
             StringBuilder response = new StringBuilder();
-            parameters.forEach((key, value) -> response.append(key).append("=").append(value).append(" "));
+            parameters.forEach((key, value) -> response
+                    .append(key)
+                    .append("=")
+                    .append(value == null ? "" : value)
+                    .append(" "));
             return new HandlerDao(response.toString(), path, parameters);
         } catch (IOException ignored) {
             throw ServerException.fileReadError();
