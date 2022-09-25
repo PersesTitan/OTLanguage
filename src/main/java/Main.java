@@ -61,6 +61,7 @@ public class Main extends Setting {
             while ((text = reader.readLine()) != null) Setting.total.append(++count).append(" ").append(text).append("\n");
             StartLine.startLine(Setting.total.toString(), mainPath, repository);
         } catch (IOException ignored) {}
+        pause();
     }
 
     private void pause() {
