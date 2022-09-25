@@ -41,6 +41,11 @@ public class HpMap<V> extends HashMap<String, V> implements Map<String, V> {
     }
 
     @Override
+    public V getOrDefault(Object key, V defaultValue) {
+        return super.getOrDefault(key, defaultValue);
+    }
+
+    @Override
     public V get(Object key) {
         V v = super.get(key);
         int hpCount = hp.getOrDefault(key.toString(), 0);
