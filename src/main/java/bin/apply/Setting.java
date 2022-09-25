@@ -1,6 +1,7 @@
 package bin.apply;
 
 import bin.apply.sys.item.Color;
+import bin.apply.sys.item.HpMap;
 import bin.apply.sys.run.ForceQuit;
 import bin.apply.sys.run.Sleep;
 import bin.math.random.*;
@@ -31,6 +32,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import static bin.token.ConsoleToken.*;
@@ -38,6 +41,7 @@ import static bin.token.LoopToken.*;
 import static bin.token.cal.NumberToken.*;
 
 public class Setting implements Repository {
+    public static final HashMap<String, Map<String, Object>> COPY_REPOSITORY = new HashMap<>();
     public static final StringBuilder total = new StringBuilder();
     public static String mainPath;
     public static String path;
@@ -68,6 +72,7 @@ public class Setting implements Repository {
         noUse.add(RANDOM_FLOAT);
         noUse.add(RANDOM_INTEGER);
         noUse.add(RANDOM_LONG);
+        TOTAL_LIST.forEach(v -> COPY_REPOSITORY.put(v, new HpMap<>()));
 
         priorityWorks.add(new ForceQuit(FORCE_QUIT));
         priorityWorks.add(new PriorityPrint(PRIORITY_PRINT));
@@ -152,5 +157,6 @@ public class Setting implements Repository {
         repository.clear();
         priorityWorks.clear();
         noUse.clear();
+        COPY_REPOSITORY.clear();
     }
 }
