@@ -5,6 +5,8 @@ import bin.apply.sys.item.Color;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static cos.poison.controller.HttpServerManager.httpServer;
+
 public interface HttpRepository {
     String dateFormat = "yyyy-MM-dd H:mm:ss";
     Map<HttpMethod, Map<String, String>> httpRepository = new HashMap<>(); // url, html
@@ -33,16 +35,18 @@ public interface HttpRepository {
                 Color.PURPLE_BRIGHT, Color.RESET,
                 Color.PURPLE, Color.RESET);
 
-        System.out.printf("%s[%s]%s%s[Poison Server 시작]%s ",
+        System.out.printf("%s[%s]%s%s[Poison Server 시작]%s \n",
                 Color.YELLOW,
                 new SimpleDateFormat(dateFormat).format(new Date()),
                 Color.RESET, Color.GREEN, Color.RESET);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() ->
-                System.out.printf("%s[%s]%s%s[Poison Server 종료]%s \n",
-                        Color.YELLOW,
-                        new SimpleDateFormat(dateFormat).format(new Date()),
-                        Color.RESET, Color.GREEN, Color.RESET)));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.printf("%s[%s]%s%s[Poison Server 종료]%s \n",
+                    Color.YELLOW,
+                    new SimpleDateFormat(dateFormat).format(new Date()),
+                    Color.RESET, Color.GREEN, Color.RESET);
+            httpServer.stop(0);
+        }));
     }
 
     default void printLog(HttpMethod method, String path, String query) {
