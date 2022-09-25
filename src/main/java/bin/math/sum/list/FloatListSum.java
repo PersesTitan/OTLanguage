@@ -32,9 +32,10 @@ public class FloatListSum implements ReturnWork, LoopToken, GetList {
                     .replaceFirst(LIST_SUM + END, "");
             if (groups.matches(VARIABLE_ACCESS)) {
                 int accessCount = accessCount(groups);
-                var repository1 = repositoryArray[accessCount].get(FLOAT_VARIABLE);
-                var repository2 = repositoryArray[accessCount].get(DOUBLE_VARIABLE);
-                String variableName = groups.replaceAll(ACCESS, "");
+                if (repositoryArray.length <= accessCount) continue;
+                var repository1 = repositoryArray[accessCount].get(LIST_DOUBLE);
+                var repository2 = repositoryArray[accessCount].get(LIST_FLOAT);
+                String variableName = groups.substring(accessCount);
                 if (repository1.containsKey(variableName)) {
                     LinkedList<Double> list = (LinkedList<Double>) repository1.get(variableName);
                     String sum = Double.toString(list.stream().mapToDouble(v -> v).sum());
@@ -45,6 +46,7 @@ public class FloatListSum implements ReturnWork, LoopToken, GetList {
                     line = line.replace(group, sum);
                 }
             } else {
+                // 변환이 불가능하면 에러발생
                 try {
                     LinkedList<Double> list = getDoubleList(groups);
                     String sum = Double.toString(list.stream().mapToDouble(v -> v).sum());
