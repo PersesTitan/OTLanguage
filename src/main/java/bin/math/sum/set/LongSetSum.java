@@ -40,6 +40,7 @@ public class LongSetSum implements ReturnWork, LoopToken, GetSet {
                     line = line.replace(group, sum);
                 }
             } else {
+                // 변환이 불가능하면 에러발생
                 try {
                     LinkedHashSet<Long> list = getLongSet(groups);
                     String sum = Long.toString(list.stream().mapToLong(v -> v).sum());
