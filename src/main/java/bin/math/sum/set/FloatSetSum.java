@@ -44,6 +44,7 @@ public class FloatSetSum implements ReturnWork, LoopToken, GetSet {
                     line = line.replace(group, sum);
                 }
             } else {
+                // 변환이 불가능하면 에러발생
                 try {
                     LinkedHashSet<Double> list = getDoubleSet(groups);
                     String sum = Double.toString(list.stream().mapToDouble(v -> v).sum());
