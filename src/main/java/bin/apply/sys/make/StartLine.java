@@ -6,17 +6,20 @@ import bin.exception.MatchException;
 import bin.exception.ServerException;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
+import org.apache.hadoop.hdfs.web.JsonUtil;
 
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.apply.Controller.bracket;
 import static bin.apply.Controller.loopController;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
+import static cos.poison.Poison.variableHTML;
 
 public class StartLine implements LoopToken {
     private static final String patternText = START + "[0-9]+( |$)";
@@ -28,17 +31,15 @@ public class StartLine implements LoopToken {
         boolean extensionCheck = extensionCheck(path);
         if (extensionCheck) errorPath.set(path);
         try {
-            String finalTotal =
-                    extensionCheck
-                            ? bracket.bracket(total, new File(path))
-                            : bracket.bracket(total, path, false);
+            String finalTotal = getFinalTotal(extensionCheck, total, path);
+
             Pattern.compile("\\n")
                     .splitAsStream(finalTotal)
+                    .filter(Predicate.not(String::isBlank))
                     .map(line -> setError(line, total))
                     .forEach(line -> Setting.start(line, errorLine.get(), repository));
         } catch (VariableException e) {
             VariableException.variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            e.printStackTrace();
         } catch (MatchException e) {
             MatchException.matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
         } catch (ServerException e) {
@@ -48,16 +49,38 @@ public class StartLine implements LoopToken {
         }
     }
 
+    public static String getFinalTotal(boolean extensionCheck, String total, String path) {
+        return extensionCheck
+                ? bracket.bracket(total, new File(path))
+                : bracket.bracket(total, path, false);
+    }
+
     @SafeVarargs
     public static String startLoop(String total, String fileName,
                                  Map<String, Map<String, Object>>... repository) {
         for (var line : bracket.bracket(total, fileName, false).split("\\n")) {
             line = loopController.check(setError(line, total).strip());
-
             if (line.equals(BREAK) || line.equals(CONTINUE)) return line;
             else Setting.start(line, errorLine.get(), repository);
         }
         return "FINISH";
+    }
+
+    @SafeVarargs
+    public static void startPoison(String total, String fileName,
+                                     Map<String, Map<String, Object>>... repository) {
+        for (var line : bracket.bracket(total, fileName, false).split("\\n")) {
+            line = setError(line, total).strip();
+            line = Setting.lineStart(line, repository);
+            if (variableHTML.check(line)) {variableHTML.start(line); continue;}
+
+            Setting.start(line, errorLine.get(), repository);
+        }
+//        for (var line : total.split("\\n")) {
+//            line = setError(line, total).strip();
+//            if (variableHTML.check(line)) {variableHTML.start(line); return;}
+//            Setting.start(line, errorLine.get(), repository);
+//        }
     }
 
     private static final AtomicLong errorCount = new AtomicLong(0);
@@ -65,19 +88,24 @@ public class StartLine implements LoopToken {
     private static final AtomicReference<String> errorPath = new AtomicReference<>();
     public static String setError(String line, String total) {
         Matcher matcher = pattern.matcher(line);
-        String lineNum = "0";
         if (matcher.find()) {
-            lineNum = matcher.group().trim();
+            String lineNum = matcher.group().trim();
             errorCount.set(Long.parseLong(lineNum));
+
+            int start = total.indexOf("\n" + lineNum + " ");
+            if (start == -1 && lineNum.equals("1")) start = 0;
+            errorLine.set(total.substring(start).split("\\n")[0]);
         }
 
-        for (var lines : total.split("\\n")) {
-            if (lines.startsWith(lineNum + " ")) {
-                errorLine.set(lines.replaceFirst(patternText, ""));
-                break;
-            }
-        }
+//        for (var lines : total.split("\\n")) {
+//            if (lines.startsWith(lineNum + " ")) {
+//                errorLine.set(lines.replaceFirst(patternText, ""));
+//                break;
+//            }
+//        }
 
-        return line.replaceFirst(patternText, "");
+        return line
+                .replaceFirst(patternText, "")
+                .strip();
     }
 }
