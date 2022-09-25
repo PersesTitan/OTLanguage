@@ -1,4 +1,4 @@
-package cos.poison.controller;
+package cos.poison.handler;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
