@@ -1,33 +1,42 @@
 package cos.poison;
 
-import bin.exception.MatchException;
 import bin.token.LoopToken;
+import cos.poison.controller.HttpServerManager;
+import cos.poison.method.PoisonGet;
+import cos.poison.method.PoisonPost;
+import cos.poison.root.VariableHTML;
+import cos.poison.setting.PoisonCreate;
+import cos.poison.setting.PoisonStart;
 import work.StartWork;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 
 public class Poison implements StartWork, LoopToken {
-    private final String httpMethod = orMerge(POISON_POST, POISON_GET);
+    public static HttpServerManager httpServerManager = new HttpServerManager();
+    public static VariableHTML variableHTML = new VariableHTML(MODEL);
+    private final List<StartWork> startWorks = new ArrayList<>();
 
-    private final String pattern1 = blackMerge(httpMethod, "(", BL, "[^"+BL+BR+"]+", BR, ")+", BRACE_STYLE(), RETURN);
-//    private final String patternText = startEndMerge(POISON_METHOD, blackMerge);
-//    private final Pattern pattern = Pattern.compile(patternText);
-    private Matcher matcher;
+    private final String className;
+
+    public Poison(String className) {
+        this.className = className;
+
+        startWorks.add(new PoisonCreate(className));
+        startWorks.add(new PoisonStart(className));
+        startWorks.add(new PoisonGet(className));
+        startWorks.add(new PoisonPost(className));
+    }
 
     @Override
     public boolean check(String line) {
-//        return (matcher = pattern.matcher(line)).find();
-        return false;
+        return line.strip().startsWith(className);
     }
 
     @Override
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
-        String[] tokens = line.strip().split(BLANKS, 2); // ㅍㅇㅍ~ㅍㅅㅍ,
-        if (tokens.length != 2) throw MatchException.grammarError();
-        String[] method = tokens[0].split(ACCESS, 2);   // ㅍㅇㅍ, ㅍㅅㅍ
-        if (method.length != 2) throw MatchException.grammarError();
-
+        for (var works : startWorks) {if (works.check(line)) {works.start(line, origen, repositoryArray); return;}}
     }
 }
