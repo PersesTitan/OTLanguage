@@ -1,0 +1,53 @@
+compulsion:
+    ForceQuit
+    CreateString
+    PriorityPrint
+    PriorityPrintln
+    PriorityPrintTap
+    PriorityPrintSpace
+    ListClear
+    ListSort
+    SetClear
+    SetSort
+
+alteration:
+    SetVariable
+    RandomBoolean
+    RandomDouble
+    RandomFloat
+    RandomInteger
+    RandomLong
+    Input
+    ListIsEmpty
+    SetIsEmpty
+
+operate:
+    CreateBoolean
+    CreateCharacter
+    CreateDouble
+    CreateFloat
+    CreateInteger
+    CreateLong
+    CreateBooleanSet
+    CreateCharacterSet
+    CreateDoubleSet
+    CreateFloatSet
+    CreateIntegerSet
+    CreateLongSet
+    CreateStringSet
+    SetAdd
+    CreateBooleanList
+    CreateCharacterList
+    CreateDoubleList
+    CreateFloatList
+    CreateIntegerList
+    CreateLongList
+    CreateStringList
+    ListAdd
+    PrintSpace
+    PrintTap
+    Println
+    Print
+    PutVariable
+    Sleep
+    If
