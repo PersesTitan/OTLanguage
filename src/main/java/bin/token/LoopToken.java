@@ -12,8 +12,8 @@ public interface LoopToken extends VariableToken {
         add(IF); add(ELSE_IF);
         add(ELSE); add(WHITE);
 
-        add(POISON + POISON_POST);
-        add(POISON + POISON_GET);
+        add(POISON + ACCESS + POISON_POST);
+        add(POISON + ACCESS + POISON_GET);
         add(SERVER);
     }};
 
@@ -47,4 +47,5 @@ public interface LoopToken extends VariableToken {
     String POISON_POST = "ㅍㅅㅍ";
     String POISON_GET = "ㄱㅅㄱ";
     String POISON_START = "ㅅㅌㅅ";
+    String MODEL = "ㅁㄷㅁ";
 }
