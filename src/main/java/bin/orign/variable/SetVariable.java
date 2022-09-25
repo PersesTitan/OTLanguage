@@ -1,8 +1,10 @@
 package bin.orign.variable;
 
 import bin.token.VariableToken;
+import org.apache.hadoop.hive.metastore.api.NoSuchTxnException;
 import work.ReturnWork;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,12 +24,12 @@ public class SetVariable implements ReturnWork, VariableToken {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();
-            int access = accessCount(group);
-            String variableName = bothEndCut(group).replaceFirst(START + ACCESS + "+", "");
+            String value = bothEndCut(group);
+            int access = accessCount(value);
+            if (repositoryArray.length <= access) continue;
             var repository = repositoryArray[access];
-            line = getValue(group, variableName, line, repository);
+            line = getValue(group, value.substring(access), line, repository);
         }
-
         return line;
     }
 
