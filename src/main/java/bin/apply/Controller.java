@@ -5,6 +5,7 @@ import bin.calculator.NumberCalculator;
 import bin.calculator.bool.BoolCalculator;
 import bin.calculator.bool.CompareCalculator;
 import bin.exception.ConsoleException;
+import bin.orign.GetSetVariable;
 import bin.orign.loop.tool.LoopController;
 
 import java.io.*;
@@ -15,6 +16,7 @@ public interface Controller {
     CompareCalculator compareCalculator = new CompareCalculator();
     LoopController loopController = new LoopController();
     Bracket bracket = new Bracket();
+    GetSetVariable getSetVariable = new GetSetVariable();
     // 입력, 출력
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
