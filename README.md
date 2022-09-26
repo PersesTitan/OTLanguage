@@ -45,6 +45,18 @@
 curl https://raw.githubusercontent.com/OTLanguage/.github/main/otlmake.sh | sh
 ```
 - **Linux**
-  ```shell
-  curl https://raw.githubusercontent.com/OTLanguage/.github/main/otlmake-linux.sh | sh
+```shell
+curl https://raw.githubusercontent.com/OTLanguage/.github/main/otlmake-linux.sh | sh
 ```
+<br>
+
+# 문법
+
+## 숫자
+### ㅇㅈㅇ
+ - 타입 : ```정수형```
+ - 버전 : ver 1.0.0
+
+### ㅇㅉㅇ
+ - 타입 : ```쩡수형```
+ - 버전 : ver 1.0.0
