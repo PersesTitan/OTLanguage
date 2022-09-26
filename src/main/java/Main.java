@@ -1,12 +1,15 @@
 import bin.apply.Setting;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
+import com.sun.management.OperatingSystemMXBean;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.util.regex.Pattern;
 
 import static bin.apply.Controller.br;
@@ -61,6 +64,7 @@ public class Main extends Setting {
             while ((text = reader.readLine()) != null) Setting.total.append(++count).append(" ").append(text).append("\n");
             StartLine.startLine(Setting.total.toString(), mainPath, repository);
         } catch (IOException ignored) {}
+
         pause();
     }
 
