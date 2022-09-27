@@ -1,0 +1,81 @@
+package bin.token;
+
+import bin.apply.Repository;
+import bin.exception.MatchException;
+import bin.exception.VariableException;
+
+import java.util.Arrays;
+import java.util.Map;
+
+import static bin.token.Token.*;
+
+public interface MergeToken {
+    default String merge(String...texts) {
+        StringBuilder builder = new StringBuilder();
+        Arrays.stream(texts).forEach(builder::append);
+        return builder.toString();
+    }
+
+    default String startEndMerge(String...texts) {
+        StringBuilder builder = new StringBuilder(START);
+        builder.append(BLANK);
+        Arrays.stream(texts).forEach(builder::append);
+        builder.append(BLANK).append(END);
+        return builder.toString();
+    }
+
+    default String orMerge(String...texts) {
+        return "("+String.join("|", texts)+")";
+    }
+
+    default String startMerge(String...texts) {
+        return START + BLANK + String.join("", texts);
+    }
+
+    default String blackMerge(String...texts) {
+        return String.join(BLANK, texts);
+    }
+
+    default String blacksMerge(String...texts) {
+        return String.join(BLANKS, texts);
+    }
+
+    // 양쪽 끝 삭제
+    default String bothEndCut(String text, int start, int end) {
+        return text.substring(start, text.length()-end);
+    }
+
+    default String bothEndCut(String text) {
+        return bothEndCut(text, 1, 1);
+    }
+
+    // Iterable
+    default String orMerge(Iterable<? extends CharSequence> elements) {
+        return "(" + String.join("|", elements) + ")";
+    }
+
+    // ACCESS 갯수 세는 로직
+    default int accessCount(String line) {
+        int count = 0;
+        for (int i = 0; i < line.length(); i++) {
+            if (line.charAt(i) == ACCESS.charAt(0)) count++;
+            else break;
+        }
+        return count;
+    }
+
+    // 변수
+    default void variableDefineError(String variableName, Map<String, Map<String, Object>> repository) {
+        if (variableName.startsWith("["))
+            variableName = variableName.replaceFirst(START + BL + "\\d+" + BR, "");
+        if (Repository.noUse.contains(variableName)) throw VariableException.reservedWorks();
+        else if (Repository.getSet(repository).contains(variableName)) throw VariableException.sameVariable();
+    }
+
+    // 갯수 에러 체크
+    default String[] matchSplitError(String value, String pattern, int count) {
+        String[] values = value.split(pattern, count);
+        if (values.length != count) throw MatchException.grammarError();
+        else return values;
+    }
+}
