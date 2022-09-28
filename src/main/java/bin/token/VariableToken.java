@@ -104,7 +104,7 @@ public interface VariableToken extends Token {
         add(SET_FLOAT);
         add(SET_DOUBLE);
     }};
-
+    // LIST
     List<String> LIST_LIST = new ArrayList<>() {{
         add(LIST_INTEGER);
         add(LIST_LONG);
@@ -114,7 +114,7 @@ public interface VariableToken extends Token {
         add(LIST_FLOAT);
         add(LIST_DOUBLE);
     }};
-
+    // MAP
     List<String> MAP_LIST = new ArrayList<>() {{
         add(MAP_INTEGER);
         add(MAP_LONG);
