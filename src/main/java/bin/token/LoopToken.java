@@ -36,7 +36,7 @@ public interface LoopToken extends VariableToken {
     String ELSE_IF = QUESTION + "ㅈ" + QUESTION;
     String ELSE = QUESTION + "ㅉ" + QUESTION;
 
-    String FOR = CARET; // ^
+    String FOR = CARET;                 // ^
     String WHITE = PESO + "ㅅ" + PESO;
 
     // SERVER
