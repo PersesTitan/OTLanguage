@@ -15,15 +15,13 @@ import bin.orign.console.*;
 import bin.orign.loop.For;
 import bin.orign.loop.While;
 import bin.orign.variable.list.create.*;
+import bin.orign.variable.list.get.*;
 import bin.orign.variable.map.create.*;
+import bin.orign.variable.map.get.MapDelete;
 import bin.orign.variable.origin.create.*;
 import bin.orign.variable.set.create.*;
 import bin.orign.loop.If;
 import bin.orign.variable.SetVariable;
-import bin.orign.variable.list.get.ListAdd;
-import bin.orign.variable.list.get.ListClear;
-import bin.orign.variable.list.get.ListIsEmpty;
-import bin.orign.variable.list.get.ListSort;
 import bin.orign.variable.origin.put.PutVariable;
 import bin.orign.variable.set.get.*;
 import cos.poison.Poison;
@@ -99,6 +97,7 @@ public class Setting implements Repository {
         returnWorks.add(new IntegerSetSum());
         returnWorks.add(new LongSetSum());
         returnWorks.add(new FloatSetSum());
+        returnWorks.add(new ListGet(LIST_GET));
 
         // ORIGEN
         startWorks.add(new CreateBoolean(BOOL_VARIABLE, repository));
@@ -144,6 +143,9 @@ public class Setting implements Repository {
         startWorks.add(new If(IF, ELSE_IF, ELSE));
         startWorks.add(new For());
         startWorks.add(new While(WHITE));
+        startWorks.add(new ListDelete(LIST_DELETE));
+        startWorks.add(new SetDelete(SET_DELETE));
+        startWorks.add(new MapDelete(MAP_DELETE));
 
         // POISON
         startWorks.add(new Poison(POISON));
