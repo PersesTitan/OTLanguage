@@ -54,4 +54,5 @@ public class VariableException extends RuntimeException {
     public static VariableException noDefine() {
         return new VariableException(noDefine);
     }
+
 }
