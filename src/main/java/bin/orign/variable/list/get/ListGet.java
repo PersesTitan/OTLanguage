@@ -16,7 +16,7 @@ public class ListGet implements ReturnWork, LoopToken {
 
     public ListGet(String type) {
         this.type = type;
-        String patternText = merge(VARIABLE_GET_S, VARIABLE_ACCESS, type, BLANK, "\\d+", BLANK, VARIABLE_GET_E);
+        String patternText = merge(VARIABLE_GET_S, VARIABLE_ACCESS, type, "\\d+", VARIABLE_GET_E);
         this.pattern = Pattern.compile(patternText);
     }
 
