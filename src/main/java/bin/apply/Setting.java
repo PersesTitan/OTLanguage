@@ -18,6 +18,7 @@ import bin.orign.variable.list.create.*;
 import bin.orign.variable.list.get.*;
 import bin.orign.variable.map.create.*;
 import bin.orign.variable.map.get.MapDelete;
+import bin.orign.variable.map.get.MapGet;
 import bin.orign.variable.origin.create.*;
 import bin.orign.variable.set.create.*;
 import bin.orign.loop.If;
@@ -98,6 +99,7 @@ public class Setting implements Repository {
         returnWorks.add(new LongSetSum());
         returnWorks.add(new FloatSetSum());
         returnWorks.add(new ListGet(LIST_GET));
+        returnWorks.add(new MapGet(MAP_GET));
 
         // ORIGEN
         startWorks.add(new CreateBoolean(BOOL_VARIABLE, repository));
