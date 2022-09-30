@@ -4,9 +4,12 @@ import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.StartWork;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class SetDelete implements StartWork, LoopToken {
     private final String type;
@@ -30,7 +33,7 @@ public class SetDelete implements StartWork, LoopToken {
         int count = accessCount(line);
         if (repositoryArray.length < count) throw VariableException.localNoVariable();
         line = line.substring(count);   // ~변수-1 -> 변수-1
-        String[] tokens = matchSplitError(line, Pattern.quote(type), 2);
+        String[] tokens = matchSplitError(line, type + "(?=\\d+$)", 2);
         var repository = repositoryArray[count];
         getSet(repository, tokens[0], Integer.parseInt(tokens[1]));
     }
@@ -41,7 +44,7 @@ public class SetDelete implements StartWork, LoopToken {
             var rep = repository.get(token);
             if (rep.containsKey(variableName)) {
                 LinkedHashSet<Object> set = (LinkedHashSet<Object>) rep.get(variableName);
-                set.remove(position);
+                set.remove(new ArrayList<>(set).get(position));
                 return;
             }
         }
