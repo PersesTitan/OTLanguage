@@ -30,7 +30,7 @@ public class ListDelete implements StartWork, LoopToken {
         int count = accessCount(line);
         if (repositoryArray.length < count) throw VariableException.localNoVariable();
         line = line.substring(count);   // ~변수--1 -> 변수--1
-        String[] tokens = matchSplitError(line, Pattern.quote(type), 2);
+        String[] tokens = matchSplitError(line, type + "(?=\\d+$)", 2);
         var repository = repositoryArray[count];
         getList(repository, tokens[0], Integer.parseInt(tokens[1]));
     }
