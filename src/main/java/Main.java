@@ -1,7 +1,10 @@
 import bin.apply.Setting;
+import bin.apply.sys.item.HpMap;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
 import com.sun.management.OperatingSystemMXBean;
+import org.apache.commons.collections4.queue.PredicatedQueue;
+import work.setting.ReadOTLM;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,12 +13,14 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static bin.apply.Controller.br;
 import static bin.apply.Controller.bw;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.token.Token.*;
+import static bin.token.VariableToken.TOTAL_LIST;
 
 public class Main extends Setting {
     private final String patternText = START + "[0-9]+ ";
@@ -57,6 +62,9 @@ public class Main extends Setting {
         else if (!file.canRead()) throw FileException.noReadError();
         else if (!extensionCheck(file.getName())) throw FileException.rightExtension();
         Setting.firstStart();
+//        TOTAL_LIST.forEach(v -> COPY_REPOSITORY.put(v, new HpMap<>()));
+//        repository.putAll((Map<String, Map<String, Object>>) COPY_REPOSITORY.clone());
+//        new ReadOTLM().readSetting("system.otls");
 
         String text;
         long count = 0;
