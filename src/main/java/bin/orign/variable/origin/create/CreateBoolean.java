@@ -7,6 +7,7 @@ import bin.exception.VariableException;
 import bin.token.VariableToken;
 import work.StartWork;
 
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
