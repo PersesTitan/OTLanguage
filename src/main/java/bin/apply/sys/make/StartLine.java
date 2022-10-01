@@ -75,9 +75,9 @@ public class StartLine implements LoopToken {
                                      Map<String, Map<String, Object>>... repository) {
         for (var line : bracket.bracket(total, fileName, false).split("\\n")) {
             line = setError(line, total).strip();
+
             line = Setting.lineStart(line, repository);
             if (variableHTML.check(line)) {variableHTML.start(line); continue;}
-
             Setting.start(line, errorLine.get(), repository);
         }
 //        for (var line : total.split("\\n")) {
@@ -98,7 +98,7 @@ public class StartLine implements LoopToken {
 
             int start = total.indexOf("\n" + lineNum + " ");
             if (start == -1 && lineNum.equals("1")) start = 0;
-            errorLine.set(total.substring(start).split("\\n")[0]);
+            errorLine.set(total.substring(start).strip().split("\\n")[0].replaceFirst("^\\d+ ", ""));
         }
 
 //        for (var lines : total.split("\\n")) {
