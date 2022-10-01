@@ -1,15 +1,27 @@
 package work.setting;
 
-import java.io.IOException;
+import bin.apply.Repository;
+import bin.apply.sys.item.Color;
+import bin.token.MergeToken;
+import work.ReturnWork;
+import work.StartWork;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
+
+import static bin.apply.sys.item.Separator.SEPARATOR_FILE;
 
 // Setting : .otls
 // Model : .otlm
-public class ReadOTLM {
-    private final static String modelPath = ".otlm";
+public class ReadOTLM implements Repository, MergeToken {
+    public static final String modelPath = ".otlm";
+    public static final String compulsion = "compulsion";
+    public static final String alteration = "alteration";
+    public static final String operate = "operate";
 
     public static void main(String[] args) {
         new ReadOTLM().readSetting("system.otls");
@@ -19,34 +31,52 @@ public class ReadOTLM {
     // alteration : 변경
     // operate : 작동
     public void readSetting(String filePath) {
-        String compulsion = "compulsion:";
-        String alteration = "alteration:";
-        String operate = "operate:";
         try {
-            List<LinkedList<String>> lists = new ArrayList<>();
-            var file = Files.readAllLines(Path.of(filePath))
+            Files.readAllLines(Path.of(filePath))
                     .stream()
                     .filter(Predicate.not(Objects::isNull))
                     .filter(Predicate.not(String::isBlank))
                     .map(String::strip)
-                    .toList();
-
-            LinkedList<String> list = new LinkedList<>();
-            for (String line : file) {
-                if (line.endsWith(":")) {
-                    list = new LinkedList<>();
-                    lists.add(list);
-                }
-                list.add(line);
-            }
-
-
+                    .forEach(v -> {
+                        if (v.endsWith(":")) mode.set(bothEndCut(v, 0, 1));
+                        else readOTLM(v);
+                    });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void readOTLM(LinkedList<String> list, String path) {
+    private final AtomicReference<String> mode = new AtomicReference<>();
+    private void readOTLM(String path) {
+        String modeType = mode.get();
+        String ph = "module" + SEPARATOR_FILE + mode + SEPARATOR_FILE + path + modelPath;
+        if (Objects.equals(modeType, operate)) {
+            var work = readStartWork(path, ph);
+            if (work != null) startWorks.add(work);
+        } else if (Objects.equals(modeType, compulsion)) {
+            var work = readStartWork(path, ph);
+            if (work != null) priorityWorks.add(work);
+        } else if (Objects.equals(modeType, alteration)) {
+            var work = readReturnWork(path, ph);
+            if (work != null) returnWorks.add(work);
+        }
+    }
 
+    private ReturnWork readReturnWork(String path, String getPath) {
+        try (ObjectInput input = new ObjectInputStream(new FileInputStream(getPath))) {
+            return (ReturnWork) input.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.printf("%s%s를 모듈에 추가하지 못하였습니다.%s\n", Color.YELLOW, path + modelPath, Color.RESET);
+            return null;
+        }
+    }
+
+    private StartWork readStartWork(String path, String getPath) {
+        try (ObjectInput input = new ObjectInputStream(new FileInputStream(getPath))) {
+            return (StartWork) input.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.printf("%s%s를 모듈에 추가하지 못하였습니다.%s\n", Color.YELLOW, path + modelPath, Color.RESET);
+            return null;
+        }
     }
 }
