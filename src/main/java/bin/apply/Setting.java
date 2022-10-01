@@ -19,6 +19,7 @@ import bin.orign.variable.list.get.*;
 import bin.orign.variable.map.create.*;
 import bin.orign.variable.map.get.MapDelete;
 import bin.orign.variable.map.get.MapGet;
+import bin.orign.variable.map.get.MapPutAll;
 import bin.orign.variable.origin.create.*;
 import bin.orign.variable.set.create.*;
 import bin.orign.loop.If;
@@ -54,13 +55,17 @@ public class Setting implements Repository {
         line = lineStart(line, repositoryArray);
         for (var work : startWorks) {if (work.check(line)) {work.start(line, origen, repositoryArray);return;}}
 
-        System.out.printf("%s경고! %s는 실행되지 않은 라인 입니다.%s\n", Color.YELLOW, errorLine, Color.RESET);
+        runMessage(errorLine);
     }
 
     public static String lineStart(String line, Map<String, Map<String, Object>>[] repositoryArray) {
         for (var work : returnWorks) {if (work.check(line)) line = work.start(line, repositoryArray);}
         line = Controller.boolCalculator.start(line);
         return line;
+    }
+
+    public static void runMessage(String errorLine) {
+        System.out.printf("%s경고! %s는 실행되지 않은 라인 입니다.%s\n", Color.YELLOW, errorLine, Color.RESET);
     }
 
     public static void firstStart() {
@@ -148,6 +153,7 @@ public class Setting implements Repository {
         startWorks.add(new ListDelete(LIST_DELETE));
         startWorks.add(new SetDelete(SET_DELETE));
         startWorks.add(new MapDelete(MAP_DELETE));
+        startWorks.add(new MapPutAll(MAP_ADD));
 
         // POISON
         startWorks.add(new Poison(POISON));
