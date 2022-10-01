@@ -1,13 +1,12 @@
 package bin.orign.variable.map.create;
 
-import bin.apply.Repository;
 import bin.apply.sys.item.HpMap;
 import bin.exception.VariableException;
 import bin.orign.variable.map.get.GetMap;
 import bin.token.VariableToken;
 import work.StartWork;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
