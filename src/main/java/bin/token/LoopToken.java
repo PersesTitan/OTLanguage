@@ -9,6 +9,7 @@ public interface LoopToken extends VariableToken {
     Map<String, String> LOOP_TOKEN = new HashMap<>();
     Set<String> LOOP_SET = new HashSet<>() {{
         add("[^\\^\\n]+" + FOR + "[^\\^\\n]+" + FOR + "[^\\^\\n]+");
+        add(FOR + "[^\\^\\n]+" + FOR);
         add(IF); add(ELSE_IF);
         add(ELSE); add(WHITE);
 
@@ -22,7 +23,7 @@ public interface LoopToken extends VariableToken {
         return SL + FILE_TYPE + ",[0-9]+,[0-9]+" + SR;
     }
 
-    String ARGUMENT = BL + "[^" + BL + BR + "]+" + BR; // [...]
+    String ARGUMENT = BL + "[^" + BL + BR + "]*" + BR; // [...]
 
     String LINE_NUMBER = "[0-9]+ ";
     String RETURN_TOKEN = "=>";
