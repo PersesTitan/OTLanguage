@@ -2,6 +2,7 @@ package bin.apply;
 
 import bin.apply.sys.item.Color;
 import bin.apply.sys.item.HpMap;
+import bin.apply.sys.item.RunType;
 import bin.apply.sys.run.ForceQuit;
 import bin.apply.sys.run.Sleep;
 import bin.math.random.*;
@@ -47,6 +48,7 @@ public class Setting implements Repository {
     public static final StringBuilder total = new StringBuilder();
     public static String mainPath;
     public static String path;
+    public static RunType runType;
 
     @SafeVarargs
     public static void start(String line, String errorLine,
