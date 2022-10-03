@@ -2,6 +2,7 @@ package bin.check;
 
 import bin.token.Token;
 import bin.token.cal.BoolToken;
+import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 
 import java.util.regex.Pattern;
 
@@ -12,50 +13,11 @@ public interface VariableCheck {
         if (line.isBlank()) return false;
         return line.equals(BoolToken.FALSE) || line.equals(BoolToken.TRUE);
     }
-
-    static boolean isCharacter(String line) {
-        try {
-            return line.length() == 1;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    static boolean isDouble(String line) {
-        try {
-            Double.parseDouble(line);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    static boolean isFloat(String line) {
-        try {
-            Float.parseFloat(line);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    static boolean isInteger(String line) {
-        try {
-            Integer.parseInt(line);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    static boolean isLong(String line) {
-        try {
-            Long.parseLong(line);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+    static boolean isCharacter(String line) {try {return line.length() == 1;} catch (Exception e) {return false;}}
+    static boolean isDouble(String line) {try {Double.parseDouble(line);return true;} catch (Exception e) {return false;}}
+    static boolean isFloat(String line) {try {Float.parseFloat(line);return true;} catch (Exception e) {return false;}}
+    static boolean isInteger(String line) {try {Integer.parseInt(line);return true;} catch (Exception e) {return false;}}
+    static boolean isLong(String line) {try {Long.parseLong(line);return true;} catch (Exception e) {return false;}}
 
     static boolean listCheck(String line) {
         return !line.startsWith("[") || !line.endsWith("]");
