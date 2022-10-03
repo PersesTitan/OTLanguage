@@ -7,6 +7,7 @@ import bin.token.LoopToken;
 import bin.token.Token;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,5 +82,12 @@ public class Bracket implements LoopToken, Token {
         Matcher matcher = Pattern.compile(LINE_NUMBER.trim() + END).matcher(total);
         if (matcher.find()) return Integer.parseInt(matcher.group().trim());
         else return total.length();
+    }
+
+    // Shell
+    private Matcher shellMatcher;
+    public boolean bracketCheck(String line) {
+        shellMatcher = pattern.matcher(line);
+        return shellMatcher.find();
     }
 }
