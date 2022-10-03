@@ -1,11 +1,13 @@
 package bin.apply.sys.make;
 
 import bin.apply.Setting;
+import bin.apply.sys.item.RunType;
 import bin.exception.ConsoleException;
 import bin.exception.MatchException;
 import bin.exception.ServerException;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
+import com.sun.tools.javac.Main;
 import org.apache.hadoop.hdfs.web.JsonUtil;
 
 import java.io.File;
@@ -40,18 +42,21 @@ public class StartLine implements LoopToken {
                     .forEach(line -> Setting.start(line, errorLine.get(), repository));
         } catch (VariableException e) {
             VariableException.variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            e.printStackTrace();
-            System.exit(0);
+            setLine();
         } catch (MatchException e) {
             MatchException.matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            System.exit(0);
+            setLine();
         } catch (ServerException e) {
             ServerException.serverErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            System.exit(0);
+            setLine();
         } catch (ConsoleException e) {
             ConsoleException.consoleErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            System.exit(0);
+            setLine();
         }
+    }
+
+    private static void setLine() {
+        if (Setting.runType.equals(RunType.Normal)) System.exit(0);
     }
 
     public static String getFinalTotal(boolean extensionCheck, String total, String path) {
@@ -100,14 +105,7 @@ public class StartLine implements LoopToken {
             int start = total.indexOf("\n" + lineNum + " ");
             if (start == -1 && lineNum.equals("1")) start = 0;
             errorLine.set(total.substring(start).strip().split("\\n")[0].replaceFirst("^\\d+ ", ""));
-        }
-
-//        for (var lines : total.split("\\n")) {
-//            if (lines.startsWith(lineNum + " ")) {
-//                errorLine.set(lines.replaceFirst(patternText, ""));
-//                break;
-//            }
-//        }
+        } else errorLine.set(line);
 
         return line
                 .replaceFirst(patternText, "")
