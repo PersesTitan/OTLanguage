@@ -1,6 +1,5 @@
 package bin.orign.loop;
 
-import bin.apply.Repository;
 import bin.apply.sys.make.StartLine;
 import bin.check.VariableCheck;
 import bin.check.VariableType;
@@ -28,7 +27,7 @@ public class For implements
     public For() {
         this.patternText = blackMerge(NUMBER, FOR, NUMBER, FOR, NUMBER);
         this.pattern = Pattern.compile(
-                startEndMerge(patternText, BLANK, BRACE_STYLE(), BLANK, "(" + PUTIN + ")?"));
+                startEndMerge(patternText, BLANKS, BRACE_STYLE(), "(", BLANKS, PUTIN, ")?"));
     }
 
     @Override
