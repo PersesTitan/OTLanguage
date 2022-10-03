@@ -40,6 +40,7 @@ public class StartLine implements LoopToken {
                     .forEach(line -> Setting.start(line, errorLine.get(), repository));
         } catch (VariableException e) {
             VariableException.variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            e.printStackTrace();
             System.exit(0);
         } catch (MatchException e) {
             MatchException.matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
