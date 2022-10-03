@@ -1,7 +1,11 @@
 package bin.token;
 
+import bin.exception.VariableException;
+
 import java.util.*;
 
+import static bin.apply.Repository.getSet;
+import static bin.apply.Repository.noUse;
 import static bin.check.VariableCheck.*;
 import static bin.token.cal.BoolToken.FALSE;
 import static bin.token.cal.NumberToken.NUMBER;
