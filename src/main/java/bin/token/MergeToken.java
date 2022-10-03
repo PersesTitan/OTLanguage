@@ -7,6 +7,7 @@ import bin.exception.VariableException;
 import java.util.Arrays;
 import java.util.Map;
 
+import static bin.token.LoopToken.LOOP_TOKEN;
 import static bin.token.Token.*;
 
 public interface MergeToken {
@@ -77,5 +78,15 @@ public interface MergeToken {
         String[] values = value.split(pattern, count);
         if (values.length != count) throw MatchException.grammarError();
         else return values;
+    }
+
+    // input = (test,1,10)
+    default String getLoopTotal(String input) {
+        // test, 1, 10
+        String[] variables = matchSplitError(bothEndCut(input), ",", 3);
+        String total = LOOP_TOKEN.get(variables[0]);
+        int start = total.indexOf("\n" + variables[1] + " ");
+        int end = total.indexOf("\n" + variables[2] + " ");
+        return total.substring(start, end);
     }
 }
