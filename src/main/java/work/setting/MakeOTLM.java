@@ -13,11 +13,11 @@ import static work.setting.ReadOTLM.*;
 public class MakeOTLM implements Repository {
     public static void main(String[] args) {
         Setting.firstStart();
-        new MakeOTLM().start();
+        new MakeOTLM().start("system.otls");
     }
 
-    public void start() {
-        File file = new File("system.otls");
+    public void start(String url) {
+        File file = new File(url);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             makeWriter(writer, compulsion);
             priorityWorks.forEach(v -> {
@@ -25,12 +25,10 @@ public class MakeOTLM implements Repository {
                 builder.append(SEPARATOR_FILE).append(compulsion);
                 if (!new File(builder.toString()).mkdirs()) {
                     builder.append(SEPARATOR_FILE).append(v.getClass().getSimpleName()).append(modelPath);
-
                     try {
-                        writer.append("\t").append(v.getClass().getSimpleName());
+                        writer.append("    ").append(v.getClass().getSimpleName());
                         writer.newLine();
                     } catch (IOException ignored) {}
-
                     makeWork(builder.toString(), v);
                 }
             });
@@ -42,12 +40,10 @@ public class MakeOTLM implements Repository {
                 builder.append(SEPARATOR_FILE).append(alteration);
                 if (!new File(builder.toString()).mkdirs()) {
                     builder.append(SEPARATOR_FILE).append(v.getClass().getSimpleName()).append(modelPath);
-
                     try {
-                        writer.append("\t").append(v.getClass().getSimpleName());
+                        writer.append("    ").append(v.getClass().getSimpleName());
                         writer.newLine();
                     } catch (IOException ignored) {}
-
                     makeWork(builder.toString(), v);
                 }
             });
@@ -59,12 +55,10 @@ public class MakeOTLM implements Repository {
                 builder.append(SEPARATOR_FILE).append(operate);
                 if (!new File(builder.toString()).mkdirs()) {
                     builder.append(SEPARATOR_FILE).append(v.getClass().getSimpleName()).append(modelPath);
-
                     try {
-                        writer.append("\t").append(v.getClass().getSimpleName());
+                        writer.append("    ").append(v.getClass().getSimpleName());
                         writer.newLine();
                     } catch (IOException ignored) {}
-
                     makeWork(builder.toString(), v);
                 }
             });
