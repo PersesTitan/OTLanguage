@@ -13,6 +13,7 @@ import bin.math.sum.set.IntegerSetSum;
 import bin.math.sum.set.LongSetSum;
 import bin.orign.console.*;
 import bin.orign.loop.For;
+import bin.orign.loop.ForEach;
 import bin.orign.loop.While;
 import bin.orign.variable.list.create.*;
 import bin.orign.variable.list.get.*;
@@ -36,6 +37,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static bin.apply.Controller.variableDefault;
 import static bin.token.ConsoleToken.*;
 import static bin.token.LoopToken.*;
 import static bin.token.cal.NumberToken.*;
@@ -59,8 +61,12 @@ public class Setting implements Repository {
     }
 
     public static String lineStart(String line, Map<String, Map<String, Object>>[] repositoryArray) {
+        if (variableDefault.check(line)) line = variableDefault.start(line);
+
         for (var work : returnWorks) {if (work.check(line)) line = work.start(line, repositoryArray);}
         line = Controller.boolCalculator.start(line);
+
+        if (variableDefault.changeCheck(line)) line = variableDefault.changeStart(line);
         return line;
     }
 
@@ -154,6 +160,7 @@ public class Setting implements Repository {
         startWorks.add(new SetDelete(SET_DELETE));
         startWorks.add(new MapDelete(MAP_DELETE));
         startWorks.add(new MapPutAll(MAP_ADD));
+        startWorks.add(new ForEach());
 
         // POISON
         startWorks.add(new Poison(POISON));
