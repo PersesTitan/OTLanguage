@@ -62,13 +62,14 @@ public class HpMap<V> extends HashMap<String, V> implements Map<String, V> {
     @Override
     public V put(String key, V value) {
         Matcher matcher = pattern.matcher(key);
+        int c = noCount;
         if (matcher.find()) {
             String group = matcher.group();
             int len = group.length();
-            int count = Integer.parseInt(group.substring(1, len-1));
-            if (count != 0) key = key.substring(len);
+            c = Integer.parseInt(group.substring(1, len-1));
+            if (c != 0) key = key.substring(len);
         }
-        hp.put(key, noCount);
+        hp.put(key, c);
         return super.put(key, value);
     }
 
