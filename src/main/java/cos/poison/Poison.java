@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static bin.apply.Setting.runMessage;
+
 public class Poison implements StartWork, LoopToken {
     public static HttpServerManager httpServerManager = new HttpServerManager();
     public static VariableHTML variableHTML = new VariableHTML(MODEL);
@@ -38,5 +40,6 @@ public class Poison implements StartWork, LoopToken {
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
         for (var works : startWorks) {if (works.check(line)) {works.start(line, origen, repositoryArray); return;}}
+        runMessage(origen);
     }
 }
