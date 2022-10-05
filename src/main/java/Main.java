@@ -35,8 +35,8 @@ public class Main extends Setting {
 //            }
 //        });
 
-//        args = new String[]{SEPARATOR_HOME, "hello.otl"};
-        args = new String[]{SEPARATOR_HOME};
+        args = new String[]{SEPARATOR_HOME, "hello.otl"};
+//        args = new String[]{SEPARATOR_HOME};
 
         try {
             new Main(args);
@@ -52,7 +52,11 @@ public class Main extends Setting {
 
         Setting.path = args[0];
         if (runType.equals(RunType.Normal)) normal(args);
-        else if (runType.equals(RunType.Shell)) shell();
+        else if (runType.equals(RunType.Shell)) {
+            try {
+                shell();
+            } catch (NullPointerException ignored) {}
+        }
     }
 
     private void normal(String[] args) {
