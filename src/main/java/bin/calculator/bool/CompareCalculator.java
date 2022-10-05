@@ -14,16 +14,17 @@ public class CompareCalculator implements
         BoolToken, NumberToken, MergeToken, Token {
     private final String sings = orMerge(BIG, SMALL, SAME, BIG_SAME, SMALL_SAME);
     private final String sing = blackMerge(NUMBER, this.sings, NUMBER);
-    private final Pattern singPattern = Pattern.compile(sing);
+    private final Matcher singPattern = Pattern.compile(sing).matcher("");
 
     public String start(String line) {
         line = Controller.numberCalculator.start(line);
         return blank(line);
     }
 
+    private final Matcher matcher = Pattern.compile(sing).matcher("");
     private String blank(String line) {
         String sing = blackMerge(SL, NUMBER, this.sings, NUMBER, BL);
-        Matcher matcher = Pattern.compile(sing).matcher(line);
+        matcher.reset(line);
         while (matcher.find()) {
             String group = matcher.group().replaceFirst(BLANKS, "");
             String var = group.substring(1, group.length()-1);
@@ -34,9 +35,9 @@ public class CompareCalculator implements
     }
 
     private String calculator(String line) {
-        Matcher matcher = singPattern.matcher(line);
-        while (matcher.find()) {
-            String group = matcher.group();
+        singPattern.reset(line);
+        while (singPattern.find()) {
+            String group = singPattern.group();
             String[] big = group.split(BIG, 2);
             if (big.length == 2) {line = line.replaceFirst(sing, calculator(big, BIG));continue;}
             String[] small = group.split(SMALL, 2);
