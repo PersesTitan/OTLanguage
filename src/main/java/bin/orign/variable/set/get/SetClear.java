@@ -8,22 +8,23 @@ import work.StartWork;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SetClear implements
         VariableToken, StartWork {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public SetClear(String type) {
         String patternText = startEndMerge(VARIABLE_ACCESS, type);
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
