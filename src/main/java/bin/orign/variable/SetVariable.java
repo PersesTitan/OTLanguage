@@ -10,12 +10,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SetVariable implements ReturnWork, VariableToken {
-    private final static Pattern pattern = Pattern.compile(VARIABLE);
-    private Matcher matcher;
+    private final Matcher matcher = Pattern.compile(VARIABLE).matcher("");
 
     @Override
     public boolean check(String line) {
-        return (matcher = pattern.matcher(line)).find();
+        return (matcher.reset(line)).find();
     }
 
     @Override
