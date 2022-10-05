@@ -14,25 +14,25 @@ import java.util.regex.Pattern;
 public class CreateBooleanSet implements
         StartWork, VariableToken, GetSet {
     private final String patternText;
-    private final Pattern pattern;
+    private final Matcher matcher;
     private final String type;
 
     public CreateBooleanSet(String type, Map<String, Map<String, Object>> repository) {
         repository.put(type, new HpMap<>());
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
-        Matcher matcher = pattern.matcher(line);
+        matcher.reset();
         if (matcher.find()) {
             // group : VARIABLE_NAME
             String group = matcher.group().replaceFirst(START + BLANK + type + BLANK, "");
