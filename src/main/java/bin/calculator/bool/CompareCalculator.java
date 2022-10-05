@@ -29,7 +29,6 @@ public class CompareCalculator implements
             String group = matcher.group().replaceFirst(BLANKS, "");
             String var = group.substring(1, group.length()-1);
             line = line.replaceFirst(sing, calculator(var));
-            matcher.reset(line);
         }
         return calculator(line);
     }
