@@ -5,21 +5,22 @@ import bin.token.Token;
 import work.StartWork;
 
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PriorityPrint implements
         StartWork, ConsoleToken, Token {
     private final String patternText;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public PriorityPrint(String type) {
         this.patternText = startMerge(type, orMerge(BLANKS, END));
-        this.pattern = Pattern.compile(this.patternText);
+        this.matcher = Pattern.compile(this.patternText).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override

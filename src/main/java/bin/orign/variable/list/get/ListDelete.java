@@ -6,21 +6,22 @@ import work.StartWork;
 
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ListDelete implements StartWork, LoopToken {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public ListDelete(String type) {
         this.type = type;
         String patternText = startEndMerge(VARIABLE_ACCESS, type, "\\d+");
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override

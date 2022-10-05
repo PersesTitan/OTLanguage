@@ -10,20 +10,18 @@ import java.util.regex.Pattern;
 
 public class MapGet implements ReturnWork, VariableToken {
     private final String type;
-    private final Pattern pattern;
-    private Matcher matcher;
+    private final Matcher matcher;
 
     public MapGet(String type) {
         this.type = type;
         String token = "[^" + type.charAt(0) + VARIABLE_GET_E + "]+" + "[^" + VARIABLE_GET_E + "]*";
         String patternText = VARIABLE_GET_S + VARIABLE_ACCESS + type + token + VARIABLE_GET_E;
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        matcher = pattern.matcher(line);
-        return matcher.find();
+        return (matcher.reset(line)).find();
     }
 
     @Override

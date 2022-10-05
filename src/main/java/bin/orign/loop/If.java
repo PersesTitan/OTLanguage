@@ -6,8 +6,7 @@ import bin.token.LoopToken;
 import bin.token.cal.BoolToken;
 import work.StartWork;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +14,10 @@ public class If implements LoopToken, StartWork, BoolToken {
     private final String type1;
     private final String type2;
     private final String type3;
+    private final String typeToken1;
+    private final String typeToken2;
+    private final String typeToken3;
+
     private Pattern IF_Pattern;
     private Pattern IF_ELSE_Pattern;
     private Pattern ELSE_Pattern;
@@ -24,6 +27,9 @@ public class If implements LoopToken, StartWork, BoolToken {
         this.type1 = type1;
         this.type2 = type2;
         this.type3 = type3;
+        this.typeToken1 = type1.replace("\\", "");
+        this.typeToken2 = type2.replace("\\", "");
+        this.typeToken3 = type3.replace("\\", "");
     }
 
     @Override
@@ -35,26 +41,49 @@ public class If implements LoopToken, StartWork, BoolToken {
     @Override
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find()) {
-            String group = matcher.group().strip();
-            startLine(group, repositoryArray);
-        }
+        startLine(line.strip(), repositoryArray);
     }
 
     private void startLine(String line, Map<String, Map<String, Object>>[] repository) {
-        Matcher ifPattern = IF_Pattern.matcher(line);
-        if (ifPattern.find()) {
-            String[] tokens = ifPattern.group().strip().split("\\s+", 3);
-            if (tokens.length != 3) throw MatchException.grammarError();
-            boolean bool = tokens[1].equals("ㅇㅇ");
-            String token = bothEndCut(tokens[2]);
-            if (bool) startValue(token, repository);
+        StringTokenizer tokenizer = new StringTokenizer(line);
+
+        String token;
+        if (tokenizer.hasMoreTokens() &&
+            tokenizer.nextToken().equals(typeToken1) &&
+            ((token = tokenizer.nextToken()).equals(TRUE) || token.equals(FALSE))) {
+            if (token.equals(TRUE)) startValue(bothEndCut(tokenizer.nextToken()), repository);
             else {
-                if (!elseIF(line, repository)) ELSE(line, repository);
+                tokenizer.nextToken();
+                while (tokenizer.hasMoreTokens()) {
+                    token = tokenizer.nextToken();
+                    if (token.equals(typeToken2) &&
+                       ((token = tokenizer.nextToken()).equals(TRUE) || token.equals(FALSE))) {
+                        if (token.equals(TRUE)) {
+                            startValue(bothEndCut(tokenizer.nextToken()), repository);
+                            break;
+                        } else tokenizer.nextToken();
+                    } else if (token.equals(typeToken3)) {
+                        startValue(bothEndCut(tokenizer.nextToken()), repository);
+                        break;
+                    } else throw MatchException.grammarError();
+                }
             }
-        }
+        } else throw MatchException.grammarError();
     }
+
+//    private void startLine(String line, Map<String, Map<String, Object>>[] repository) {
+//        Matcher ifPattern = IF_Pattern.matcher(line);
+//        if (ifPattern.find()) {
+//            String[] tokens = ifPattern.group().strip().split("\\s+", 3);
+//            if (tokens.length != 3) throw MatchException.grammarError();
+//            boolean bool = tokens[1].equals("ㅇㅇ");
+//            String token = bothEndCut(tokens[2]);
+//            if (bool) startValue(token, repository);
+//            else {
+//                if (!elseIF(line, repository)) ELSE(line, repository);
+//            }
+//        }
+//    }
 
     private boolean elseIF(String line, Map<String, Map<String, Object>>[] repository) {
         Matcher matcher = IF_ELSE_Pattern.matcher(line);
@@ -83,9 +112,8 @@ public class If implements LoopToken, StartWork, BoolToken {
 
     // FileName, StartPos, EndPos
     private void startValue(String line, Map<String, Map<String, Object>>[] repository) {
-        String[] values = line.split(COMMA, 3);
-        if (values.length != 3) throw MatchException.grammarError();
-        else if (!LOOP_TOKEN.containsKey(values[0])) throw MatchException.grammarError();
+        String[] values = matchSplitError(line, COMMA, 3);
+        if (!LOOP_TOKEN.containsKey(values[0])) throw MatchException.grammarError();
         String total = LOOP_TOKEN.get(values[0]);
         int s = total.indexOf("\n" + values[1] + " ");
         int e = total.indexOf("\n" + values[2] + " ");

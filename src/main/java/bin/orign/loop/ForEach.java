@@ -9,23 +9,23 @@ import bin.token.LoopToken;
 import work.StartWork;
 
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.listCheck;
 
 public class ForEach extends GetSetVariable implements StartWork, LoopToken, GetList {
-    private final String patternText;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public ForEach() {
         String black = blackMerge(FOR, "(" + ARGUMENT + "|", VARIABLE_ACCESS + ")", FOR);
-        this.patternText = startEndMerge(black, BLANKS, BRACE_STYLE(), BLANKS, PUTIN);
-        this.pattern = Pattern.compile(this.patternText);
+        String patternText = startEndMerge(black, BLANKS, BRACE_STYLE(), BLANKS, PUTIN);
+        this.matcher = Pattern.compile(patternText).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override

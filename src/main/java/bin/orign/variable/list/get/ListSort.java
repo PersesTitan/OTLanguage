@@ -7,22 +7,23 @@ import bin.token.VariableToken;
 import work.StartWork;
 
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ListSort implements
         StartWork, Token, VariableToken {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public ListSort(String type) {
         String patternText = startEndMerge(VARIABLE_ACCESS, type);
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override

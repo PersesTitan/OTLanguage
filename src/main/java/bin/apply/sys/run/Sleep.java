@@ -6,23 +6,24 @@ import bin.token.Token;
 import work.StartWork;
 
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.token.cal.NumberToken.INT;
 
 public class Sleep implements Token, StartWork {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public Sleep(String type) {
         this.type = type;
         String patternText = startEndMerge(type, BLANKS, INT);
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override

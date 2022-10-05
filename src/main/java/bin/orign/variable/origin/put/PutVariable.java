@@ -14,19 +14,19 @@ import java.util.regex.Pattern;
 public class PutVariable implements
         StartWork, SetVariableValue, GetSet, GetList, GetMap {
     private final String patternText = startMerge(VARIABLE_SET);
-    private final Pattern pattern = Pattern.compile(patternText);
+    private final Matcher matcher = Pattern.compile(patternText).matcher("");
     private final Pattern accessPattern = Pattern.compile(ACCESS);
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
     public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
         String value = line.replaceFirst(patternText, ""); //넣을 값
-        Matcher matcher = pattern.matcher(line);
+        matcher.reset();
         if (matcher.find()) {
             String group = matcher.group();
             int accessCount = accessCount(group);

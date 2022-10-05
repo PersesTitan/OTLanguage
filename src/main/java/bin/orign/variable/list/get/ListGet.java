@@ -11,19 +11,17 @@ import java.util.regex.Pattern;
 
 public class ListGet implements ReturnWork, LoopToken {
     private final String type;
-    private final Pattern pattern;
-    private Matcher matcher;
+    private final Matcher matcher;
 
     public ListGet(String type) {
         this.type = type;
         String patternText = merge(VARIABLE_GET_S, VARIABLE_ACCESS, type, "\\d+", VARIABLE_GET_E);
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        matcher = pattern.matcher(line);
-        return matcher.find();
+        return (matcher.reset(line)).find();
     }
 
     @Override

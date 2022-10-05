@@ -8,6 +8,7 @@ import work.StartWork;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.*;
@@ -15,17 +16,17 @@ import static bin.check.VariableCheck.*;
 public class SetAdd implements
         VariableToken, StartWork, GetSet {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public SetAdd(String type) {
         String patternText = startMerge(VARIABLE_ACCESS, type, "[^" + type + "].*");
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override

@@ -6,6 +6,7 @@ import bin.token.Token;
 import bin.token.cal.BoolToken;
 import bin.token.cal.NumberToken;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +37,6 @@ public class CompareCalculator implements
         Matcher matcher = singPattern.matcher(line);
         while (matcher.find()) {
             String group = matcher.group();
-            matcher.reset(line);
             String[] big = group.split(BIG, 2);
             if (big.length == 2) {line = line.replaceFirst(sing, calculator(big, BIG));continue;}
             String[] small = group.split(SMALL, 2);

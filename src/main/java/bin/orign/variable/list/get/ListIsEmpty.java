@@ -14,23 +14,23 @@ import java.util.regex.Pattern;
 public class ListIsEmpty implements
         GetList, VariableToken, ReturnWork {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public ListIsEmpty(String type) {
         this.type = type;
         String patternText = VARIABLE_GET_S + VARIABLE_ACCESS + type + VARIABLE_GET_E;
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return (matcher.reset(line)).find();
     }
 
     @Override
     public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
         StringBuilder builder = new StringBuilder(line);
-        Matcher matcher = pattern.matcher(line);
+        matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();
             StringBuilder variables = new StringBuilder(group);

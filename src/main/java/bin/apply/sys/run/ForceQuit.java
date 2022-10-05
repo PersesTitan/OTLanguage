@@ -4,18 +4,19 @@ import bin.token.MergeToken;
 import work.StartWork;
 
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ForceQuit implements StartWork, MergeToken {
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public ForceQuit(String type) {
-        this.pattern = Pattern.compile(startEndMerge(type));
+        this.matcher = Pattern.compile(startEndMerge(type)).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override

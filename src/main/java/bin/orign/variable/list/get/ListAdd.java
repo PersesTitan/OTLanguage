@@ -8,6 +8,7 @@ import work.StartWork;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.*;
@@ -15,17 +16,17 @@ import static bin.check.VariableCheck.*;
 public class ListAdd implements
         VariableToken, StartWork, GetList {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public ListAdd(String type) {
         String patternText = startMerge(VARIABLE_ACCESS, type, "[^" + type + "].*");
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override

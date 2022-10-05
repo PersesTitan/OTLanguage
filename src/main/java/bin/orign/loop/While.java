@@ -7,6 +7,7 @@ import bin.token.cal.BoolToken;
 import work.StartWork;
 
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.apply.Controller.boolCalculator;
@@ -14,16 +15,18 @@ import static bin.apply.Setting.lineStart;
 
 public class While implements StartWork, LoopToken, BoolToken {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public While(String type) {
         this.type = type;
-        this.pattern = Pattern.compile(startEndMerge(type, BLANKS, BOOL, BLANKS, BRACE_STYLE()));
+        this.matcher =
+                Pattern.compile(startEndMerge(type, BLANKS, BOOL, BLANKS, BRACE_STYLE()))
+                .matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override

@@ -13,24 +13,23 @@ import java.util.regex.Pattern;
 public class RandomBoolean implements
         ReturnWork, Token, VariableToken, NumberToken {
     private final Random random = new Random();
-    private final Pattern pattern;
     private final String patternText;
+    private final Matcher matcher;
 
     public RandomBoolean(String type) {
         this.patternText = VARIABLE_GET_S + type + VARIABLE_GET_E;
-        this.pattern = Pattern.compile(this.patternText);
+        this.matcher = Pattern.compile(this.patternText).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return (matcher.reset(line)).find();
     }
 
     @Override
     public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
-        Matcher matcher = pattern.matcher(line);
-        while (matcher.find())
-            line = line.replaceFirst(patternText, random.nextBoolean() ? "ㅇㅇ" : "ㄴㄴ");
+        matcher.reset();
+        while (matcher.find()) line = line.replaceFirst(patternText, random.nextBoolean() ? "ㅇㅇ" : "ㄴㄴ");
         return line;
     }
 }
