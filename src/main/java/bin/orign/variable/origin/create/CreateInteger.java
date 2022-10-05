@@ -9,24 +9,25 @@ import work.StartWork;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.isInteger;
 
 public class CreateInteger implements StartWork, VariableToken, Controller {
-    private final Pattern pattern;
+    private final Matcher matcher;
     private final String type;
 
     public CreateInteger(String type, Map<String, Map<String, Object>> repository) {
         String patternText = startMerge(type, BLANKS, VARIABLE_NAME, VARIABLE_PUT);
         repository.put(type, new HpMap<>());
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
