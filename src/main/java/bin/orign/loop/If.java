@@ -71,45 +71,6 @@ public class If implements LoopToken, StartWork, BoolToken {
         } else throw MatchException.grammarError();
     }
 
-//    private void startLine(String line, Map<String, Map<String, Object>>[] repository) {
-//        Matcher ifPattern = IF_Pattern.matcher(line);
-//        if (ifPattern.find()) {
-//            String[] tokens = ifPattern.group().strip().split("\\s+", 3);
-//            if (tokens.length != 3) throw MatchException.grammarError();
-//            boolean bool = tokens[1].equals("ㅇㅇ");
-//            String token = bothEndCut(tokens[2]);
-//            if (bool) startValue(token, repository);
-//            else {
-//                if (!elseIF(line, repository)) ELSE(line, repository);
-//            }
-//        }
-//    }
-
-    private boolean elseIF(String line, Map<String, Map<String, Object>>[] repository) {
-        Matcher matcher = IF_ELSE_Pattern.matcher(line);
-        while (matcher.find()) {
-            String[] tokens = matcher.group().strip().split("\\s+", 3);
-            if (tokens.length != 3) throw MatchException.grammarError();
-            boolean bool = tokens[1].equals("ㅇㅇ");
-            String token = bothEndCut(tokens[2]);
-            if (bool) {
-                startValue(token, repository);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void ELSE(String line, Map<String, Map<String, Object>>[] repository) {
-        Matcher matcher = ELSE_Pattern.matcher(line);
-        if (matcher.find()) {
-            String[] tokens = matcher.group().strip().split("\\s+", 2);
-            if (tokens.length != 2) throw MatchException.grammarError();
-            String token = bothEndCut(tokens[1]);
-            startValue(token, repository);
-        }
-    }
-
     // FileName, StartPos, EndPos
     private void startValue(String line, Map<String, Map<String, Object>>[] repository) {
         String[] values = matchSplitError(line, COMMA, 3);
