@@ -81,12 +81,13 @@ public interface MergeToken {
     }
 
     // input = (test,1,10)
-    default String getLoopTotal(String input) {
+    default String[] getLoopTotal(String input) {
         // test, 1, 10
         String[] variables = matchSplitError(bothEndCut(input), ",", 3);
         String total = LOOP_TOKEN.get(variables[0]);
         int start = total.indexOf("\n" + variables[1] + " ");
         int end = total.indexOf("\n" + variables[2] + " ");
-        return total.substring(start, end);
+        // test, total
+        return new String[]{variables[0], total.substring(start, end)};
     }
 }

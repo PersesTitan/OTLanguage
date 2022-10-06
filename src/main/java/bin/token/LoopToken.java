@@ -15,7 +15,7 @@ public interface LoopToken extends VariableToken {
 
         add(POISON + ACCESS + POISON_POST);
         add(POISON + ACCESS + POISON_GET);
-        add(SERVER);
+        add(SERVER); add(TRY_CATCH);
     }};
 
     default String BRACE_STYLE() {
@@ -36,7 +36,9 @@ public interface LoopToken extends VariableToken {
     String IF = QUESTION + "ㅅ" + QUESTION;
     String ELSE_IF = QUESTION + "ㅈ" + QUESTION;
     String ELSE = QUESTION + "ㅉ" + QUESTION;
+    String TRY_CATCH = "ㅠㅅㅠ";
 
+    // LOOP
     String FOR = CARET;                 // ^
     String WHITE = PESO + "ㅅ" + PESO;
 
