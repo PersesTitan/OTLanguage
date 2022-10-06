@@ -5,6 +5,7 @@ import bin.apply.sys.item.HpMap;
 import bin.apply.sys.item.RunType;
 import bin.apply.sys.run.ForceQuit;
 import bin.apply.sys.run.Sleep;
+import bin.apply.sys.run.TryCatch;
 import bin.math.random.*;
 import bin.math.sum.list.FloatListSum;
 import bin.math.sum.list.IntegerListSum;
@@ -163,6 +164,7 @@ public class Setting implements Repository {
         startWorks.add(new MapDelete(MAP_DELETE));
         startWorks.add(new MapPutAll(MAP_ADD));
         startWorks.add(new ForEach());
+        startWorks.add(new TryCatch(TRY_CATCH));
 
         // POISON
         startWorks.add(new Poison(POISON));
