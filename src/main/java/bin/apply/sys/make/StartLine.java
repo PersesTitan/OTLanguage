@@ -35,11 +35,12 @@ public class StartLine implements LoopToken {
         try {
             String finalTotal = getFinalTotal(extensionCheck, total, path);
 
-            Pattern.compile("\\n")
-                    .splitAsStream(finalTotal)
-                    .filter(Predicate.not(String::isBlank))
-                    .map(line -> setError(line, total))
-                    .forEach(line -> Setting.start(line, errorLine.get(), repository));
+            startStartLine(finalTotal, total, repository);
+//            Pattern.compile("\\n")
+//                    .splitAsStream(finalTotal)
+//                    .filter(Predicate.not(String::isBlank))
+//                    .map(line -> setError(line, total))
+//                    .forEach(line -> Setting.start(line, errorLine.get(), repository));
         } catch (VariableException e) {
             VariableException.variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
             setLine();
@@ -63,6 +64,15 @@ public class StartLine implements LoopToken {
         return extensionCheck
                 ? bracket.bracket(total, new File(path))
                 : bracket.bracket(total, path, false);
+    }
+
+    public static void startStartLine(String finalTotal, String total,
+                                      Map<String, Map<String, Object>>[] repository) {
+        Pattern.compile("\\n")
+                .splitAsStream(finalTotal)
+                .filter(Predicate.not(String::isBlank))
+                .map(line -> setError(line, total))
+                .forEach(line -> Setting.start(line, errorLine.get(), repository));
     }
 
     @SafeVarargs
