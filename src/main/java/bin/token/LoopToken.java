@@ -16,6 +16,7 @@ public interface LoopToken extends VariableToken {
         add(POISON + ACCESS + POISON_POST);
         add(POISON + ACCESS + POISON_GET);
         add(SERVER); add(TRY_CATCH);
+        add(METHOD);
     }};
 
     default String BRACE_STYLE() {
@@ -29,7 +30,7 @@ public interface LoopToken extends VariableToken {
     String RETURN_TOKEN = "=>";
     String RETURN = RETURN_TOKEN + BLANK + "\\S+";
     String PUTIN_TOKEN = "<=";
-    String PUTIN = PUTIN_TOKEN + "(" + String.join("|", TOTAL_LIST) + ")" + BLANKS + VARIABLE_NAME;
+    String PUTIN = PUTIN_TOKEN + BLANK + "(" + String.join("|", TOTAL_LIST) + ")" + BLANKS + VARIABLE_NAME;
 
     String BREAK = "ㅂㅇㅂ";
     String CONTINUE = "ㅋㅇㅋ";
@@ -37,6 +38,7 @@ public interface LoopToken extends VariableToken {
     String ELSE_IF = QUESTION + "ㅈ" + QUESTION;
     String ELSE = QUESTION + "ㅉ" + QUESTION;
     String TRY_CATCH = "ㅠㅅㅠ";
+    String METHOD = "ㅁㅅㅁ";
 
     // LOOP
     String FOR = CARET;                 // ^
