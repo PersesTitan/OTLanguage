@@ -1,4 +1,3 @@
-import bin.apply.Repository;
 import bin.apply.Setting;
 import bin.apply.sys.item.HpMap;
 import bin.apply.sys.item.RunType;
@@ -10,18 +9,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.regex.Pattern;
 
 import static bin.apply.Controller.*;
-import static bin.apply.sys.item.Separator.SEPARATOR_HOME;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.token.LoopToken.LOOP_TOKEN;
-import static bin.token.Token.*;
 import static bin.token.VariableToken.TOTAL_LIST;
 
 public class Main extends Setting {
-    private final String patternText = START + "[0-9]+ ";
-    private final Pattern pattern = Pattern.compile(patternText);
 
     public static void main(String[] args) {
 //        List<String[]> test = new ArrayList<>() {{
@@ -35,7 +29,7 @@ public class Main extends Setting {
 //            }
 //        });
 
-        args = new String[]{SEPARATOR_HOME, "hello.otl"};
+//        args = new String[]{SEPARATOR_HOME, "hello.otl"};
 //        args = new String[]{SEPARATOR_HOME};
 
         try {
@@ -53,9 +47,7 @@ public class Main extends Setting {
         Setting.path = args[0];
         if (runType.equals(RunType.Normal)) normal(args);
         else if (runType.equals(RunType.Shell)) {
-            try {
-                shell();
-            } catch (NullPointerException ignored) {}
+            try {shell();} catch (NullPointerException ignored) {}
         }
     }
 
