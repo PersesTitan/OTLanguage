@@ -6,6 +6,7 @@ import bin.apply.sys.item.RunType;
 import bin.apply.sys.run.ForceQuit;
 import bin.apply.sys.run.Sleep;
 import bin.apply.sys.run.TryCatch;
+import bin.define.item.MethodItem;
 import bin.math.random.*;
 import bin.math.sum.list.FloatListSum;
 import bin.math.sum.list.IntegerListSum;
@@ -79,6 +80,7 @@ public class Setting implements Repository {
 
     public static void firstStart() {
         reset();
+        repository.put(METHOD, new HashMap<>());
         noUse.add(SCANNER);
         noUse.add(RANDOM_BOOL);
         noUse.add(RANDOM_DOUBLE);
