@@ -1,60 +1,75 @@
 package bin.apply.sys.run;
 
+import bin.apply.Setting;
 import bin.apply.sys.item.Separator;
+import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
-import bin.exception.MatchException;
-import bin.exception.VariableException;
 import bin.token.LoopToken;
-import bin.token.Token;
+import work.StartWork;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static bin.apply.Controller.bracket;
+import static bin.apply.sys.item.Separator.SEPARATOR_FILE;
+import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 import static bin.apply.sys.item.SystemSetting.extension;
+import static bin.apply.sys.item.SystemSetting.extensionCheck;
+import static bin.apply.sys.make.StartLine.errorPath;
 
-public class FilePath implements Token, LoopToken {
-    public final Pattern pattern =
-            Pattern.compile(START + BLANK + FILE + BLANKS + FILE_TYPE + "(" + ACCESS + FILE_TYPE + ")" + BLANK + END);
+public class FilePath implements LoopToken, StartWork {
+    private final Matcher matcher;
 
-    public boolean check(String line) {
-        return pattern.matcher(line).find();
+    public FilePath() {
+        String patternText = startEndMerge(FILE, BLANKS, FILE_TYPE, "(", ACCESS, FILE_TYPE, ")*");
+        this.matcher = Pattern.compile(patternText).matcher("");
     }
 
-    public void start(String line) {
-        String path = line
-                .strip()
-                .replaceFirst(START + FILE + BLANKS, "")
-                .replace(ACCESS, Separator.SEPARATOR_FILE);
+    public boolean check(String line) {
+        return matcher.reset(line).find();
+    }
+
+    @Override
+    public void start(String line, String origen,
+                      Map<String, Map<String, Object>>[] repositoryArray) {
+        StringTokenizer tokenizer = new StringTokenizer(line.strip());
+        tokenizer.nextToken();                  // ㅍㅅㅍ
+        // 디렉토리~파일명
+        String path = Setting.path + SEPARATOR_FILE + tokenizer
+                        .nextToken()
+                        .replace(ACCESS, SEPARATOR_FILE);
+
         for (String ext : extension) {
             File file = new File(path + ext);
             if (file.isFile()) {
-                importFile(file);
+                importFile(file, repositoryArray);
                 return;
             }
         }
         throw FileException.pathNoHaveError();
     }
 
-    private void importFile(File file) {
-        if (!file.canRead()) throw FileException.noReadError();
-        String text = "";
-        long count = 0;
+    private void importFile(File file, Map<String, Map<String, Object>>[] repositoryArray) {
+        if (!file.exists()) throw FileException.pathNoHaveError();
+        else if (!file.isFile()) throw FileException.isNotFileError();
+        else if (!file.canRead()) throw FileException.noReadError();
+        else if (!extensionCheck(file.getName())) throw FileException.rightExtension();
+
         StringBuilder builder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath(), StandardCharsets.UTF_8))) {
-            while ((text = reader.readLine()) != null) builder.append(++count).append(" ").append(text).append("\n");
-            bracket.bracket(builder.toString(), file);
-        } catch (VariableException e) {
-            VariableException.variableErrorMessage(e, file.getAbsolutePath(), text, count);
-        } catch (MatchException e) {
-            MatchException.matchErrorMessage(e, file.getAbsolutePath(), text, count);
-        } catch (FileException e) {
-            FileException.printErrorMessage(e, file.getAbsolutePath(), text, count);
+        try (FileReader fileReader = new FileReader(file, StandardCharsets.UTF_8);
+             BufferedReader reader = new BufferedReader(fileReader)) {
+            for (int i = 1;;i++) {
+                String line = reader.readLine();
+                if (line == null) break;
+                builder.append(i).append(" ").append(line).append(SEPARATOR_LINE);
+            }
         } catch (IOException ignored) {}
+        String path = errorPath.get();
+        StartLine.startLine(builder.toString(), file.getAbsolutePath(), repositoryArray);
+        errorPath.set(path);
     }
 
 }
