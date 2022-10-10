@@ -38,11 +38,9 @@ public class VariableDefault implements LoopToken {
                        VALUES_ONE + VARIABLE_GET_E, "");
     }
 
-    private final Pattern pattern = Pattern.compile(VARIABLE_GET_S + VALUES_ALL + VARIABLE_GET_E);
-    private Matcher changeMatcher;
+    private final Matcher changeMatcher = Pattern.compile(VARIABLE_GET_S + VALUES_ALL + VARIABLE_GET_E).matcher("");
     public boolean changeCheck(String line) {
-        changeMatcher = pattern.matcher(line);
-        return !map.isEmpty() && changeMatcher.find();
+        return !map.isEmpty() && changeMatcher.reset(line).find();
     }
 
     public String changeStart(String line) {
