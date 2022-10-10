@@ -8,6 +8,8 @@ public class VariableException extends RuntimeException {
     private final static String noDefine = "정의되지 않은 변수 타입 입니다.";
     private final static String noGrammar = "문법이 올바르지 않습니다.";
     private final static String forTypeMatchError = "^^문의 타입으로 유효하지 않습니다.";
+    private final static String definedMethodName = "이미 정의된 메소드 이름입니다.";
+    private final static String methodParamsCount = "매개변수 갯수가 일치하지 않습니다.";
 
     public VariableException(String message) {
         super(message);
@@ -22,9 +24,19 @@ public class VariableException extends RuntimeException {
             case noDefine -> "Undefined variable name.\nPlease check the variable name.";
             case noGrammar -> "The grammar does not match.\nPlease check the grammar.";
             case forTypeMatchError -> "^^ It is not valid as a return value of the query.\nPlease check the variable type";
+            case definedMethodName -> "The method name already defined.\nPlease check the defined name.";
+            case methodParamsCount -> "The number of parameters does not match.\nPlease check the number of parameters.";
             default -> "";
         };
         ErrorMessage.printErrorMessage(e, subMessage, path, line, position);
+    }
+
+    public static VariableException methodParamsCount() {
+        return new VariableException(methodParamsCount);
+    }
+
+    public static VariableException definedMethodName() {
+        return new VariableException(definedMethodName);
     }
 
     public static VariableException forTypeMatchError() {
