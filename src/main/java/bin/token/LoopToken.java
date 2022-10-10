@@ -24,7 +24,7 @@ public interface LoopToken extends VariableToken {
         return SL + FILE_TYPE + ",[0-9]+,[0-9]+" + SR;
     }
 
-    String ARGUMENT = BL + "[^" + BL + BR + "]*" + BR; // [...]
+    String ARGUMENT = BL + "[" + "\\s\\S" + "]*" + BR; // [...]
 
     String LINE_NUMBER = "[0-9]+ ";
     String RETURN_TOKEN = "=>";
