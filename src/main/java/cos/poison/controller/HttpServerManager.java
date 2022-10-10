@@ -1,6 +1,6 @@
 package cos.poison.controller;
 
-import bin.apply.sys.item.Color;
+import bin.apply.Setting;
 import com.sun.net.httpserver.HttpServer;
 import cos.http.controller.HttpMethod;
 import cos.http.controller.HttpRepository;
@@ -30,7 +30,7 @@ public class HttpServerManager implements HttpRepository {
     public void createServer() {create();}
     private void create() {
         try {httpServer = HttpServer.create(new InetSocketAddress(host, port), 0);}
-        catch (IOException e) {System.out.printf("%s서버 생성에 실패하였습니다.%s\n", Color.RED, Color.RESET);}
+        catch (IOException e) {Setting.errorMessage("서버 생성에 실패하였습니다.");}
     }
 
     // 시작 로직
@@ -40,22 +40,22 @@ public class HttpServerManager implements HttpRepository {
                 httpServer.start();
                 System.out.printf("URL http://%s:%d/\n", host, port);
                 startServerPrint();
-            } catch (Exception e) {System.out.printf("%s서버 실행에 실패하였습니다.%s\n", Color.RED, Color.RESET);}
-        } else System.out.printf("%s서버가 존재하지 않습니다.%s\n", Color.RED, Color.RESET);
+            } catch (Exception e) {Setting.errorMessage("서버 실행에 실패하였습니다.");}
+        } else Setting.errorMessage("서버가 존재하지 않습니다.");
     }
 
     // POST 추가
     public void addPost(String path, String[] total, String[][] params, String html) {
         if (httpServer != null) httpServer.createContext(path,
                 new HandlerRoot(path, HttpMethod.POST, total, params, html, "text/html;charset=UTF-8"));
-        else System.out.printf("%s서버가 존재하지 않습니다.%s\n", Color.RED, Color.RESET);
+        else Setting.errorMessage("서버가 존재하지 않습니다.");
     }
 
     // GET 추가
     public void addGet(String path, String[] total, String[][] params, String html) {
         if (httpServer != null) httpServer.createContext(path,
                 new HandlerRoot(path, HttpMethod.GET, total, params, html, "text/html;charset=UTF-8"));
-        else System.out.printf("%s서버가 존재하지 않습니다.%s\n", Color.RED, Color.RESET);
+        else Setting.errorMessage("서버가 존재하지 않습니다.");
     }
 
     public static HttpHandlerInf getHttpHandlerInf(HttpMethod httpMethod) {
