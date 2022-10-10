@@ -9,8 +9,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static bin.apply.Controller.*;
+import static bin.apply.sys.item.Separator.SEPARATOR_HOME;
+import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.token.LoopToken.LOOP_TOKEN;
 import static bin.token.VariableToken.TOTAL_LIST;
@@ -29,7 +32,7 @@ public class Main extends Setting {
 //            }
 //        });
 
-//        args = new String[]{SEPARATOR_HOME, "hello.otl"};
+        args = new String[]{SEPARATOR_HOME, "hello.otl"};
 //        args = new String[]{SEPARATOR_HOME};
 
         try {
@@ -64,12 +67,22 @@ public class Main extends Setting {
 //        repository.putAll((Map<String, Map<String, Object>>) COPY_REPOSITORY.clone());
 //        new ReadOTLM().readSetting("system.otls");
 
-        String text;
-        long count = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader(mainPath, StandardCharsets.UTF_8))) {
-            while ((text = reader.readLine()) != null) Setting.total.append(++count).append(" ").append(text).append("\n");
+        try (FileReader fileReader = new FileReader(mainPath, StandardCharsets.UTF_8);
+             BufferedReader reader = new BufferedReader(fileReader)) {
+            for (int i = 1;;i++) {
+                String line = reader.readLine();
+                if (line == null) break;
+                Setting.total.append(i).append(" ").append(line).append(SEPARATOR_LINE);
+            }
             StartLine.startLine(Setting.total.toString(), mainPath, repository);
         } catch (IOException ignored) {}
+
+//        String text;
+//        long count = 0;
+//        try (BufferedReader reader = new BufferedReader(new FileReader(mainPath, StandardCharsets.UTF_8))) {
+//            while ((text = reader.readLine()) != null) Setting.total.append(++count).append(" ").append(text).append("\n");
+//            StartLine.startLine(Setting.total.toString(), mainPath, repository);
+//        } catch (IOException ignored) {}
 
         pause();
     }
