@@ -20,7 +20,7 @@ public interface VariableToken extends Token {
     String VARIABLE_GET_S = ":";
     String VARIABLE_GET_E = "_";
 
-    String FILE_TYPE = "[^~]+";
+    String FILE_TYPE = "[^~\\s]+";
     String FILE_NAME = "[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]+";
 
     // SYSTEM
