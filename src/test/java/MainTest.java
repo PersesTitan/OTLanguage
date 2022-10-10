@@ -15,6 +15,11 @@ public class MainTest implements LoopToken {
 //        Taskbar.getTaskbar().setIconImage(Toolkit.getDefaultToolkit().getImage("/Users/persestitan/Documents/GitHub/OTLanguage/OTLanguage.png"));
 //        Robot robot = new Robot();
 //        JFrame frame = new JFrame("test");
+
+        System.out.println(Arrays.toString("메소드명[]".substring(0, "메소드명[]".length() - 1).split(BL)));
+        System.out.println(Arrays.toString("메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ]".substring(0, "메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ]".length() - 1).split(BL)));
+
+        System.out.println("\u3000");
         new MainTest();
     }
 
