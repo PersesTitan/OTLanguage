@@ -6,7 +6,6 @@ import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.StartWork;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +23,7 @@ public class DefineMethod implements LoopToken, StartWork {
         String params = orMerge(TOTAL_LIST) + BLANKS + VARIABLE_HTML;
         String patternText = startEndMerge(
                 type, BLANKS, VARIABLE_HTML,
-                "(", "(", BL, params, BR, ")+", "|", BL, BR, ")",
+                "((", BL, params, BR, ")+|", BL, BR, ")",
                 BLANKS, BRACE_STYLE(),
                 "(", BLANK, RETURN, ")?");
         this.matcher = Pattern.compile(patternText).matcher("");
