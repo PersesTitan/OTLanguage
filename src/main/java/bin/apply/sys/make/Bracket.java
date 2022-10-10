@@ -19,6 +19,7 @@ public class Bracket implements LoopToken, Token {
     private final String loopEndPattern =
             orMerge(START, "\\n") + LINE_NUMBER + BLANK + MR + "(?=" + BLANK + endPattern + "\\s*(\\n|$))";
     private final Pattern pattern = Pattern.compile(orMerge(loopStartPattern, loopEndPattern));
+    private final Matcher matcher = pattern.matcher("");
     private final Stack<Integer> stack = new Stack<>();
 
     public String bracket(String total, File file) {
@@ -37,7 +38,7 @@ public class Bracket implements LoopToken, Token {
 
         if (!(copy.contains("{") && copy.contains("}"))) return copy;
         stack.clear();
-        Matcher matcher = pattern.matcher(copy);
+        matcher.reset(copy);
         while (matcher.find()) {
             String group = matcher.group().strip();
             if (Pattern.compile(MR + BLANK + END).matcher(group).find()) {
@@ -62,7 +63,7 @@ public class Bracket implements LoopToken, Token {
         }
 
         if (!stack.isEmpty()) getErrorLine(total, stack.pop());
-        return new LoopBracket().deleteEnter(copy);
+        return LoopBracket.deleteEnter(copy);
     }
 
     private void getErrorLine(String total, int pos) {
@@ -85,9 +86,9 @@ public class Bracket implements LoopToken, Token {
     }
 
     // Shell
-    private Matcher shellMatcher;
-    public boolean bracketCheck(String line) {
-        shellMatcher = pattern.matcher(line);
-        return shellMatcher.find();
-    }
+//    private Matcher shellMatcher;
+//    public boolean bracketCheck(String line) {
+//        shellMatcher = pattern.matcher(line);
+//        return shellMatcher.find();
+//    }
 }
