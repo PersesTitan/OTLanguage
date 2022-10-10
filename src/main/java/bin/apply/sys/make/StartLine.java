@@ -105,7 +105,7 @@ public class StartLine implements LoopToken {
 
     private static final AtomicLong errorCount = new AtomicLong(0);
     private static final AtomicReference<String> errorLine = new AtomicReference<>("");
-    private static final AtomicReference<String> errorPath = new AtomicReference<>();
+    public static final AtomicReference<String> errorPath = new AtomicReference<>();
     public static String setError(String line, String total) {
         Matcher matcher = pattern.matcher(line);
         if (matcher.find()) {
