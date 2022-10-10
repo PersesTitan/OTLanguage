@@ -1,21 +1,29 @@
 package bin.define.method;
 
+import bin.define.item.MethodItem;
+import bin.define.item.MethodType;
+import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.StartWork;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DefineMethod implements LoopToken, StartWork {
+    private final String type;
     private final Matcher matcher;
 
     public DefineMethod(String type) {
+        this.type = type;
         // ㅁㅅㅁ 메소드명[ㅇㅅㅇ 매개변수] (test,1,10) => 변수명
         // ㅁㅅㅁ 메소드명[ㅇㅅㅇ 매개변수] (test,1,10)
         String params = orMerge(TOTAL_LIST) + BLANKS + VARIABLE_HTML;
         String patternText = startEndMerge(
-                METHOD, BLANKS, VARIABLE_HTML,
+                type, BLANKS, VARIABLE_HTML,
                 "(", "(", BL, params, BR, ")+", "|", BL, BR, ")",
                 BLANKS, BRACE_STYLE(),
                 "(", BLANK, RETURN, ")?");
@@ -38,22 +46,37 @@ public class DefineMethod implements LoopToken, StartWork {
         // ㅇㅈㅇ 매개변수][ㅇㅅㅇ 매개변수   (test,1,10)
         String[] methodParams = matchSplitError(methodToken[1], BR + BLANKS, 2);
 
+        // [[ㅇㅈㅇ, 매개변수][ㅇㅅㅇ, 매개변수]]
         String[][] params = methodParams[0].isBlank()
             ? new String[0][0]
             : getParams(methodParams[0].split(BR + BL));
-        String total = getLoopTotal(methodParams[1])[1];
+        // test, 1, 10
+        String[] fileInformation = matchSplitError(bothEndCut(methodParams[1]), ",", 3);
+        String fileName = fileInformation[0];
+        String total = LOOP_TOKEN.get(fileName);
+        int start = total.indexOf("\n" + fileInformation[1] + " ");
+        int end = total.indexOf("\n" + fileInformation[2] + " ");
+
         String methodName = methodToken[0]; // 메소드명
-        if (tokens.length == 1) {   // void
+        var repository = repositoryArray[0].get(this.type);
+        if (repository.containsKey(methodName)) throw VariableException.definedMethodName();
 
-        } else {                    // return
-
-        }
+        MethodType methodType = tokens.length == 1 ? MethodType.VOID : MethodType.RETURN;
+        String returnVariable = tokens.length == 1 ? null : tokens[1];
+        repository.put(methodName, new MethodItem(params, methodType, returnVariable, fileName, start, end));
     }
 
+    private final Set<String> set = new HashSet<>();
     private String[][] getParams(String[] params) {
+        set.clear();
         int count = params.length;
         String[][] param = new String[count][2];
-        for (int i = 0; i<count; i++) param[i] = matchSplitError(params[i], BLANKS, 2);
+        for (int i = 0; i<count; i++) {
+            String[] values = matchSplitError(params[i], BLANKS, 2);
+            if (set.contains(values[1])) throw VariableException.sameVariable();
+            else set.add(values[1]);
+            param[i] = values;
+        }
         return param;
     }
 }
