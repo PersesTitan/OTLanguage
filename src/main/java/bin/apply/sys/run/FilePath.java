@@ -60,8 +60,8 @@ public class FilePath implements LoopToken, StartWork {
 
         StringBuilder builder = new StringBuilder();
         try (FileReader fileReader = new FileReader(file, StandardCharsets.UTF_8);
-             BufferedReader reader = new BufferedReader(fileReader)) {
-            for (int i = 1;;i++) {
+            BufferedReader reader = new BufferedReader(fileReader)) {
+            for (int i=1;;i++) {
                 String line = reader.readLine();
                 if (line == null) break;
                 builder.append(i).append(" ").append(line).append(SEPARATOR_LINE);
@@ -71,5 +71,4 @@ public class FilePath implements LoopToken, StartWork {
         StartLine.startLine(builder.toString(), file.getAbsolutePath(), repositoryArray);
         errorPath.set(path);
     }
-
 }
