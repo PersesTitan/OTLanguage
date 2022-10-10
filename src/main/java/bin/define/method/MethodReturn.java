@@ -1,9 +1,12 @@
 package bin.define.method;
 
 import bin.define.item.MethodItem;
+import bin.define.item.MethodType;
+import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.ReturnWork;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +17,7 @@ public class MethodReturn implements LoopToken, ReturnWork {
     public MethodReturn() {
         String patternText = merge(
                 VARIABLE_GET_S, VARIABLE_HTML,
-                "(", "(", BL, "[\\S\\s]+", BR, ")+", "|", BL, BR, ")",
+                "((", BL, "[\\S\\s]+", BR, ")+|", BL, BR, ")",
                 VARIABLE_GET_E);
         this.matcher = Pattern.compile(patternText).matcher("");
     }
@@ -32,24 +35,18 @@ public class MethodReturn implements LoopToken, ReturnWork {
             // :메소드명[]_     :메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ][ㅇㅅㅇ ㅁㄴㅇㄹ]
             String group = matcher.group();
             // 메소드명,    메소드명, ㅇㅈㅇ][ㅇㅈㅇ ㅁㄴㅇㄹ
-            String[] methodNames = matchSplitError(bothEndCut(group, 1, 2), BL, 2);
+            String[] methodNames = matchSplitError(bothEndCut(group.strip(), 1, 2), BL, 2);
             String methodName = methodNames[0];
-
             var repository = repositoryArray[0].get(METHOD);
             if (repository.containsKey(methodName)) {
                 MethodItem methodItem = (MethodItem) repository.get(methodName);
-                if (methodNames[1].isBlank()) {
-                    line = line.replace(group,
-                        repositoryArray.length == 1
-                        ? methodItem.startReturn(new String[0], repositoryArray[0])
-                        : methodItem.startReturn(new String[0], repositoryArray[0], repositoryArray[1]));
-                } else {
-                    String[] methodParams = methodNames[1].split(BR + BL);
-                    line = line.replace(group,
-                        repositoryArray.length == 1
+                if (!methodItem.methodType().equals(MethodType.RETURN)) throw VariableException.methodTypeMatch();
+                String[] methodParams = methodNames[1].isEmpty() ? new String[0] : methodNames[1].split(BR + BL);
+
+                String oldWord = repositoryArray.length == 1
                         ? methodItem.startReturn(methodParams, repositoryArray[0])
-                        : methodItem.startReturn(methodParams, repositoryArray[0], repositoryArray[1]));
-                }
+                        : methodItem.startReturn(methodParams, repositoryArray[0], repositoryArray[1]);
+                if (oldWord != null) line = line.replace(group, oldWord);
             }
         }
         return line;
