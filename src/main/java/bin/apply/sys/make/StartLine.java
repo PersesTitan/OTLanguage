@@ -34,7 +34,6 @@ public class StartLine implements LoopToken {
         if (extensionCheck) errorPath.set(path);
         try {
             String finalTotal = getFinalTotal(extensionCheck, total, path);
-
             startStartLine(finalTotal, total, repository);
 //            Pattern.compile("\\n")
 //                    .splitAsStream(finalTotal)
@@ -66,8 +65,9 @@ public class StartLine implements LoopToken {
                 : bracket.bracket(total, path, false);
     }
 
+    @SafeVarargs
     public static void startStartLine(String finalTotal, String total,
-                                      Map<String, Map<String, Object>>[] repository) {
+                                      Map<String, Map<String, Object>>... repository) {
         Pattern.compile("\\n")
                 .splitAsStream(finalTotal)
                 .filter(Predicate.not(String::isBlank))
