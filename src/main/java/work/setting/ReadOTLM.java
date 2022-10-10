@@ -1,6 +1,7 @@
 package work.setting;
 
 import bin.apply.Repository;
+import bin.apply.Setting;
 import bin.apply.sys.item.Color;
 import bin.token.MergeToken;
 import work.ReturnWork;
@@ -66,7 +67,7 @@ public class ReadOTLM implements Repository, MergeToken {
         try (ObjectInput input = new ObjectInputStream(new FileInputStream(getPath))) {
             return (ReturnWork) input.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.printf("%s%s를 모듈에 추가하지 못하였습니다.%s\n", Color.YELLOW, path + modelPath, Color.RESET);
+            Setting.warringMessage(String.format("%s를 모듈에 추가하지 못하였습니다.", path + modelPath));
             return null;
         }
     }
@@ -75,7 +76,7 @@ public class ReadOTLM implements Repository, MergeToken {
         try (ObjectInput input = new ObjectInputStream(new FileInputStream(getPath))) {
             return (StartWork) input.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.printf("%s%s를 모듈에 추가하지 못하였습니다.%s\n", Color.YELLOW, path + modelPath, Color.RESET);
+            Setting.warringMessage(String.format("%s를 모듈에 추가하지 못하였습니다.", path + modelPath));
             return null;
         }
     }
