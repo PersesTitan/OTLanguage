@@ -3,10 +3,14 @@ package bin.apply;
 import bin.apply.sys.item.Color;
 import bin.apply.sys.item.HpMap;
 import bin.apply.sys.item.RunType;
+import bin.apply.sys.run.FilePath;
 import bin.apply.sys.run.ForceQuit;
 import bin.apply.sys.run.Sleep;
 import bin.apply.sys.run.TryCatch;
 import bin.define.item.MethodItem;
+import bin.define.method.DefineMethod;
+import bin.define.method.MethodReturn;
+import bin.define.method.MethodVoid;
 import bin.math.random.*;
 import bin.math.sum.list.FloatListSum;
 import bin.math.sum.list.IntegerListSum;
@@ -74,8 +78,17 @@ public class Setting implements Repository {
         return line;
     }
 
+    // 메세지 세팅
     public static void runMessage(String errorLine) {
-        System.out.printf("%s경고! %s는 실행되지 않은 라인 입니다.%s\n", Color.YELLOW, errorLine, Color.RESET);
+        warringMessage(String.format("경고! %s는 실행되지 않은 라인 입니다.", errorLine));
+    }
+
+    public static void warringMessage(String message) {
+        System.out.printf("%s%s%s\n", Color.YELLOW, message, Color.RESET);
+    }
+
+    public static void errorMessage(String message) {
+        System.out.printf("%s%s%s\n", Color.RED, message, Color.RESET);
     }
 
     public static void firstStart() {
@@ -98,6 +111,7 @@ public class Setting implements Repository {
         priorityWorks.add(new ListSort(LIST_SORT));
         priorityWorks.add(new SetClear(SET_CLEAR));
         priorityWorks.add(new SetSort(SET_SORT));
+        priorityWorks.add(new FilePath());
 
         returnWorks.add(new SetVariable());
         returnWorks.add(new RandomBoolean(RANDOM_BOOL));
@@ -116,6 +130,7 @@ public class Setting implements Repository {
         returnWorks.add(new FloatSetSum());
         returnWorks.add(new ListGet(LIST_GET));
         returnWorks.add(new MapGet(MAP_GET));
+        returnWorks.add(new MethodReturn());
 
         // ORIGEN
         startWorks.add(new CreateBoolean(BOOL_VARIABLE, repository));
@@ -167,6 +182,8 @@ public class Setting implements Repository {
         startWorks.add(new MapPutAll(MAP_ADD));
         startWorks.add(new ForEach());
         startWorks.add(new TryCatch(TRY_CATCH));
+        startWorks.add(new DefineMethod(METHOD));
+        startWorks.add(new MethodVoid());
 
         // POISON
         startWorks.add(new Poison(POISON));
