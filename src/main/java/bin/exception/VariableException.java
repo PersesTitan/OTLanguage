@@ -10,6 +10,7 @@ public class VariableException extends RuntimeException {
     private final static String forTypeMatchError = "^^문의 타입으로 유효하지 않습니다.";
     private final static String definedMethodName = "이미 정의된 메소드 이름입니다.";
     private final static String methodParamsCount = "매개변수 갯수가 일치하지 않습니다.";
+    private final static String methodTypeMatch = "메소드 타입이 일치하지 않습니다.";
 
     public VariableException(String message) {
         super(message);
@@ -26,9 +27,14 @@ public class VariableException extends RuntimeException {
             case forTypeMatchError -> "^^ It is not valid as a return value of the query.\nPlease check the variable type";
             case definedMethodName -> "The method name already defined.\nPlease check the defined name.";
             case methodParamsCount -> "The number of parameters does not match.\nPlease check the number of parameters.";
+            case methodTypeMatch -> "Method types do not match.\nPlease check the corresponding method type.";
             default -> "";
         };
         ErrorMessage.printErrorMessage(e, subMessage, path, line, position);
+    }
+
+    public static VariableException methodTypeMatch() {
+        return new VariableException(methodTypeMatch);
     }
 
     public static VariableException methodParamsCount() {
