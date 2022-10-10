@@ -1,5 +1,4 @@
 import bin.apply.Setting;
-import bin.apply.sys.item.HpMap;
 import bin.apply.sys.item.RunType;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
@@ -9,14 +8,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 import static bin.apply.Controller.*;
 import static bin.apply.sys.item.Separator.SEPARATOR_HOME;
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.token.LoopToken.LOOP_TOKEN;
-import static bin.token.VariableToken.TOTAL_LIST;
 
 public class Main extends Setting {
 
@@ -63,7 +60,7 @@ public class Main extends Setting {
         else if (!file.canRead()) throw FileException.noReadError();
         else if (!extensionCheck(file.getName())) throw FileException.rightExtension();
         Setting.firstStart();
-        TOTAL_LIST.forEach(v -> COPY_REPOSITORY.put(v, new HpMap<>()));
+//        TOTAL_LIST.forEach(v -> COPY_REPOSITORY.put(v, new HpMap<>()));
 //        repository.putAll((Map<String, Map<String, Object>>) COPY_REPOSITORY.clone());
 //        new ReadOTLM().readSetting("system.otls");
 

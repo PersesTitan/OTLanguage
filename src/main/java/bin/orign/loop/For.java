@@ -28,7 +28,7 @@ public class For implements
     public For() {
         this.patternText = blackMerge(NUMBER, FOR, NUMBER, FOR, NUMBER);
         this.matcher = Pattern.compile(
-                startEndMerge(patternText, BLANKS, BRACE_STYLE(), "(", BLANKS, PUTIN, ")?"))
+                startEndMerge(patternText, BLANKS, BRACE_STYLE, "(", BLANKS, PUTIN, ")?"))
                 .matcher("");
         this.m = Pattern.compile(START + patternText).matcher("");
     }

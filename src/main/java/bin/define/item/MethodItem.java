@@ -38,18 +38,18 @@ public record MethodItem(String[][] params, MethodType methodType, String return
     // ================================================== //
     public String startReturn(String[] params, Map<String, Map<String, Object>> repositoryArray) {
         getVariable(params, repositoryArray);
-        return getVariable(returnVariable, repository);
+        return getVariable(returnVariable);
     }
 
     public String startReturn(String[] params,
                               Map<String, Map<String, Object>> repositoryArray1,
                               Map<String, Map<String, Object>> repositoryArray2) {
         getVariable(params, repositoryArray1, repositoryArray2);
-        return getVariable(returnVariable, repository);
+        return getVariable(returnVariable);
     }
 
     // ============================= TOOL ============================= //
-    private static final Map<String, Map<String, Object>> repository = (HashMap<String, Map<String, Object>>) COPY_REPOSITORY.clone();
+    private static final Map<String, Map<String, Object>> repository = (Map<String, Map<String, Object>>) COPY_REPOSITORY.clone();
     private void getRepository(String[] params) {
         if (params.length != this.params.length) throw VariableException.methodParamsCount();
         repository.values().forEach(Map::clear);
@@ -85,7 +85,7 @@ public record MethodItem(String[][] params, MethodType methodType, String return
     }
 
     // 변수값을 가져오는 작업
-    private String getVariable(String variable, Map<String, Map<String, Object>> repository) {
+    private String getVariable(String variable) {
         for (var rep : repository.entrySet()) {
             var value = rep.getValue();
             if (value.containsKey(variable)) return value.get(variable).toString();

@@ -18,7 +18,7 @@ public class TryCatch implements StartWork, LoopToken {
 
     public TryCatch(String type) {
         this.matcher = Pattern
-                .compile(startEndMerge(type, BLANKS, BRACE_STYLE()))
+                .compile(startEndMerge(type, BLANKS, BRACE_STYLE))
                 .matcher("");
     }
 

@@ -19,7 +19,7 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
 
     public ForEach() {
         String black = blackMerge(FOR, "(" + ARGUMENT + "|", VARIABLE_ACCESS + ")", FOR);
-        String patternText = startEndMerge(black, BLANKS, BRACE_STYLE(), BLANKS, PUTIN);
+        String patternText = startEndMerge(black, BLANKS, BRACE_STYLE, BLANKS, PUTIN);
         this.matcher = Pattern.compile(patternText).matcher("");
     }
 

@@ -16,7 +16,7 @@ public class PoisonPost implements PoisonTools, StartWork {
         String patternText = startEndMerge(
                 text,
                 BL, "[^", BL, BR, "]+", BR, "(", or, ")*",
-                BLANKS, BRACE_STYLE(), BLANKS, RETURN);
+                BLANKS, BRACE_STYLE, BLANKS, RETURN);
         this.pattern = Pattern.compile(patternText);
     }
 

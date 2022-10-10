@@ -20,7 +20,7 @@ public class While implements StartWork, LoopToken, BoolToken {
     public While(String type) {
         this.type = type;
         this.matcher =
-                Pattern.compile(startEndMerge(type, BLANKS, BOOL, BLANKS, BRACE_STYLE()))
+                Pattern.compile(startEndMerge(type, BLANKS, BOOL, BLANKS, BRACE_STYLE))
                 .matcher("");
     }
 
@@ -44,7 +44,7 @@ public class While implements StartWork, LoopToken, BoolToken {
 
         String b = origen.strip()
                 .replaceFirst(START + type, "")
-                .replaceFirst(BRACE_STYLE() + END, "")
+                .replaceFirst(BRACE_STYLE + END, "")
                 .strip();
 
         while (bool) {

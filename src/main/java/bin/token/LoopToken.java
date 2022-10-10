@@ -19,13 +19,9 @@ public interface LoopToken extends VariableToken {
         add(METHOD);
     }};
 
-    default String BRACE_STYLE() {
-//        return SL + "(" + String.join("|", LOOP_TOKEN.keySet()) + "),[0-9]+,[0-9]+" + SR;
-        return SL + FILE_TYPE + ",[0-9]+,[0-9]+" + SR;
-    }
     String BRACE_STYLE = SL + FILE_TYPE + ",[0-9]+,[0-9]+" + SR;
 
-    String ARGUMENT = BL + "[" + "\\s\\S" + "]*" + BR; // [...]
+    String ARGUMENT = BL + "[\\s\\S]*" + BR; // [...]
 
     String LINE_NUMBER = "[0-9]+ ";
     String RETURN_TOKEN = "=>";

@@ -28,7 +28,7 @@ public class MainTest implements LoopToken {
         String patternText = startEndMerge(
                 METHOD, BLANKS, VARIABLE_HTML,
                 "(", "(", BL, params, BR, ")+", "|", BL, BR, ")",
-                BLANKS, BRACE_STYLE(),
+                BLANKS, BRACE_STYLE,
                 "(", BLANK, RETURN, ")?");
 
         String[] strings = {"ㅇㅅㅇ ㅁㄴㄴ", "ㅇㅈㅇ ㅁㄴㅇㄹ", "ㅇㅈㅇ ㅁㄴㅇㄹ"};
