@@ -1,5 +1,6 @@
 package bin.exception;
 
+import bin.apply.Setting;
 import bin.apply.sys.item.Color;
 import bin.apply.sys.item.RunType;
 
@@ -10,7 +11,7 @@ public interface ErrorMessage {
         String message = "OTLanguage." + e.getClass().getSimpleName() + ": " +
                 e.getMessage() +
                 (subMessage.isBlank() ? "" : subMessage.replaceAll("(^|\\n)","\n\totl "));
-        if (runType.equals(RunType.Shell)) System.out.println(Color.RED + message + Color.RESET);
+        if (runType.equals(RunType.Shell)) Setting.errorMessage(message);
         else System.err.println(message);
     }
 
@@ -19,7 +20,7 @@ public interface ErrorMessage {
                 e.getMessage() +
                 "\n\totl Path(" + path + ")" +
                 (subMessage.isBlank() ? "" : subMessage.replaceAll("(^|\\n)","\n\totl "));
-        if (runType.equals(RunType.Shell)) System.out.println(Color.RED + message + Color.RESET);
+        if (runType.equals(RunType.Shell)) Setting.errorMessage(message);
         else System.err.println(message);
     }
 
@@ -29,7 +30,7 @@ public interface ErrorMessage {
                 (path == null ? "" : "\n\totl file location where it occurred(" + path + ":" + position + ")") +
                 "\n\totl line that occurred(" + line + ")" +
                 (subMessage.isBlank() ? "" : subMessage.replaceAll("(^|\\n)","\n\totl "));
-        if (runType.equals(RunType.Shell)) System.out.println(Color.RED + message + Color.RESET);
+        if (runType.equals(RunType.Shell)) Setting.errorMessage(message);
         else System.err.println(message);
     }
 }
