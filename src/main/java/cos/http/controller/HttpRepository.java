@@ -1,5 +1,6 @@
 package cos.http.controller;
 
+import bin.apply.Setting;
 import bin.apply.sys.item.Color;
 
 import java.text.SimpleDateFormat;
@@ -51,7 +52,7 @@ public interface HttpRepository {
 
     default void printLog(HttpMethod method, String path, String query) {
         //[2022-07-12 18:58:53] GET   [경로]  /  | [값]  name=hi
-        System.out.printf("%s[%s]%s", Color.YELLOW, new SimpleDateFormat(dateFormat).format(new Date()), Color.RESET);
+        Setting.warringMessage(String.format("[%s]", new SimpleDateFormat(dateFormat).format(new Date())));
         if (method.equals(HttpMethod.POST)) System.out.printf("%s %s %s", Color.POST_PRINT, method, Color.RESET);
         else System.out.printf("%s %s  %s", Color.GET_PRINT, method, Color.RESET);
         System.out.print(" [경로] ");
