@@ -24,7 +24,6 @@ public class DefineKlass implements LoopToken, StartWork {
         this.matcher = Pattern.compile(patternText).matcher("");
     }
 
-
     @Override
     public boolean check(String line) {
         return this.matcher.reset(line).find();
@@ -50,6 +49,7 @@ public class DefineKlass implements LoopToken, StartWork {
         int start = total.indexOf("\n" + fileInformation[1] + " ");
         int end = total.indexOf("\n" + fileInformation[2] + " ");
 
+        var repository = repositoryArray[0].get(this.type);
 
     }
 

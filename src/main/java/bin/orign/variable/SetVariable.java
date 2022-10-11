@@ -32,7 +32,6 @@ public class SetVariable implements ReturnWork, VariableToken {
         return line;
     }
 
-
     private String getValue(String group, String variableName, String line,
                             Map<String, Map<String, Object>> repository) {
         for (var rep : repository.values()) {

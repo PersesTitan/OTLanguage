@@ -32,6 +32,5 @@ public class DefineMethodTest {
             if (defineMethod.check(v)) defineMethod.start(v, v, new Map[]{map});
         });
 
-        System.out.println(map);
     }
 }

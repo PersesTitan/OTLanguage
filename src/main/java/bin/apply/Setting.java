@@ -34,6 +34,11 @@ import bin.orign.loop.If;
 import bin.orign.variable.SetVariable;
 import bin.orign.variable.origin.put.PutVariable;
 import bin.orign.variable.set.get.*;
+import bin.string.Contains;
+import bin.string.Join;
+import bin.string.Split;
+import bin.string.SplitRegular;
+import bin.token.StringToken;
 import cos.poison.Poison;
 
 import java.io.BufferedReader;
@@ -47,6 +52,7 @@ import java.util.Map;
 import static bin.apply.Controller.variableDefault;
 import static bin.token.ConsoleToken.*;
 import static bin.token.LoopToken.*;
+import static bin.token.StringToken.*;
 import static bin.token.cal.NumberToken.*;
 
 public class Setting implements Repository {
@@ -131,6 +137,10 @@ public class Setting implements Repository {
         returnWorks.add(new ListGet(LIST_GET));
         returnWorks.add(new MapGet(MAP_GET));
         returnWorks.add(new MethodReturn());
+        returnWorks.add(new Join(JOIN));
+        returnWorks.add(new Split(SPLIT));
+        returnWorks.add(new SplitRegular(SPLIT_REGULAR));
+        returnWorks.add(new Contains(CONTAINS));
 
         // ORIGEN
         startWorks.add(new CreateBoolean(BOOL_VARIABLE, repository));
