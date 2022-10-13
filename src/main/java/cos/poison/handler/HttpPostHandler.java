@@ -14,7 +14,7 @@ import static cos.poison.controller.HttpServerManager.uriParser;
 
 public class HttpPostHandler implements HttpHandlerInf {
     public HandlerDao handle(HttpExchange exchange) {
-        var isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_16);
+        var isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
         try (var br = new BufferedReader(isr)) {
             Map<String, Object> parameters = new HashMap<>();
 
