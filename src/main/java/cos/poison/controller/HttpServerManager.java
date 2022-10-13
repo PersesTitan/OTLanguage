@@ -1,6 +1,7 @@
 package cos.poison.controller;
 
 import bin.apply.Setting;
+import bin.token.MergeToken;
 import com.sun.net.httpserver.HttpServer;
 import cos.http.controller.HttpMethod;
 import cos.http.controller.HttpRepository;
@@ -13,11 +14,17 @@ import cos.poison.root.HandlerRoot;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-public class HttpServerManager implements HttpRepository {
+public class HttpServerManager implements HttpRepository, MergeToken {
     public final static UriParser uriParser = new UriParser();
     public final static HttpHandlerInf httpGetHandler = new HttpGetHandler();
     public final static HttpHandlerInf httpPostHandler = new HttpPostHandler();
+    public final static Map<String, HandlerItem> postMap = new HashMap<>();
+    public final static Map<String, HandlerItem> getMap = new HashMap<>();
 
     public static HttpServer httpServer;
     public String host = "localhost";
@@ -37,6 +44,11 @@ public class HttpServerManager implements HttpRepository {
     public void start() {
         if (httpServer != null) {
             try {
+                Set<String> set = new HashSet<>();
+                set.addAll(postMap.keySet());
+                set.addAll(getMap.keySet());
+                set.forEach(v -> httpServer.createContext(v, new HandlerRoot()));
+
                 httpServer.start();
                 System.out.printf("URL http://%s:%d/\n", host, port);
                 startServerPrint();
@@ -46,15 +58,17 @@ public class HttpServerManager implements HttpRepository {
 
     // POST 추가
     public void addPost(String path, String[] total, String[][] params, String html) {
-        if (httpServer != null) httpServer.createContext(path,
-                new HandlerRoot(path, HttpMethod.POST, total, params, html, "text/html;charset=UTF-8"));
+        if (httpServer != null)
+            postMap.put(path, new HandlerItem(total[0], getLoopTotal(total), params,
+                    HttpMethod.POST, html, "text/html;charset=UTF-8"));
         else Setting.errorMessage("서버가 존재하지 않습니다.");
     }
 
     // GET 추가
     public void addGet(String path, String[] total, String[][] params, String html) {
-        if (httpServer != null) httpServer.createContext(path,
-                new HandlerRoot(path, HttpMethod.GET, total, params, html, "text/html;charset=UTF-8"));
+        if (httpServer != null)
+            getMap.put(path, new HandlerItem(total[0], getLoopTotal(total), params,
+                        HttpMethod.POST, html, "text/html;charset=UTF-8"));
         else Setting.errorMessage("서버가 존재하지 않습니다.");
     }
 
