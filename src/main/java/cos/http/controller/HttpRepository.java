@@ -1,11 +1,11 @@
 package cos.http.controller;
 
-import bin.apply.Setting;
 import bin.apply.sys.item.Color;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static cos.http.controller.HttpMethod.POST;
 import static cos.poison.controller.HttpServerManager.httpServer;
 
 public interface HttpRepository {
@@ -52,8 +52,8 @@ public interface HttpRepository {
 
     default void printLog(HttpMethod method, String path, String query) {
         //[2022-07-12 18:58:53] GET   [경로]  /  | [값]  name=hi
-        Setting.warringMessage(String.format("[%s]", new SimpleDateFormat(dateFormat).format(new Date())));
-        if (method.equals(HttpMethod.POST)) System.out.printf("%s %s %s", Color.POST_PRINT, method, Color.RESET);
+        System.out.printf("[%s]", new SimpleDateFormat(dateFormat).format(new Date()));
+        if (method.equals(POST)) System.out.printf("%s %s %s", Color.POST_PRINT, method, Color.RESET);
         else System.out.printf("%s %s  %s", Color.GET_PRINT, method, Color.RESET);
         System.out.print(" [경로] ");
         System.out.printf("%s %s %s",Color.QUERY_PRINT, path == null ? "" : path, Color.RESET);
