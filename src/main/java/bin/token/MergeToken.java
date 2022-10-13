@@ -90,4 +90,11 @@ public interface MergeToken {
         // test, total
         return new String[]{variables[0], total.substring(start, end)};
     }
+
+    default String getLoopTotal(String[] input) {
+        String total = LOOP_TOKEN.get(input[0]);
+        int start = total.indexOf("\n" + input[1] + " ");
+        int end = total.indexOf("\n" + input[2] + " ");
+        return total.substring(start, end);
+    }
 }
