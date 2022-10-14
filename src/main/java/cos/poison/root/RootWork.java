@@ -4,12 +4,7 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
-import java.net.CookieManager;
-import java.net.HttpCookie;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Objects;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class RootWork {
     public void redirect(HttpExchange exchange, Headers headers, String newUrl) throws IOException {
@@ -30,13 +25,15 @@ public class RootWork {
         headers.add("Set-Cookie", cookie.toString());
     }
 
-
-    public void getCookie(Headers headers, String key) {
-        StringTokenizer cookies = new StringTokenizer(headers.get("Cookie").get(0), ";");
+    public String getCookie(Headers headers, String key) {
+        List<String> cookie = headers.getOrDefault("Cookie", null);
+        if (cookie == null || cookie.isEmpty()) return null;
+        StringTokenizer cookies = new StringTokenizer(cookie.get(0), ";");
         while (cookies.hasMoreTokens()) {
-            String[] tokens = cookies.nextToken().split("=", 2)[0]
+            String[] tokens = cookies.nextToken().split("=", 2);
+            if (tokens[0].strip().equals(key)) return tokens[1];
         }
-
+        return null;
     }
 
 }
