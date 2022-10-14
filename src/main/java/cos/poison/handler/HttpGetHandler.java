@@ -20,13 +20,7 @@ public class HttpGetHandler implements HttpHandlerInf {
             uriParser.parsesQuery(query, parameters);
 
             String path = exchange.getRequestURI().getPath();
-            StringBuilder response = new StringBuilder();
-            parameters.forEach((key, value) -> response
-                    .append(key)
-                    .append("=")
-                    .append(value == null ? "" : value)
-                    .append(" "));
-            return new HandlerDao(response.toString(), path, parameters);
+            return new HandlerDao(parameters.isEmpty() ? "" : parameters.toString(), path, parameters);
         } catch (UnsupportedEncodingException e) {
             throw ServerException.fileReadError();
         }
