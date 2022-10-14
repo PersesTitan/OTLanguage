@@ -7,9 +7,7 @@ import bin.orign.variable.origin.put.SetVariableValue;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import cos.http.controller.HttpMethod;
 import cos.http.controller.HttpRepository;
-import cos.poison.handler.HttpHandlerInf;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -66,38 +64,6 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         } else {
             if (!path.equals("/favicon.ico")) warringMessage("[" + method + "][" + path + "]가 정의되어 있지 않습니다.");
         }
-
-//        if (this.path.equals(path) && method.equals(this.method.name())) {
-//            try (exchange; OutputStream responsive = exchange.getResponseBody()) {
-//                // 정보 받아오기
-//                var handlerDao = getHttpHandlerInf(this.method).handle(exchange);
-//                // 저장공간 생성
-//                Map<String, Object> parameters = handlerDao.parameters();
-//                setParameters(parameters);
-//
-//                printLog(this.method, path, handlerDao.value());
-//                serverStart(repository);
-//
-//                String htmlTotal = Files.readString(Path.of(html));
-//                ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(variableHTML.replace(htmlTotal));
-//
-//                int contentLen = byteBuffer.limit();
-//                byte[] content = new byte[contentLen];
-//                byteBuffer.get(content, 0, contentLen);
-//
-//                Headers headers = exchange.getResponseHeaders();
-//                headers.add("Content-Type", contentType);
-//                headers.add("Content-Length", String.valueOf(contentLen));
-//
-//                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, contentLen);
-//                responsive.write(content);
-//            } catch (IOException e) {throw ServerException.serverReadError();}
-//        } else {
-//            if (!path.equals("/favicon.ico")) {
-//                String message = "[" + method + "][" + path + "]가 정의되어 있지 않습니다.";
-//                System.out.println(message);
-//            }
-//        }
     }
 
     private void setParameters(Map<String, Object> parameters, String[][] params) {
