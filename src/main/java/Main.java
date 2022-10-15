@@ -29,14 +29,18 @@ public class Main extends Setting {
 //            }
 //        });
 
-        args = new String[]{SEPARATOR_HOME, "hello.otl"};
+//        args = new String[]{SEPARATOR_HOME, "hello.otl"};
 //        args = new String[]{SEPARATOR_HOME};
 
-        try {
-            new Main(args);
-        } catch (FileException e) {
-            FileException.printErrorMessage(e, Setting.mainPath);
-        } finally {try {br.close(); bw.close();} catch (IOException ignored) {}}
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+
+        } else {
+            try {
+                new Main(args);
+            } catch (FileException e) {
+                FileException.printErrorMessage(e, Setting.mainPath);
+            } finally {try {br.close(); bw.close();} catch (IOException ignored) {}}
+        }
     }
 
     private Main(String[] args) {
