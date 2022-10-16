@@ -1,40 +1,47 @@
 package http;
 
 import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import cos.poison.root.HandlerRoot;
 import cos.poison.root.RootWork;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
 
-public class URLTest {
+public class URLTest implements RootWork {
     public static void main(String[] args) throws IOException {
+        new URLTest();
+    }
+
+    public URLTest() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(9090), 0);
         String newUrl ="/a";
-        server.createContext("/", t -> {
+        server.createContext("/", new Handler());
+        server.createContext("/{id}/a", t -> new Handler());
+        server.start();
+    }
+
+    class Handler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            System.out.println(exchange.getRequestURI().getRawPath());
+            System.out.println(exchange.getRequestURI().getPath());
             String response = "This is the response";
 //            Headers responseHeaders = t.getResponseHeaders();
 //            responseHeaders.set("Location", newUrl);
 
-            RootWork rootWork = new RootWork();
-            Headers headers = t.getResponseHeaders();
-            
-            rootWork.setCookie(headers, "test1", "1", null, 20);
-            rootWork.setCookie(headers, "test2", "2", null, -1);
+            Headers headers = exchange.getResponseHeaders();
 
-            System.out.println(rootWork.getCookie(t.getRequestHeaders(), "test1"));
-            System.out.println(rootWork.getCookie(t.getRequestHeaders(), "test2"));
-            System.out.println(rootWork.getCookie(t.getRequestHeaders(), "test3"));
+            setCookie(headers, "test1", "1", null, 20);
+            setCookie(headers, "test2", "2", null, -1);
+            exchange.sendResponseHeaders(200,0);
 
-            t.sendResponseHeaders(200,0);
-
-            OutputStream os = t.getResponseBody();
+            OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
-        });
-
-        server.start();
+        }
     }
-
 }
