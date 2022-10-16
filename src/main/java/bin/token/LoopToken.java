@@ -50,4 +50,7 @@ public interface LoopToken extends VariableToken {
     String POISON_GET = "ㄱㅅㄱ";
     String POISON_START = "ㅅㅌㅅ";
     String MODEL = "ㅁㄷㅁ";
+    String REDIRECT = "";
+    String GET_COOKIE = "";
+    String SET_COOKIE = "";
 }
