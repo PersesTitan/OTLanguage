@@ -6,13 +6,12 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.util.*;
 
-public class RootWork {
-    public void redirect(HttpExchange exchange, Headers headers, String newUrl) throws IOException {
+public interface RootWork {
+    default void redirect(Headers headers, String newUrl){
         headers.set("Location", newUrl);
-        exchange.sendResponseHeaders(302, 0);
     }
 
-    public void setCookie(Headers headers, String key, String value, String path, int maxAge) {
+    default void setCookie(Headers headers, String key, String value, String path, int maxAge) {
         StringBuilder cookie = new StringBuilder();
         cookie.append(key).append("=").append(value);
         if (maxAge != -1) {
@@ -25,7 +24,7 @@ public class RootWork {
         headers.add("Set-Cookie", cookie.toString());
     }
 
-    public String getCookie(Headers headers, String key) {
+    default String getCookie(Headers headers, String key) {
         List<String> cookie = headers.getOrDefault("Cookie", null);
         if (cookie == null || cookie.isEmpty()) return null;
         StringTokenizer cookies = new StringTokenizer(cookie.get(0), ";");
@@ -35,5 +34,4 @@ public class RootWork {
         }
         return null;
     }
-
 }
