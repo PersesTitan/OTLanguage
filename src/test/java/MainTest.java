@@ -1,4 +1,6 @@
+import bin.exception.MatchException;
 import bin.token.LoopToken;
+import org.apache.xerces.impl.xpath.regex.Match;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,6 +9,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 
@@ -15,6 +18,15 @@ public class MainTest implements LoopToken {
 //        Taskbar.getTaskbar().setIconImage(Toolkit.getDefaultToolkit().getImage("/Users/persestitan/Documents/GitHub/OTLanguage/OTLanguage.png"));
 //        Robot robot = new Robot();
 //        JFrame frame = new JFrame("test");
+        try {
+        } catch (PatternSyntaxException e) {
+            String text = e.getDescription();
+            String start = "Named capturing group <";
+            int a = text.indexOf(start) + start.length();
+            int b = text.lastIndexOf("> is already defined");
+            if (b == -1 || a-start.length() == -1) throw MatchException.patternMatchError(null);
+            throw MatchException.patternMatchError(text.substring(a, b));
+        }
 
         System.out.println(Arrays.toString("메소드명[]".substring(0, "메소드명[]".length() - 1).split(BL)));
         System.out.println(Arrays.toString("메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ]".substring(0, "메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ]".length() - 1).split(BL)));
