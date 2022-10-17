@@ -1,6 +1,7 @@
 package cos.poison.controller;
 
 import bin.apply.Setting;
+import bin.apply.sys.make.ChangeHangle;
 import bin.token.MergeToken;
 import com.sun.net.httpserver.HttpServer;
 import cos.http.controller.HttpMethod;
@@ -11,20 +12,19 @@ import cos.poison.handler.HttpPostHandler;
 import cos.poison.handler.UriParser;
 import cos.poison.root.HandlerRoot;
 
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-public class HttpServerManager implements HttpRepository, MergeToken {
+import static bin.token.VariableToken.*;
+
+public class HttpServerManager implements HttpRepository, MergeToken, ChangeHangle {
     public final static UriParser uriParser = new UriParser();
     public final static HttpHandlerInf httpGetHandler = new HttpGetHandler();
     public final static HttpHandlerInf httpPostHandler = new HttpPostHandler();
-    public final static Map<String, HandlerItem> postMap = new HashMap<>();
-    public final static Map<String, HandlerItem> getMap = new HashMap<>();
+    public final static Map<HttpMethod, Map<String, HandlerItem>> httpMethod = new HashMap<>();
+    static {for (HttpMethod method : HttpMethod.values()) httpMethod.put(method, new HashMap<>());}
 
     public static HttpServer httpServer;
     public String host = "localhost";
@@ -44,34 +44,45 @@ public class HttpServerManager implements HttpRepository, MergeToken {
     public void start() {
         if (httpServer != null) {
             try {
-                Set<String> set = new HashSet<>();
-                set.addAll(postMap.keySet());
-                set.addAll(getMap.keySet());
-                set.forEach(v -> httpServer.createContext(v, new HandlerRoot()));
-
-                httpServer.start();
+                httpServer.createContext("/", new HandlerRoot())
+                        .getServer().start();
                 System.out.printf("URL http://%s:%d/\n", host, port);
                 startServerPrint();
             } catch (Exception e) {Setting.errorMessage("서버 실행에 실패하였습니다.");}
         } else Setting.errorMessage("서버가 존재하지 않습니다.");
     }
 
+    // "text/html;charset=UTF-8"
     // POST 추가
     public void addPost(String path, String[] total, String[][] params, String html) {
         if (httpServer != null)
-            postMap.put(path, new HandlerItem(total[0], getLoopTotal(total), params,
-                    HttpMethod.POST, html, "text/html;charset=UTF-8"));
+            putHttpMethod(HttpMethod.POST, path,
+                    new HandlerItem(total[0], getLoopTotal(total), params, html, null));
         else Setting.errorMessage("서버가 존재하지 않습니다.");
     }
 
     // GET 추가
     public void addGet(String path, String[] total, String[][] params, String html) {
         if (httpServer != null)
-            getMap.put(path, new HandlerItem(total[0], getLoopTotal(total), params,
-                        HttpMethod.POST, html, "text/html;charset=UTF-8"));
+            putHttpMethod(HttpMethod.GET, path,
+                    new HandlerItem(total[0], getLoopTotal(total), params, html, null));
         else Setting.errorMessage("서버가 존재하지 않습니다.");
     }
 
+    private void putHttpMethod(HttpMethod method, String path, HandlerItem value) {
+        String numberType = String.format("(?<$0>%s)", "[0-9]+");
+        String otherType = String.format("(?<$0>%s)", "[^/]+");
+        path = (path.endsWith("/") ? path : path + "/")
+                .replaceAll(INT_VARIABLE + VARIABLE_PUT + VARIABLE_HTML, numberType)
+                .replace("<" + INT_VARIABLE + VARIABLE_PUT, "<")
+                .replaceAll(VARIABLE_PUT + VARIABLE_HTML, otherType)
+                .replace("<" + VARIABLE_PUT, "<");
+        path = ;
+        checkPattern(path);
+        HttpServerManager.httpMethod.get(method).put(path, value);
+    }
+
+    // ============================================= //
     public static HttpHandlerInf getHttpHandlerInf(HttpMethod httpMethod) {
         return switch (httpMethod) {
             case POST -> httpPostHandler;
