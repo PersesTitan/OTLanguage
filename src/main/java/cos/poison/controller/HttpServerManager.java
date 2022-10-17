@@ -77,9 +77,7 @@ public class HttpServerManager implements HttpRepository, MergeToken, ChangeHang
                 .replace("<" + INT_VARIABLE + VARIABLE_PUT, "<")
                 .replaceAll(VARIABLE_PUT + VARIABLE_HTML, otherType)
                 .replace("<" + VARIABLE_PUT, "<");
-        path = ;
-        checkPattern(path);
-        HttpServerManager.httpMethod.get(method).put(path, value);
+        HttpServerManager.httpMethod.get(method).put(checkPattern(change(path)), value);
     }
 
     // ============================================= //
