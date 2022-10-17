@@ -1,3 +1,4 @@
+import bin.apply.sys.make.ChangeHangle;
 import bin.exception.MatchException;
 import bin.token.LoopToken;
 import org.apache.xerces.impl.xpath.regex.Match;
@@ -13,11 +14,12 @@ import java.util.regex.PatternSyntaxException;
 
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 
-public class MainTest implements LoopToken {
+public class MainTest implements LoopToken, ChangeHangle {
     public static void main(String[] args) {
 //        Taskbar.getTaskbar().setIconImage(Toolkit.getDefaultToolkit().getImage("/Users/persestitan/Documents/GitHub/OTLanguage/OTLanguage.png"));
 //        Robot robot = new Robot();
 //        JFrame frame = new JFrame("test");
+
         try {
         } catch (PatternSyntaxException e) {
             String text = e.getDescription();
@@ -36,6 +38,8 @@ public class MainTest implements LoopToken {
     }
 
     public MainTest() {
+
+        System.out.println(change("asaㅁㄴㅇㄹㄴㄹ 앙나나 "));
         String params = orMerge(TOTAL_LIST) + BLANKS + VARIABLE_HTML;
         String patternText = startEndMerge(
                 METHOD, BLANKS, VARIABLE_HTML,
