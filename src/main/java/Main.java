@@ -30,7 +30,7 @@ public class Main extends Setting {
 //            }
 //        });
 
-//        args = new String[]{SEPARATOR_HOME, "hello.otl"};
+        args = new String[]{SEPARATOR_HOME, "hello.otl"};
 //        args = new String[]{SEPARATOR_HOME};
 
         try {
