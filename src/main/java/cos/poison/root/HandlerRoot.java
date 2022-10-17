@@ -9,6 +9,7 @@ import com.sun.net.httpserver.HttpHandler;
 import cos.http.controller.HttpMethod;
 import cos.http.controller.HttpRepository;
 import cos.poison.controller.HandlerItem;
+import cos.poison.handler.HandlerDao;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,7 +32,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         String path = exchange.getRequestURI().getPath();
         path = path.endsWith("/") ? path : path + "/";
         try (exchange; OutputStream responseBody = exchange.getResponseBody()) {
-            HttpMethod method = HttpMethod.valueOf(exchange.getRequestMethod());;
+            HttpMethod method = HttpMethod.valueOf(exchange.getRequestMethod());
 
             Headers responseHeader = exchange.getResponseHeaders(); // 응답(send)
             Headers requestHeader = exchange.getRequestHeaders();   // 요청(get)
@@ -47,7 +48,9 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
                 serverStart(repository, handlerItem.startFinalTotal(), handlerItem.fileName());
 
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK,0);
-                responseBody.write(Files.readString(Path.of("index.html")).getBytes());
+                String responseValue = handlerItem.responseValue();
+                if (responseValue.endsWith(".html")) responseBody.write(html(responseValue));
+                else responseBody.write(responseValue.getBytes());
             } else {
                 // ==== 에러 동작 ====
                 if (!path.equals("/favicon.ico"))
@@ -96,8 +99,8 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
     }
 
     // Body Value
-    private byte[] html(HandlerItem handlerItem) throws IOException {
-        String htmlTotal = Files.readString(Path.of(handlerItem.responseValue()));
+    private byte[] html(String responseValue) throws IOException {
+        String htmlTotal = Files.readString(Path.of(responseValue));
         return variableHTML.replace(htmlTotal).getBytes();
     }
 
