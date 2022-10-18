@@ -74,7 +74,9 @@ public class Setting implements Repository {
         runMessage(errorLine);
     }
 
-    public static String lineStart(String line, Map<String, Map<String, Object>>[] repositoryArray) {
+    // ============================================================================== //
+    @SafeVarargs
+    public static String lineStart(String line, Map<String, Map<String, Object>>... repositoryArray) {
         if (variableDefault.check(line)) line = variableDefault.start(line);
 
         for (var work : returnWorks) {if (work.check(line)) line = work.start(line, repositoryArray);}
@@ -84,6 +86,7 @@ public class Setting implements Repository {
         return line;
     }
 
+    // ============================================================================== //
     // 메세지 세팅
     public static void runMessage(String errorLine) {
         warringMessage(String.format("경고! %s는 실행되지 않은 라인 입니다.", errorLine));
