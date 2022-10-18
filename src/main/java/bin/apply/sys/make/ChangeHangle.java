@@ -17,7 +17,7 @@ public interface ChangeHangle {
 
     Matcher matcher = Pattern.compile("[ㄱ-ㅎㅏ-ㅣ가-힣]").matcher("");
     default String change(String origin) {
-        if (matcher.reset(origin).find()) return origin;
+        if (!matcher.reset(origin).find()) return origin;
         StringBuilder builder = new StringBuilder();
         for(int i = 0; i < origin.length(); i++) {
             char uniVal = origin.charAt(i);
