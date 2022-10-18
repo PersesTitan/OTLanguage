@@ -1,5 +1,6 @@
 package bin.apply.sys.make;
 
+import bin.apply.Repository;
 import bin.apply.Setting;
 import bin.apply.sys.item.RunType;
 import bin.exception.ConsoleException;
@@ -89,22 +90,25 @@ public class StartLine implements LoopToken {
     @SafeVarargs
     public static void startPoison(String total, String fileName,
                                      Map<String, Map<String, Object>>... repository) {
+        CONTINUE:
         for (var line : bracket.bracket(total, fileName, false).split("\\n")) {
-            line = setError(line, total).strip();
+            if (line.isBlank()) continue;
+            line = setError(line, total);
+            final String origen = line;
+            for (var work : Repository.priorityWorks) {     // 강제 동작
+                if (work.check(line)) {work.start(line, origen, repository);continue CONTINUE;}}
 
             line = Setting.lineStart(line, repository);
+            // ㅁㄷㅁ 변수명:HTML 변수명 ( HTML 변수명 등록 )
             if (variableHTML.check(line)) {variableHTML.start(line); continue;}
-            Setting.start(line, errorLine.get(), repository);
+            for (var work : Repository.startWorks) {        // 시작 동작
+                if (work.check(line)) {work.start(line, origen, repository);continue CONTINUE;}}
+            Setting.runMessage(origen);
         }
-//        for (var line : total.split("\\n")) {
-//            line = setError(line, total).strip();
-//            if (variableHTML.check(line)) {variableHTML.start(line); return;}
-//            Setting.start(line, errorLine.get(), repository);
-//        }
     }
 
-    private static final AtomicLong errorCount = new AtomicLong(0);
-    private static final AtomicReference<String> errorLine = new AtomicReference<>("");
+    public static final AtomicLong errorCount = new AtomicLong(0);
+    public static final AtomicReference<String> errorLine = new AtomicReference<>("");
     public static final AtomicReference<String> errorPath = new AtomicReference<>();
     public static String setError(String line, String total) {
         Matcher matcher = pattern.matcher(line);
