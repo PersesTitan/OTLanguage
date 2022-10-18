@@ -39,6 +39,6 @@ public class PoisonPost implements PoisonTools, StartWork {
         // (start,1,10), index.html
         String[] total = matchSplitError(tokens[1], BLANK + RETURN_TOKEN + BLANK, 2);
 
-        Poison.httpServerManager.addPost(token[0], getTotal(total[0]), getParams(token), getHtml(total[1]));
+        Poison.httpServerManager.addPost(token[0], getTotal(total[0]), getParams(token), total[1]);
     }
 }
