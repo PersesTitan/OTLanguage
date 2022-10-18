@@ -44,7 +44,10 @@ public class HttpServerManager implements HttpRepository, MergeToken, ChangeHang
     public void start() {
         if (httpServer != null) {
             try {
-                httpServer.createContext("/", new HandlerRoot())
+                boolean b = httpMethod.entrySet()
+                        .stream()
+                        .allMatch(v -> v.getValue().isEmpty());
+                httpServer.createContext("/", new HandlerRoot(b ? new IndexPage().createHtml() : null))
                         .getServer().start();
                 System.out.printf("URL http://%s:%d/\n", host, port);
                 startServerPrint();
@@ -53,6 +56,8 @@ public class HttpServerManager implements HttpRepository, MergeToken, ChangeHang
     }
 
     // "text/html;charset=UTF-8"
+    // "text/plain"
+
     // POST 추가
     public void addPost(String path, String[] total, String[][] params, String html) {
         if (httpServer != null)
