@@ -17,6 +17,7 @@ import bin.math.sum.list.LongListSum;
 import bin.math.sum.set.FloatSetSum;
 import bin.math.sum.set.IntegerSetSum;
 import bin.math.sum.set.LongSetSum;
+import bin.orign.CreateList;
 import bin.orign.console.*;
 import bin.orign.loop.For;
 import bin.orign.loop.ForEach;
@@ -118,7 +119,9 @@ public class Setting implements Repository {
         TOTAL_LIST.forEach(v -> repository.put(v, new HpMap(v)));
 
         CreateOrigin createOrigin = new CreateOrigin();
+        CreateList createList = new CreateList();
         ORIGIN_LIST.forEach(v -> startWorkMap.put(v, createOrigin));
+        LIST_LIST.forEach(v -> startWorkMap.put(v, createList));
 
         priorityWorks.add(new ForceQuit(FORCE_QUIT));
         priorityWorks.add(new PriorityPrint(PRIORITY_PRINT));

@@ -3,6 +3,7 @@ package bin.orign;
 import bin.token.LoopToken;
 import work.StartWork;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class CreateList implements StartWork, LoopToken {
@@ -17,8 +18,8 @@ public class CreateList implements StartWork, LoopToken {
                       Map<String, Map<String, Object>>[] repositoryArray) {
         String[] values = matchSplitError(line, BLANKS, 2);
         // 변수명:1234  =>
-        String[] tokens = matchSplitError(values[1], VARIABLE_PUT, 2);
+        String[] tokens = matchSplitError(values[1], orMerge(VARIABLE_PUT, LIST_ADD), 2);
         variableDefineError(tokens[0], repositoryArray[0]);
-        repositoryArray[0].get(values[1]).put(tokens[0], tokens[1]);
+        repositoryArray[0].get(values[0]).put(tokens[0], VARIABLE_PUT + tokens[1]);
     }
 }
