@@ -16,8 +16,7 @@ public class CreateCharacterList implements StartWork, VariableToken, GetList {
     private final Matcher matcher;
     private final String type;
 
-    public CreateCharacterList(String type, Map<String, Map<String, Object>> repository) {
-        repository.put(type, new HpMap<>());
+    public CreateCharacterList(String type) {
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
         this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;

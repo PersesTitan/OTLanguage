@@ -16,8 +16,7 @@ public class CreateFloatList implements StartWork, VariableToken, GetList {
     private final Matcher matcher;
     private final String type;
 
-    public CreateFloatList(String type, Map<String, Map<String, Object>> repository) {
-        repository.put(type, new HpMap<>());
+    public CreateFloatList(String type) {
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
         this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
