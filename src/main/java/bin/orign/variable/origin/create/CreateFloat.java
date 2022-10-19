@@ -18,9 +18,8 @@ public class CreateFloat implements StartWork, VariableToken, Controller {
     private final Matcher matcher;
     private final String type;
 
-    public CreateFloat(String type, Map<String, Map<String, Object>> repository) {
+    public CreateFloat(String type) {
         String patternText = startMerge(type, BLANKS, VARIABLE_NAME, VARIABLE_PUT);
-        repository.put(type, new HpMap<>());
         this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
