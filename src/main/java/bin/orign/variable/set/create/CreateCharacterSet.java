@@ -20,8 +20,7 @@ public class CreateCharacterSet implements
     private final Matcher matcher;
     private final String type;
 
-    public CreateCharacterSet(String type, Map<String, Map<String, Object>> repository) {
-        repository.put(type, new HpMap<>());
+    public CreateCharacterSet(String type) {
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
         this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
