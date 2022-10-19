@@ -17,8 +17,7 @@ public class CreateBooleanSet implements
     private final Matcher matcher;
     private final String type;
 
-    public CreateBooleanSet(String type, Map<String, Map<String, Object>> repository) {
-        repository.put(type, new HpMap<>());
+    public CreateBooleanSet(String type) {
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
         this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
