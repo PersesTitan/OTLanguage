@@ -20,8 +20,7 @@ public class CreateStringSet implements
     private final Matcher matcher;
     private final String type;
 
-    public CreateStringSet(String type, Map<String, Map<String, Object>> repository) {
-        repository.put(type, new HpMap<>());
+    public CreateStringSet(String type) {
         this.patternText = startMerge(type, BLANKS, VARIABLE_NAME);
         this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
