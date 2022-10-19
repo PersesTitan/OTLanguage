@@ -1,12 +1,11 @@
-package bin.orign.variable;
+package bin.orign;
 
 import bin.token.LoopToken;
-import bin.token.MergeToken;
 import work.StartWork;
 
 import java.util.Map;
 
-public class CreateOrigin implements StartWork, LoopToken {
+public class CreateList implements StartWork, LoopToken {
 
     @Override
     public boolean check(String line) {
@@ -16,10 +15,10 @@ public class CreateOrigin implements StartWork, LoopToken {
     @Override
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
-//        String
+        String[] values = matchSplitError(line, BLANKS, 2);
         // 변수명:1234  =>
-        String[] tokens = matchSplitError(line, VARIABLE_PUT, 2);
+        String[] tokens = matchSplitError(values[1], VARIABLE_PUT, 2);
         variableDefineError(tokens[0], repositoryArray[0]);
-        repositoryArray[0].get()
+        repositoryArray[0].get(values[1]).put(tokens[0], tokens[1]);
     }
 }

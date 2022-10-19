@@ -7,7 +7,6 @@ import bin.apply.sys.run.FilePath;
 import bin.apply.sys.run.ForceQuit;
 import bin.apply.sys.run.Sleep;
 import bin.apply.sys.run.TryCatch;
-import bin.define.item.MethodItem;
 import bin.define.method.DefineMethod;
 import bin.define.method.MethodReturn;
 import bin.define.method.MethodVoid;
@@ -22,7 +21,7 @@ import bin.orign.console.*;
 import bin.orign.loop.For;
 import bin.orign.loop.ForEach;
 import bin.orign.loop.While;
-import bin.orign.variable.CreateOrigin;
+import bin.orign.CreateOrigin;
 import bin.orign.variable.list.create.*;
 import bin.orign.variable.list.get.*;
 import bin.orign.variable.map.create.*;
@@ -39,17 +38,12 @@ import bin.string.Contains;
 import bin.string.Join;
 import bin.string.Split;
 import bin.string.SplitRegular;
-import bin.token.StringToken;
 import cos.poison.Poison;
 import work.StartWork;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import static bin.apply.Controller.variableDefault;
 import static bin.token.ConsoleToken.*;
@@ -71,6 +65,13 @@ public class Setting implements Repository {
                              Map<String, Map<String, Object>>...repositoryArray) {
         if (line.isBlank()) return;
         String origen = line;
+
+        String value = new StringTokenizer(line).nextToken();
+        if (startWorkMap.containsKey(value)) {
+            startWorkMap.get(value).start(line, origen, repositoryArray);
+            return;
+        }
+
         for (var work : priorityWorks) {if (work.check(line)) {work.start(line, origen, repositoryArray); return;}}
         line = lineStart(line, repositoryArray);
         for (var work : startWorks) {if (work.check(line)) {work.start(line, origen, repositoryArray);return;}}
