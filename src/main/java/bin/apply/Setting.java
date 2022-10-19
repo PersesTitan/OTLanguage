@@ -22,6 +22,7 @@ import bin.orign.console.*;
 import bin.orign.loop.For;
 import bin.orign.loop.ForEach;
 import bin.orign.loop.While;
+import bin.orign.variable.CreateOrigin;
 import bin.orign.variable.list.create.*;
 import bin.orign.variable.list.get.*;
 import bin.orign.variable.map.create.*;
@@ -40,6 +41,7 @@ import bin.string.Split;
 import bin.string.SplitRegular;
 import bin.token.StringToken;
 import cos.poison.Poison;
+import work.StartWork;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -61,6 +63,8 @@ public class Setting implements Repository {
     public static String mainPath;
     public static String path;
     public static RunType runType;
+
+    public static Map<String, StartWork> startWorkMap = new HashMap<>();
 
     @SafeVarargs
     public static void start(String line, String errorLine,
@@ -109,7 +113,11 @@ public class Setting implements Repository {
         noUse.add(RANDOM_FLOAT);
         noUse.add(RANDOM_INTEGER);
         noUse.add(RANDOM_LONG);
-        TOTAL_LIST.forEach(v -> COPY_REPOSITORY.put(v, new HpMap<>()));
+        TOTAL_LIST.forEach(v -> COPY_REPOSITORY.put(v, new HpMap(v)));
+        TOTAL_LIST.forEach(v -> repository.put(v, new HpMap(v)));
+
+        CreateOrigin createOrigin = new CreateOrigin();
+        ORIGIN_LIST.forEach(v -> startWorkMap.put(v, createOrigin));
 
         priorityWorks.add(new ForceQuit(FORCE_QUIT));
         priorityWorks.add(new PriorityPrint(PRIORITY_PRINT));
@@ -146,39 +154,39 @@ public class Setting implements Repository {
         returnWorks.add(new Contains(CONTAINS));
 
         // ORIGEN
-        startWorks.add(new CreateBoolean(BOOL_VARIABLE, repository));
-        startWorks.add(new CreateCharacter(CHARACTER_VARIABLE, repository));
-        startWorks.add(new CreateDouble(DOUBLE_VARIABLE, repository));
-        startWorks.add(new CreateFloat(FLOAT_VARIABLE, repository));
-        startWorks.add(new CreateInteger(INT_VARIABLE, repository));
-        startWorks.add(new CreateLong(LONG_VARIABLE, repository));
-        startWorks.add(new CreateString(STRING_VARIABLE, repository));
+        startWorks.add(new CreateBoolean(BOOL_VARIABLE));
+        startWorks.add(new CreateCharacter(CHARACTER_VARIABLE));
+        startWorks.add(new CreateDouble(DOUBLE_VARIABLE));
+        startWorks.add(new CreateFloat(FLOAT_VARIABLE));
+        startWorks.add(new CreateInteger(INT_VARIABLE));
+        startWorks.add(new CreateLong(LONG_VARIABLE));
+        startWorks.add(new CreateString(STRING_VARIABLE));
         // SET
-        startWorks.add(new CreateBooleanSet(SET_BOOLEAN, repository));
-        startWorks.add(new CreateCharacterSet(SET_CHARACTER, repository));
-        startWorks.add(new CreateDoubleSet(SET_DOUBLE, repository));
-        startWorks.add(new CreateFloatSet(SET_FLOAT, repository));
-        startWorks.add(new CreateIntegerSet(SET_INTEGER, repository));
-        startWorks.add(new CreateLongSet(SET_LONG, repository));
-        startWorks.add(new CreateStringSet(SET_STRING, repository));
+        startWorks.add(new CreateBooleanSet(SET_BOOLEAN));
+        startWorks.add(new CreateCharacterSet(SET_CHARACTER));
+        startWorks.add(new CreateDoubleSet(SET_DOUBLE));
+        startWorks.add(new CreateFloatSet(SET_FLOAT));
+        startWorks.add(new CreateIntegerSet(SET_INTEGER));
+        startWorks.add(new CreateLongSet(SET_LONG));
+        startWorks.add(new CreateStringSet(SET_STRING));
         startWorks.add(new SetAdd(SET_ADD));
         // LIST
-        startWorks.add(new CreateBooleanList(LIST_BOOLEAN, repository));
-        startWorks.add(new CreateCharacterList(LIST_CHARACTER, repository));
-        startWorks.add(new CreateDoubleList(LIST_DOUBLE, repository));
-        startWorks.add(new CreateFloatList(LIST_FLOAT, repository));
-        startWorks.add(new CreateIntegerList(LIST_INTEGER, repository));
-        startWorks.add(new CreateLongList(LIST_LONG, repository));
-        startWorks.add(new CreateStringList(LIST_STRING, repository));
+        startWorks.add(new CreateBooleanList(LIST_BOOLEAN));
+        startWorks.add(new CreateCharacterList(LIST_CHARACTER));
+        startWorks.add(new CreateDoubleList(LIST_DOUBLE));
+        startWorks.add(new CreateFloatList(LIST_FLOAT));
+        startWorks.add(new CreateIntegerList(LIST_INTEGER));
+        startWorks.add(new CreateLongList(LIST_LONG));
+        startWorks.add(new CreateStringList(LIST_STRING));
         startWorks.add(new ListAdd(LIST_ADD));
         // MAP
-        startWorks.add(new CreateBooleanMap(MAP_BOOLEAN, repository));
-        startWorks.add(new CreateCharacterMap(MAP_CHARACTER, repository));
-        startWorks.add(new CreateDoubleMap(MAP_DOUBLE, repository));
-        startWorks.add(new CreateFloatMap(MAP_FLOAT, repository));
-        startWorks.add(new CreateIntegerMap(MAP_INTEGER, repository));
-        startWorks.add(new CreateLongMap(MAP_LONG, repository));
-        startWorks.add(new CreateStringMap(MAP_STRING, repository));
+        startWorks.add(new CreateBooleanMap(MAP_BOOLEAN));
+        startWorks.add(new CreateCharacterMap(MAP_CHARACTER));
+        startWorks.add(new CreateDoubleMap(MAP_DOUBLE));
+        startWorks.add(new CreateFloatMap(MAP_FLOAT));
+        startWorks.add(new CreateIntegerMap(MAP_INTEGER));
+        startWorks.add(new CreateLongMap(MAP_LONG));
+        startWorks.add(new CreateStringMap(MAP_STRING));
 
         startWorks.add(new PrintSpace(PRINT_SPACE));
         startWorks.add(new PrintTap(PRINT_TAP));

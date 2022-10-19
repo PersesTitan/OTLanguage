@@ -8,8 +8,6 @@ import bin.exception.MatchException;
 import bin.exception.ServerException;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
-import com.sun.tools.javac.Main;
-import org.apache.hadoop.hdfs.web.JsonUtil;
 
 import java.io.File;
 import java.util.Map;
@@ -43,6 +41,7 @@ public class StartLine implements LoopToken {
 //                    .forEach(line -> Setting.start(line, errorLine.get(), repository));
         } catch (VariableException e) {
             VariableException.variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            e.printStackTrace();
             setLine();
         } catch (MatchException e) {
             MatchException.matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());

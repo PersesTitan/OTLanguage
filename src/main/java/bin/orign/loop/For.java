@@ -123,18 +123,18 @@ public class For implements
     }
 
     private String getType(String value1, String value2, String value3) {
-        List<VariableType.Origin> vars = List.of(getType(value1), getType(value2), getType(value3));
-        if (vars.contains(VariableType.Origin.Double)) return DOUBLE_VARIABLE;
-        else if (vars.contains(VariableType.Origin.Float)) return FLOAT_VARIABLE;
-        else if (vars.contains(VariableType.Origin.Long)) return LONG_VARIABLE;
+        List<VariableType> vars = List.of(getType(value1), getType(value2), getType(value3));
+        if (vars.contains(VariableType.Double)) return DOUBLE_VARIABLE;
+        else if (vars.contains(VariableType.Float)) return FLOAT_VARIABLE;
+        else if (vars.contains(VariableType.Long)) return LONG_VARIABLE;
         else return INT_VARIABLE;
     }
 
-    private VariableType.Origin getType(String value) {
-        if (isInteger(value)) return VariableType.Origin.Integer;
-        else if (isLong(value)) return VariableType.Origin.Long;
-        else if (isFloat(value)) return VariableType.Origin.Float;
-        else if (isDouble(value)) return VariableType.Origin.Double;
+    private VariableType getType(String value) {
+        if (isInteger(value)) return VariableType.Integer;
+        else if (isLong(value)) return VariableType.Long;
+        else if (isFloat(value)) return VariableType.Float;
+        else if (isDouble(value)) return VariableType.Double;
         else throw VariableException.typeMatch();
     }
 

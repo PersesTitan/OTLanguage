@@ -2,7 +2,6 @@ package bin.check;
 
 import bin.token.Token;
 import bin.token.cal.BoolToken;
-import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 
 import java.util.regex.Pattern;
 
@@ -10,6 +9,7 @@ public interface VariableCheck {
     // 기본 변수
     static boolean isBoolean(String line) {
         line = line.strip();
+        System.out.println(line);
         if (line.isBlank()) return false;
         return line.equals(BoolToken.FALSE) || line.equals(BoolToken.TRUE);
     }

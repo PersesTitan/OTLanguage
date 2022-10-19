@@ -1,19 +1,8 @@
 package bin.check;
 
-public class VariableType {
-    public enum Origin {
-        Boolean, Character, Double, Float, Integer, Long, String
-    }
-
-    public enum List {
-        Boolean, Character, Double, Float, Integer, Long, String
-    }
-
-    public enum Map {
-        Boolean, Character, Double, Float, Integer, Long, String
-    }
-
-    public enum Set {
-        Boolean, Character, Double, Float, Integer, Long, String
-    }
+public enum VariableType {
+    Boolean, Character, Double, Float, Integer, Long, String,
+    ListBoolean, ListCharacter, ListDouble, ListFloat, ListInteger, ListLong, ListString,
+    MapBoolean, MapCharacter, MapDouble, MapFloat, MapInteger, MapLong, MapString,
+    SetBoolean, SetCharacter, SetDouble, SetFloat, SetInteger, SetLong, SetString
 }

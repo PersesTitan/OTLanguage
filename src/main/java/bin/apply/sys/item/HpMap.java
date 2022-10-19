@@ -1,10 +1,8 @@
 package bin.apply.sys.item;
 
-import bin.apply.Repository;
-import bin.exception.VariableException;
-import bin.token.LoopToken;
+import bin.check.VariableType;
+import bin.token.VariableToken;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,12 +11,18 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static bin.token.Token.*;
+import static bin.apply.Controller.variableTypeCheck;
+import static bin.check.VariableTypeCheck.getVariableType;
 
-public class HpMap<V> extends HashMap<String, V> implements Map<String, V> {
+public class HpMap extends HashMap<String, Object> implements Map<String, Object>, VariableToken {
     private final Map<String, Integer> hp = new HashMap<>();
-    private final Pattern pattern = Pattern.compile(START + BL + "\\d+" + BR);
+    private final Matcher matcher = Pattern.compile(START + BL + "\\d+" + BR).matcher("");
     private static final int noCount = -1;
+    private final VariableType variableType;
+
+    public HpMap(String variableType) {
+        this.variableType = getVariableType(variableType);
+    }
 
     @Override
     public int size() {
@@ -41,13 +45,13 @@ public class HpMap<V> extends HashMap<String, V> implements Map<String, V> {
     }
 
     @Override
-    public V getOrDefault(Object key, V defaultValue) {
+    public Object getOrDefault(Object key, Object defaultValue) {
         return super.getOrDefault(key, defaultValue);
     }
 
     @Override
-    public V get(Object key) {
-        V v = super.get(key);
+    public Object get(Object key) {
+        Object object = super.get(key);
         int hpCount = hp.getOrDefault(key.toString(), 0);
         if (hpCount != noCount) {
             if (--hpCount == 0) {
@@ -55,37 +59,35 @@ public class HpMap<V> extends HashMap<String, V> implements Map<String, V> {
                 hp.remove(key.toString());
             } else hp.put(key.toString(), hpCount);
         }
-        return v;
+        return object;
     }
 
-    @Nullable
     @Override
-    public V put(String key, V value) {
-        Matcher matcher = pattern.matcher(key);
+    public Object put(String key, Object value) {
         int c = noCount;
-        if (matcher.find()) {
+        if (matcher.reset(key).find()) {
             String group = matcher.group();
             int len = group.length();
             c = Integer.parseInt(group.substring(1, len-1));
             if (c != 0) key = key.substring(len);
         }
+
+        Object keyObj = this.getOrDefault(key, null);
+        Object valueObj = variableTypeCheck.getObject(variableType, value.toString(), keyObj);
         hp.put(key, c);
-        return super.put(key, value);
+        if (keyObj == null || ORIGIN_LIST.contains(key)) return super.put(key, valueObj);
+        else return value;
     }
 
     @Override
-    public V remove(Object key) {
+    public Object remove(Object key) {
         hp.remove(key);
         return super.remove(key);
     }
 
     @Override
-    public void putAll(@NotNull Map<? extends String, ? extends V> m) {
-        for (var ms : m.entrySet()) {
-            String key = ms.getKey();
-            V value = ms.getValue();
-            put(key, value);
-        }
+    public void putAll(@NotNull Map<? extends String, ? extends Object> m) {
+        for (var ms : m.entrySet()) put(ms.getKey(), ms.getValue());
     }
 
     @Override
@@ -100,12 +102,12 @@ public class HpMap<V> extends HashMap<String, V> implements Map<String, V> {
     }
 
     @Override
-    public Collection<V> values() {
+    public Collection<Object> values() {
         return super.values();
     }
 
     @Override
-    public Set<Entry<String, V>> entrySet() {
+    public Set<Entry<String, Object>> entrySet() {
         return super.entrySet();
     }
 }
