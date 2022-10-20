@@ -11,8 +11,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SetClear implements
-        VariableToken, StartWork {
+public class SetClear implements VariableToken, StartWork {
     private final String type;
     private final Matcher matcher;
 
@@ -35,6 +34,11 @@ public class SetClear implements
         String variableName = bothEndCut(line, count, type.length());
         if (count > repositoryArray.length) throw VariableException.localNoVariable();
         getSet(count, variableName, repositoryArray).clear();
+    }
+
+    @Override
+    public void first() {
+
     }
 
     private LinkedHashSet<Object> getSet(int count, String variableName,

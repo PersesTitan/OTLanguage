@@ -52,4 +52,9 @@ public class While implements StartWork, LoopToken, BoolToken {
             bool = lineStart(b, repositoryArray).equals("ㅇㅇ");
         }
     }
+
+    @Override
+    public void first() {
+
+    }
 }

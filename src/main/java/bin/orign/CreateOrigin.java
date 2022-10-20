@@ -28,4 +28,9 @@ public class CreateOrigin implements StartWork, LoopToken {
         variableDefineError(tokens[0], repositoryArray[0]);
         repositoryArray[0].get(values[0]).put(tokens[0], tokens[1]);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

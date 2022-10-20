@@ -11,8 +11,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ListClear implements
-        VariableToken, StartWork {
+public class ListClear implements VariableToken, StartWork {
     private final String type;
     private final Matcher matcher;
 
@@ -35,6 +34,11 @@ public class ListClear implements
         String variableName = bothEndCut(line, count, type.length());
         if (count > repositoryArray.length) throw VariableException.localNoVariable();
         getList(count, variableName, repositoryArray).clear();
+    }
+
+    @Override
+    public void first() {
+
     }
 
     private LinkedList<Object> getList(int count, String variableName,

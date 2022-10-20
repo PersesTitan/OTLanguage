@@ -40,4 +40,9 @@ public class MethodVoid implements LoopToken, StartWork {
             else methodItem.startVoid(methodParams, repositoryArray[0], repositoryArray[1]);
         } else Setting.runMessage(origen);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

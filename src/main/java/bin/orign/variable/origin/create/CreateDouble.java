@@ -38,4 +38,9 @@ public class CreateDouble implements StartWork, VariableToken, Controller {
         if (!isDouble(value)) throw VariableException.typeMatch();
         repositoryArray[0].get(type).put(variableName, value);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

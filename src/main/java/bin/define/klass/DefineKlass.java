@@ -53,6 +53,11 @@ public class DefineKlass implements LoopToken, StartWork {
 
     }
 
+    @Override
+    public void first() {
+
+    }
+
     private final Set<String> set = new HashSet<>();
     private String[][] getParams(String[] params) {
         set.clear();

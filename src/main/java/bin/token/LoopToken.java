@@ -36,6 +36,7 @@ public interface LoopToken extends VariableToken {
     String ELSE = QUESTION + "ㅉ" + QUESTION;
     String TRY_CATCH = "ㅠㅅㅠ";
     String METHOD = "ㅁㅅㅁ";
+    String KLASS = "ㅋㅅㅋ";
 
     // LOOP
     String FOR = CARET;                 // ^
@@ -50,7 +51,7 @@ public interface LoopToken extends VariableToken {
     String POISON_GET = "ㄱㅅㄱ";
     String POISON_START = "ㅅㅌㅅ";
     String MODEL = "ㅁㄷㅁ";
-    String REDIRECT = "";
-    String GET_COOKIE = "";
-    String SET_COOKIE = "";
+    String REDIRECT = "ㄹㄷㄹ";
+    String GET_COOKIE = "ㄱㅋㄱ";
+    String SET_COOKIE = "ㄱㅋㄱ";
 }

@@ -46,4 +46,9 @@ public class SetSort implements StartWork, Token, VariableToken {
         }
         throw VariableException.noDefine();
     }
+
+    @Override
+    public void first() {
+
+    }
 }

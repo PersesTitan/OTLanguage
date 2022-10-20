@@ -77,6 +77,11 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
         }
     }
 
+    @Override
+    public void first() {
+
+    }
+
     @SafeVarargs
     private void loop(Map<String, Object> rep, String variableName,
                       Set<Object> set, String total, String fileName,

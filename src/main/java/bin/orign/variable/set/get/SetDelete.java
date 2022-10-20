@@ -39,6 +39,11 @@ public class SetDelete implements StartWork, LoopToken {
         getSet(repository, tokens[0], Integer.parseInt(tokens[1]));
     }
 
+    @Override
+    public void first() {
+        
+    }
+
     private void getSet(Map<String, Map<String, Object>> repository,
                          String variableName, int position) {
         for (var token : SET_LIST) {

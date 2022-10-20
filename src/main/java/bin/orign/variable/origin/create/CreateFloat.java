@@ -38,4 +38,9 @@ public class CreateFloat implements StartWork, VariableToken, Controller {
         if (!isFloat(value)) throw VariableException.typeMatch();
         repositoryArray[0].get(type).put(variableName, value);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

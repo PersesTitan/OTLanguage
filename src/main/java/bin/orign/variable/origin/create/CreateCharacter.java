@@ -38,4 +38,9 @@ public class CreateCharacter implements StartWork, VariableToken, Controller {
         if (!isCharacter(value)) throw VariableException.typeMatch();
         repositoryArray[0].get(type).put(variableName, value);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

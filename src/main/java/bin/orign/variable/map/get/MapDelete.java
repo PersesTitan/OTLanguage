@@ -36,6 +36,11 @@ public class MapDelete implements StartWork, LoopToken {
         getMap(repository, tokens[0], tokens[1]);
     }
 
+    @Override
+    public void first() {
+
+    }
+
     private void getMap(Map<String, Map<String, Object>> repository,
                         String variableName, String value) {
         for (var token : MAP_LIST) {

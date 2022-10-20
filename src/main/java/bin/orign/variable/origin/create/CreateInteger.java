@@ -38,4 +38,9 @@ public class CreateInteger implements StartWork, VariableToken, Controller {
         if (!isInteger(value)) throw VariableException.typeMatch();
         repositoryArray[0].get(type).put(variableName, value);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

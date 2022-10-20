@@ -11,8 +11,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CreateBooleanSet implements
-        StartWork, VariableToken, GetSet {
+public class CreateBooleanSet implements StartWork, VariableToken, GetSet {
     private final String patternText;
     private final Matcher matcher;
     private final String type;
@@ -47,5 +46,10 @@ public class CreateBooleanSet implements
             }
             repositoryArray[0].get(type).put(group, set);
         }
+    }
+
+    @Override
+    public void first() {
+
     }
 }

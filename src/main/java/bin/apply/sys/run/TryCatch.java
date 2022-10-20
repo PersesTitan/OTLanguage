@@ -41,4 +41,9 @@ public class TryCatch implements StartWork, LoopToken {
             startStartLine(finalTotal, loopTotals[0], repositoryArray);
         } catch (Exception ignored) {}
     }
+
+    @Override
+    public void first() {
+
+    }
 }

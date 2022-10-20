@@ -14,6 +14,8 @@ public class SetCookie implements RootWork, LoopToken, PoisonStartWork {
     private final int length;
     private final Matcher matcher;
 
+    // ㄱㅋㄱ[][] ~ [][][][]
+    // key, value, path, time
     public SetCookie(String type) {
         this.length = type.replace("\\", "").length();
         String patternText = startEndMerge(type, ARGUMENT.repeat(2), "(", ARGUMENT, "){0,2}");

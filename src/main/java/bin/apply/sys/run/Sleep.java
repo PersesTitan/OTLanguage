@@ -37,4 +37,9 @@ public class Sleep implements Token, StartWork {
             Thread.sleep(time);
         } catch (InterruptedException ignored) {}
     }
+
+    @Override
+    public void first() {
+
+    }
 }

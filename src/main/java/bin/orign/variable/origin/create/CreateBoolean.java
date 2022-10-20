@@ -39,4 +39,9 @@ public class CreateBoolean implements StartWork, VariableToken, Controller {
         if (!isBoolean(value)) throw VariableException.typeMatch();
         repositoryArray[0].get(type).put(variableName, value);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

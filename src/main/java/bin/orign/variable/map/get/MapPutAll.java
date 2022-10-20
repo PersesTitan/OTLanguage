@@ -40,4 +40,9 @@ public class MapPutAll implements StartWork, LoopToken, GetMap {
             }
         }
     }
+
+    @Override
+    public void first() {
+
+    }
 }

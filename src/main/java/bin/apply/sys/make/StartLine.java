@@ -8,6 +8,8 @@ import bin.exception.MatchException;
 import bin.exception.ServerException;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
+import com.sun.net.httpserver.Headers;
+import org.apache.http.Header;
 
 import java.io.File;
 import java.util.Map;
@@ -25,6 +27,8 @@ import static bin.apply.Setting.lineStart;
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static cos.poison.Poison.variableHTML;
+import static cos.poison.PoisonRepository.poisonReturnWorks;
+import static cos.poison.PoisonRepository.poisonStartWorks;
 
 public class StartLine implements LoopToken {
 
@@ -83,21 +87,22 @@ public class StartLine implements LoopToken {
 
     @SafeVarargs
     public static void startPoison(String total, String fileName,
-                                     Map<String, Map<String, Object>>...repository) {
+                                   Headers requestHeader, Headers responseHeader,
+                                   Map<String, Map<String, Object>>...repository) {
         CONTINUE:
         for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
             if (line.isBlank()) continue;
-            line = setError(line);
-
-            final String origen = line;
+            final String origen = (line = setError(line));
             final String value = new StringTokenizer(line).nextToken();
 
             if (priorityWorkMap.containsKey(value)) {priorityWorkMap.get(value).start(line, origen, repository);continue;}
             for (var work : priorityWorks) {if (work.check(line)) {work.start(line, origen, repository); continue CONTINUE;}}
             line = lineStart(line, repository);
+            for (var work : poisonReturnWorks) {if (work.check(line)) {line = work.start(line, origen, requestHeader, repository);}}
 
             // ㅁㄷㅁ 변수명:HTML 변수명 ( HTML 변수명 등록 )
             if (variableHTML.check(line)) {variableHTML.start(line); continue;}
+            for (var work : poisonStartWorks) {if (work.check(line)) {work.start(line, origen, responseHeader, repository);return;}}
 
             if (startWorkMap.containsKey(value)) {startWorkMap.get(value).start(line, origen, repository);continue;}
             for (var work : startWorks) {if (work.check(line)) {work.start(line, origen, repository);continue CONTINUE;}}

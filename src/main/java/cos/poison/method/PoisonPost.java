@@ -41,4 +41,9 @@ public class PoisonPost implements PoisonTools, StartWork {
 
         Poison.httpServerManager.addPost(token[0], getTotal(total[0]), getParams(token), total[1]);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

@@ -42,6 +42,11 @@ public class If implements LoopToken, StartWork, BoolToken {
         startLine(line.strip(), repositoryArray);
     }
 
+    @Override
+    public void first() {
+
+    }
+
     private void startLine(String line, Map<String, Map<String, Object>>[] repository) {
         StringTokenizer tokenizer = new StringTokenizer(line);
         String token;

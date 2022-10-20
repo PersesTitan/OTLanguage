@@ -11,8 +11,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ListIsEmpty implements
-        GetList, VariableToken, ReturnWork {
+public class ListIsEmpty implements GetList, VariableToken, ReturnWork {
     private final String type;
     private final Matcher matcher;
 

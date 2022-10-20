@@ -10,8 +10,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ListSort implements
-        StartWork, Token, VariableToken {
+public class ListSort implements StartWork, Token, VariableToken {
     private final String type;
     private final Matcher matcher;
 
@@ -44,6 +43,11 @@ public class ListSort implements
             }
         }
         throw VariableException.noDefine();
+    }
+
+    @Override
+    public void first() {
+
     }
 
     private void getList(String type, Object ob) {

@@ -58,7 +58,10 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
                 // 로그 출력
                 printLog(method, path, handlerDao.value());
                 // 동작
-                serverStart(repository, handlerItem.startFinalTotal(), handlerItem.fileName());
+                serverStart(repository,
+                        requestHeader, responseHeader,
+                        handlerItem.startFinalTotal(),
+                        handlerItem.fileName());
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK,0);
                 responseBody.write(getBody(handlerItem.responseValue()));
             } else {
@@ -91,10 +94,13 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
     }
 
     private void serverStart(Map<String, Map<String, Object>> repository,
+                             Headers requestHeader, Headers responseHeader,
                              String startFinalTotal, String fileName) {
         variableHTML.reset();
         try {
-            StartLine.startPoison(startFinalTotal, fileName, repository, Repository.repository);
+            StartLine.startPoison(startFinalTotal, fileName,
+                    requestHeader, responseHeader,
+                    repository, Repository.repository);
         } catch (Exception e) {
             String error = String.format("Error Line %d (%s)", errorCount.get(), errorLine.get());
             errorMessage(error);

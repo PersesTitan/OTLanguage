@@ -13,8 +13,7 @@ import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.*;
 
-public class SetAdd implements
-        VariableToken, StartWork, GetSet {
+public class SetAdd implements VariableToken, StartWork, GetSet {
     private final String type;
     private final Matcher matcher;
 
@@ -51,6 +50,11 @@ public class SetAdd implements
             }
         }
         throw VariableException.noDefine();
+    }
+
+    @Override
+    public void first() {
+
     }
 
     private LinkedHashSet<?> getValues(String type, String value) {

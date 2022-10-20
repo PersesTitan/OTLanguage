@@ -52,6 +52,11 @@ public class FilePath implements LoopToken, StartWork {
         throw FileException.pathNoHaveError();
     }
 
+    @Override
+    public void first() {
+
+    }
+
     private void importFile(File file, Map<String, Map<String, Object>>[] repositoryArray) {
         if (!file.exists()) throw FileException.pathNoHaveError();
         else if (!file.isFile()) throw FileException.isNotFileError();

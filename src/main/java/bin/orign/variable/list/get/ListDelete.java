@@ -36,6 +36,11 @@ public class ListDelete implements StartWork, LoopToken {
         getList(repository, tokens[0], Integer.parseInt(tokens[1]));
     }
 
+    @Override
+    public void first() {
+
+    }
+
     private void getList(Map<String, Map<String, Object>> repository,
                          String variableName, int position) {
         for (var token : LIST_LIST) {

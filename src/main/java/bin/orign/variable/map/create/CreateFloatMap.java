@@ -13,8 +13,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CreateFloatMap implements
-        StartWork, VariableToken, GetMap {
+public class CreateFloatMap implements StartWork, VariableToken, GetMap {
     private final String patternText;
     private final Matcher matcher;
     private final String type;
@@ -49,5 +48,10 @@ public class CreateFloatMap implements
             }
             repositoryArray[0].get(type).put(group, map);
         }
+    }
+
+    @Override
+    public void first() {
+
     }
 }

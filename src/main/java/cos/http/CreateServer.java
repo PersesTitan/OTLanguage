@@ -18,4 +18,9 @@ public class CreateServer implements StartWork, LoopToken {
                       Map<String, Map<String, Object>>[] repositoryArray) {
 
     }
+
+    @Override
+    public void first() {
+
+    }
 }

@@ -19,4 +19,9 @@ public class ForceQuit implements StartWork, MergeToken {
                       Map<String, Map<String, Object>>[] repositoryArray) {
         System.exit(0);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

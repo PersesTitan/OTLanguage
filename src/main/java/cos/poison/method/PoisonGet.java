@@ -41,4 +41,9 @@ public class PoisonGet implements PoisonTools, StartWork {
         String[] total = matchSplitError(tokens[1], BLANK + RETURN_TOKEN + BLANK, 2);
         Poison.httpServerManager.addGet(token[0], getTotal(total[0]), getParams(token), total[1]);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

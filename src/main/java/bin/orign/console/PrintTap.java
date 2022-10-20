@@ -19,4 +19,9 @@ public record PrintTap(int type) implements StartWork, ConsoleToken, Token {
     public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
         System.out.print(line.substring(type).stripIndent() + "\t");
     }
+
+    @Override
+    public void first() {
+
+    }
 }

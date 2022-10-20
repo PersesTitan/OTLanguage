@@ -19,4 +19,9 @@ public record PriorityPrintSpace(int type) implements StartWork, ConsoleToken, T
     public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
         System.out.print(origen.substring(type).stripIndent() + " ");
     }
+
+    @Override
+    public void first() {
+
+    }
 }

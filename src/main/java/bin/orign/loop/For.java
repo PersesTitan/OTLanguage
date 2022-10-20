@@ -19,8 +19,7 @@ import java.util.regex.Pattern;
 import static bin.check.VariableCheck.*;
 import static bin.token.cal.NumberToken.NUMBER;
 
-public class For implements
-        Token, StartWork, LoopToken, VariableCheck {
+public class For implements Token, StartWork, LoopToken, VariableCheck {
     private final String patternText;
     private final Matcher matcher;
     private final Matcher m;
@@ -68,6 +67,11 @@ public class For implements
                         total, repositoryArray);
             }
         }
+    }
+
+    @Override
+    public void first() {
+
     }
 
     @SafeVarargs

@@ -65,6 +65,11 @@ public class DefineMethod implements LoopToken, StartWork {
         repository.put(methodToken[0], new MethodItem(params, methodType, returnVariable, fileName, start, end));
     }
 
+    @Override
+    public void first() {
+
+    }
+
     private final Set<String> set = new HashSet<>();
     private String[][] getParams(String[] params) {
         set.clear();

@@ -20,4 +20,9 @@ public record PriorityPrintln(int type) implements StartWork, ConsoleToken, Toke
     public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
         System.out.println(origen.substring(type).stripIndent());
     }
+
+    @Override
+    public void first() {
+
+    }
 }

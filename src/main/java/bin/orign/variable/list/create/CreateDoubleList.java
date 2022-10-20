@@ -47,4 +47,9 @@ public class CreateDoubleList implements StartWork, VariableToken, GetList {
             repositoryArray[0].get(type).put(group, list);
         }
     }
+
+    @Override
+    public void first() {
+
+    }
 }

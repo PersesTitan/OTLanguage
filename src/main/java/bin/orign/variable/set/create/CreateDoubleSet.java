@@ -14,8 +14,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CreateDoubleSet implements
-        StartWork, VariableToken, GetSet {
+public class CreateDoubleSet implements StartWork, VariableToken, GetSet {
     private final String patternText;
     private final Matcher matcher;
     private final String type;
@@ -50,5 +49,10 @@ public class CreateDoubleSet implements
             }
             repositoryArray[0].get(type).put(group, set);
         }
+    }
+
+    @Override
+    public void first() {
+
     }
 }

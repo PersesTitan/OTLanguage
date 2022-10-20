@@ -35,4 +35,9 @@ public class CreateString implements StartWork, VariableToken, Controller {
         variableDefineError(variableName, repositoryArray[0]);
         repositoryArray[0].get(type).put(variableName, value);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

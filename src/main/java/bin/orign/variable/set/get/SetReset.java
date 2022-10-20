@@ -51,6 +51,11 @@ public class SetReset implements StartWork, LoopToken, GetSet {
         }
     }
 
+    @Override
+    public void first() {
+
+    }
+
     private LinkedHashSet<?> getSet(String type, String value) {
         return switch (type) {
             case SET_INTEGER -> getIntegerSet(value);

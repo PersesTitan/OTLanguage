@@ -38,4 +38,9 @@ public class CreateLong implements StartWork, VariableToken, Controller {
         if (!isLong(value)) throw VariableException.typeMatch();
         repositoryArray[0].get(type).put(variableName, value);
     }
+
+    @Override
+    public void first() {
+
+    }
 }

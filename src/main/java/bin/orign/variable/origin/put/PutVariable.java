@@ -11,8 +11,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PutVariable implements
-        StartWork, SetVariableValue, GetSet, GetList, GetMap {
+public class PutVariable implements StartWork, SetVariableValue, GetSet, GetList, GetMap {
     private final String patternText = startMerge(VARIABLE_SET);
     private final Matcher matcher = Pattern.compile(patternText).matcher("");
 
@@ -32,6 +31,11 @@ public class PutVariable implements
         if (!Repository.getSet(repository).contains(values[0])) throw VariableException.noDefine();
         String varType = getVariableType(repository, values[0]); // ㅇㅅㅇ, ㅇㅈㅇ
         repository.get(varType).put(values[0], values[1]);
+    }
+
+    @Override
+    public void first() {
+
     }
 
     private String getVariableType(Map<String, Map<String, Object>> repository, String variableName) {
