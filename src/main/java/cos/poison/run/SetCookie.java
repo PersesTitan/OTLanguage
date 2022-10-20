@@ -3,6 +3,7 @@ package cos.poison.run;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
 import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
 import cos.poison.root.RootWork;
 import cos.poison.work.PoisonStartWork;
 
@@ -28,9 +29,10 @@ public class SetCookie implements RootWork, LoopToken, PoisonStartWork {
     }
 
     @Override
-    public void start(String line, String origen, Headers responseHeader,
+    public void start(String line, String origen,
+                      HttpExchange exchange, Headers responseHeader,
                       Map<String, Map<String, Object>>[] repositoryArray) {
-        String[] tokens = matchSplitError(bothEndCut(line.strip(), length + 1, 1), BR + BL, 4);
+        String[] tokens = bothEndCut(line.strip(), length + 1, 1).split(BR + BL, 4);
         switch (tokens.length) {
             case 2 -> setCookie(responseHeader, tokens[0], tokens[1], null, -1);
             case 3 -> {

@@ -25,8 +25,8 @@ public class Poison implements StartWork, LoopToken, PoisonRepository {
     private final List<StartWork> startWorks = new ArrayList<>();
 
     public Poison(String className) {
-        first();
         this.className = className;
+        first();
     }
 
     @Override

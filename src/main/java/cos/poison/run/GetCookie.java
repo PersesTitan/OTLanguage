@@ -2,6 +2,7 @@ package cos.poison.run;
 
 import bin.token.LoopToken;
 import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
 import cos.poison.root.RootWork;
 import cos.poison.work.PoisonReturnWork;
 
@@ -24,7 +25,8 @@ public class GetCookie implements RootWork, LoopToken, PoisonReturnWork {
     }
 
     @Override
-    public String start(String line, String origen, Headers requestHeader,
+    public String start(String line, String origen,
+                        HttpExchange exchange, Headers requestHeader,
                         Map<String, Map<String, Object>>[] repositoryArray) {
         matcher.reset();
         if (matcher.find()) {

@@ -8,7 +8,7 @@ import java.util.*;
 
 public interface RootWork {
     default void redirect(Headers headers, String newUrl){
-        headers.set("Location", newUrl);
+        headers.add("Location", newUrl);
     }
 
     default void setCookie(Headers headers, String key, String value, String path, int maxAge) {

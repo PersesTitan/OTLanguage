@@ -9,6 +9,7 @@ import bin.exception.ServerException;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
 import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
 import org.apache.http.Header;
 
 import java.io.File;
@@ -87,6 +88,7 @@ public class StartLine implements LoopToken {
 
     @SafeVarargs
     public static void startPoison(String total, String fileName,
+                                   HttpExchange exchange,
                                    Headers requestHeader, Headers responseHeader,
                                    Map<String, Map<String, Object>>...repository) {
         CONTINUE:
@@ -98,11 +100,11 @@ public class StartLine implements LoopToken {
             if (priorityWorkMap.containsKey(value)) {priorityWorkMap.get(value).start(line, origen, repository);continue;}
             for (var work : priorityWorks) {if (work.check(line)) {work.start(line, origen, repository); continue CONTINUE;}}
             line = lineStart(line, repository);
-            for (var work : poisonReturnWorks) {if (work.check(line)) {line = work.start(line, origen, requestHeader, repository);}}
+            for (var work : poisonReturnWorks) {if (work.check(line)) {line = work.start(line, origen, exchange, requestHeader, repository);}}
 
             // ㅁㄷㅁ 변수명:HTML 변수명 ( HTML 변수명 등록 )
             if (variableHTML.check(line)) {variableHTML.start(line); continue;}
-            for (var work : poisonStartWorks) {if (work.check(line)) {work.start(line, origen, responseHeader, repository);return;}}
+            for (var work : poisonStartWorks) {if (work.check(line)) {work.start(line, origen, exchange, responseHeader, repository);return;}}
 
             if (startWorkMap.containsKey(value)) {startWorkMap.get(value).start(line, origen, repository);continue;}
             for (var work : startWorks) {if (work.check(line)) {work.start(line, origen, repository);continue CONTINUE;}}

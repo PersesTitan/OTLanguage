@@ -18,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static bin.apply.Setting.*;
 import static bin.apply.sys.make.StartLine.errorCount;
@@ -26,6 +28,7 @@ import static cos.poison.Poison.variableHTML;
 import static cos.poison.controller.HttpServerManager.*;
 
 public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValue, PoisonTools {
+    public static final AtomicInteger statusCode = new AtomicInteger();
     private final Map<String, Map<String, Object>> repository = (Map<String, Map<String, Object>>) COPY_REPOSITORY.clone();
     private final String defaultHtml;
     public HandlerRoot(String defaultHtml) {
@@ -37,6 +40,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
     public void handle(HttpExchange exchange) {
         String path = exchange.getRequestURI().getPath();
         path = path.endsWith("/") ? path : path + "/";
+        statusCode.set(HttpURLConnection.HTTP_OK);
         try (exchange; OutputStream responseBody = exchange.getResponseBody()) {
             HttpMethod method = HttpMethod.valueOf(exchange.getRequestMethod());
 
@@ -58,11 +62,11 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
                 // 로그 출력
                 printLog(method, path, handlerDao.value());
                 // 동작
-                serverStart(repository,
+                serverStart(repository, exchange,
                         requestHeader, responseHeader,
                         handlerItem.startFinalTotal(),
                         handlerItem.fileName());
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK,0);
+                exchange.sendResponseHeaders(statusCode.get(),0);
                 responseBody.write(getBody(handlerItem.responseValue()));
             } else {
                 // ==== 에러 동작 ====
@@ -94,12 +98,13 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
     }
 
     private void serverStart(Map<String, Map<String, Object>> repository,
+                             HttpExchange exchange,
                              Headers requestHeader, Headers responseHeader,
                              String startFinalTotal, String fileName) {
         variableHTML.reset();
         try {
             StartLine.startPoison(startFinalTotal, fileName,
-                    requestHeader, responseHeader,
+                    exchange, requestHeader, responseHeader,
                     repository, Repository.repository);
         } catch (Exception e) {
             String error = String.format("Error Line %d (%s)", errorCount.get(), errorLine.get());
