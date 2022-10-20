@@ -18,19 +18,17 @@ import bin.math.sum.set.FloatSetSum;
 import bin.math.sum.set.IntegerSetSum;
 import bin.math.sum.set.LongSetSum;
 import bin.orign.CreateList;
+import bin.orign.CreateMap;
+import bin.orign.CreateSet;
 import bin.orign.console.*;
 import bin.orign.loop.For;
 import bin.orign.loop.ForEach;
 import bin.orign.loop.While;
 import bin.orign.CreateOrigin;
-import bin.orign.variable.list.create.*;
 import bin.orign.variable.list.get.*;
-import bin.orign.variable.map.create.*;
 import bin.orign.variable.map.get.MapDelete;
 import bin.orign.variable.map.get.MapGet;
 import bin.orign.variable.map.get.MapPutAll;
-import bin.orign.variable.origin.create.*;
-import bin.orign.variable.set.create.*;
 import bin.orign.loop.If;
 import bin.orign.variable.SetVariable;
 import bin.orign.variable.origin.put.PutVariable;
@@ -40,7 +38,6 @@ import bin.string.Join;
 import bin.string.Split;
 import bin.string.SplitRegular;
 import cos.poison.Poison;
-import work.StartWork;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,22 +56,19 @@ public class Setting implements Repository {
     public static String path;
     public static RunType runType;
 
-    public static Map<String, StartWork> startWorkMap = new HashMap<>();
-
     @SafeVarargs
     public static void start(String line, String errorLine,
                              Map<String, Map<String, Object>>...repositoryArray) {
         if (line.isBlank()) return;
-        String origen = line;
+        final String origen = line;
+        final String value = new StringTokenizer(line).nextToken();
 
-        String value = new StringTokenizer(line).nextToken();
-        if (startWorkMap.containsKey(value)) {
-            startWorkMap.get(value).start(line, origen, repositoryArray);
-            return;
-        }
+        if (priorityWorkMap.containsKey(value)) {priorityWorkMap.get(value).start(line, origen, repositoryArray);return;}
 
         for (var work : priorityWorks) {if (work.check(line)) {work.start(line, origen, repositoryArray); return;}}
         line = lineStart(line, repositoryArray);
+
+        if (startWorkMap.containsKey(value)) {startWorkMap.get(value).start(line, origen, repositoryArray);return;}
         for (var work : startWorks) {if (work.check(line)) {work.start(line, origen, repositoryArray);return;}}
 
         runMessage(errorLine);
@@ -120,14 +114,19 @@ public class Setting implements Repository {
 
         CreateOrigin createOrigin = new CreateOrigin();
         CreateList createList = new CreateList();
+        CreateSet createSet = new CreateSet();
+        CreateMap createMap = new CreateMap();
         ORIGIN_LIST.forEach(v -> startWorkMap.put(v, createOrigin));
         LIST_LIST.forEach(v -> startWorkMap.put(v, createList));
+        SET_LIST.forEach(v -> startWorkMap.put(v, createSet));
+        MAP_LIST.forEach(v -> startWorkMap.put(v, createMap));
 
-        priorityWorks.add(new ForceQuit(FORCE_QUIT));
-        priorityWorks.add(new PriorityPrint(PRIORITY_PRINT));
-        priorityWorks.add(new PriorityPrintln(PRIORITY_PRINTLN));
-        priorityWorks.add(new PriorityPrintTap(PRIORITY_PRINT_TAP));
-        priorityWorks.add(new PriorityPrintSpace(PRIORITY_PRINT_SPACE));
+        priorityWorkMap.put(FORCE_QUIT, new ForceQuit());
+        priorityWorkMap.put(PRIORITY_PRINT, new PriorityPrint(PRIORITY_PRINT.length()));
+        priorityWorkMap.put(PRIORITY_PRINTLN, new PriorityPrintln(PRIORITY_PRINTLN.length()));
+        priorityWorkMap.put(PRIORITY_PRINT_TAP, new PriorityPrintTap(PRIORITY_PRINT_TAP.length()));
+        priorityWorkMap.put(PRIORITY_PRINT_SPACE, new PriorityPrintSpace(PRIORITY_PRINT_SPACE.length()));
+
         priorityWorks.add(new ListClear(LIST_CLEAR));
         priorityWorks.add(new ListSort(LIST_SORT));
         priorityWorks.add(new SetClear(SET_CLEAR));
@@ -151,51 +150,20 @@ public class Setting implements Repository {
         returnWorks.add(new FloatSetSum());
         returnWorks.add(new ListGet(LIST_GET));
         returnWorks.add(new MapGet(MAP_GET));
+        returnWorks.add(new SetGet(SET_GET));
         returnWorks.add(new MethodReturn());
         returnWorks.add(new Join(JOIN));
         returnWorks.add(new Split(SPLIT));
         returnWorks.add(new SplitRegular(SPLIT_REGULAR));
         returnWorks.add(new Contains(CONTAINS));
 
-        // ORIGEN
-        startWorks.add(new CreateBoolean(BOOL_VARIABLE));
-        startWorks.add(new CreateCharacter(CHARACTER_VARIABLE));
-        startWorks.add(new CreateDouble(DOUBLE_VARIABLE));
-        startWorks.add(new CreateFloat(FLOAT_VARIABLE));
-        startWorks.add(new CreateInteger(INT_VARIABLE));
-        startWorks.add(new CreateLong(LONG_VARIABLE));
-        startWorks.add(new CreateString(STRING_VARIABLE));
-        // SET
-        startWorks.add(new CreateBooleanSet(SET_BOOLEAN));
-        startWorks.add(new CreateCharacterSet(SET_CHARACTER));
-        startWorks.add(new CreateDoubleSet(SET_DOUBLE));
-        startWorks.add(new CreateFloatSet(SET_FLOAT));
-        startWorks.add(new CreateIntegerSet(SET_INTEGER));
-        startWorks.add(new CreateLongSet(SET_LONG));
-        startWorks.add(new CreateStringSet(SET_STRING));
-        startWorks.add(new SetAdd(SET_ADD));
-        // LIST
-        startWorks.add(new CreateBooleanList(LIST_BOOLEAN));
-        startWorks.add(new CreateCharacterList(LIST_CHARACTER));
-        startWorks.add(new CreateDoubleList(LIST_DOUBLE));
-        startWorks.add(new CreateFloatList(LIST_FLOAT));
-        startWorks.add(new CreateIntegerList(LIST_INTEGER));
-        startWorks.add(new CreateLongList(LIST_LONG));
-        startWorks.add(new CreateStringList(LIST_STRING));
-        startWorks.add(new ListAdd(LIST_ADD));
-        // MAP
-        startWorks.add(new CreateBooleanMap(MAP_BOOLEAN));
-        startWorks.add(new CreateCharacterMap(MAP_CHARACTER));
-        startWorks.add(new CreateDoubleMap(MAP_DOUBLE));
-        startWorks.add(new CreateFloatMap(MAP_FLOAT));
-        startWorks.add(new CreateIntegerMap(MAP_INTEGER));
-        startWorks.add(new CreateLongMap(MAP_LONG));
-        startWorks.add(new CreateStringMap(MAP_STRING));
+        startWorkMap.put(PRINT_SPACE, new PrintSpace(PRINT_SPACE.length()));
+        startWorkMap.put(PRINT_TAP, new PrintTap(PRINT_TAP.length()));
+        startWorkMap.put(PRINTLN, new Println(PRINTLN.length()));
+        startWorkMap.put(PRINT, new Print(PRINT.length()));
 
-        startWorks.add(new PrintSpace(PRINT_SPACE));
-        startWorks.add(new PrintTap(PRINT_TAP));
-        startWorks.add(new Println(PRINTLN));
-        startWorks.add(new Print(PRINT));
+        startWorks.add(new SetAdd(SET_ADD));
+        startWorks.add(new ListAdd(LIST_ADD));
         startWorks.add(new PutVariable());
         startWorks.add(new Sleep(SLEEP));
         startWorks.add(new If(IF, ELSE_IF, ELSE));
@@ -217,6 +185,8 @@ public class Setting implements Repository {
     private static void reset() {
 //        total.setLength(0);
 //        LOOP_TOKEN.clear();
+        priorityWorkMap.clear();
+        startWorkMap.clear();
         returnWorks.clear();
         startWorks.clear();
         repository.clear();

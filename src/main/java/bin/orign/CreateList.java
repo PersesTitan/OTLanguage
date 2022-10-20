@@ -1,5 +1,6 @@
 package bin.orign;
 
+import bin.apply.Setting;
 import bin.token.LoopToken;
 import work.StartWork;
 
@@ -17,9 +18,13 @@ public class CreateList implements StartWork, LoopToken {
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
         String[] values = matchSplitError(line, BLANKS, 2);
-        // 변수명:1234  =>
-        String[] tokens = matchSplitError(values[1], orMerge(VARIABLE_PUT, LIST_ADD), 2);
+        // 변수명<<1234  => ㅁㄴㅇㄹ
+        if (!values[0].matches(VARIABLE_NAME)) {
+            Setting.runMessage(line);
+            return;
+        }
+        String[] tokens = matchSplitError(values[1], splitNoCutBack(VARIABLE_PUT, LIST_ADD), 2);
         variableDefineError(tokens[0], repositoryArray[0]);
-        repositoryArray[0].get(values[0]).put(tokens[0], VARIABLE_PUT + tokens[1]);
+        repositoryArray[0].get(values[0]).put(tokens[0], tokens[1]);
     }
 }

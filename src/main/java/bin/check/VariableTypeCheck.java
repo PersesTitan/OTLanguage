@@ -6,40 +6,50 @@ import bin.orign.variable.map.get.GetMap;
 import bin.orign.variable.set.get.GetSet;
 import bin.token.VariableToken;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
+import java.util.*;
 
 import static bin.check.VariableCheck.*;
 
 public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap {
-    public static boolean getVariableTypeCheck(VariableType variableType, String value) {
-        return switch (variableType) {
-            case Boolean -> isBoolean(value);
-            case Character -> isCharacter(value);
-            case Double -> isDouble(value);
-            case Float -> isFloat(value);
-            case Integer -> isInteger(value);
-            case Long -> isLong(value);
+    public static final Set<VariableType> originList = new HashSet<>() {{
+        add(VariableType.Integer);
+        add(VariableType.Long);
+        add(VariableType.Boolean);
+        add(VariableType.Character);
+        add(VariableType.Float);
+        add(VariableType.Double);
+        add(VariableType.String);
+    }};
 
-            case SetBoolean, ListBoolean -> !isListBoolean(value);
-            case SetCharacter, ListCharacter -> !isListCharacter(value);
-            case SetDouble, ListDouble -> !isListDouble(value);
-            case SetFloat, ListFloat -> !isListFloat(value);
-            case SetInteger, ListInteger -> !isListInteger(value);
-            case SetLong, ListLong -> !isListLong(value);
-            case SetString, ListString -> !isListString(value);
+    public static final Set<VariableType> listList = new HashSet<>() {{
+        add(VariableType.ListInteger);
+        add(VariableType.ListLong);
+        add(VariableType.ListBoolean);
+        add(VariableType.ListString);
+        add(VariableType.ListCharacter);
+        add(VariableType.ListFloat);
+        add(VariableType.ListDouble);
+    }};
 
-            case MapBoolean -> isMapBoolean(value);
-            case MapCharacter -> isMapCharacter(value);
-            case MapDouble -> isMapDouble(value);
-            case MapFloat -> isMapFloat(value);
-            case MapInteger -> isMapInteger(value);
-            case MapLong -> isMapLong(value);
-            case MapString -> isMapString(value);
-            case String -> true;
-        };
-    }
+    public static final Set<VariableType> setList = new HashSet<>() {{
+        add(VariableType.SetInteger);
+        add(VariableType.SetLong);
+        add(VariableType.SetBoolean);
+        add(VariableType.SetString);
+        add(VariableType.SetCharacter);
+        add(VariableType.SetFloat);
+        add(VariableType.SetDouble);
+    }};
+
+    public static final Set<VariableType> mapList = new HashSet<>() {{
+        add(VariableType.MapInteger);
+        add(VariableType.MapLong);
+        add(VariableType.MapBoolean);
+        add(VariableType.MapString);
+        add(VariableType.MapCharacter);
+        add(VariableType.MapFloat);
+        add(VariableType.MapDouble);
+    }};
 
     public static VariableType getVariableType(String variableType) {
         return switch (variableType) {
@@ -93,11 +103,11 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
                 else return value.charAt(0);
             }
             case Float -> {
-                if (!isLong(value)) throw VariableException.typeMatch();
+                if (!isFloat(value)) throw VariableException.typeMatch();
                 else return Float.parseFloat(value);
             }
             case Double -> {
-                if (!isLong(value)) throw VariableException.typeMatch();
+                if (!isDouble(value)) throw VariableException.typeMatch();
                 else return Double.parseDouble(value);
             }
             case SetInteger -> {

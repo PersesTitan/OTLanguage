@@ -43,7 +43,7 @@ public class Bracket implements LoopToken, Token {
             String group = matcher.group().strip();
             if (Pattern.compile(MR + BLANK + END).matcher(group).find()) {
                 if (stack.isEmpty()) {
-                    StartLine.setError(group, total);
+                    StartLine.setError(group);
                     throw MatchException.bracketMatchError();
                 } else if (stack.size() == 1) {
                     int start = stack.pop()+1;
@@ -56,7 +56,7 @@ public class Bracket implements LoopToken, Token {
                 } else stack.pop();
             } else {
                 if (!group.endsWith("{")) {
-                    StartLine.setError(group, total);
+                    StartLine.setError(group);
                     throw MatchException.loopStyleError();
                 } else stack.add(matcher.end()-1);
             }
@@ -69,7 +69,7 @@ public class Bracket implements LoopToken, Token {
     private void getErrorLine(String total, int pos) {
         String[] lines = total.substring(0, pos).split("\\n");
         String line = lines[lines.length-1];
-        StartLine.setError(line, total);
+        StartLine.setError(line);
         throw MatchException.bracketMatchError();
     }
 
@@ -84,11 +84,4 @@ public class Bracket implements LoopToken, Token {
         if (matcher.find()) return Integer.parseInt(matcher.group().trim());
         else return total.length();
     }
-
-    // Shell
-//    private Matcher shellMatcher;
-//    public boolean bracketCheck(String line) {
-//        shellMatcher = pattern.matcher(line);
-//        return shellMatcher.find();
-//    }
 }

@@ -15,7 +15,6 @@ public class PutVariable implements
         StartWork, SetVariableValue, GetSet, GetList, GetMap {
     private final String patternText = startMerge(VARIABLE_SET);
     private final Matcher matcher = Pattern.compile(patternText).matcher("");
-    private final Pattern accessPattern = Pattern.compile(ACCESS);
 
     @Override
     public boolean check(String line) {
@@ -23,21 +22,16 @@ public class PutVariable implements
     }
 
     @Override
-    public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
-        line = line.strip();
-        String value = line.replaceFirst(patternText, ""); //넣을 값
-        matcher.reset();
-        if (matcher.find()) {
-            String group = matcher.group();
-            int accessCount = accessCount(group);
-            if (accessCount > repositoryArray.length) throw VariableException.localNoVariable();
-            String variableName = group.substring(accessCount, group.length()-1); // 변수명
-            var repository = repositoryArray[accessCount];
-            if (Repository.noUse.contains(variableName)) throw VariableException.reservedWorks();
-            else if (!Repository.getSet(repository).contains(variableName)) throw VariableException.noDefine();
-            String varType = getVariableType(repository, variableName); // ㅇㅅㅇ, ㅇㅈㅇ
-            set(varType, variableName, value, repository);
-        }
+    public void start(String line, String origen,
+                      Map<String, Map<String, Object>>[] repositoryArray) {
+        // value = 변수명, 새로운 값
+        String[] values = matchSplitError(line.strip(), VARIABLE_PUT, 2);
+        int accessCount = accessCount(values[0]);
+        if (accessCount > repositoryArray.length) throw VariableException.localNoVariable();
+        var repository = repositoryArray[accessCount];
+        if (!Repository.getSet(repository).contains(values[0])) throw VariableException.noDefine();
+        String varType = getVariableType(repository, values[0]); // ㅇㅅㅇ, ㅇㅈㅇ
+        repository.get(varType).put(values[0], values[1]);
     }
 
     private String getVariableType(Map<String, Map<String, Object>> repository, String variableName) {

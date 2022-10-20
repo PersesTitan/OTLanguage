@@ -1,5 +1,6 @@
 package bin.apply.sys.make;
 
+import bin.apply.Setting;
 import bin.token.LoopToken;
 
 import java.util.*;
@@ -20,6 +21,7 @@ public class VariableDefault implements LoopToken {
         VARIABLE_GET_E + VALUES_ONE + VARIABLE_GET_E);
 
     public boolean check(String line) {
+        map.clear();
         return variableDefaultPatternCheck.matcher(line).find();
     }
 
@@ -61,7 +63,6 @@ public class VariableDefault implements LoopToken {
             }
             line = builder.toString();
         }
-        map.clear();
         return line;
     }
 }

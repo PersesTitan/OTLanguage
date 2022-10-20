@@ -80,6 +80,14 @@ public interface MergeToken {
         else return values;
     }
 
+    default String splitNoCutBack(String token) {
+        return "(?=" + token + ")";
+    }
+
+    default String splitNoCutBack(String...token) {
+        return "(?=" + String.join("|", token) + ")";
+    }
+
     // input = (test,1,10)
     default String[] getLoopTotal(String input) {
         // test, 1, 10

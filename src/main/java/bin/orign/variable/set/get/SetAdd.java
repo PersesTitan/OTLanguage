@@ -34,11 +34,10 @@ public class SetAdd implements
                       Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
         int count = accessCount(line);
-        line = line.replaceFirst(START + ACCESS + "+", "");
         if (count > repositoryArray.length) throw VariableException.localNoVariable();
         var repository = repositoryArray[count];
 
-        String[] vs = line.split(type, 2);
+        String[] vs = line.substring(count).split(type, 2);
         String variableName = vs[0].strip();
         String variableValue = vs[1].strip();
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {

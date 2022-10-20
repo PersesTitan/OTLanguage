@@ -1,5 +1,6 @@
 package bin.apply.sys.item;
 
+import bin.apply.Setting;
 import bin.check.VariableType;
 import bin.token.VariableToken;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import java.util.regex.Pattern;
 
 import static bin.apply.Controller.variableTypeCheck;
 import static bin.check.VariableTypeCheck.getVariableType;
+import static bin.check.VariableTypeCheck.originList;
 
 public class HpMap extends HashMap<String, Object> implements Map<String, Object>, VariableToken {
     private final Map<String, Integer> hp = new HashMap<>();
@@ -52,7 +54,7 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
     @Override
     public Object get(Object key) {
         Object object = super.get(key);
-        int hpCount = hp.getOrDefault(key.toString(), 0);
+        int hpCount = hp.getOrDefault(key.toString(), -1);
         if (hpCount != noCount) {
             if (--hpCount == 0) {
                 super.remove(key);
@@ -64,18 +66,15 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
 
     @Override
     public Object put(String key, Object value) {
-        int c = noCount;
         if (matcher.reset(key).find()) {
-            String group = matcher.group();
-            int len = group.length();
-            c = Integer.parseInt(group.substring(1, len-1));
-            if (c != 0) key = key.substring(len);
+            String[] match = matchSplitError(key, BR, 2);
+            int c = Integer.parseInt(match[0].substring(1));
+            if (c != 0) key = match[1];
+            hp.put(key, c);
         }
-
         Object keyObj = this.getOrDefault(key, null);
         Object valueObj = variableTypeCheck.getObject(variableType, value.toString(), keyObj);
-        hp.put(key, c);
-        if (keyObj == null || ORIGIN_LIST.contains(key)) return super.put(key, valueObj);
+        if (keyObj == null || originList.contains(variableType)) return super.put(key, valueObj);
         else return value;
     }
 
@@ -86,7 +85,7 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
     }
 
     @Override
-    public void putAll(@NotNull Map<? extends String, ? extends Object> m) {
+    public void putAll(@NotNull Map<? extends String, ?> m) {
         for (var ms : m.entrySet()) put(ms.getKey(), ms.getValue());
     }
 

@@ -9,23 +9,15 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PriorityPrintln implements
-        StartWork, ConsoleToken, Token {
-    private final String patternText;
-    private final Matcher matcher;
-
-    public PriorityPrintln(String type) {
-        this.patternText = startMerge(type, orMerge(BLANKS, END));
-        this.matcher = Pattern.compile(this.patternText).matcher("");
-    }
+public record PriorityPrintln(int type) implements StartWork, ConsoleToken, Token {
 
     @Override
     public boolean check(String line) {
-        return matcher.reset(line).find();
+        return false;
     }
 
     @Override
     public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
-        System.out.println(origen.replaceFirst(this.patternText, ""));
+        System.out.println(origen.substring(type).stripIndent());
     }
 }

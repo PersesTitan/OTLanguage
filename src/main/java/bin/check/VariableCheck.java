@@ -9,7 +9,6 @@ public interface VariableCheck {
     // 기본 변수
     static boolean isBoolean(String line) {
         line = line.strip();
-        System.out.println(line);
         if (line.isBlank()) return false;
         return line.equals(BoolToken.FALSE) || line.equals(BoolToken.TRUE);
     }

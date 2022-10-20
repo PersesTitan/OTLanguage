@@ -37,8 +37,7 @@ public class ListAdd implements
         if (count > repositoryArray.length) throw VariableException.localNoVariable();
         var repository = repositoryArray[count];
 
-        line = line.substring(count);
-        String[] vs = line.split(BLANKS + type, 2);
+        String[] vs = line.substring(count).split(type, 2);
         String variableName = vs[0].strip();
         String variableValue = vs[1].strip();
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {

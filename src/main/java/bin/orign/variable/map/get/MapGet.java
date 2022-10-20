@@ -4,6 +4,7 @@ import bin.token.VariableToken;
 import work.ReturnWork;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,22 +34,20 @@ public class MapGet implements ReturnWork, VariableToken {
             String[] variables = matchSplitError(bothEndCut(group), type, 2);
             int count = accessCount(variables[0]);
             var repository = repositoryArray[count];
-            String variableName = variables[0].substring(count); // 변수
-            line = getMap(repository, group, line, variableName, variables[1]);
+            String value = getMap(repository, variables[1], variables[0].substring(count));
+            if (value != null) line = line.replace(group, value);
         }
         return line;
     }
 
-    private String getMap(Map<String, Map<String, Object>> repository,
-                          String group, String line,
-                          String variableName, String key) {
-        for (var type : MAP_LIST) {
-            var rep = repository.get(type);
+    private String getMap(Map<String, Map<String, Object>> repository, String key, String variableName) {
+        for (String lists : MAP_LIST) {
+            var rep = repository.get(lists);
             if (rep.containsKey(variableName)) {
                 LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) rep.get(variableName);
-                if (map.containsKey(key)) line = line.replace(group, map.get(key).toString());
+                if (map.containsKey(key)) return map.get(key).toString();
             }
         }
-        return line;
+        return null;
     }
 }

@@ -1,19 +1,21 @@
-package bin.orign.variable.list.get;
+package bin.orign.variable.set.get;
 
 import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.ReturnWork;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ListGet implements ReturnWork, LoopToken {
+public class SetGet implements ReturnWork, LoopToken {
     private final String type;
     private final Matcher matcher;
 
-    public ListGet(String type) {
+    public SetGet(String type) {
         this.type = type;
         String patternText = merge(VARIABLE_GET_S, VARIABLE_ACCESS, type, "\\d+", VARIABLE_GET_E);
         this.matcher = Pattern.compile(patternText).matcher("");
@@ -24,12 +26,13 @@ public class ListGet implements ReturnWork, LoopToken {
         return (matcher.reset(line)).find();
     }
 
+
     @Override
     public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
-            String group = matcher.group(); // :변수>>1_
-            String cut = bothEndCut(group); // 변수>>1
+            String group = matcher.group(); // :변수>1_
+            String cut = bothEndCut(group); // 변수>1
             int count = accessCount(cut);   // 0
             if (repositoryArray.length < count) throw VariableException.localNoVariable();
             var repository = repositoryArray[count];
@@ -42,11 +45,11 @@ public class ListGet implements ReturnWork, LoopToken {
     }
 
     private String getValue(Map<String, Map<String, Object>> repository, int count, String variableName) {
-        for (String lists : LIST_LIST) {
+        for (String lists : SET_LIST) {
             var rep = repository.get(lists);
             if (rep.containsKey(variableName)) {
-                LinkedList<Object> list = (LinkedList<Object>) rep.get(variableName);
-                if (list.size() > count) return list.get(count).toString();
+                LinkedHashSet<Object> set = (LinkedHashSet<Object>) rep.get(variableName);
+                if (set.size() > count) return set.stream().toList().get(count).toString();
             }
         }
         return null;

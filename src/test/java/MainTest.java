@@ -3,6 +3,8 @@ import bin.exception.MatchException;
 import bin.token.LoopToken;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -11,16 +13,19 @@ public class MainTest implements LoopToken, ChangeHangle {
 //        Taskbar.getTaskbar().setIconImage(Toolkit.getDefaultToolkit().getImage("/Users/persestitan/Documents/GitHub/OTLanguage/OTLanguage.png"));
 //        Robot robot = new Robot();
 //        JFrame frame = new JFrame("test");
-
-        try {
-        } catch (PatternSyntaxException e) {
-            String text = e.getDescription();
-            String start = "Named capturing group <";
-            int a = text.indexOf(start) + start.length();
-            int b = text.lastIndexOf("> is already defined");
-            if (b == -1 || a-start.length() == -1) throw MatchException.patternMatchError(null);
-            throw MatchException.patternMatchError(text.substring(a, b));
-        }
+        String a = "a";
+        String b = "a";
+        System.out.println(Arrays.toString(a.split(" ")));
+        System.out.println(Arrays.toString(b.split(" ")));
+//        try {
+//        } catch (PatternSyntaxException e) {
+//            String text = e.getDescription();
+//            String start = "Named capturing group <";
+//            int a = text.indexOf(start) + start.length();
+//            int b = text.lastIndexOf("> is already defined");
+//            if (b == -1 || a-start.length() == -1) throw MatchException.patternMatchError(null);
+//            throw MatchException.patternMatchError(text.substring(a, b));
+//        }
 
         System.out.println(Arrays.toString("메소드명[]".substring(0, "메소드명[]".length() - 1).split(BL)));
         System.out.println(Arrays.toString("메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ]".substring(0, "메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ]".length() - 1).split(BL)));
