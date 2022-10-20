@@ -33,7 +33,7 @@ public class Redirect implements RootWork, LoopToken, PoisonStartWork {
                       Map<String, Map<String, Object>>[] repositoryArray) {
         StringTokenizer tokenizer = new StringTokenizer(line.strip());
         tokenizer.nextToken();
-        redirect(responseHeader, tokenizer.nextToken());
         statusCode.set(HttpURLConnection.HTTP_MOVED_TEMP);
+        redirect(responseHeader, tokenizer.nextToken());
     }
 }
