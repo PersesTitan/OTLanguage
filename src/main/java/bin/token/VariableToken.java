@@ -11,7 +11,7 @@ import static bin.token.cal.BoolToken.FALSE;
 import static bin.token.cal.NumberToken.NUMBER;
 
 public interface VariableToken extends Token {
-    String VARIABLE_HTML = "[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]+[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$-]*";
+    String VARIABLE_HTML = "[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$-]+[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$-]*";
     String VARIABLE_NAME = "(\\[\\d+\\])?" + VARIABLE_HTML;
     String VARIABLE_ACCESS = ACCESS + "{0,2}" + VARIABLE_NAME;
     String VARIABLE = ":" + VARIABLE_ACCESS + "_";

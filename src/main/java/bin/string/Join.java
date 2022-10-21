@@ -43,4 +43,9 @@ public class Join extends GetOnlyChangeList implements LoopToken, StringToken, R
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

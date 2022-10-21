@@ -8,6 +8,7 @@ public interface StringToken {
     String SPLIT = "ㅅㅍㅅ";
     String SPLIT_REGULAR = "ㅆㅍㅆ";
     String CONTAINS = QUESTION;
+    String EQUALS = "=" + QUESTION;
 
     String ADD_ALL = "";        // 합집합
     String RETAIN_ALL = "";     // 교집합

@@ -48,4 +48,9 @@ public class RandomDouble implements
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

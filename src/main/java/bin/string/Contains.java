@@ -46,4 +46,9 @@ public class Contains implements LoopToken, StringToken, ReturnWork {
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

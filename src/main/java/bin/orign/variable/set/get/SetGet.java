@@ -54,4 +54,9 @@ public class SetGet implements ReturnWork, LoopToken {
         }
         return null;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

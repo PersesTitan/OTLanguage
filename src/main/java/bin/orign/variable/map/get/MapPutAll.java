@@ -1,13 +1,17 @@
 package bin.orign.variable.map.get;
 
+import bin.apply.Repository;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.StartWork;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static bin.apply.Repository.getSet;
 
 public class MapPutAll implements StartWork, LoopToken, GetMap {
     private final String type;
@@ -32,6 +36,7 @@ public class MapPutAll implements StartWork, LoopToken, GetMap {
         variableTokens[0] = variableTokens[0].substring(count);
         if (count > repositoryArray.length) throw VariableException.localNoVariable();
         var repository = repositoryArray[count];
+        if (!Repository.getSet(repository).contains(variableTokens[0])) throw VariableException.noDefine();
         for (var entry : repository.entrySet()) {
             var map = entry.getValue();
             if (map.containsKey(variableTokens[0])) {

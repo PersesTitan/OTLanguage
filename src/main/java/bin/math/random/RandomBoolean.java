@@ -32,4 +32,9 @@ public class RandomBoolean implements
         while (matcher.find()) line = line.replaceFirst(patternText, random.nextBoolean() ? "ㅇㅇ" : "ㄴㄴ");
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

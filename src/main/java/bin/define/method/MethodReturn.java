@@ -51,4 +51,9 @@ public class MethodReturn implements LoopToken, ReturnWork {
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

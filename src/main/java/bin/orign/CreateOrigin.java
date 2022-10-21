@@ -24,9 +24,9 @@ public class CreateOrigin implements StartWork, LoopToken {
             Setting.runMessage(line);
             return;
         }
-        String[] tokens = matchSplitError(values[1], VARIABLE_PUT, 2);
+        String[] tokens = values[1].split(VARIABLE_PUT, 2);
         variableDefineError(tokens[0], repositoryArray[0]);
-        repositoryArray[0].get(values[0]).put(tokens[0], tokens[1]);
+        repositoryArray[0].get(values[0]).put(tokens[0], tokens.length == 2 ? tokens[1] : "");
     }
 
     @Override

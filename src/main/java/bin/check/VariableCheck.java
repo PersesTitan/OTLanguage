@@ -155,6 +155,6 @@ public interface VariableCheck {
         return Pattern.compile(Token.COMMA).splitAsStream(line)
                 .map(String::trim)
                 .map(v -> v.split(Token.MAP_EQUAL, 2))
-                .anyMatch(v -> v.length == 2 && isLong(v[1]));
+                .anyMatch(v -> v.length == 2);
     }
 }

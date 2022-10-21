@@ -48,4 +48,9 @@ public class RandomFloat implements
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

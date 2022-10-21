@@ -54,4 +54,5 @@ public interface LoopToken extends VariableToken {
     String REDIRECT = "ㄹㄷㄹ";
     String GET_COOKIE = "ㄱㅋㄱ";
     String SET_COOKIE = "ㄱㅋㄱ";
+    String GET_URL = "ㅇㄹㅇ";
 }

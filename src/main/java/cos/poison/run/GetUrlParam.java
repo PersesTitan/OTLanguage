@@ -1,9 +1,9 @@
 package cos.poison.run;
 
+import bin.apply.sys.make.ChangeHangle;
 import bin.token.LoopToken;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import cos.poison.root.RootWork;
 import cos.poison.work.PoisonReturnWork;
 import work.ReturnWork;
 
@@ -14,14 +14,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GetCookie implements PoisonReturnWork, RootWork, LoopToken {
+public class GetUrlParam implements PoisonReturnWork, LoopToken, ChangeHangle {
     private final Matcher matcher;
     public HttpExchange exchange;
     public Headers requestHeader;
     public AtomicInteger statCode;
     public AtomicReference<String> nowPath;
 
-    public GetCookie(String className, String type) {
+    public GetUrlParam(String className, String type) {
         String patternText = merge(VARIABLE_GET_S, className, ACCESS, type, BLANKS, VARIABLE_HTML, VARIABLE_GET_E);
         this.matcher = Pattern.compile(patternText).matcher("");
     }
@@ -32,21 +32,23 @@ public class GetCookie implements PoisonReturnWork, RootWork, LoopToken {
     }
 
     @Override
-    public ReturnWork first() {
-        return this;
-    }
-
-    @Override
     public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
         matcher.reset();
-        if (matcher.find()) {
+        while (matcher.find()) {
+            // :ㅇㄹㅇ ㅁ_
             String group = matcher.group();
             StringTokenizer tokenizer = new StringTokenizer(bothEndCut(group));
             tokenizer.nextToken();
-            String value = getCookie(requestHeader, tokenizer.nextToken());
-            if (value != null) line = line.replace(group, value);
+            String url = exchange.getRequestURI().getPath();
+            Matcher urlMatcher = Pattern.compile(nowPath.get()).matcher(url.endsWith("/") ? url : url + "/");
+            if (urlMatcher.find()) line = line.replace(group, urlMatcher.group(change(tokenizer.nextToken())));
         }
         return line;
+    }
+
+    @Override
+    public ReturnWork first() {
+        return this;
     }
 
     @Override

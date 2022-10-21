@@ -50,4 +50,9 @@ public class MapGet implements ReturnWork, VariableToken {
         }
         return null;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

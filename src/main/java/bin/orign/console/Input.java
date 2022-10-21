@@ -35,4 +35,9 @@ public class Input implements
         while (matcher.find()) line = line.replaceFirst(patternText, scanner());
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

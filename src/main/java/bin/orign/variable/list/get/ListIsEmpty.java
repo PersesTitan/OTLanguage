@@ -78,4 +78,9 @@ public class ListIsEmpty implements GetList, VariableToken, ReturnWork {
         line.replace(0, count, "");
         return count;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

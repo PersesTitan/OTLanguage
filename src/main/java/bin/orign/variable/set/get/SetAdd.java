@@ -1,5 +1,6 @@
 package bin.orign.variable.set.get;
 
+import bin.apply.Repository;
 import bin.exception.MatchException;
 import bin.exception.VariableException;
 import bin.token.VariableToken;
@@ -37,6 +38,7 @@ public class SetAdd implements VariableToken, StartWork, GetSet {
         var repository = repositoryArray[count];
 
         String[] vs = line.substring(count).split(type, 2);
+        if (!Repository.getSet(repository).contains(vs[0])) throw VariableException.noDefine();
         String variableName = vs[0].strip();
         String variableValue = vs[1].strip();
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {

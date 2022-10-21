@@ -20,15 +20,17 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static bin.apply.Setting.*;
 import static bin.apply.sys.make.StartLine.errorCount;
 import static bin.apply.sys.make.StartLine.errorLine;
 import static cos.poison.Poison.variableHTML;
+import static cos.poison.PoisonRepository.poisonReturnWorks;
+import static cos.poison.PoisonRepository.poisonStartWorks;
 import static cos.poison.controller.HttpServerManager.*;
 
 public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValue, PoisonTools {
-    public static final AtomicInteger statusCode = new AtomicInteger();
     private final Map<String, Map<String, Object>> repository = (Map<String, Map<String, Object>>) COPY_REPOSITORY.clone();
     private final String defaultHtml;
     public HandlerRoot(String defaultHtml) {
@@ -40,15 +42,18 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
     public void handle(HttpExchange exchange) {
         String path = exchange.getRequestURI().getPath();
         path = path.endsWith("/") ? path : path + "/";
-        statusCode.set(HttpURLConnection.HTTP_OK);
         try (exchange; OutputStream responseBody = exchange.getResponseBody()) {
-            HttpMethod method = HttpMethod.valueOf(exchange.getRequestMethod());
+            // 기본값 : StatusCode = 200, Path = /
+            final AtomicInteger statusCode = new AtomicInteger(HttpURLConnection.HTTP_OK);
+            final AtomicReference<String> nowPath = new AtomicReference<>(path);
+            // method 종류 구하기
+            final HttpMethod method = HttpMethod.valueOf(exchange.getRequestMethod());
 
-            Headers responseHeader = exchange.getResponseHeaders(); // 응답(send)
-            Headers requestHeader = exchange.getRequestHeaders();   // 요청(get)
-            HandlerItem handlerItem = checkHandlerItem(method, path);
+            final Headers responseHeader = exchange.getResponseHeaders(); // 응답(send)
+            final Headers requestHeader = exchange.getRequestHeaders();   // 요청(get)
+            final HandlerItem handlerItem = checkHandlerItem(method, path, nowPath);
             if (defaultHtml != null) {
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK,0);
+                exchange.sendResponseHeaders(statusCode.get(),0);
                 responseBody.write(defaultHtml.getBytes());
             }
 
@@ -62,8 +67,8 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
                 // 로그 출력
                 printLog(method, path, handlerDao.value());
                 // 동작
-                serverStart(repository, exchange,
-                        requestHeader, responseHeader,
+                serverStart(repository, statusCode, nowPath,
+                        exchange, requestHeader, responseHeader,
                         handlerItem.startFinalTotal(),
                         handlerItem.fileName());
                 exchange.sendResponseHeaders(statusCode.get(),0);
@@ -98,26 +103,47 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
     }
 
     private void serverStart(Map<String, Map<String, Object>> repository,
+                             AtomicInteger statCode, AtomicReference<String> nowPath,
                              HttpExchange exchange,
                              Headers requestHeader, Headers responseHeader,
                              String startFinalTotal, String fileName) {
+        poisonReturnWorks.forEach(v -> {
+            v.setExchange(exchange);
+            v.setNowPath(nowPath);
+            v.setRequestHeader(requestHeader);
+            v.setStatCode(statCode);
+            returnWorks.add(v);
+        });
+
+        poisonStartWorks.forEach(v -> {
+            v.setExchange(exchange);
+            v.setNowPath(nowPath);
+            v.setResponseHeader(responseHeader);
+            v.setStatCode(statCode);
+            startWorks.add(v);
+        });
+
         variableHTML.reset();
         try {
-            StartLine.startPoison(startFinalTotal, fileName,
-                    exchange, requestHeader, responseHeader,
-                    repository, Repository.repository);
+            StartLine.startPoison(startFinalTotal, fileName, repository, Repository.repository);
         } catch (Exception e) {
             String error = String.format("Error Line %d (%s)", errorCount.get(), errorLine.get());
             errorMessage(error);
+        } finally {
+            poisonReturnWorks.forEach(returnWorks::remove);
+            poisonStartWorks.forEach(startWorks::remove);
         }
     }
 
-    private HandlerItem checkHandlerItem(HttpMethod method, String path) {
+    private HandlerItem checkHandlerItem(HttpMethod method, String path, AtomicReference<String> nowPath) {
         var repository = httpMethod.get(method);
         if (repository.containsKey(path)) return repository.get(path);
         else {
             for (Map.Entry<String, HandlerItem> entry : repository.entrySet()) {
-                if (path.matches(entry.getKey())) return entry.getValue();
+                if (path.matches(entry.getKey())) {
+                    nowPath.set(entry.getKey());
+                    return entry.getValue();
+                }
             }
             return null;
         }

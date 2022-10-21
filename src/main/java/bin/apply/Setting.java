@@ -33,10 +33,7 @@ import bin.orign.loop.If;
 import bin.orign.variable.SetVariable;
 import bin.orign.variable.origin.put.PutVariable;
 import bin.orign.variable.set.get.*;
-import bin.string.Contains;
-import bin.string.Join;
-import bin.string.Split;
-import bin.string.SplitRegular;
+import bin.string.*;
 import cos.poison.Poison;
 
 import java.util.HashMap;
@@ -156,6 +153,7 @@ public class Setting implements Repository {
         returnWorks.add(new Split(SPLIT));
         returnWorks.add(new SplitRegular(SPLIT_REGULAR));
         returnWorks.add(new Contains(CONTAINS));
+        returnWorks.add(new Equals(STRING_VARIABLE, EQUALS));
 
         startWorkMap.put(PRINT_SPACE, new PrintSpace(PRINT_SPACE.length()));
         startWorkMap.put(PRINT_TAP, new PrintTap(PRINT_TAP.length()));

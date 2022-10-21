@@ -6,20 +6,30 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import cos.poison.root.RootWork;
 import cos.poison.work.PoisonStartWork;
+import work.StartWork;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SetCookie implements RootWork, LoopToken, PoisonStartWork {
     private final int length;
     private final Matcher matcher;
+    public HttpExchange exchange;
+    public Headers responseHeader;
+    public AtomicInteger statCode;
+    public AtomicReference<String> nowPath;
+
 
     // ㄱㅋㄱ[][] ~ [][][][]
     // key, value, path, time
-    public SetCookie(String type) {
-        this.length = type.replace("\\", "").length();
-        String patternText = startEndMerge(type, ARGUMENT.repeat(2), "(", ARGUMENT, "){0,2}");
+    public SetCookie(String className, String type) {
+        String start = merge(className, ACCESS, type);
+        this.length = start.replace("\\", "").length();
+        String patternText = startEndMerge(start, ARGUMENT.repeat(2), "(", ARGUMENT, "){0,2}");
         this.matcher = Pattern.compile(patternText).matcher("");
     }
 
@@ -29,9 +39,7 @@ public class SetCookie implements RootWork, LoopToken, PoisonStartWork {
     }
 
     @Override
-    public void start(String line, String origen,
-                      HttpExchange exchange, Headers responseHeader,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+    public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
         String[] tokens = bothEndCut(line.strip(), length + 1, 1).split(BR + BL, 4);
         switch (tokens.length) {
             case 2 -> setCookie(responseHeader, tokens[0], tokens[1], null, -1);
@@ -46,5 +54,30 @@ public class SetCookie implements RootWork, LoopToken, PoisonStartWork {
                 else throw VariableException.typeMatch();
             }
         }
+    }
+
+    @Override
+    public void first() {
+
+    }
+
+    @Override
+    public void setExchange(HttpExchange exchange) {
+        this.exchange = exchange;
+    }
+
+    @Override
+    public void setResponseHeader(Headers responseHeader) {
+        this.responseHeader = responseHeader;
+    }
+
+    @Override
+    public void setStatCode(AtomicInteger statCode) {
+        this.statCode = statCode;
+    }
+
+    @Override
+    public void setNowPath(AtomicReference<String> nowPath) {
+        this.nowPath = nowPath;
     }
 }

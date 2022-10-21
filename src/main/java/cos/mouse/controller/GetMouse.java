@@ -36,4 +36,9 @@ public class GetMouse implements ReturnWork, LoopToken {
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

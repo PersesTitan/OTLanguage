@@ -288,8 +288,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
                     else if (value.startsWith(VARIABLE_PUT)) {
                         if (object != null) ((LinkedHashMap<String, Integer>) object).clear();
                         map = getIntegerMap(value.substring(VARIABLE_PUT.length()));
-                    }
-                    else throw VariableException.noGrammar();
+                    } else throw VariableException.noGrammar();
                 }
                 if (object != null) ((LinkedHashMap<String, Integer>) object).putAll(map);
                 return map;
@@ -302,8 +301,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
                     else if (value.startsWith(VARIABLE_PUT)) {
                         if (object != null) ((LinkedHashMap<String, Integer>) object).clear();
                         map = getLongMap(value.substring(VARIABLE_PUT.length()));
-                    }
-                    else throw VariableException.noGrammar();
+                    } else throw VariableException.noGrammar();
                 }
                 if (object != null) ((LinkedHashMap<String, Long>) object).putAll(map);
                 return map;

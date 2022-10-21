@@ -40,4 +40,9 @@ public class SetVariable implements ReturnWork, VariableToken {
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

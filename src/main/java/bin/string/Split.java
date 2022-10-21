@@ -42,4 +42,9 @@ public class Split implements LoopToken, StringToken, ReturnWork {
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

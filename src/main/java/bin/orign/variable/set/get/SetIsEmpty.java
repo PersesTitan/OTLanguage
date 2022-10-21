@@ -79,4 +79,9 @@ public class SetIsEmpty implements
         line.replace(0, count, "");
         return count;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

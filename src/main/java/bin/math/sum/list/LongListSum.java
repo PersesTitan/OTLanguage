@@ -50,4 +50,9 @@ public class LongListSum implements ReturnWork, LoopToken, GetList {
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

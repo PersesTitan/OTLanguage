@@ -49,4 +49,9 @@ public class RandomInteger implements
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

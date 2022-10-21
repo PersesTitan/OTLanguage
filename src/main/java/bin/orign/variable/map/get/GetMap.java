@@ -83,7 +83,7 @@ public interface GetMap {
     }
 
     default LinkedHashMap<String, String> getStringMap(String line) {
-        if (!isMapLong(line)) throw VariableException.typeMatch();
+        if (!isMapString(line)) throw VariableException.typeMatch();
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
         Pattern.compile(Token.COMMA)
                 .splitAsStream(line.substring(1, line.length()-1))

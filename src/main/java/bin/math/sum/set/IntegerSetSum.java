@@ -48,4 +48,9 @@ public class IntegerSetSum implements ReturnWork, LoopToken, GetSet {
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

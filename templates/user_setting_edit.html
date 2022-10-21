@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <style>
+        div.error {
+        color: red
+    }
+
+    table {
+        text-align: center;
+    }
+
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #444444;
+    }
+    </style>
+</head>
+<body>
+    <div class="center">
+    <form method="post">
+        <table>
+            <tr><th colspan="2" style="font-size: 2em">설정</th></tr>
+            <tr><td>생성일</td><td>{{ user.date_joined | date:'Y년 m월 d일 - h시 i분' }}</tr>
+            <tr><td>아이디</td><td><input value="{{ user.username }}" type="text"></td></tr>
+            <tr><td>비밀번호</td><td><input value="{{ user.password }}" type="password"></td></tr>
+            <tr><td>이메일</td><td><input value="{{ user.email }}" type="text"></td></tr>
+            <tr>
+                <td colspan="2">
+                <details>
+                    <summary>좋아요한 블로그</summary>
+                    {% for goods in user.good.all %}
+                        <br><a href="/boards/{{ goods.id }}">{{ goods.title }}</a>
+                    {% endfor %}
+                </details>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">저장</button></td>
+            </tr>
+        </table>
+    </form>
+    </div>
+</body>
+</html>

@@ -51,4 +51,9 @@ public class ListGet implements ReturnWork, LoopToken {
         }
         return null;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }

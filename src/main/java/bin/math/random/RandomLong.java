@@ -48,4 +48,9 @@ public class RandomLong implements
         }
         return line;
     }
+
+    @Override
+    public ReturnWork first() {
+        return this;
+    }
 }
