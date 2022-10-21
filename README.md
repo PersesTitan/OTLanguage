@@ -26,10 +26,13 @@
 ## 확장자
 > OTLanguage는 ```.otl```확장자를 사용합니다.
 ## 동작환경
-> 문장을 분석하는 (파서)구문 분석기가 Java로 구현되어 있기 때문에 Java가 깔려 있어야 실행이 됩니다.<br>
-> (현재 Java를 설치하지 않고 실행할 방법 찾는 중 입니다.) <br>
-> 구문 분석기 개발 환경은 Java-17입니다. 버전이 낮으면 호환이 되지 않을 수 있으니 참고해주세요. <br>
-> [오라클 Java-17 다운로드 링크](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) <br>
+> OS
+> - MacOS <br>
+>   테스트 환경 : MacBook <br>
+>   칩 : Apple M1 <br>
+> - Linux <br>
+>   테스트 환경 : Red Hat
+
 ## 특징
 1. OTLanguage는 1줄씩 문장을 읽어 해석하는 인터프린터 방식의 프로그래밍 언어입니다. <br>
 2. 기본 타입이 문자열이기 때문에 특수한 경우를 제외하고는 ' 나 " 를 사용하지 않습니다. <br>
@@ -42,11 +45,11 @@
 [Git 다운로드 링크](https://git-scm.com/downloads)
 - **MacOS**
 ```shell
-curl https://raw.githubusercontent.com/OTLanguage/.github/main/otlmake.sh | sh
+curl https://raw.githubusercontent.com/OTLanguage/download/main/mac.sh | sh
 ```
 - **Linux**
 ```shell
-curl https://raw.githubusercontent.com/OTLanguage/.github/main/otlmake-linux.sh | sh
+curl https://raw.githubusercontent.com/OTLanguage/download/main/linux.sh | sh
 ```
 <br>
 
