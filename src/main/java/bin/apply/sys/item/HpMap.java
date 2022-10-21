@@ -2,6 +2,7 @@ package bin.apply.sys.item;
 
 import bin.apply.Setting;
 import bin.check.VariableType;
+import bin.exception.VariableException;
 import bin.token.VariableToken;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,7 @@ import static bin.check.VariableTypeCheck.originList;
 
 public class HpMap extends HashMap<String, Object> implements Map<String, Object>, VariableToken {
     private final Map<String, Integer> hp = new HashMap<>();
-    private final Matcher matcher = Pattern.compile(START + BL + "\\d+" + BR).matcher("");
+//    private final Matcher matcher = Pattern.compile(START + BL + "\\d+" + BR).matcher("");
     private static final int noCount = -1;
     private final VariableType variableType;
 
@@ -66,7 +67,8 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
 
     @Override
     public Object put(String key, Object value) {
-        if (matcher.reset(key).find()) {
+        if (!key.matches(VARIABLE_NAME)) throw VariableException.variableNameMatch();
+        else if (key.startsWith("[")) {
             String[] match = matchSplitError(key, BR, 2);
             int c = Integer.parseInt(match[0].substring(1));
             if (c != 0) key = match[1];

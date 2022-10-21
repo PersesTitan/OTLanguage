@@ -65,9 +65,6 @@ public class Main extends Setting {
         else if (!file.canRead()) throw FileException.noReadError();
         else if (!extensionCheck(file.getName())) throw FileException.rightExtension();
         Setting.firstStart();
-//        TOTAL_LIST.forEach(v -> COPY_REPOSITORY.put(v, new HpMap<>()));
-//        repository.putAll((Map<String, Map<String, Object>>) COPY_REPOSITORY.clone());
-//        new ReadOTLM().readSetting("system.otls");
 
         try (FileReader fileReader = new FileReader(mainPath, StandardCharsets.UTF_8);
              BufferedReader reader = new BufferedReader(fileReader)) {
@@ -84,13 +81,12 @@ public class Main extends Setting {
     private void shell() {
         String fileName = "temporary";
         StringBuilder total = new StringBuilder();
-
         Setting.firstStart();
         while (true) {
             System.out.print(">>> ");
 
-            String line = scanner().strip();
-            if (line.equals("끝")) break;
+            String line = "1 " + scanner().strip();
+            if (line.equals("1 끝")) break;
             else if (line.endsWith("{")) {
                 boolean check = false;
                 int count = 0;

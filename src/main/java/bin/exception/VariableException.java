@@ -2,6 +2,7 @@ package bin.exception;
 
 public class VariableException extends RuntimeException {
     private final static String typeMatch = "변수 값이 유효하지 않습니다.";
+    private final static String variableNameMatch = "변수명이 유효하지 않습니다.";
     private final static String sameVariable = "이미 존재하는 변수명입니다.";
     private final static String localNoVariable = "해당 위치의 변수에 접근할 수 없습니다.";
     private final static String reservedWorks = "예약된 단어를 사용할 수 없습니다.";
@@ -28,9 +29,14 @@ public class VariableException extends RuntimeException {
             case definedMethodName -> "The method name already defined.\nPlease check the defined name.";
             case methodParamsCount -> "The number of parameters does not match.\nPlease check the number of parameters.";
             case methodTypeMatch -> "Method types do not match.\nPlease check the corresponding method type.";
+            case variableNameMatch -> "Variable name is not valid.\nPlease check the variable name.";
             default -> "";
         };
         ErrorMessage.printErrorMessage(e, subMessage, path, line, position);
+    }
+
+    public static VariableException variableNameMatch() {
+        return new VariableException(variableNameMatch);
     }
 
     public static VariableException methodTypeMatch() {
