@@ -9,22 +9,22 @@ import work.StartWork;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CreateString implements StartWork, VariableToken, Controller {
-    private final Pattern pattern;
+    private final Matcher matcher;
     private final String type;
 
-    public CreateString(String type, Map<String, Map<String, Object>> repository) {
+    public CreateString(String type) {
         String patternText = startMerge(type, BLANKS, VARIABLE_NAME, VARIABLE_PUT);
-        repository.put(type, new HpMap<>());
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
@@ -34,5 +34,10 @@ public class CreateString implements StartWork, VariableToken, Controller {
         String value = line.replaceFirst(VARIABLE_NAME + VARIABLE_PUT, ""); // 값
         variableDefineError(variableName, repositoryArray[0]);
         repositoryArray[0].get(type).put(variableName, value);
+    }
+
+    @Override
+    public void first() {
+
     }
 }

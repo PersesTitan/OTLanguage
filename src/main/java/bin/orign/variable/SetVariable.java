@@ -10,12 +10,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SetVariable implements ReturnWork, VariableToken {
-    private final static Pattern pattern = Pattern.compile(VARIABLE);
-    private Matcher matcher;
+    private final Matcher matcher = Pattern.compile(VARIABLE).matcher("");
 
     @Override
     public boolean check(String line) {
-        return (matcher = pattern.matcher(line)).find();
+        return (matcher.reset(line)).find();
     }
 
     @Override
@@ -33,7 +32,6 @@ public class SetVariable implements ReturnWork, VariableToken {
         return line;
     }
 
-
     private String getValue(String group, String variableName, String line,
                             Map<String, Map<String, Object>> repository) {
         for (var rep : repository.values()) {
@@ -41,5 +39,10 @@ public class SetVariable implements ReturnWork, VariableToken {
                 line = line.replaceFirst(Pattern.quote(group), rep.get(variableName).toString());
         }
         return line;
+    }
+
+    @Override
+    public ReturnWork first() {
+        return this;
     }
 }

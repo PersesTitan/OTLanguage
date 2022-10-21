@@ -9,24 +9,24 @@ import work.StartWork;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.isCharacter;
 
 public class CreateCharacter implements StartWork, VariableToken, Controller {
-    private final Pattern pattern;
+    private final Matcher matcher;
     private final String type;
 
-    public CreateCharacter(String type, Map<String, Map<String, Object>> repository) {
+    public CreateCharacter(String type) {
         String patternText = startMerge(type, BLANKS, VARIABLE_NAME, VARIABLE_PUT);
-        repository.put(type, new HpMap<>());
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
@@ -37,5 +37,10 @@ public class CreateCharacter implements StartWork, VariableToken, Controller {
         variableDefineError(variableName, repositoryArray[0]);
         if (!isCharacter(value)) throw VariableException.typeMatch();
         repositoryArray[0].get(type).put(variableName, value);
+    }
+
+    @Override
+    public void first() {
+
     }
 }

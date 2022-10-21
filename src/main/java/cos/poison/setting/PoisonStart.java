@@ -25,4 +25,9 @@ public class PoisonStart implements LoopToken, StartWork {
                       Map<String, Map<String, Object>>[] repositoryArray) {
         httpServerManager.start();
     }
+
+    @Override
+    public void first() {
+
+    }
 }

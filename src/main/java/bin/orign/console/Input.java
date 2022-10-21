@@ -16,23 +16,28 @@ public class Input implements
         ReturnWork, ConsoleToken, Token, VariableToken {
 //    private final Scanner scanner = new Scanner(System.in);
     private final String patternText;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public Input(String type) {
         this.patternText = VARIABLE_GET_S + type + VARIABLE_GET_E;
-        this.pattern = Pattern.compile(this.patternText);
+        this.matcher = Pattern.compile(this.patternText).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return (matcher.reset(line)).find();
     }
 
     @Override
     public String start(String line,
                         Map<String, Map<String, Object>>[] repositoryArray) {
-        Matcher matcher = pattern.matcher(line);
+        matcher.reset();
         while (matcher.find()) line = line.replaceFirst(patternText, scanner());
         return line;
+    }
+
+    @Override
+    public ReturnWork first() {
+        return this;
     }
 }

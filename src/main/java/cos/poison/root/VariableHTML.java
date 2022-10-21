@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class VariableHTML implements LoopToken {
-    private final Map<String, String> map = new HpMap<>();
+    private final Map<String, Object> map = new HpMap(MODEL);
     private final Pattern pattern;
 
     public VariableHTML(String type) {
@@ -46,7 +46,7 @@ public class VariableHTML implements LoopToken {
                     .strip()
                     .substring(1);
             if (map.containsKey(variableName))
-                htmlTotal = htmlTotal.replaceAll(Pattern.quote(group), map.get(variableName));
+                htmlTotal = htmlTotal.replaceAll(Pattern.quote(group), map.get(variableName).toString());
         }
         return htmlTotal;
     }

@@ -1,29 +1,34 @@
 package bin.apply.sys.make;
 
+import bin.apply.Repository;
 import bin.apply.Setting;
+import bin.apply.sys.item.RunType;
 import bin.exception.ConsoleException;
 import bin.exception.MatchException;
 import bin.exception.ServerException;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
-import org.apache.hadoop.hdfs.web.JsonUtil;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import cos.poison.run.GetCookie;
+import org.apache.http.Header;
 
 import java.io.File;
 import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static bin.apply.Controller.bracket;
 import static bin.apply.Controller.loopController;
+import static bin.apply.Repository.*;
+import static bin.apply.Setting.lineStart;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static cos.poison.Poison.variableHTML;
 
 public class StartLine implements LoopToken {
-    private static final String patternText = START + "[0-9]+( |$)";
-    private static final Pattern pattern = Pattern.compile(patternText);
 
     @SafeVarargs
     public static void startLine(String total, String path,
@@ -32,21 +37,24 @@ public class StartLine implements LoopToken {
         if (extensionCheck) errorPath.set(path);
         try {
             String finalTotal = getFinalTotal(extensionCheck, total, path);
-
-            Pattern.compile("\\n")
-                    .splitAsStream(finalTotal)
-                    .filter(Predicate.not(String::isBlank))
-                    .map(line -> setError(line, total))
-                    .forEach(line -> Setting.start(line, errorLine.get(), repository));
+            startStartLine(finalTotal, total, repository);
         } catch (VariableException e) {
             VariableException.variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            setLine();
         } catch (MatchException e) {
             MatchException.matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            setLine();
         } catch (ServerException e) {
             ServerException.serverErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            setLine();
         } catch (ConsoleException e) {
             ConsoleException.consoleErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            setLine();
         }
+    }
+
+    private static void setLine() {
+        if (Setting.runType.equals(RunType.Normal)) System.exit(0);
     }
 
     public static String getFinalTotal(boolean extensionCheck, String total, String path) {
@@ -56,10 +64,19 @@ public class StartLine implements LoopToken {
     }
 
     @SafeVarargs
+    public static void startStartLine(String finalTotal, String total,
+                                      Map<String, Map<String, Object>>... repository) {
+        finalTotal.lines()
+                .filter(Predicate.not(String::isBlank))
+                .map(StartLine::setError)
+                .forEach(line -> Setting.start(line, errorLine.get(), repository));
+    }
+
+    @SafeVarargs
     public static String startLoop(String total, String fileName,
                                  Map<String, Map<String, Object>>... repository) {
-        for (var line : bracket.bracket(total, fileName, false).split("\\n")) {
-            line = loopController.check(setError(line, total).strip());
+        for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
+            line = loopController.check(setError(line).strip());
             if (line.equals(BREAK) || line.equals(CONTINUE)) return line;
             else Setting.start(line, errorLine.get(), repository);
         }
@@ -67,45 +84,38 @@ public class StartLine implements LoopToken {
     }
 
     @SafeVarargs
-    public static void startPoison(String total, String fileName,
-                                     Map<String, Map<String, Object>>... repository) {
-        for (var line : bracket.bracket(total, fileName, false).split("\\n")) {
-            line = setError(line, total).strip();
-            line = Setting.lineStart(line, repository);
+    public static void startPoison(String total, String fileName, Map<String, Map<String, Object>>...repository) {
+        CONTINUE:
+        for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
+            if (line.isBlank()) continue;
+            final String origen = (line = setError(line));
+            final String value = new StringTokenizer(line).nextToken();
+
+            if (priorityWorkMap.containsKey(value)) {priorityWorkMap.get(value).start(line, origen, repository);continue;}
+            for (var work : priorityWorks) {if (work.check(line)) {work.start(line, origen, repository); continue CONTINUE;}}
+            line = lineStart(line, repository);
+
+            // ㅁㄷㅁ 변수명:HTML 변수명 ( HTML 변수명 등록 )
             if (variableHTML.check(line)) {variableHTML.start(line); continue;}
 
-            Setting.start(line, errorLine.get(), repository);
+            if (startWorkMap.containsKey(value)) {startWorkMap.get(value).start(line, origen, repository);continue;}
+            for (var work : startWorks) {if (work.check(line)) {work.start(line, origen, repository);continue CONTINUE;}}
+
+            Setting.runMessage(origen);
         }
-//        for (var line : total.split("\\n")) {
-//            line = setError(line, total).strip();
-//            if (variableHTML.check(line)) {variableHTML.start(line); return;}
-//            Setting.start(line, errorLine.get(), repository);
-//        }
+
     }
 
-    private static final AtomicLong errorCount = new AtomicLong(0);
-    private static final AtomicReference<String> errorLine = new AtomicReference<>("");
-    private static final AtomicReference<String> errorPath = new AtomicReference<>();
-    public static String setError(String line, String total) {
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find()) {
-            String lineNum = matcher.group().trim();
-            errorCount.set(Long.parseLong(lineNum));
-
-            int start = total.indexOf("\n" + lineNum + " ");
-            if (start == -1 && lineNum.equals("1")) start = 0;
-            errorLine.set(total.substring(start).split("\\n")[0]);
-        }
-
-//        for (var lines : total.split("\\n")) {
-//            if (lines.startsWith(lineNum + " ")) {
-//                errorLine.set(lines.replaceFirst(patternText, ""));
-//                break;
-//            }
-//        }
-
-        return line
-                .replaceFirst(patternText, "")
-                .strip();
+    public static final AtomicLong errorCount = new AtomicLong(0);
+    public static final AtomicReference<String> errorLine = new AtomicReference<>("");
+    public static final AtomicReference<String> errorPath = new AtomicReference<>();
+    public static String setError(String line) {
+        if (line.isBlank()) return "";
+        String[] tokens = line.split(" ", 2);
+        errorCount.set(Integer.parseInt(tokens[0]));
+        if (tokens.length == 2) {
+            errorLine.set(tokens[1]);
+            return tokens[1];
+        } else return "";
     }
 }

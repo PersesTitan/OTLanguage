@@ -7,26 +7,27 @@ import bin.exception.VariableException;
 import bin.token.VariableToken;
 import work.StartWork;
 
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.isBoolean;
 
 public class CreateBoolean implements StartWork, VariableToken, Controller {
-    private final Pattern pattern;
+    private final Matcher matcher;
     private final String type;
 
-    public CreateBoolean(String type, Map<String, Map<String, Object>> repository) {
+    public CreateBoolean(String type) {
         String patternText = startMerge(type, BLANKS, VARIABLE_NAME, VARIABLE_PUT);
-        repository.put(type, new HpMap<>());
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
@@ -37,5 +38,10 @@ public class CreateBoolean implements StartWork, VariableToken, Controller {
         variableDefineError(variableName, repositoryArray[0]);
         if (!isBoolean(value)) throw VariableException.typeMatch();
         repositoryArray[0].get(type).put(variableName, value);
+    }
+
+    @Override
+    public void first() {
+
     }
 }

@@ -11,33 +11,31 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PutVariable implements
-        StartWork, SetVariableValue, GetSet, GetList, GetMap {
+public class PutVariable implements StartWork, SetVariableValue, GetSet, GetList, GetMap {
     private final String patternText = startMerge(VARIABLE_SET);
-    private final Pattern pattern = Pattern.compile(patternText);
-    private final Pattern accessPattern = Pattern.compile(ACCESS);
+    private final Matcher matcher = Pattern.compile(patternText).matcher("");
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
-    public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
-        line = line.strip();
-        String value = line.replaceFirst(patternText, ""); //넣을 값
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find()) {
-            String group = matcher.group();
-            int accessCount = accessCount(group);
-            if (accessCount > repositoryArray.length) throw VariableException.localNoVariable();
-            String variableName = group.substring(accessCount, group.length()-1); // 변수명
-            var repository = repositoryArray[accessCount];
-            if (Repository.noUse.contains(variableName)) throw VariableException.reservedWorks();
-            else if (!Repository.getSet(repository).contains(variableName)) throw VariableException.noDefine();
-            String varType = getVariableType(repository, variableName); // ㅇㅅㅇ, ㅇㅈㅇ
-            set(varType, variableName, value, repository);
-        }
+    public void start(String line, String origen,
+                      Map<String, Map<String, Object>>[] repositoryArray) {
+        // value = 변수명, 새로운 값
+        String[] values = matchSplitError(line.strip(), VARIABLE_PUT, 2);
+        int accessCount = accessCount(values[0]);
+        if (accessCount > repositoryArray.length) throw VariableException.localNoVariable();
+        var repository = repositoryArray[accessCount];
+        if (!Repository.getSet(repository).contains(values[0])) throw VariableException.noDefine();
+        String varType = getVariableType(repository, values[0]); // ㅇㅅㅇ, ㅇㅈㅇ
+        repository.get(varType).put(values[0], values[1]);
+    }
+
+    @Override
+    public void first() {
+
     }
 
     private String getVariableType(Map<String, Map<String, Object>> repository, String variableName) {

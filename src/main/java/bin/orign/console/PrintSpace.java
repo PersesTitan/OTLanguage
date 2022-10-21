@@ -5,25 +5,24 @@ import bin.token.Token;
 import work.StartWork;
 
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PrintSpace implements
-        StartWork, ConsoleToken, Token {
-    private final String patternText;
-    private final Pattern pattern;
-
-    public PrintSpace(String type) {
-        this.patternText = startMerge(type, orMerge(BLANKS, END));
-        this.pattern = Pattern.compile(this.patternText);
-    }
+public record PrintSpace(int type) implements StartWork, ConsoleToken, Token {
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return false;
     }
 
     @Override
-    public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
-        System.out.print(line.replaceFirst(this.patternText, "") + " ");
+    public void start(String line, String origen,
+                      Map<String, Map<String, Object>>[] repositoryArray) {
+        System.out.print(line.substring(type).stripIndent() + " ");
+    }
+
+    @Override
+    public void first() {
+
     }
 }

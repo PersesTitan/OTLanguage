@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SingUp</title>
+</head>
+<style>
+    div.error {
+        color: red
+    }
+
+    table {
+        text-align: center;
+    }
+
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+<body>
+    <div class="center">
+    <form method="post">
+      <table>
+        <tr><th colspan="2" style="font-size: 2em">회원가입</th></tr>
+        <tr><td>아이디</td><td><input name="id" type="text"></td></tr>
+        <tr><td>비밀번호</td><td><input name="password" type="password"></td></tr>
+        <tr><td>비밀번호 확인</td><td><input name="password-check" type="password"></td></tr>
+        <tr><td>이메일</td><td><input name="email" type="email"></td></tr>
+        <tr>
+            <th colspan="2">
+                <br>
+                <button type="submit">회원가입</button>
+            </th>
+        </tr>
+      </table>
+    </form>
+    </div>
+</body>
+</html>

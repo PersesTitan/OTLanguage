@@ -1,51 +1,64 @@
-import org.jcodings.specific.UTF16LEEncoding;
+import bin.apply.sys.make.ChangeHangle;
+import bin.exception.MatchException;
+import bin.token.LoopToken;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.regex.Matcher;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
-public class MainTest {
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        File file = new File("hello.otl");
-        String path1 = file.getPath();
-        String path2 = file.getAbsolutePath();
-        String path3 = file.getAbsoluteFile().getParent();
-        String path4 = file.getParent();
-
-        System.out.println(path1);
-        System.out.println(path2);
-        System.out.println(path3);
-
-
-        System.out.println(Arrays.toString("⌄".getBytes(StandardCharsets.UTF_16)));
-        System.out.println(Arrays.toString("a".getBytes(StandardCharsets.UTF_16)));
-        System.out.println(Arrays.toString("ㅇㅅㅇ".getBytes(StandardCharsets.UTF_16)));
-        System.out.println(Arrays.toString("한".getBytes(StandardCharsets.UTF_16)));
-
-        byte[][] bs = new byte[100][4];
-        for (int i = 0; i<100; i++) {
-            String[] value = Integer.toString(i).split("");
-            bs[i][0] = -2;
-            bs[i][1] = -1;
-            bs[i][2] = Byte.parseByte(value[0]);
-            bs[i][3] = Byte.parseByte(value.length > 1 ? value[1] : "0");
-        }
-
-        for (int i = 0; i<bs.length; i++) {
-            System.out.print(new String(bs[i], StandardCharsets.UTF_16));
-            System.out.print(" ");
-            if (i%5 == 4) System.out.println();
-        }
-
-
-//        for (int i = 0; i<bs.length; i++) {
-//            bs[i] = {};
+public class MainTest implements LoopToken, ChangeHangle {
+    public static void main(String[] args) {
+//        Taskbar.getTaskbar().setIconImage(Toolkit.getDefaultToolkit().getImage("/Users/persestitan/Documents/GitHub/OTLanguage/OTLanguage.png"));
+//        Robot robot = new Robot();
+//        JFrame frame = new JFrame("test");
+        String a = "a";
+        String b = "a";
+        System.out.println(Arrays.toString(a.split(" ")));
+        System.out.println(Arrays.toString(b.split(" ")));
+//        try {
+//        } catch (PatternSyntaxException e) {
+//            String text = e.getDescription();
+//            String start = "Named capturing group <";
+//            int a = text.indexOf(start) + start.length();
+//            int b = text.lastIndexOf("> is already defined");
+//            if (b == -1 || a-start.length() == -1) throw MatchException.patternMatchError(null);
+//            throw MatchException.patternMatchError(text.substring(a, b));
 //        }
 
-//        System.out.println(new String(b, StandardCharsets.UTF_16));
-//        Unicode.list.forEach(System.out::println);
+        System.out.println(Arrays.toString("메소드명[]".substring(0, "메소드명[]".length() - 1).split(BL)));
+        System.out.println(Arrays.toString("메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ]".substring(0, "메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ]".length() - 1).split(BL)));
+
+        System.out.println("\u3000");
+        new MainTest();
+    }
+
+    public MainTest() {
+        System.out.println(change("asaㅁㄴㅇㄹㄴㄹ 앙나나 "));
+        String params = orMerge(TOTAL_LIST) + BLANKS + VARIABLE_HTML;
+        String patternText = startEndMerge(
+                METHOD, BLANKS, VARIABLE_HTML,
+                "(", "(", BL, params, BR, ")+", "|", BL, BR, ")",
+                BLANKS, BRACE_STYLE,
+                "(", BLANK, RETURN, ")?");
+
+        String[] strings = {"ㅇㅅㅇ ㅁㄴㄴ", "ㅇㅈㅇ ㅁㄴㅇㄹ", "ㅇㅈㅇ ㅁㄴㅇㄹ"};
+        System.out.println(Arrays.deepToString(getParams(strings)));
+        System.out.println(getParams(strings).length);
+        System.out.println(new String[0][0].length);
+
+        Pattern pattern = Pattern.compile(patternText);
+        System.out.println(Arrays.toString("ㅇㅅㅇ 매개변수][adf".split(BR + BL)));
+        System.out.println(pattern.matcher("ㅁㅅㅁ 메소드명[] (test,1,10)").find());
+        System.out.println(pattern.matcher("ㅁㅅㅁ 메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ][ㅇㅈㅇ ㅁㄴㅇㄹ] (test,1,10)=> a").find());
+        System.out.println(pattern.matcher("ㅁㅅㅁ 메소드명[ㅇㅈㅇ] (test,1,10)").find());
+    }
+
+    private String[][] getParams(String[] params) {
+        int count = params.length;
+        String[][] param = new String[count][2];
+        for (int i = 0; i<count; i++) param[i] = matchSplitError(params[i], BLANKS, 2);
+        return param;
     }
 }

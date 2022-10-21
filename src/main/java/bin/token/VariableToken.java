@@ -1,13 +1,17 @@
 package bin.token;
 
+import bin.exception.VariableException;
+
 import java.util.*;
 
+import static bin.apply.Repository.getSet;
+import static bin.apply.Repository.noUse;
 import static bin.check.VariableCheck.*;
 import static bin.token.cal.BoolToken.FALSE;
 import static bin.token.cal.NumberToken.NUMBER;
 
 public interface VariableToken extends Token {
-    String VARIABLE_HTML = "[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]+[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$-]*";
+    String VARIABLE_HTML = "[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$-]+[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$-]*";
     String VARIABLE_NAME = "(\\[\\d+\\])?" + VARIABLE_HTML;
     String VARIABLE_ACCESS = ACCESS + "{0,2}" + VARIABLE_NAME;
     String VARIABLE = ":" + VARIABLE_ACCESS + "_";
@@ -16,7 +20,7 @@ public interface VariableToken extends Token {
     String VARIABLE_GET_S = ":";
     String VARIABLE_GET_E = "_";
 
-    String FILE_TYPE = "[^~]+";
+    String FILE_TYPE = "[^~\\s]+";
     String FILE_NAME = "[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]+";
 
     // SYSTEM
@@ -104,7 +108,7 @@ public interface VariableToken extends Token {
         add(SET_FLOAT);
         add(SET_DOUBLE);
     }};
-
+    // LIST
     List<String> LIST_LIST = new ArrayList<>() {{
         add(LIST_INTEGER);
         add(LIST_LONG);
@@ -114,7 +118,7 @@ public interface VariableToken extends Token {
         add(LIST_FLOAT);
         add(LIST_DOUBLE);
     }};
-
+    // MAP
     List<String> MAP_LIST = new ArrayList<>() {{
         add(MAP_INTEGER);
         add(MAP_LONG);

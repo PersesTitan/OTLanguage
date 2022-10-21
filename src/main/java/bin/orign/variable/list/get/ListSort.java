@@ -7,22 +7,22 @@ import bin.token.VariableToken;
 import work.StartWork;
 
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ListSort implements
-        StartWork, Token, VariableToken {
+public class ListSort implements StartWork, Token, VariableToken {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public ListSort(String type) {
         String patternText = startEndMerge(VARIABLE_ACCESS, type);
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
@@ -30,9 +30,7 @@ public class ListSort implements
                       Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
         int count = accessCount(line);
-        line = line.replaceFirst(START + ACCESS + "+", "");
-
-        String variableName = line.replaceFirst(type + END, "");
+        String variableName = bothEndCut(line, count, type.length());
         if (count > repositoryArray.length) throw VariableException.localNoVariable();
         var repository = repositoryArray[count];
 
@@ -47,36 +45,20 @@ public class ListSort implements
         throw VariableException.noDefine();
     }
 
+    @Override
+    public void first() {
+
+    }
+
     private void getList(String type, Object ob) {
         switch (type) {
-            case LIST_INTEGER -> {
-                LinkedList<Integer> list = (LinkedList<Integer>) ob;
-                Collections.sort(list);
-            }
-            case LIST_LONG -> {
-                LinkedList<Long> list = (LinkedList<Long>) ob;
-                Collections.sort(list);
-            }
-            case LIST_BOOLEAN -> {
-                LinkedList<String> list = (LinkedList<String>) ob;
-                Collections.sort(list);
-            }
-            case LIST_CHARACTER -> {
-                LinkedList<Character> list = (LinkedList<Character>) ob;
-                Collections.sort(list);
-            }
-            case LIST_FLOAT -> {
-                LinkedList<Float> list = (LinkedList<Float>) ob;
-                Collections.sort(list);
-            }
-            case LIST_DOUBLE -> {
-                LinkedList<Double> list = (LinkedList<Double>) ob;
-                Collections.sort(list);
-            }
-            default -> {
-                LinkedList<String> list = (LinkedList<String>) ob;
-                Collections.sort(list);
-            }
-        };
+            case LIST_INTEGER -> Collections.sort((LinkedList<Integer>) ob);
+            case LIST_LONG -> Collections.sort((LinkedList<Long>) ob);
+            case LIST_BOOLEAN -> Collections.sort((LinkedList<String>) ob);
+            case LIST_CHARACTER -> Collections.sort((LinkedList<Character>) ob);
+            case LIST_FLOAT -> Collections.sort((LinkedList<Float>) ob);
+            case LIST_DOUBLE -> Collections.sort((LinkedList<Double>) ob);
+            default -> Collections.sort((LinkedList<String>) ob);
+        }
     }
 }

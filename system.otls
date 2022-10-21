@@ -1,6 +1,5 @@
 compulsion:
     ForceQuit
-    CreateString
     PriorityPrint
     PriorityPrintln
     PriorityPrintTap
@@ -20,6 +19,14 @@ alteration:
     Input
     ListIsEmpty
     SetIsEmpty
+    IntegerListSum
+    LongListSum
+    FloatListSum
+    IntegerSetSum
+    LongSetSum
+    FloatSetSum
+    ListGet
+    MapGet
 
 operate:
     CreateBoolean
@@ -28,6 +35,7 @@ operate:
     CreateFloat
     CreateInteger
     CreateLong
+    CreateString
     CreateBooleanSet
     CreateCharacterSet
     CreateDoubleSet
@@ -44,6 +52,13 @@ operate:
     CreateLongList
     CreateStringList
     ListAdd
+    CreateBooleanMap
+    CreateCharacterMap
+    CreateDoubleMap
+    CreateFloatMap
+    CreateIntegerMap
+    CreateLongMap
+    CreateStringMap
     PrintSpace
     PrintTap
     Println
@@ -51,3 +66,10 @@ operate:
     PutVariable
     Sleep
     If
+    For
+    While
+    ListDelete
+    SetDelete
+    MapDelete
+    MapPutAll
+    Poison

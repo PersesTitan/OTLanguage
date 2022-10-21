@@ -3,6 +3,7 @@ package cos.poison.method;
 import cos.poison.Poison;
 import work.StartWork;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -16,7 +17,7 @@ public class PoisonGet implements PoisonTools, StartWork {
         String patternText = startEndMerge(
                 text,
                 BL, "[^", BL, BR, "]+", BR, "(", or, ")*",
-                BLANKS, BRACE_STYLE(), BLANKS, RETURN);
+                BLANKS, BRACE_STYLE, BLANKS, RETURN);
         this.pattern = Pattern.compile(patternText);
     }
 
@@ -38,7 +39,11 @@ public class PoisonGet implements PoisonTools, StartWork {
         String[] token = bothEndCut(tokens[0]).split(BR + BL); // [sub/][ㅇㅅㅇ ㅁ:ㅁ]
         // (start,1,10), index.html
         String[] total = matchSplitError(tokens[1], BLANK + RETURN_TOKEN + BLANK, 2);
+        Poison.httpServerManager.addGet(token[0], getTotal(total[0]), getParams(token), total[1]);
+    }
 
-        Poison.httpServerManager.addGet(token[0], getTotal(total[0]), getParams(token), getHtml(total[1]));
+    @Override
+    public void first() {
+
     }
 }

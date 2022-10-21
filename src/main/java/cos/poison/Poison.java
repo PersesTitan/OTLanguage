@@ -9,34 +9,33 @@ import cos.poison.setting.PoisonCreate;
 import cos.poison.setting.PoisonStart;
 import work.StartWork;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-public class Poison implements StartWork, LoopToken {
+import static bin.apply.Repository.startWorks;
+
+public class Poison implements StartWork, LoopToken, PoisonRepository {
+    private final String className;
     public static HttpServerManager httpServerManager = new HttpServerManager();
     public static VariableHTML variableHTML = new VariableHTML(MODEL);
-    private final List<StartWork> startWorks = new ArrayList<>();
-
-    private final String className;
 
     public Poison(String className) {
         this.className = className;
-
-        startWorks.add(new PoisonCreate(className));
-        startWorks.add(new PoisonStart(className));
-        startWorks.add(new PoisonGet(className));
-        startWorks.add(new PoisonPost(className));
+        first();
     }
 
     @Override
     public boolean check(String line) {
-        return line.strip().startsWith(className);
+        return false;
     }
 
     @Override
-    public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
-        for (var works : startWorks) {if (works.check(line)) {works.start(line, origen, repositoryArray); return;}}
+    public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {}
+
+    @Override
+    public void first() {
+        startWorks.add(new PoisonCreate(className));
+        startWorks.add(new PoisonStart(className));
+        startWorks.add(new PoisonGet(className));
+        startWorks.add(new PoisonPost(className));
     }
 }

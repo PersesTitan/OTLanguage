@@ -1,5 +1,6 @@
 package bin.orign.variable.set.get;
 
+import bin.apply.Repository;
 import bin.exception.MatchException;
 import bin.exception.VariableException;
 import bin.token.VariableToken;
@@ -8,24 +9,24 @@ import work.StartWork;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.*;
 
-public class SetAdd implements
-        VariableToken, StartWork, GetSet {
+public class SetAdd implements VariableToken, StartWork, GetSet {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public SetAdd(String type) {
         String patternText = startMerge(VARIABLE_ACCESS, type, "[^" + type + "].*");
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
@@ -33,11 +34,11 @@ public class SetAdd implements
                       Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
         int count = accessCount(line);
-        line = line.replaceFirst(START + ACCESS + "+", "");
         if (count > repositoryArray.length) throw VariableException.localNoVariable();
         var repository = repositoryArray[count];
 
-        String[] vs = line.split(type, 2);
+        String[] vs = line.substring(count).split(type, 2);
+        if (!Repository.getSet(repository).contains(vs[0])) throw VariableException.noDefine();
         String variableName = vs[0].strip();
         String variableValue = vs[1].strip();
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
@@ -51,6 +52,11 @@ public class SetAdd implements
             }
         }
         throw VariableException.noDefine();
+    }
+
+    @Override
+    public void first() {
+
     }
 
     private LinkedHashSet<?> getValues(String type, String value) {

@@ -8,22 +8,22 @@ import work.StartWork;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SetClear implements
-        VariableToken, StartWork {
+public class SetClear implements VariableToken, StartWork {
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public SetClear(String type) {
         String patternText = startEndMerge(VARIABLE_ACCESS, type);
-        this.pattern = Pattern.compile(patternText);
+        this.matcher = Pattern.compile(patternText).matcher("");
         this.type = type;
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return matcher.reset(line).find();
     }
 
     @Override
@@ -31,12 +31,14 @@ public class SetClear implements
                       Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
         int count = accessCount(line);
-        line = line.replaceFirst(START + ACCESS + "+", "");
-
-        String variableName = line.replaceFirst(type + END, "");
+        String variableName = bothEndCut(line, count, type.length());
         if (count > repositoryArray.length) throw VariableException.localNoVariable();
-        LinkedHashSet<Object> set = getSet(count, variableName, repositoryArray);
-        set.clear();
+        getSet(count, variableName, repositoryArray).clear();
+    }
+
+    @Override
+    public void first() {
+
     }
 
     private LinkedHashSet<Object> getSet(int count, String variableName,

@@ -7,6 +7,7 @@ import bin.token.LoopToken;
 import bin.token.Token;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +19,7 @@ public class Bracket implements LoopToken, Token {
     private final String loopEndPattern =
             orMerge(START, "\\n") + LINE_NUMBER + BLANK + MR + "(?=" + BLANK + endPattern + "\\s*(\\n|$))";
     private final Pattern pattern = Pattern.compile(orMerge(loopStartPattern, loopEndPattern));
+    private final Matcher matcher = pattern.matcher("");
     private final Stack<Integer> stack = new Stack<>();
 
     public String bracket(String total, File file) {
@@ -36,12 +38,12 @@ public class Bracket implements LoopToken, Token {
 
         if (!(copy.contains("{") && copy.contains("}"))) return copy;
         stack.clear();
-        Matcher matcher = pattern.matcher(copy);
+        matcher.reset(copy);
         while (matcher.find()) {
             String group = matcher.group().strip();
             if (Pattern.compile(MR + BLANK + END).matcher(group).find()) {
                 if (stack.isEmpty()) {
-                    StartLine.setError(group, total);
+                    StartLine.setError(group);
                     throw MatchException.bracketMatchError();
                 } else if (stack.size() == 1) {
                     int start = stack.pop()+1;
@@ -54,20 +56,20 @@ public class Bracket implements LoopToken, Token {
                 } else stack.pop();
             } else {
                 if (!group.endsWith("{")) {
-                    StartLine.setError(group, total);
+                    StartLine.setError(group);
                     throw MatchException.loopStyleError();
                 } else stack.add(matcher.end()-1);
             }
         }
 
         if (!stack.isEmpty()) getErrorLine(total, stack.pop());
-        return new LoopBracket().deleteEnter(copy);
+        return LoopBracket.deleteEnter(copy);
     }
 
     private void getErrorLine(String total, int pos) {
         String[] lines = total.substring(0, pos).split("\\n");
         String line = lines[lines.length-1];
-        StartLine.setError(line, total);
+        StartLine.setError(line);
         throw MatchException.bracketMatchError();
     }
 

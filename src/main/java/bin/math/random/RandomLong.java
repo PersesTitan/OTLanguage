@@ -15,22 +15,22 @@ public class RandomLong implements
     private final Random random = new Random();
     private final String patternText;
     private final String type;
-    private final Pattern pattern;
+    private final Matcher matcher;
 
     public RandomLong(String type) {
         this.type = type;
         this.patternText = VARIABLE_GET_S + orMerge(INT + type + INT, type + INT, type) + VARIABLE_GET_E;
-        this.pattern = Pattern.compile(this.patternText);
+        this.matcher = Pattern.compile(this.patternText).matcher("");
     }
 
     @Override
     public boolean check(String line) {
-        return pattern.matcher(line).find();
+        return (matcher.reset(line)).find();
     }
 
     @Override
     public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
-        Matcher matcher = pattern.matcher(line);
+        matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();
             group = group.substring(1, group.length()-1);
@@ -47,5 +47,10 @@ public class RandomLong implements
             } else line = line.replaceFirst(this.patternText, Long.toString(random.nextLong()));
         }
         return line;
+    }
+
+    @Override
+    public ReturnWork first() {
+        return this;
     }
 }

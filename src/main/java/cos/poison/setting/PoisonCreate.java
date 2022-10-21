@@ -49,4 +49,9 @@ public class PoisonCreate implements LoopToken, StartWork {
             else httpServerManager.createServer(tokens);
         }
     }
+
+    @Override
+    public void first() {
+
+    }
 }

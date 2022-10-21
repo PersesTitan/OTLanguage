@@ -1,9 +1,11 @@
 package bin.apply;
 
 import bin.apply.sys.make.Bracket;
+import bin.apply.sys.make.VariableDefault;
 import bin.calculator.NumberCalculator;
 import bin.calculator.bool.BoolCalculator;
 import bin.calculator.bool.CompareCalculator;
+import bin.check.VariableTypeCheck;
 import bin.exception.ConsoleException;
 import bin.orign.GetSetVariable;
 import bin.orign.loop.tool.LoopController;
@@ -17,6 +19,8 @@ public interface Controller {
     LoopController loopController = new LoopController();
     Bracket bracket = new Bracket();
     GetSetVariable getSetVariable = new GetSetVariable();
+    VariableDefault variableDefault = new VariableDefault();
+    VariableTypeCheck variableTypeCheck = new VariableTypeCheck();
     // 입력, 출력
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));

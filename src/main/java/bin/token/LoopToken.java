@@ -9,34 +9,37 @@ public interface LoopToken extends VariableToken {
     Map<String, String> LOOP_TOKEN = new HashMap<>();
     Set<String> LOOP_SET = new HashSet<>() {{
         add("[^\\^\\n]+" + FOR + "[^\\^\\n]+" + FOR + "[^\\^\\n]+");
+        add(FOR + "[^\\^\\n]+" + FOR);
         add(IF); add(ELSE_IF);
         add(ELSE); add(WHITE);
 
         add(POISON + ACCESS + POISON_POST);
         add(POISON + ACCESS + POISON_GET);
-        add(SERVER);
+        add(SERVER); add(TRY_CATCH);
+        add(METHOD);
     }};
 
-    default String BRACE_STYLE() {
-//        return SL + "(" + String.join("|", LOOP_TOKEN.keySet()) + "),[0-9]+,[0-9]+" + SR;
-        return SL + FILE_TYPE + ",[0-9]+,[0-9]+" + SR;
-    }
+    String BRACE_STYLE = SL + FILE_TYPE + ",[0-9]+,[0-9]+" + SR;
 
-    String ARGUMENT = BL + "[^" + BL + BR + "]+" + BR; // [...]
+    String ARGUMENT = BL + "[\\s\\S]*" + BR; // [...]
 
     String LINE_NUMBER = "[0-9]+ ";
     String RETURN_TOKEN = "=>";
     String RETURN = RETURN_TOKEN + BLANK + "\\S+";
     String PUTIN_TOKEN = "<=";
-    String PUTIN = PUTIN_TOKEN + "(" + String.join("|", TOTAL_LIST) + ")" + BLANKS + VARIABLE_NAME;
+    String PUTIN = PUTIN_TOKEN + BLANK + "(" + String.join("|", TOTAL_LIST) + ")" + BLANKS + VARIABLE_NAME;
 
     String BREAK = "ㅂㅇㅂ";
     String CONTINUE = "ㅋㅇㅋ";
     String IF = QUESTION + "ㅅ" + QUESTION;
     String ELSE_IF = QUESTION + "ㅈ" + QUESTION;
     String ELSE = QUESTION + "ㅉ" + QUESTION;
+    String TRY_CATCH = "ㅠㅅㅠ";
+    String METHOD = "ㅁㅅㅁ";
+    String KLASS = "ㅋㅅㅋ";
 
-    String FOR = CARET; // ^
+    // LOOP
+    String FOR = CARET;                 // ^
     String WHITE = PESO + "ㅅ" + PESO;
 
     // SERVER
@@ -48,4 +51,8 @@ public interface LoopToken extends VariableToken {
     String POISON_GET = "ㄱㅅㄱ";
     String POISON_START = "ㅅㅌㅅ";
     String MODEL = "ㅁㄷㅁ";
+    String REDIRECT = "ㄹㄷㄹ";
+    String GET_COOKIE = "ㄱㅋㄱ";
+    String SET_COOKIE = "ㄱㅋㄱ";
+    String GET_URL = "ㅇㄹㅇ";
 }
