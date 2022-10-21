@@ -34,7 +34,7 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
         // ^[1, 2, 3]^ (test,1,10), ㅇㅁㅇ 변수명
         String[] groups = matchSplitError(line.strip(), PUTIN_TOKEN, 2);
         String[] forEachTokens = matchSplitError(groups[0], FOR, 3); // [, [1, 2, 3], (test,1,10)]
-        String[] variableToken = matchSplitError(groups[1], BLANKS, 2); // ㅇㅁㅇ, 변수명
+        String[] variableToken = matchSplitError(groups[1].strip(), BLANKS, 2); // ㅇㅁㅇ, 변수명
 
         // Total
         String[] variables = matchSplitError(bothEndCut(forEachTokens[2].strip()), ",", 3);
