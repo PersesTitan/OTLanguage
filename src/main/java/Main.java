@@ -85,7 +85,7 @@ public class Main extends Setting {
         while (true) {
             System.out.print(">>> ");
 
-            String line = "1 " + scanner().strip();
+            String line = scanner().strip();
             if (line.equals("1 끝")) break;
             else if (line.endsWith("{")) {
                 boolean check = false;
@@ -112,7 +112,7 @@ public class Main extends Setting {
                 }
                 LOOP_TOKEN.put(fileName, total.toString());
                 StartLine.startLine(total.toString(), fileName, repository);
-            } else StartLine.startLine(line, fileName, repository);
+            } else StartLine.startLine("1 " + line, fileName, repository);
         }
     }
 
