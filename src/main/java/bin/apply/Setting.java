@@ -81,7 +81,7 @@ public class Setting implements Repository {
     public static String lineStart(String line, Map<String, Map<String, Object>>... repositoryArray) {
         if (variableDefault.check(line)) line = variableDefault.start(line);
 
-        if (line.contains(VARIABLE_GET_S) && line.contains(VARIABLE_GET_E)) 
+        if (line.contains(VARIABLE_GET_S) && line.contains(VARIABLE_GET_E))
             for (var work : returnWorks) {if (work.check(line)) {line = work.start(line, repositoryArray);}}
         line = Controller.boolCalculator.start(line);
 
@@ -147,12 +147,12 @@ public class Setting implements Repository {
         returnWorks.add(new Input(SCANNER));
         returnWorks.add(new ListIsEmpty(LIST_ISEMPTY));
         returnWorks.add(new SetIsEmpty(SET_ISEMPTY));
-        returnWorks.add(new IntegerListSum());
-        returnWorks.add(new LongListSum());
-        returnWorks.add(new FloatListSum());
-        returnWorks.add(new IntegerSetSum());
-        returnWorks.add(new LongSetSum());
-        returnWorks.add(new FloatSetSum());
+        returnWorks.add(new IntegerListSum(LIST_SUM));
+        returnWorks.add(new LongListSum(LIST_SUM));
+        returnWorks.add(new FloatListSum(LIST_SUM));
+        returnWorks.add(new IntegerSetSum(SET_SUM));
+        returnWorks.add(new LongSetSum(SET_SUM));
+        returnWorks.add(new FloatSetSum(SET_SUM));
         returnWorks.add(new ListGet(LIST_GET));
         returnWorks.add(new MapGet(MAP_GET));
         returnWorks.add(new SetGet(SET_GET));
@@ -186,6 +186,7 @@ public class Setting implements Repository {
         startWorks.add(new TryCatch(TRY_CATCH));
         startWorks.add(new DefineMethod(METHOD));
         startWorks.add(new MethodVoid());
+        startWorks.add(new SetReset(SET_CLEAR));
 
         // POISON
         startWorks.add(new Poison(POISON));
