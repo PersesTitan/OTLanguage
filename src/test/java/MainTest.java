@@ -1,18 +1,20 @@
 import bin.apply.sys.make.ChangeHangle;
-import bin.exception.MatchException;
 import bin.token.LoopToken;
 
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 public class MainTest implements LoopToken, ChangeHangle {
-    public static void main(String[] args) {
-//        Taskbar.getTaskbar().setIconImage(Toolkit.getDefaultToolkit().getImage("/Users/persestitan/Documents/GitHub/OTLanguage/OTLanguage.png"));
-//        Robot robot = new Robot();
-//        JFrame frame = new JFrame("test");
+
+    public static void main(String[] args) throws AWTException, IOException {
+//        Taskbar.getTaskbar().setIconImage(Toolkit.getDefaultToolkit().getImage(sb.toString()));
+        Taskbar.getTaskbar().setIconImage(Toolkit.getDefaultToolkit().getImage("image/icon.png"));
+        Robot robot = new Robot();
+        JFrame frame = new JFrame("test");
+
         String a = "a";
         String b = "a";
         System.out.println(Arrays.toString(a.split(" ")));
