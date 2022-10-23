@@ -30,8 +30,8 @@ public class ListContains implements ReturnWork, VariableToken, ContainsTool {
         while (matcher.find()) {
             String group = matcher.group(); // :~변수명??[ㅁㅁ]_
             String token = bothEndCut(group, 1, 2);   // ~변수명??[ㅁㅁ
-            int count = accessCount(token);
-            if (count > repositoryArray.length) throw VariableException.localNoVariable();
+            int count = accessCount(token, repositoryArray.length);
+            if (count == -1) continue;
             // 변수명??[ㅁㅁ => 변수명, ㅁㅁ
             String[] tokens = matchSplitError(token.substring(count), LIST_ISEMPTY + BL, 2);
             // 변수명
