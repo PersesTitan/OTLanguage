@@ -47,9 +47,9 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
         String variableType = variableToken[0].strip(); // 들어가는 변수 타입
         String variableName = variableToken[1].strip(); // 들어가는 변수명
 
-        int count = accessCount(listValue);
+        int count = accessCount(listValue, repositoryArray.length);
+        if (count == -1) throw VariableException.localNoVariable();
         listValue = listValue.substring(count);
-        if (count > repositoryArray.length) throw VariableException.localNoVariable();
         var rep = repositoryArray[count];
         variableDefineError(variableName, rep);
 
