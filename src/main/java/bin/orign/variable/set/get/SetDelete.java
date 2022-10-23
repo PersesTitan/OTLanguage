@@ -31,8 +31,8 @@ public class SetDelete implements StartWork, LoopToken {
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
-        int count = accessCount(line);
-        if (repositoryArray.length < count) throw VariableException.localNoVariable();
+        int count = accessCount(line, repositoryArray.length);
+        if (count == -1) throw VariableException.localNoVariable();
         line = line.substring(count);   // ~변수-1 -> 변수-1
         String[] tokens = matchSplitError(line, type + "(?=\\d+$)", 2);
         var repository = repositoryArray[count];
