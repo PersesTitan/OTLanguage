@@ -25,8 +25,8 @@ public class PutVariable implements StartWork, SetVariableValue, GetSet, GetList
                       Map<String, Map<String, Object>>[] repositoryArray) {
         // value = 변수명, 새로운 값
         String[] values = matchSplitError(line.strip(), VARIABLE_PUT, 2);
-        int accessCount = accessCount(values[0]);
-        if (accessCount > repositoryArray.length) throw VariableException.localNoVariable();
+        int accessCount = accessCount(values[0], repositoryArray.length);
+        if (accessCount == -1) throw VariableException.localNoVariable();
         var repository = repositoryArray[accessCount];
         if (!Repository.getSet(repository).contains(values[0])) throw VariableException.noDefine();
         String varType = getVariableType(repository, values[0]); // ㅇㅅㅇ, ㅇㅈㅇ
