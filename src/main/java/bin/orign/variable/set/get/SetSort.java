@@ -29,9 +29,9 @@ public class SetSort implements StartWork, Token, VariableToken {
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
-        int count = accessCount(line);
+        int count = accessCount(line, repositoryArray.length);
+        if (count == -1) throw VariableException.localNoVariable();
         String variableName = bothEndCut(line, count, type.length());
-        if (count > repositoryArray.length) throw VariableException.localNoVariable();
         var repository = repositoryArray[count];
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
             Map<String, Object> values = entry.getValue();
