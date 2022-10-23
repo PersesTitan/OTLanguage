@@ -13,10 +13,12 @@ import java.util.regex.Pattern;
 // 내용 변경
 public class SetReset implements StartWork, LoopToken, GetSet {
     private final String type;
+    private final int typeLen;
     private final Pattern pattern;
 
     public SetReset(String type) {
         this.type = type;
+        this.typeLen = type.replace("\\", "").length();
         String patternText = startMerge(VARIABLE_ACCESS, VARIABLE_PUT);
         this.pattern = Pattern.compile(patternText);
     }
@@ -30,14 +32,10 @@ public class SetReset implements StartWork, LoopToken, GetSet {
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
-        int count = accessCount(line);
-        String[] tokens = line
-                .replaceFirst(START + ACCESS + "+", "")
-                .replaceFirst(type + END, "")
-                .split(VARIABLE_PUT, 2);
-        if (tokens.length != 2) throw VariableException.noGrammar();
+        int count = accessCount(line, repositoryArray.length);
+        if (count == -1) throw VariableException.localNoVariable();
+        String[] tokens = bothEndCut(line, count, typeLen).split(VARIABLE_PUT, 2);
         String variableName = tokens[0];
-
         if (count > repositoryArray.length) throw VariableException.localNoVariable();
         var repository = repositoryArray[count];
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
