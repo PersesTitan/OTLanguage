@@ -1,6 +1,5 @@
 package bin.apply.sys.item;
 
-import bin.apply.Setting;
 import bin.check.VariableType;
 import bin.exception.VariableException;
 import bin.token.VariableToken;
@@ -10,8 +9,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static bin.apply.Controller.variableTypeCheck;
 import static bin.check.VariableTypeCheck.getVariableType;
