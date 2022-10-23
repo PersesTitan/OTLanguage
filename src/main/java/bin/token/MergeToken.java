@@ -56,13 +56,13 @@ public interface MergeToken {
     }
 
     // ACCESS 갯수 세는 로직
-    default int accessCount(String line) {
+    default int accessCount(String line, int repLen) {
         int count = 0;
         for (int i = 0; i < line.length(); i++) {
             if (line.charAt(i) == ACCESS.charAt(0)) count++;
             else break;
         }
-        return count;
+        return  count >= repLen ? -1 : count;
     }
 
     // 변수
