@@ -33,8 +33,8 @@ public class ListAdd implements VariableToken, StartWork, GetList {
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
-        int count = accessCount(line);
-        if (count > repositoryArray.length) throw VariableException.localNoVariable();
+        int count = accessCount(line, repositoryArray.length);
+        if (count == -1) throw VariableException.localNoVariable();
         var repository = repositoryArray[count];
 
         String[] vs = line.substring(count).split(type, 2);
