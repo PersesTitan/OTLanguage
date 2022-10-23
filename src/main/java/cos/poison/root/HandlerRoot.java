@@ -96,8 +96,8 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         for (var param : params) {
             try {
                 if (parameters.containsKey(param[2])) {
-                    Object paramValue = parameters.get(param[2]);
-                    set(param[0], param[1], paramValue == null ? "" : paramValue.toString(), repository);
+                    Object paramValue = parameters.getOrDefault(param[2], "");
+                    set(param[0], param[1], paramValue.toString(), repository);
                 }
             } catch (Exception ignored) {}
         }
@@ -124,7 +124,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
             startWorks.add(v);
         });
 
-        variableHTML.reset();
+        startWorks.add(variableHTML.reset());
         try {
             StartLine.startPoison(startFinalTotal, fileName, repository, Repository.repository);
         } catch (Exception e) {
@@ -133,6 +133,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         } finally {
             poisonReturnWorks.forEach(returnWorks::remove);
             poisonStartWorks.forEach(startWorks::remove);
+            startWorks.remove(variableHTML);
         }
     }
 
