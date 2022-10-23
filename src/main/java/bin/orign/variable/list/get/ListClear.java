@@ -30,9 +30,9 @@ public class ListClear implements VariableToken, StartWork {
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
         line = line.strip();
-        int count = accessCount(line);
+        int count = accessCount(line, repositoryArray.length);
+        if (count == -1) throw VariableException.localNoVariable();
         String variableName = bothEndCut(line, count, type.length());
-        if (count > repositoryArray.length) throw VariableException.localNoVariable();
         getList(count, variableName, repositoryArray).clear();
     }
 
