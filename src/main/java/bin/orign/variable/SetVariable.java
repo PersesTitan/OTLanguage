@@ -24,8 +24,8 @@ public class SetVariable implements ReturnWork, VariableToken {
         while (matcher.find()) {
             String group = matcher.group();
             String value = bothEndCut(group);
-            int access = accessCount(value);
-            if (repositoryArray.length <= access) continue;
+            int access = accessCount(value, repositoryArray.length);
+            if (access == -1) continue;
             var repository = repositoryArray[access];
             line = getValue(group, value.substring(access), line, repository);
         }
