@@ -32,9 +32,9 @@ public class MapPutAll implements StartWork, LoopToken, GetMap {
     public void start(String line, String origen,
                       Map<String, Map<String, Object>>[] repositoryArray) {
         String[] variableTokens = matchSplitError(line.strip(), splitNoCutBack(type), 2);
-        int count = accessCount(variableTokens[0]);
+        int count = accessCount(variableTokens[0], repositoryArray.length);
+        if (count == -1) throw VariableException.localNoVariable();
         variableTokens[0] = variableTokens[0].substring(count);
-        if (count > repositoryArray.length) throw VariableException.localNoVariable();
         var repository = repositoryArray[count];
         if (!Repository.getSet(repository).contains(variableTokens[0])) throw VariableException.noDefine();
         for (var entry : repository.entrySet()) {
