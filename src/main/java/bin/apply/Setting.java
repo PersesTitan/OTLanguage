@@ -1,6 +1,7 @@
 package bin.apply;
 
 import bin.apply.sys.item.Color;
+import bin.apply.sys.item.DebugMode;
 import bin.apply.sys.item.HpMap;
 import bin.apply.sys.item.RunType;
 import bin.apply.sys.run.FilePath;
@@ -17,15 +18,16 @@ import bin.math.sum.list.LongListSum;
 import bin.math.sum.set.FloatSetSum;
 import bin.math.sum.set.IntegerSetSum;
 import bin.math.sum.set.LongSetSum;
-import bin.orign.CreateList;
-import bin.orign.CreateMap;
-import bin.orign.CreateSet;
+import bin.orign.variable.CreateList;
+import bin.orign.variable.CreateMap;
+import bin.orign.variable.CreateSet;
 import bin.orign.console.*;
 import bin.orign.loop.For;
 import bin.orign.loop.ForEach;
 import bin.orign.loop.While;
-import bin.orign.CreateOrigin;
+import bin.orign.variable.CreateOrigin;
 import bin.orign.variable.list.get.*;
+import bin.orign.variable.map.get.MapContains;
 import bin.orign.variable.map.get.MapDelete;
 import bin.orign.variable.map.get.MapGet;
 import bin.orign.variable.map.get.MapPutAll;
@@ -49,9 +51,12 @@ import static bin.token.cal.NumberToken.*;
 public class Setting implements Repository {
     public static final HashMap<String, Map<String, Object>> COPY_REPOSITORY = new HashMap<>();
     public static final StringBuilder total = new StringBuilder();
+    // 기본 모드 = INFO
+    public static DebugMode debugMode = DebugMode.INFO;
+    public static RunType runType;
+
     public static String mainPath;
     public static String path;
-    public static RunType runType;
 
     @SafeVarargs
     public static void start(String line, String errorLine,
@@ -76,7 +81,8 @@ public class Setting implements Repository {
     public static String lineStart(String line, Map<String, Map<String, Object>>... repositoryArray) {
         if (variableDefault.check(line)) line = variableDefault.start(line);
 
-        for (var work : returnWorks) {if (work.check(line)) line = work.start(line, repositoryArray);}
+        if (line.contains(VARIABLE_GET_S) && line.contains(VARIABLE_GET_E)) 
+            for (var work : returnWorks) {if (work.check(line)) {line = work.start(line, repositoryArray);}}
         line = Controller.boolCalculator.start(line);
 
         if (variableDefault.changeCheck(line)) line = variableDefault.changeStart(line);
@@ -90,11 +96,13 @@ public class Setting implements Repository {
     }
 
     public static void warringMessage(String message) {
-        System.out.printf("%s%s%s\n", Color.YELLOW, message, Color.RESET);
+        if (debugMode.ordinal() < DebugMode.WARRING.ordinal())
+            System.out.printf("%s%s%s\n", Color.YELLOW, message, Color.RESET);
     }
 
     public static void errorMessage(String message) {
-        System.out.printf("%s%s%s\n", Color.RED, message, Color.RESET);
+        if (debugMode.ordinal() < DebugMode.ERROR.ordinal())
+            System.out.printf("%s%s%s\n", Color.RED, message, Color.RESET);
     }
 
     public static void firstStart() {
@@ -154,6 +162,9 @@ public class Setting implements Repository {
         returnWorks.add(new SplitRegular(SPLIT_REGULAR));
         returnWorks.add(new Contains(CONTAINS));
         returnWorks.add(new Equals(STRING_VARIABLE, EQUALS));
+        returnWorks.add(new SetContains(SET_CONTAINS));
+        returnWorks.add(new ListContains(LIST_CONTAINS));
+        returnWorks.add(new MapContains(MAP_CONTAINS));
 
         startWorkMap.put(PRINT_SPACE, new PrintSpace(PRINT_SPACE.length()));
         startWorkMap.put(PRINT_TAP, new PrintTap(PRINT_TAP.length()));
