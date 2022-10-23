@@ -4,12 +4,13 @@ import bin.apply.Repository;
 import bin.apply.sys.item.HpMap;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
+import work.StartWork;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class VariableHTML implements LoopToken {
+public class VariableHTML implements LoopToken, StartWork {
     private final Map<String, Object> map = new HpMap(MODEL);
     private final Pattern pattern;
 
@@ -21,7 +22,9 @@ public class VariableHTML implements LoopToken {
         return pattern.matcher(line).find();
     }
 
-    public void start(String line) {
+    @Override
+    public void start(String line, String origen,
+                      Map<String, Map<String, Object>>[] repositoryArray) {
         String[] variables
                 = matchSplitError(matchSplitError(line, BLANKS, 2)[1], VARIABLE_PUT, 2);
         if (variables[0].startsWith("["))
@@ -31,8 +34,14 @@ public class VariableHTML implements LoopToken {
         map.put(variables[0], variables[1]);
     }
 
-    public void reset() {
+    @Override
+    public void first() {
+
+    }
+
+    public VariableHTML reset() {
         map.clear();
+        return this;
     }
 
     // 번역기
