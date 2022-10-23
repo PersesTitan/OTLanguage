@@ -68,7 +68,7 @@ public class StartLine implements LoopToken {
                                       Map<String, Map<String, Object>>... repository) {
         finalTotal.lines()
                 .filter(Predicate.not(String::isBlank))
-                .map(StartLine::setError)
+                .map(v -> setError(v, total))
                 .forEach(line -> Setting.start(line, errorLine.get(), repository));
     }
 
@@ -76,7 +76,7 @@ public class StartLine implements LoopToken {
     public static String startLoop(String total, String fileName,
                                  Map<String, Map<String, Object>>... repository) {
         for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
-            line = loopController.check(setError(line).strip());
+            line = loopController.check(setError(line, total).strip());
             if (line.equals(BREAK) || line.equals(CONTINUE)) return line;
             else Setting.start(line, errorLine.get(), repository);
         }
@@ -88,15 +88,12 @@ public class StartLine implements LoopToken {
         CONTINUE:
         for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
             if (line.isBlank()) continue;
-            final String origen = (line = setError(line));
+            final String origen = (line = setError(line, total));
             final String value = new StringTokenizer(line).nextToken();
 
             if (priorityWorkMap.containsKey(value)) {priorityWorkMap.get(value).start(line, origen, repository);continue;}
             for (var work : priorityWorks) {if (work.check(line)) {work.start(line, origen, repository); continue CONTINUE;}}
             line = lineStart(line, repository);
-
-            // ㅁㄷㅁ 변수명:HTML 변수명 ( HTML 변수명 등록 )
-            if (variableHTML.check(line)) {variableHTML.start(line); continue;}
 
             if (startWorkMap.containsKey(value)) {startWorkMap.get(value).start(line, origen, repository);continue;}
             for (var work : startWorks) {if (work.check(line)) {work.start(line, origen, repository);continue CONTINUE;}}
@@ -109,12 +106,17 @@ public class StartLine implements LoopToken {
     public static final AtomicLong errorCount = new AtomicLong(0);
     public static final AtomicReference<String> errorLine = new AtomicReference<>("");
     public static final AtomicReference<String> errorPath = new AtomicReference<>();
-    public static String setError(String line) {
+    public static String setError(String line, String total) {
         if (line.isBlank()) return "";
         String[] tokens = line.split(" ", 2);
-        errorCount.set(Integer.parseInt(tokens[0]));
+        String lineCount = tokens[0];
+        errorCount.set(Integer.parseInt(lineCount));
         if (tokens.length == 2) {
-            errorLine.set(tokens[1]);
+            int start = total.indexOf("\n" + lineCount + " ") + 1;
+            int end = total.indexOf("\n", start);
+            if (end == -1) end = total.length();
+            String lines = total.substring(start + lineCount.length() + 1, end);
+            errorLine.set(lines);
             return tokens[1];
         } else return "";
     }
