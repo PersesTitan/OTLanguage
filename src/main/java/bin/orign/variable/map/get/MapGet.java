@@ -1,5 +1,6 @@
 package bin.orign.variable.map.get;
 
+import bin.exception.VariableException;
 import bin.token.VariableToken;
 import work.ReturnWork;
 
@@ -32,7 +33,8 @@ public class MapGet implements ReturnWork, VariableToken {
         while (matcher.find()) {
             String group = matcher.group(); // :~변수>>키 값_
             String[] variables = matchSplitError(bothEndCut(group), type, 2);
-            int count = accessCount(variables[0]);
+            int count = accessCount(variables[0], repositoryArray.length);
+            if (count == -1) continue;
             var repository = repositoryArray[count];
             String value = getMap(repository, variables[1], variables[0].substring(count));
             if (value != null) line = line.replace(group, value);
