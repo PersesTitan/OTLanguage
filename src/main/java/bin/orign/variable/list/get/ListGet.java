@@ -30,8 +30,8 @@ public class ListGet implements ReturnWork, LoopToken {
         while (matcher.find()) {
             String group = matcher.group(); // :변수>>1_
             String cut = bothEndCut(group); // 변수>>1
-            int count = accessCount(cut);   // 0
-            if (repositoryArray.length < count) throw VariableException.localNoVariable();
+            int count = accessCount(cut, repositoryArray.length);   // 0
+            if (count == -1) continue;
             var repository = repositoryArray[count];
             // 변수, 1
             String[] tokens = matchSplitError(cut.substring(count), type, 2);
