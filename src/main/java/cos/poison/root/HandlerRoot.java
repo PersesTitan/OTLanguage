@@ -19,7 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static bin.apply.Setting.*;
@@ -96,8 +95,10 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         repository.values().forEach(Map::clear);
         for (var param : params) {
             try {
-                if (parameters.containsKey(param[2]))
-                    set(param[0], param[1], parameters.get(param[2]).toString(), repository);
+                if (parameters.containsKey(param[2])) {
+                    Object paramValue = parameters.get(param[2]);
+                    set(param[0], param[1], paramValue == null ? "" : paramValue.toString(), repository);
+                }
             } catch (Exception ignored) {}
         }
     }
