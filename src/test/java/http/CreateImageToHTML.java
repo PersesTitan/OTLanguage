@@ -2,21 +2,37 @@ package http;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
 
 public class CreateImageToHTML {
     public static void main(String[] args) throws Exception {
-        String text = print("image/poison.png", true);
-        StringBuilder builder = new StringBuilder();
-        for (int i=0; i<text.length(); i++) {
-            if (i%200 == 0) builder.append("\n");
-            builder.append(text.charAt(i));
-        }
+        File file = new File("image/favicon.ico");
+        String contentType = Files.probeContentType(file.toPath());
+        byte[] data = Files.readAllBytes(file.toPath());
+        String base64str = Base64.getEncoder().encodeToString(data);
 
-        builder.toString().lines().forEach(v -> {
-            System.out.printf("builder.append(\"%s\");\n", v);
-        });
+        // cretate "data URI"
+        StringBuilder sb = new StringBuilder();
+        sb.append("data:");
+        sb.append(contentType);
+        sb.append(";base64,");
+        sb.append(base64str);
+        System.out.println(sb.toString());
+
+//        String text = print("image/poison.png", true);
+//        StringBuilder builder = new StringBuilder();
+//        for (int i=0; i<text.length(); i++) {
+//            if (i%200 == 0) builder.append("\n");
+//            builder.append(text.charAt(i));
+//        }
+//
+//        builder.toString().lines().forEach(v -> {
+//            System.out.printf("builder.append(\"%s\");\n", v);
+//        });
 
 //        text = print("image/poison.png", true);
 //        builder = new StringBuilder();
