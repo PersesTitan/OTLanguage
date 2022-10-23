@@ -105,4 +105,13 @@ public interface MergeToken {
         int end = total.indexOf("\n" + input[2] + " ");
         return total.substring(start, end);
     }
+
+    // NO group
+    default String getNoMatchFront(String token1, String token2) {
+        return "(?<=" + token1 + ")" + token2;
+    }
+
+    default String getNoMatchBack(String token1, String token2) {
+        return token1 + "(?=" + token2 + ")";
+    }
 }
