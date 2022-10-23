@@ -12,7 +12,7 @@ public class UriParser {
             for (String pair : query.split("&")) {
                 var params = pair.split("=");
                 String key = null;
-                String value = null;
+                String value = "";
                 if (params.length > 0) key = URLDecoder.decode(params[0], System.getProperty("file.encoding"));
                 if (params.length > 1) value = URLDecoder.decode(params[1], System.getProperty("file.encoding"));
 
