@@ -11,10 +11,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FloatSetSum implements ReturnWork, LoopToken, GetSet {
-    private final String value = orMerge(VARIABLE_ACCESS, NUMBER_LIST);
-    private final String patternText =
-            VARIABLE_GET_S + value + SET_SUM + VARIABLE_GET_E;
-    private final Matcher matcher = Pattern.compile(patternText).matcher("");
+    private final int typeLen;
+    private final Matcher matcher;
+
+    public FloatSetSum(String type) {
+        this.typeLen = type.replace("\\", "").length();
+        final String value = orMerge(VARIABLE_ACCESS, NUMBER_LIST);
+        final String patternText = VARIABLE_GET_S + value + type + VARIABLE_GET_E;
+        this.matcher = Pattern.compile(patternText).matcher("");
+    }
 
     @Override
     public boolean check(String line) {
@@ -27,10 +32,10 @@ public class FloatSetSum implements ReturnWork, LoopToken, GetSet {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();
-            String groups = bothEndCut(group)
-                    .replaceFirst(SET_SUM + END, "");
+            String groups = bothEndCut(group, 1, 1 + typeLen);
             if (groups.matches(VARIABLE_ACCESS)) {
-                int accessCount = accessCount(groups);
+                int accessCount = accessCount(groups, repositoryArray.length);
+                if (accessCount == -1) continue;
                 var repository1 = repositoryArray[accessCount].get(SET_FLOAT);
                 var repository2 = repositoryArray[accessCount].get(SET_DOUBLE);
                 String variableName = groups.replaceAll(ACCESS, "");
