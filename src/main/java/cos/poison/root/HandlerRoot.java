@@ -50,6 +50,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
 
             final Headers responseHeader = exchange.getResponseHeaders(); // 응답(send)
             final Headers requestHeader = exchange.getRequestHeaders();   // 요청(get)
+
             final HandlerItem handlerItem = checkHandlerItem(method, path, nowPath);
             if (defaultHtml != null) {
                 exchange.sendResponseHeaders(statusCode.get(),0);
@@ -66,10 +67,8 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
                 // 로그 출력
                 printLog(method, path, handlerDao.value());
                 // 동작
-                serverStart(repository, statusCode, nowPath,
-                        exchange, requestHeader, responseHeader,
-                        handlerItem.startFinalTotal(),
-                        handlerItem.fileName());
+                serverStart(repository, statusCode, nowPath, exchange,
+                        handlerItem.startFinalTotal(), handlerItem.fileName());
                 exchange.sendResponseHeaders(statusCode.get(),0);
                 responseBody.write(getBody(handlerItem.responseValue()));
             } else {
@@ -105,13 +104,10 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
 
     private void serverStart(Map<String, Map<String, Object>> repository,
                              AtomicInteger statCode, AtomicReference<String> nowPath,
-                             HttpExchange exchange,
-                             Headers requestHeader, Headers responseHeader,
-                             String startFinalTotal, String fileName) {
+                             HttpExchange exchange, String startFinalTotal, String fileName) {
         poisonReturnWorks.forEach(v -> {
             v.setExchange(exchange);
             v.setNowPath(nowPath);
-            v.setRequestHeader(requestHeader);
             v.setStatCode(statCode);
             returnWorks.add(v);
         });
@@ -119,12 +115,11 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         poisonStartWorks.forEach(v -> {
             v.setExchange(exchange);
             v.setNowPath(nowPath);
-            v.setResponseHeader(responseHeader);
             v.setStatCode(statCode);
             startWorks.add(v);
         });
-
         startWorks.add(variableHTML.reset());
+
         try {
             StartLine.startPoison(startFinalTotal, fileName, repository, Repository.repository);
         } catch (Exception e) {
@@ -146,8 +141,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
                     nowPath.set(entry.getKey());
                     return entry.getValue();
                 }
-            }
-            return null;
+            } return null;
         }
     }
 }
