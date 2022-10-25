@@ -1,9 +1,10 @@
 package cos.poison;
 
-import cos.poison.run.GetCookie;
-import cos.poison.run.GetUrlParam;
-import cos.poison.run.Redirect;
-import cos.poison.run.SetCookie;
+import cos.poison.run.replace.GetCookie;
+import cos.poison.run.replace.GetUrlParam;
+import cos.poison.run.start.DeleteCookie;
+import cos.poison.run.start.Redirect;
+import cos.poison.run.start.SetCookie;
 import cos.poison.work.PoisonReturnWork;
 import cos.poison.work.PoisonStartWork;
 
@@ -21,5 +22,6 @@ public interface PoisonRepository {
     List<PoisonStartWork> poisonStartWorks = new ArrayList<>() {{
         add(new SetCookie(POISON, SET_COOKIE));
         add(new Redirect(POISON, REDIRECT));
+        add(new DeleteCookie(POISON, COOKIE, DELETE_COOKIE));
     }};
 }
