@@ -24,6 +24,13 @@ public interface RootWork {
         headers.add("Set-Cookie", cookie.toString());
     }
 
+    default void deleteCookie(Headers headers, String key, String path) {
+        String cookie = key + "=" +
+                "; expires=" + "Thu, 01 Jan 1970 00:00:00 GMT" +
+                "; path=" + Objects.requireNonNullElse(path, "/");
+        headers.add("Set-Cookie", cookie);
+    }
+
     default String getCookie(Headers headers, String key) {
         List<String> cookie = headers.getOrDefault("Cookie", null);
         if (cookie == null || cookie.isEmpty()) return null;
