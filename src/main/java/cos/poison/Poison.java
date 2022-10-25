@@ -1,9 +1,9 @@
 package cos.poison;
 
 import bin.token.LoopToken;
+import cos.http.controller.HttpMethod;
 import cos.poison.controller.HttpServerManager;
-import cos.poison.method.PoisonGet;
-import cos.poison.method.PoisonPost;
+import cos.poison.method.PoisonMethod;
 import cos.poison.root.VariableHTML;
 import cos.poison.setting.PoisonCreate;
 import cos.poison.setting.PoisonStart;
@@ -35,7 +35,7 @@ public class Poison implements StartWork, LoopToken, PoisonRepository {
     public void first() {
         startWorks.add(new PoisonCreate(className));
         startWorks.add(new PoisonStart(className));
-        startWorks.add(new PoisonGet(className));
-        startWorks.add(new PoisonPost(className));
+        startWorks.add(new PoisonMethod(className, LoopToken.POISON_GET, HttpMethod.GET));
+        startWorks.add(new PoisonMethod(className, LoopToken.POISON_POST, HttpMethod.POST));
     }
 }
