@@ -52,7 +52,9 @@ public interface LoopToken extends VariableToken {
     String POISON_START = "ㅅㅌㅅ";
     String MODEL = "ㅁㄷㅁ";
     String REDIRECT = "ㄹㄷㄹ";
-    String GET_COOKIE = "ㄱㅋㄱ";
-    String SET_COOKIE = "ㄱㅋㄱ";
+    String COOKIE = "ㄱㅋㄱ";
+    String GET_COOKIE = COOKIE;
+    String SET_COOKIE = COOKIE;
+    String DELETE_COOKIE = HYPHEN;
     String GET_URL = "ㅇㄹㅇ";
 }
