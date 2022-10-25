@@ -71,7 +71,7 @@ public class Main extends Setting {
             for (int i = 1;;i++) {
                 String line = reader.readLine();
                 if (line == null) break;
-                Setting.total.append(i).append(" ").append(line.stripIndent()).append(SEPARATOR_LINE);
+                Setting.total.append(i).append(" ").append(line.stripLeading()).append(SEPARATOR_LINE);
             }
             StartLine.startLine(Setting.total.toString(), mainPath, repository);
         } catch (IOException ignored) {}

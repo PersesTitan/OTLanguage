@@ -1,7 +1,114 @@
 package klass;
 
-public class KlassMapStartTest {
-    public static void main(String[] args) {
+import bin.apply.sys.item.HpMap;
+import bin.token.MergeToken;
 
+import java.util.*;
+
+import static bin.token.ConsoleToken.PRINT;
+import static bin.token.ConsoleToken.PRINTLN;
+import static bin.token.Token.*;
+import static bin.token.VariableToken.*;
+import static bin.token.VariableToken.MAP_LIST;
+
+public class KlassMapStartTest implements MergeToken {
+    public static void main(String[] args) {
+        KlassMapStartTest kt = new KlassMapStartTest();
+        kt.reset();
+        kt.start("ㅇㅁㅇ 안녕:1234");
+        kt.start("ㅆㅁㅆ[1][12]");
+        kt.start("ㅆㅁㅆ");
+        kt.start("ㅆㅁㅆ[ㅁㄴㅇㄹ]");
+        kt.print();
+    }
+
+    HashMap<String, Map<String, Object>> COPY_REPOSITORY = new HashMap<>();
+    Map<String, Map<String, StartWorkTest>> startWorks = new HashMap<>();
+    Map<String, Map<String, ReturnWorkTest>> returnWorks = new HashMap<>();
+    String merge = merge("(?=", BLANKS, "|", BL, ")");
+
+    public void print() {
+        System.out.println(COPY_REPOSITORY);
+    }
+
+    public void reset() {
+        TOTAL_LIST.forEach(v -> COPY_REPOSITORY.put(v, new HpMap(v)));
+
+        StartWorkTest createOrigin = (line, params, repositoryArray) -> {
+            String[] values = matchSplitError(line, BLANKS, 2);
+            String[] tokens = values[1].split(VARIABLE_PUT, 2);
+            variableDefineError(tokens[0], repositoryArray.get(0));
+            repositoryArray.get(0).get(values[0]).put(tokens[0], tokens.length == 2 ? tokens[1] : "");
+        };
+        StartWorkTest createList = (line, params, repositoryArray) -> {
+            String[] values = matchSplitError(line, BLANKS, 2);
+            String[] tokens = values[1].split(splitNoCutBack(VARIABLE_PUT, LIST_ADD), 2);
+            variableDefineError(tokens[0], repositoryArray.get(0));
+            repositoryArray.get(0).get(values[0]).put(tokens[0], tokens.length == 2 ? tokens[1] : "");
+        };
+        StartWorkTest createSet = (line, params, repositoryArray) -> {
+            String[] values = matchSplitError(line, BLANKS, 2);
+            String[] tokens = matchSplitError(values[1], splitNoCutBack(VARIABLE_PUT, SET_ADD), 2);
+            variableDefineError(tokens[0], repositoryArray.get(0));
+            repositoryArray.get(0).get(values[0]).put(tokens[0], tokens[1]);
+        };
+        StartWorkTest createMap = (line, params, repositoryArray) -> {
+            String[] values = matchSplitError(line, BLANKS, 2);
+            String[] tokens = values[1].split(splitNoCutBack(VARIABLE_PUT, MAP_ADD), 2);
+            variableDefineError(tokens[0], repositoryArray.get(0));
+            repositoryArray.get(0).get(values[0]).put(tokens[0], tokens.length == 2 ? tokens[1] : "");
+        };
+
+        ORIGIN_LIST.forEach(v -> createMap(v, "", createOrigin));
+        LIST_LIST.forEach(v -> createMap(v, "", createList));
+        SET_LIST.forEach(v -> createMap(v, "", createSet));
+        MAP_LIST.forEach(v -> createMap(v, "", createMap));
+        createMap(PRINT, "", (line, params, repositoryArray) -> System.out.print(params[0]));
+        createMap(PRINTLN, "", (line, params, repositoryArray) -> System.out.println(params[0]));
+    }
+
+    private void createMap(String klass, String method, StartWorkTest startWorkTest) {
+        startWorks.getOrDefault(klass, startWorks.put(klass, new HashMap<>())).put(method, startWorkTest);
+    }
+
+    private final LinkedList<Map<String, Map<String, Object>>> totalList = new LinkedList<>() {{
+        add(COPY_REPOSITORY);
+    }};
+    public void start(String line) {
+        String[] tokens = line.split(merge, 2);
+        String local = tokens[0];
+        String value = tokens.length == 2 ? tokens[1] : "";
+
+        String[] params = value.startsWith("[")
+                ? getCheck(value)
+                : new String[]{value.stripLeading()};
+        if (params == null) return;
+
+        StringTokenizer tokenizer = new StringTokenizer(local, "~");
+        String className = tokenizer.nextToken();
+        String methodName = tokenizer.hasMoreTokens() ? tokenizer.nextToken("").substring(1) : "";
+        StartWorkTest startWork = getStartWork(className, methodName);
+        if (startWork != null) startWork.start(line, params, totalList);
+    }
+
+    private String[] getCheck(String value) {
+        return value.endsWith("]")
+                ? bothEndCut(value).split(BR + BL, count(value))
+                : null;
+    }
+
+    private int count(String value) {
+        int count = 1, i = -1;
+        while ((i = value.indexOf("][", i+1)) != -1) count++;
+        return count;
+    }
+
+    private StartWorkTest getStartWork(String klassName, String methodName) {
+        Map<String, StartWorkTest> startWorkTestMap;
+        if (startWorks.containsKey(klassName)
+                && (startWorkTestMap = startWorks.get(klassName)).containsKey(methodName))
+            return startWorkTestMap.get(methodName);
+        return null;
     }
 }
+
