@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public interface PoisonReturnWork extends ReturnWork {
     void setExchange(HttpExchange exchange);
-    void setRequestHeader(Headers requestHeader);
     void setStatCode(AtomicInteger statCode);
     void setNowPath(AtomicReference<String> nowPath);
 }
