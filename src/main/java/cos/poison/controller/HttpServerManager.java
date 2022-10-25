@@ -2,6 +2,7 @@ package cos.poison.controller;
 
 import bin.apply.Setting;
 import bin.apply.sys.make.ChangeHangle;
+import bin.define.item.MethodItem;
 import bin.token.MergeToken;
 import com.sun.net.httpserver.HttpServer;
 import cos.http.controller.HttpMethod;
@@ -57,19 +58,9 @@ public class HttpServerManager implements HttpRepository, MergeToken, ChangeHang
 
     // "text/html;charset=UTF-8"
     // "text/plain"
-
-    // POST 추가
-    public void addPost(String path, String[] total, String[][] params, String html) {
+    public void addMethod(HttpMethod httpMethod, String path, String[] total, String[][] params, String html) {
         if (httpServer != null)
-            putHttpMethod(HttpMethod.POST, path,
-                    new HandlerItem(total[0], getLoopTotal(total), params, html, null));
-        else Setting.errorMessage("서버가 존재하지 않습니다.");
-    }
-
-    // GET 추가
-    public void addGet(String path, String[] total, String[][] params, String html) {
-        if (httpServer != null)
-            putHttpMethod(HttpMethod.GET, path,
+            putHttpMethod(httpMethod, path,
                     new HandlerItem(total[0], getLoopTotal(total), params, html, null));
         else Setting.errorMessage("서버가 존재하지 않습니다.");
     }
