@@ -12,19 +12,21 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static cos.poison.controller.HttpServerManager.uriParser;
+import static java.nio.charset.StandardCharsets.*;
 
 public class HttpPostHandler implements HttpHandlerInf {
     public HandlerDao handle(HttpExchange exchange) {
-        var isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
-        try (var br = new BufferedReader(isr)) {
-            Map<String, Object> parameters = new HashMap<>();
-
+        try (BufferedReader br =
+                     new BufferedReader(
+                     new InputStreamReader(exchange.getRequestBody(), UTF_8))) {
             String path = exchange.getRequestURI().getPath();
-            String query = br.readLine();
-            uriParser.parsesQuery(query, parameters);
 
-            return new HandlerDao(
-                    parameters.isEmpty() ? "" : parameters.toString(), path, parameters);
+            Map<String, Object> parameters = new HashMap<>();
+            StringBuilder query = new StringBuilder();
+            br.lines().forEach(query::append);
+            uriParser.parsesQuery(query.toString(), parameters);
+
+            return new HandlerDao(parameters.isEmpty() ? "" : parameters.toString(), path, parameters);
         } catch (IOException ignored) {
             throw ServerException.fileReadError();
         }
