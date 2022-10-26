@@ -83,12 +83,12 @@ public class Setting implements Repository {
     // ============================================================================== //
     @SafeVarargs
     public static String lineStart(String line, Map<String, Map<String, Object>>... repositoryArray) {
-        if (variableDefault.check(line)) line = variableDefault.start(line);
+//        if (variableDefault.check(line)) line = variableDefault.start(line);
 
 //        for (var work : returnWorks) {if (work.check(line)) {line = work.start(line, repositoryArray);}}
         line = Controller.boolCalculator.start(line);
 
-        if (variableDefault.changeCheck(line)) line = variableDefault.changeStart(line);
+//        if (variableDefault.changeCheck(line)) line = variableDefault.changeStart(line);
         return line;
     }
 
@@ -150,8 +150,8 @@ public class Setting implements Repository {
 //        returnWorks.add(new RandomInteger(RANDOM_INTEGER));
 //        returnWorks.add(new RandomLong(RANDOM_LONG));
 //        returnWorks.add(new Input(SCANNER));
-        returnWorks.add(new ListIsEmpty(LIST_ISEMPTY));
-        returnWorks.add(new SetIsEmpty(SET_ISEMPTY));
+//        returnWorks.add(new ListIsEmpty(LIST_ISEMPTY));
+//        returnWorks.add(new SetIsEmpty(SET_ISEMPTY));
         returnWorks.add(new IntegerListSum(LIST_SUM));
         returnWorks.add(new LongListSum(LIST_SUM));
         returnWorks.add(new FloatListSum(LIST_SUM));

@@ -3,6 +3,7 @@ package bin.v3;
 import bin.exception.MatchException;
 import work.v3.ReturnWorkV3;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -14,7 +15,7 @@ import static bin.token.VariableToken.*;
 
 public interface CreateReturnWorks {
     Matcher matcher = Pattern.compile(String.format(
-            "%s[^%s%s]+%s([^%s%s]+%s)?",
+            "%s[^%s%s]+%s([^%s%s]*%s)?",
             VARIABLE_GET_S, VARIABLE_GET_S, VARIABLE_GET_E,
             VARIABLE_GET_E, VARIABLE_DEFAULT, VARIABLE_GET_E, VARIABLE_DEFAULT)).matcher("");
 
@@ -31,11 +32,9 @@ public interface CreateReturnWorks {
                 variable = tokens[0];
                 value = tokens[1];
             }
+
             String sub;
             if ((sub = sub(variable, value, repositoryArray)) != null) {
-                line = line.replaceFirst(Pattern.quote(group), sub);
-                matcher.reset(line);
-            } else if ((sub = varSub(variable, value, repositoryArray)) != null) {
                 line = line.replaceFirst(Pattern.quote(group), sub);
                 matcher.reset(line);
             }
@@ -52,14 +51,14 @@ public interface CreateReturnWorks {
         String[] params = value.startsWith("[")
                 ? getCheck(value)
                 : new String[]{value.stripLeading()};
-        if (params == null) return def;
+        if (params == null) return varSub(line, def, repositoryArray);
 
         StringTokenizer tokenizer = new StringTokenizer(local, ACCESS);
         String className = tokenizer.nextToken();
         String methodName = tokenizer.hasMoreTokens() ? tokenizer.nextToken("").substring(1) : "";
         ReturnWorkV3 startWork = getStartWork(className, methodName);
         if (startWork != null) return startWork.paramsCheck(params.length, params[0]).start(line, params, repositoryArray);
-        else return def;
+        else return varSub(line, def, repositoryArray);
     }
 
     private static String varSub(String line, String def,

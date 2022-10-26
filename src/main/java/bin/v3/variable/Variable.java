@@ -48,7 +48,7 @@ public class Variable extends ReturnWorkV3 implements MergeToken, ContainsTool {
         else if (SET_LIST.contains(repository.getKey())) {
             LinkedHashSet<Object> set = (LinkedHashSet<Object>) repository.getValue().get(line);
             if (token.equals(SET_ISEMPTY)) return set.isEmpty() ? TRUE : FALSE;
-            else if (token.equals(SET_SUM)) return collectionSum(repository.getKey(), set);
+            else if (token.equals(SET_SUM)) return collectionSum(set, repository.getKey());
             else if (token.startsWith(SET_GET) && isInteger(token.substring(SET_GET.length())))
                 return set.stream().toList().get(Integer.parseInt(token.substring(SET_GET.length()))).toString();
             else if (token.startsWith(SET_CONTAINS))
@@ -58,7 +58,7 @@ public class Variable extends ReturnWorkV3 implements MergeToken, ContainsTool {
         else if (LIST_LIST.contains(repository.getKey())) {
             LinkedList<Object> list = (LinkedList<Object>) repository.getValue().get(line);
             if (token.equals(LIST_ISEMPTY)) return list.isEmpty() ? TRUE : FALSE;
-            else if (token.equals(LIST_SUM)) return collectionSum(repository.getKey(), list);
+            else if (token.equals(LIST_SUM)) return collectionSum(list, repository.getKey());
             else if (token.startsWith(LIST_GET) && isInteger(token.substring(LIST_GET.length())))
                 return list.get(Integer.parseInt(token.substring(LIST_GET.length()))).toString();
             else if (token.startsWith(LIST_CONTAINS))
@@ -74,16 +74,6 @@ public class Variable extends ReturnWorkV3 implements MergeToken, ContainsTool {
                 return collectionCheck(map.keySet(), repository.getKey(), token.substring(MAP_CONTAINS_KEY.length()));
         }
         return null;
-    }
-
-    // Collection sum 구하는 로직
-    private String collectionSum(String type, Collection<Object> collection) {
-        char c = type.charAt(1);
-        if (c == INT_VARIABLE.charAt(1)) return Integer.toString(collection.stream().mapToInt(v -> (int) v).sum());
-        else if (c == LONG_VARIABLE.charAt(1)) return Long.toString(collection.stream().mapToLong(v -> (long) v).sum());
-        else if (c == FLOAT_VARIABLE.charAt(1) || c == DOUBLE_VARIABLE.charAt(1))
-            return Double.toString(collection.stream().mapToDouble(v -> (double) v).sum());
-        else return null;
     }
 
     // 저장소 가져오는 로직
