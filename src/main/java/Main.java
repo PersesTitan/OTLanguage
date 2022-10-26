@@ -45,6 +45,7 @@ public class Main extends Setting {
     }
 
     private Main(String[] args) {
+        first();
         if (args.length <= 0) throw FileException.noFindError();
         else if (args.length == 1) runType = RunType.Shell;     // 현재 파일 위치
         else if (args.length == 2) runType = RunType.Normal;    // 현재 파일 이름
