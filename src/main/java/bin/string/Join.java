@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Join extends GetOnlyChangeList implements LoopToken, StringToken, ReturnWork {
+public class Join implements LoopToken, StringToken, ReturnWork, GetOnlyChangeList {
     private final int length;
     private final Matcher matcher;
 
