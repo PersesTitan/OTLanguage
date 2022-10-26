@@ -6,7 +6,8 @@ import static bin.token.LoopToken.ARGUMENT;
 import static bin.token.cal.NumberToken.NUMBER;
 
 public interface VariableToken extends Token {
-    String VARIABLE_HTML = "[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$-]+[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$-]*";
+    String VARIABLE_ALL = ACCESS + "{0,2}[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z-]+";
+    String VARIABLE_HTML = "[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z-]+[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z-]*";
     String VARIABLE_NAME = "(\\[\\d+\\])?" + VARIABLE_HTML;
     String VARIABLE_ACCESS = ACCESS + "{0,2}" + VARIABLE_NAME;
     String VARIABLE = ":" + VARIABLE_ACCESS + "_";
@@ -14,6 +15,8 @@ public interface VariableToken extends Token {
     String VARIABLE_PUT = ":";
     String VARIABLE_GET_S = ":";
     String VARIABLE_GET_E = "_";
+    String VARIABLE_DEFAULT = ";";
+    String VAR_TOKEN = "@otl;";
 
     String FILE_TYPE = "[^~\\s]+";
     String FILE_NAME = "[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]+";
@@ -50,7 +53,7 @@ public interface VariableToken extends Token {
     String SET_GET = GREATER_SIGN;                      // >
     String SET_ISEMPTY = QUESTION;                      // ?
     String SET_SUM = PLUS;                              // +
-    String SET_CONTAINS = SET_ISEMPTY + ARGUMENT;       // ?[]
+    String SET_CONTAINS = SET_ISEMPTY;                  // ?(...)
 
     // LIST
     String LIST_INTEGER = "ㄹㅈㄹ";
@@ -68,7 +71,7 @@ public interface VariableToken extends Token {
     String LIST_GET = GREATER_SIGN.repeat(2);           // >>
     String LIST_ISEMPTY = QUESTION.repeat(2);           // ??
     String LIST_SUM = PLUS.repeat(2);                   // ++
-    String LIST_CONTAINS = LIST_ISEMPTY + ARGUMENT;     // ??[]
+    String LIST_CONTAINS = LIST_ISEMPTY;                       // ??(...)
 
     String MAP_INTEGER = "ㅈㅈㅈ";
     String MAP_LONG = "ㅈㅉㅈ";
@@ -83,7 +86,7 @@ public interface VariableToken extends Token {
     String MAP_ADD = LESS_SIGN.repeat(3);              // <<<
     String MAP_GET = GREATER_SIGN.repeat(3);           // >>>
     String MAP_ISEMPTY = QUESTION.repeat(3);           // ???
-    String MAP_CONTAINS = MAP_ISEMPTY + ARGUMENT;      // ???[]
+    String MAP_CONTAINS = MAP_ISEMPTY;                       // ???(...)
 
     // ORIGIN
     List<String> ORIGIN_LIST = new ArrayList<>() {{
