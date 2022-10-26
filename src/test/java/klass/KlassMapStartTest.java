@@ -3,7 +3,6 @@ package klass;
 import bin.apply.sys.item.HpMap;
 import bin.token.MergeToken;
 
-import java.io.StringWriter;
 import java.util.*;
 
 import static bin.token.ConsoleToken.*;
@@ -12,28 +11,27 @@ import static bin.token.VariableToken.*;
 import static bin.token.VariableToken.MAP_LIST;
 
 public class KlassMapStartTest implements MergeToken {
-    public static void main(String[] args) {
-        KlassMapStartTest kt = new KlassMapStartTest();
-        kt.reset();
-        kt.start("ㅇㅁㅇ 안녕:1234");
-        kt.start("ㅆㅁㅆ[1]");
-        kt.start("ㅆㅁㅆ");
-        kt.start("ㅆㅁㅆ[ㅁㄴㅇㄹ]");
-        kt.print();
+
+    public KlassMapStartTest(HashMap<String, Map<String, Object>> rep) {
+         this.totalList = new LinkedList<>() {{add(rep);}};
+        reset();
     }
 
-    HashMap<String, Map<String, Object>> COPY_REPOSITORY = new HashMap<>();
+    public static void main(String[] args) {
+//        KlassMapStartTest kt = new KlassMapStartTest();
+//        kt.reset();
+//        kt.start("ㅇㅁㅇ 안녕:1234");
+//        kt.start("ㅆㅁㅆ[1]");
+//        kt.start("ㅆㅁㅆ");
+//        kt.start("ㅆㅁㅆ[ㅁㄴㅇㄹ]");
+//        kt.print();
+    }
+
     Map<String, Map<String, StartWorkTest>> startWorks = new HashMap<>();
     Map<String, Map<String, ReturnWorkTest>> returnWorks = new HashMap<>();
     String merge = merge("(?=", BLANKS, "|", BL, ")");
 
-    public void print() {
-        System.out.println(COPY_REPOSITORY);
-    }
-
     public void reset() {
-        TOTAL_LIST.forEach(v -> COPY_REPOSITORY.put(v, new HpMap(v)));
-
         StartWorkTest createOrigin = new StartWorkTest() {
             @Override void start(String line, String[] params,
                        LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
@@ -106,12 +104,7 @@ public class KlassMapStartTest implements MergeToken {
         else startWorks.put(klass, new HashMap<>() {{ put(method, startWorkTest); }});
     }
 
-    private void returnCreateMap(String klass, String method, ReturnWorkTest returnWorkTest) {
-        if (returnWorks.containsKey(klass)) returnWorks.get(klass).put(method, returnWorkTest);
-        else returnWorks.put(klass, new HashMap<>() {{ put(method, returnWorkTest); }});
-    }
-
-    private final LinkedList<Map<String, Map<String, Object>>> totalList = new LinkedList<>() {{add(COPY_REPOSITORY);}};
+    private final LinkedList<Map<String, Map<String, Object>>> totalList;
     public void start(String line) {
         String[] tokens = line.split(merge, 2);
         String local = tokens[0];
@@ -126,7 +119,7 @@ public class KlassMapStartTest implements MergeToken {
         String className = tokenizer.nextToken();
         String methodName = tokenizer.hasMoreTokens() ? tokenizer.nextToken("").substring(1) : "";
         StartWorkTest startWork = getStartWork(className, methodName);
-        if (startWork != null) startWork.paramsCheck(params.length).start(line, params, totalList);
+        if (startWork != null) startWork.paramsCheck(params.length, params[0]).start(line, params, totalList);
     }
 
     private String[] getCheck(String value) {
