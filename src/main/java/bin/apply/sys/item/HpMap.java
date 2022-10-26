@@ -11,12 +11,13 @@ import java.util.Map;
 import java.util.Set;
 
 import static bin.apply.Controller.variableTypeCheck;
+import static bin.apply.Repository.returnWorksV3;
+import static bin.apply.Repository.variable;
 import static bin.check.VariableTypeCheck.getVariableType;
 import static bin.check.VariableTypeCheck.originList;
 
 public class HpMap extends HashMap<String, Object> implements Map<String, Object>, VariableToken {
     private final Map<String, Integer> hp = new HashMap<>();
-//    private final Matcher matcher = Pattern.compile(START + BL + "\\d+" + BR).matcher("");
     private static final int noCount = -1;
     private final VariableType variableType;
 
@@ -54,10 +55,8 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
         Object object = super.get(key);
         int hpCount = hp.getOrDefault(key.toString(), -1);
         if (hpCount != noCount) {
-            if (--hpCount == 0) {
-                super.remove(key);
-                hp.remove(key.toString());
-            } else hp.put(key.toString(), hpCount);
+            if (--hpCount == 0) remove(key);
+            else hp.put(key.toString(), hpCount);
         }
         return object;
     }
@@ -71,6 +70,8 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
             if (c != 0) key = match[1];
             hp.put(key, c);
         }
+        // 새로운 변수일때 변수 추가
+        if (!containsKey(key)) returnWorksV3.get(VAR_TOKEN).put(key, variable);
         Object keyObj = this.getOrDefault(key, null);
         Object valueObj = variableTypeCheck.getObject(variableType, value.toString(), keyObj);
         if (keyObj == null || originList.contains(variableType)) return super.put(key, valueObj);
@@ -80,6 +81,7 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
     @Override
     public Object remove(Object key) {
         hp.remove(key);
+        returnWorksV3.get(VAR_TOKEN).remove(key);
         return super.remove(key);
     }
 
@@ -91,6 +93,7 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
     @Override
     public void clear() {
         hp.clear();
+        returnWorksV3.get(VAR_TOKEN).clear();
         super.clear();
     }
 

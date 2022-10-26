@@ -20,10 +20,6 @@ public class CreateOrigin implements StartWork, LoopToken {
                       Map<String, Map<String, Object>>[] repositoryArray) {
         // 변수명:1234  => 변수명, 1234
         String[] values = matchSplitError(line, BLANKS, 2);
-        if (!values[0].matches(VARIABLE_NAME)) {
-            Setting.runMessage(line);
-            return;
-        }
         String[] tokens = values[1].split(VARIABLE_PUT, 2);
         variableDefineError(tokens[0], repositoryArray[0]);
         repositoryArray[0].get(values[0]).put(tokens[0], tokens.length == 2 ? tokens[1] : "");

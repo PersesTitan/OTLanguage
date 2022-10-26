@@ -36,11 +36,11 @@ import bin.orign.variable.SetVariable;
 import bin.orign.variable.origin.put.PutVariable;
 import bin.orign.variable.set.get.*;
 import bin.string.*;
+import bin.v3.CreateReturnWorks;
 import cos.poison.Poison;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static bin.apply.Controller.variableDefault;
 import static bin.token.ConsoleToken.*;
@@ -65,10 +65,14 @@ public class Setting implements Repository {
         final String origen = line;
         final String value = new StringTokenizer(line).nextToken();
 
-        if (priorityWorkMap.containsKey(value)) {priorityWorkMap.get(value).start(line, origen, repositoryArray);return;}
+        if (priorityWorkMap.containsKey(value)) {priorityWorkMap.get(value).start(line, origen, repositoryArray); return;}
 
         for (var work : priorityWorks) {if (work.check(line)) {work.start(line, origen, repositoryArray); return;}}
-        line = lineStart(line, repositoryArray);
+
+        if (line.contains(VARIABLE_GET_S) && line.contains(VARIABLE_GET_E))
+            line = lineStart(line, repositoryArray);
+
+        line = CreateReturnWorks.start(line, Arrays.stream(repositoryArray).collect(Collectors.toCollection(LinkedList::new)));
 
         if (startWorkMap.containsKey(value)) {startWorkMap.get(value).start(line, origen, repositoryArray);return;}
         for (var work : startWorks) {if (work.check(line)) {work.start(line, origen, repositoryArray);return;}}
@@ -81,8 +85,7 @@ public class Setting implements Repository {
     public static String lineStart(String line, Map<String, Map<String, Object>>... repositoryArray) {
         if (variableDefault.check(line)) line = variableDefault.start(line);
 
-        if (line.contains(VARIABLE_GET_S) && line.contains(VARIABLE_GET_E))
-            for (var work : returnWorks) {if (work.check(line)) {line = work.start(line, repositoryArray);}}
+//        for (var work : returnWorks) {if (work.check(line)) {line = work.start(line, repositoryArray);}}
         line = Controller.boolCalculator.start(line);
 
         if (variableDefault.changeCheck(line)) line = variableDefault.changeStart(line);
@@ -107,6 +110,8 @@ public class Setting implements Repository {
 
     public static void firstStart() {
         reset();
+        returnWorksV3.put(VAR_TOKEN, new HashMap<>());
+
         repository.put(METHOD, new HashMap<>());
         noUse.add(SCANNER);
         noUse.add(RANDOM_BOOL);
@@ -138,13 +143,13 @@ public class Setting implements Repository {
         priorityWorks.add(new SetSort(SET_SORT));
         priorityWorks.add(new FilePath());
 
-        returnWorks.add(new SetVariable());
-        returnWorks.add(new RandomBoolean(RANDOM_BOOL));
-        returnWorks.add(new RandomDouble(RANDOM_DOUBLE));
-        returnWorks.add(new RandomFloat(RANDOM_FLOAT));
-        returnWorks.add(new RandomInteger(RANDOM_INTEGER));
-        returnWorks.add(new RandomLong(RANDOM_LONG));
-        returnWorks.add(new Input(SCANNER));
+//        returnWorks.add(new SetVariable());
+//        returnWorks.add(new RandomBoolean(RANDOM_BOOL));
+//        returnWorks.add(new RandomDouble(RANDOM_DOUBLE));
+//        returnWorks.add(new RandomFloat(RANDOM_FLOAT));
+//        returnWorks.add(new RandomInteger(RANDOM_INTEGER));
+//        returnWorks.add(new RandomLong(RANDOM_LONG));
+//        returnWorks.add(new Input(SCANNER));
         returnWorks.add(new ListIsEmpty(LIST_ISEMPTY));
         returnWorks.add(new SetIsEmpty(SET_ISEMPTY));
         returnWorks.add(new IntegerListSum(LIST_SUM));
@@ -193,8 +198,6 @@ public class Setting implements Repository {
     }
 
     private static void reset() {
-//        total.setLength(0);
-//        LOOP_TOKEN.clear();
         priorityWorkMap.clear();
         startWorkMap.clear();
         returnWorks.clear();
