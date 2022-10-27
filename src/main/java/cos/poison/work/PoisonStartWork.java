@@ -1,13 +1,11 @@
 package cos.poison.work;
 
 import com.sun.net.httpserver.HttpExchange;
-import work.StartWork;
+import cos.poison.run.replace.GetCookie;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public interface PoisonStartWork extends StartWork {
-    void setExchange(HttpExchange exchange);
-    void setStatCode(AtomicInteger statCode);
-    void setNowPath(AtomicReference<String> nowPath);
+public interface PoisonStartWork {
+    void setData(HttpExchange exchange, AtomicInteger statCode, AtomicReference<String> nowPath);
 }
