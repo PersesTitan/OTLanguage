@@ -9,6 +9,7 @@ import cos.poison.work.PoisonStartWork;
 import work.StartWork;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -39,7 +40,8 @@ public class SetCookie implements RootWork, LoopToken, PoisonStartWork {
     }
 
     @Override
-    public void start(String line, String origen, Map<String, Map<String, Object>>[] repositoryArray) {
+    public void start(String line, String origen,
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] tokens = bothEndCut(line.strip(), length + 1, 1).split(BR + BL, 4);
         switch (tokens.length) {
             case 2 -> setCookie(responseHeader, tokens[0], tokens[1], null, -1);
