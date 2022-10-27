@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpExchange;
 import cos.poison.root.RootWork;
 import cos.poison.work.PoisonStartWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -52,7 +53,7 @@ public class DeleteCookie implements RootWork, LoopToken, PoisonStartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String cookieName = line.substring(this.typeLen).strip();
         String path = null;
         if (cookieName.contains("[") && cookieName.endsWith("]")) {
