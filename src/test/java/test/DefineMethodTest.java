@@ -29,7 +29,7 @@ public class DefineMethodTest {
         Map<String, Map<String, Object>> map = new HashMap<>();
         map.put(METHOD, new HashMap<>());
         test.lines().forEach(v -> {
-            if (defineMethod.check(v)) defineMethod.start(v, v, new Map[]{map});
+//            if (defineMethod.check(v)) defineMethod.start(v, v, new Map[]{map});
         });
 
     }
