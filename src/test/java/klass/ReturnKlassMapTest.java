@@ -24,6 +24,7 @@ public class ReturnKlassMapTest implements LoopToken {
         kt.reset();
         KlassMapStartTest ks = new KlassMapStartTest(COPY_REPOSITORY);
 
+        ks.start("adf[] (a,1,23)");
         ks.start("ㅇㅁㅇ 안녕:123");
 
         kt.start(":ㅇㅁㅇ_기본값;");
