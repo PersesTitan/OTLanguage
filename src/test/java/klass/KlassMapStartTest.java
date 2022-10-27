@@ -123,7 +123,17 @@ public class KlassMapStartTest implements MergeToken {
     }
 
     private String[] getCheck(String value) {
-        return value.endsWith("]")
+        if (value.contains("(") && value.strip().endsWith(")")) {
+            int loopPoison = value.lastIndexOf('(');
+            String loop = value.substring(loopPoison);          // (test,1,10)
+            value = value.substring(0, loopPoison).strip();     // [][]
+            int count = count(value);                           // 2
+            if (!value.endsWith("]")) return null;
+            // value 쪼개기
+            String[] values = Arrays.copyOf(bothEndCut(value).split(BR + BL, count), count+1);
+            values[count] = loop;
+            return values;
+        } else return value.endsWith("]")
                 ? bothEndCut(value).split(BR + BL, count(value))
                 : null;
     }
