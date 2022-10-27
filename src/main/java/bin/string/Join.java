@@ -5,6 +5,7 @@ import bin.token.LoopToken;
 import bin.token.StringToken;
 import work.ReturnWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,8 +28,7 @@ public class Join implements LoopToken, StringToken, ReturnWork, GetOnlyChangeLi
     }
 
     @Override
-    public String start(String line,
-                        Map<String, Map<String, Object>>[] repositoryArray) {
+    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             // :ㅇㅁㅇ~ㅉㅇㅉ[반복할 값][리스트]_
@@ -39,7 +39,7 @@ public class Join implements LoopToken, StringToken, ReturnWork, GetOnlyChangeLi
                     bothEndCut(group, length+1, 2),
                     BR + BL, 2);
             line = line.replace(group,
-                    String.join(tokens[0], getList(tokens[1], repositoryArray[0])));
+                    String.join(tokens[0], getList(tokens[1], repositoryArray.get(0))));
         }
         return line;
     }

@@ -5,6 +5,7 @@ import bin.exception.MatchException;
 import bin.token.LoopToken;
 import work.StartWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -29,7 +30,7 @@ public class TryCatch implements StartWork, LoopToken {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         // ㅠㅅㅠ (test,1,10)
         StringTokenizer tokenizer = new StringTokenizer(line);
         tokenizer.nextToken();

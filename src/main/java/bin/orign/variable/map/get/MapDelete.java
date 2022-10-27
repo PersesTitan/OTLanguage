@@ -5,6 +5,7 @@ import bin.token.LoopToken;
 import work.StartWork;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,13 +27,13 @@ public class MapDelete implements StartWork, LoopToken {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         line = line.strip();
-        int count = accessCount(line, repositoryArray.length);
+        int count = accessCount(line, repositoryArray.size());
         if (count == -1) throw VariableException.localNoVariable();
         // ~변수---1 -> 변수---1 -> 변수, 1
         String[] tokens = matchSplitError(line.substring(count), Pattern.quote(type), 2);
-        var repository = repositoryArray[count];
+        var repository = repositoryArray.get(count);
         getMap(repository, tokens[0], tokens[1]);
     }
 

@@ -13,23 +13,26 @@ import static bin.token.cal.BoolToken.FALSE;
 import static bin.token.cal.BoolToken.TRUE;
 
 public class Variable extends ReturnWorkV3 implements MergeToken, ContainsTool {
-    public Variable() {
-        super(1);
+    public Variable(int... counts) {
+        super(counts);
     }
 
     private final String SET_ISEMPTY = VariableToken.SET_ISEMPTY.replace("\\", "");
     private final String SET_SUM = VariableToken.SET_SUM.replace("\\", "");
     private final String SET_GET = VariableToken.SET_GET.replace("\\", "");
     private final String SET_CONTAINS = VariableToken.SET_CONTAINS.replace("\\", "");
+    private final String SET_LENGTH = VariableToken.SET_LENGTH.replace("\\", "");
 
     private final String LIST_ISEMPTY = VariableToken.LIST_ISEMPTY.replace("\\", "");
     private final String LIST_SUM = VariableToken.LIST_SUM.replace("\\", "");
     private final String LIST_GET = VariableToken.LIST_GET.replace("\\", "");
     private final String LIST_CONTAINS = VariableToken.LIST_CONTAINS.replace("\\", "");
+    private final String LIST_LENGTH = VariableToken.LIST_LENGTH.replace("\\", "");
 
     private final String MAP_ISEMPTY = VariableToken.MAP_ISEMPTY.replace("\\", "");
     private final String MAP_GET = VariableToken.MAP_GET.replace("\\", "");
     private final String MAP_CONTAINS_KEY = VariableToken.MAP_CONTAINS.replace("\\", "");
+    private final String MAP_LENGTH = VariableToken.MAP_LENGTH.replace("\\", "");
 
     @Override
     public String start(String line, String[] params,
@@ -49,8 +52,10 @@ public class Variable extends ReturnWorkV3 implements MergeToken, ContainsTool {
             LinkedHashSet<Object> set = (LinkedHashSet<Object>) repository.getValue().get(line);
             if (token.equals(SET_ISEMPTY)) return set.isEmpty() ? TRUE : FALSE;
             else if (token.equals(SET_SUM)) return collectionSum(set, repository.getKey());
+            else if (token.equals(SET_LENGTH)) return Integer.toString(set.size());
+            // Start
             else if (token.startsWith(SET_GET) && isInteger(token.substring(SET_GET.length())))
-                return set.stream().toList().get(Integer.parseInt(token.substring(SET_GET.length()))).toString();
+                return getSet(set, token.substring(SET_GET.length()));
             else if (token.startsWith(SET_CONTAINS))
                 return collectionCheck(set, repository.getKey(), token.substring(SET_CONTAINS.length()));
         }
@@ -59,8 +64,10 @@ public class Variable extends ReturnWorkV3 implements MergeToken, ContainsTool {
             LinkedList<Object> list = (LinkedList<Object>) repository.getValue().get(line);
             if (token.equals(LIST_ISEMPTY)) return list.isEmpty() ? TRUE : FALSE;
             else if (token.equals(LIST_SUM)) return collectionSum(list, repository.getKey());
+            else if (token.equals(LIST_LENGTH)) return Integer.toString(list.size());
+            // Start
             else if (token.startsWith(LIST_GET) && isInteger(token.substring(LIST_GET.length())))
-                return list.get(Integer.parseInt(token.substring(LIST_GET.length()))).toString();
+                return getList(list, token.substring(LIST_GET.length()));
             else if (token.startsWith(LIST_CONTAINS))
                 return collectionCheck(list, repository.getKey(), token.substring(LIST_CONTAINS.length()));
         }
@@ -68,6 +75,8 @@ public class Variable extends ReturnWorkV3 implements MergeToken, ContainsTool {
         else if (MAP_LIST.contains(repository.getKey())) {
             LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) repository.getValue().get(line);
             if (token.equals(MAP_ISEMPTY)) return map.isEmpty() ? TRUE : FALSE;
+            else if (token.equals(MAP_LENGTH)) return Integer.toString(map.size());
+            // Start
             else if (token.startsWith(MAP_GET) && map.containsKey(token.substring(MAP_GET.length())))
                 return map.get(token.substring(MAP_GET.length())).toString();
             else if (token.startsWith(MAP_CONTAINS_KEY))

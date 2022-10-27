@@ -53,6 +53,7 @@ public interface VariableToken extends Token {
     String SET_GET = GREATER_SIGN;                      // >
     String SET_ISEMPTY = QUESTION;                      // ?
     String SET_SUM = PLUS;                              // +
+    String SET_LENGTH = SL;                             // )
     String SET_CONTAINS = SET_ISEMPTY;                  // ?(...)
 
     // LIST
@@ -70,6 +71,7 @@ public interface VariableToken extends Token {
     String LIST_ADD = LESS_SIGN.repeat(2);              // <<
     String LIST_GET = GREATER_SIGN.repeat(2);           // >>
     String LIST_ISEMPTY = QUESTION.repeat(2);           // ??
+    String LIST_LENGTH = SL.repeat(2);                  // ))
     String LIST_SUM = PLUS.repeat(2);                   // ++
     String LIST_CONTAINS = LIST_ISEMPTY;                       // ??(...)
 
@@ -86,7 +88,8 @@ public interface VariableToken extends Token {
     String MAP_ADD = LESS_SIGN.repeat(3);              // <<<
     String MAP_GET = GREATER_SIGN.repeat(3);           // >>>
     String MAP_ISEMPTY = QUESTION.repeat(3);           // ???
-    String MAP_CONTAINS = MAP_ISEMPTY;                       // ???(...)
+    String MAP_LENGTH = SL.repeat(3);                  // )))
+    String MAP_CONTAINS = MAP_ISEMPTY;                 // ???(...)
 
     // ORIGIN
     List<String> ORIGIN_LIST = new ArrayList<>() {{

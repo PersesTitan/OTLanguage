@@ -54,7 +54,7 @@ public interface LoopToken extends VariableToken {
     String REDIRECT = "ㄹㄷㄹ";
     String COOKIE = "ㄱㅋㄱ";
     String GET_COOKIE = COOKIE;
-    String SET_COOKIE = COOKIE;
-    String DELETE_COOKIE = HYPHEN;
+    String SET_COOKIE = COOKIE + PLUS;
+    String DELETE_COOKIE = COOKIE + HYPHEN;
     String GET_URL = "ㅇㄹㅇ";
 }

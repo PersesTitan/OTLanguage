@@ -5,6 +5,7 @@ import bin.token.LoopToken;
 import work.StartWork;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -31,7 +32,7 @@ public class DefineKlass implements LoopToken, StartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         // ㅋㅅㅋ 클래스명[] (test,1,2)    // 클래스명[] (test,1,2)
         line = line.strip().substring(type.length()).strip();
         // 클래스명, ] (test,1,2)
@@ -49,7 +50,7 @@ public class DefineKlass implements LoopToken, StartWork {
         int start = total.indexOf("\n" + fileInformation[1] + " ");
         int end = total.indexOf("\n" + fileInformation[2] + " ");
 
-        var repository = repositoryArray[0].get(this.type);
+        var repository = repositoryArray.get(0).get(this.type);
 
     }
 

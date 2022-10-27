@@ -6,6 +6,7 @@ import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.StartWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +25,7 @@ public class VariableHTML implements LoopToken, StartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] variables
                 = matchSplitError(matchSplitError(line, BLANKS, 2)[1], VARIABLE_PUT, 2);
         if (variables[0].startsWith("["))

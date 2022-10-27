@@ -7,8 +7,10 @@ import bin.exception.MatchException;
 import bin.exception.ServerException;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
+import bin.v3.CreateStartWorks;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,18 +21,18 @@ import static bin.apply.Controller.bracket;
 import static bin.apply.Controller.loopController;
 import static bin.apply.Repository.*;
 import static bin.apply.Setting.lineStart;
+import static bin.apply.Setting.start;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 
 public class StartLine implements LoopToken {
 
-    @SafeVarargs
     public static void startLine(String total, String path,
-                                 Map<String, Map<String, Object>>... repository) {
+                                 LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         boolean extensionCheck = extensionCheck(path);
         if (extensionCheck) errorPath.set(path);
         try {
             String finalTotal = getFinalTotal(extensionCheck, total, path);
-            startStartLine(finalTotal, total, repository);
+            startStartLine(finalTotal, total, repositoryArray);
         } catch (VariableException e) {
             VariableException.variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
             setLine();
@@ -56,42 +58,35 @@ public class StartLine implements LoopToken {
                 : bracket.bracket(total, path, false);
     }
 
-    @SafeVarargs
     public static void startStartLine(String finalTotal, String total,
-                                      Map<String, Map<String, Object>>... repository) {
+                                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         finalTotal.lines()
                 .filter(Predicate.not(String::isBlank))
                 .map(v -> setError(v, total))
-                .forEach(line -> Setting.start(line, errorLine.get(), repository));
+                .forEach(line -> Setting.start(line, errorLine.get(), repositoryArray));
     }
 
-    @SafeVarargs
     public static String startLoop(String total, String fileName,
-                                 Map<String, Map<String, Object>>... repository) {
+                                   LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
             line = loopController.check(setError(line, total).strip());
             if (line.equals(BREAK) || line.equals(CONTINUE)) return line;
-            else Setting.start(line, errorLine.get(), repository);
+            else Setting.start(line, errorLine.get(), repositoryArray);
         }
         return "FINISH";
     }
 
-    @SafeVarargs
-    public static void startPoison(String total, String fileName, Map<String, Map<String, Object>>...repository) {
-        CONTINUE:
+    public static void startPoison(String total, String fileName,
+                                   LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
-            if (line.isBlank()) continue;
-            final String origen = (line = setError(line, total));
-            final String value = new StringTokenizer(line).nextToken();
+            if ((line = setError(line, total)).isBlank()) continue;
+            start(line, errorLine.get(), repositoryArray);
 
-            if (priorityWorkMap.containsKey(value)) {priorityWorkMap.get(value).start(line, origen, repository);continue;}
-            for (var work : priorityWorks) {if (work.check(line)) {work.start(line, origen, repository); continue CONTINUE;}}
-            line = lineStart(line, repository);
+//            if (CreateStartWorks.start(line, false, repositoryArray)) continue;
+//            if (line.contains(VARIABLE_GET_S) && line.contains(VARIABLE_GET_E)) line = lineStart(line, repositoryArray);
+//            if (CreateStartWorks.start(line, true, repositoryArray)) continue;
 
-            if (startWorkMap.containsKey(value)) {startWorkMap.get(value).start(line, origen, repository);continue;}
-            for (var work : startWorks) {if (work.check(line)) {work.start(line, origen, repository);continue CONTINUE;}}
-
-            Setting.runMessage(origen);
+//            Setting.runMessage(errorLine.get());
         }
 
     }

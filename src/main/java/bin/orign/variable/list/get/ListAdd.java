@@ -31,11 +31,11 @@ public class ListAdd implements VariableToken, StartWork, GetList {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         line = line.strip();
-        int count = accessCount(line, repositoryArray.length);
+        int count = accessCount(line, repositoryArray.size());
         if (count == -1) throw VariableException.localNoVariable();
-        var repository = repositoryArray[count];
+        var repository = repositoryArray.get(count);
 
         String[] vs = line.substring(count).split(type, 2);
         if (!Repository.getSet(repository).contains(vs[0])) throw VariableException.noDefine();

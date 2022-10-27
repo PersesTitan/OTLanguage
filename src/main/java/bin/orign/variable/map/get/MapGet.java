@@ -28,14 +28,14 @@ public class MapGet implements ReturnWork, VariableToken {
 
     @Override
     public String start(String line,
-                        Map<String, Map<String, Object>>[] repositoryArray) {
+                        LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group(); // :~변수>>키 값_
             String[] variables = matchSplitError(bothEndCut(group), type, 2);
-            int count = accessCount(variables[0], repositoryArray.length);
+            int count = accessCount(variables[0], repositoryArray.size());
             if (count == -1) continue;
-            var repository = repositoryArray[count];
+            var repository = repositoryArray.get(count);
             String value = getMap(repository, variables[1], variables[0].substring(count));
             if (value != null) line = line.replace(group, value);
         }

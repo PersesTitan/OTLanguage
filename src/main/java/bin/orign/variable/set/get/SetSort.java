@@ -27,12 +27,12 @@ public class SetSort implements StartWork, Token, VariableToken {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         line = line.strip();
-        int count = accessCount(line, repositoryArray.length);
+        int count = accessCount(line, repositoryArray.size());
         if (count == -1) throw VariableException.localNoVariable();
         String variableName = bothEndCut(line, count, type.length());
-        var repository = repositoryArray[count];
+        var repository = repositoryArray.get(count);
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
             Map<String, Object> values = entry.getValue();
             if (values.containsKey(variableName)) {

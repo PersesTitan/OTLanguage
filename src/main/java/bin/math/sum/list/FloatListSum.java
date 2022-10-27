@@ -28,16 +28,16 @@ public class FloatListSum implements ReturnWork, LoopToken, GetList {
 
     @Override
     public String start(String line,
-                        Map<String, Map<String, Object>>[] repositoryArray) {
+                        LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();
             String groups = bothEndCut(group, 1, 1 + typeLen);
             if (groups.matches(VARIABLE_ACCESS)) {
-                int accessCount = accessCount(groups, repositoryArray.length);
+                int accessCount = accessCount(groups, repositoryArray.size());
                 if (accessCount == -1) continue;
-                var repository1 = repositoryArray[accessCount].get(LIST_DOUBLE);
-                var repository2 = repositoryArray[accessCount].get(LIST_FLOAT);
+                var repository1 = repositoryArray.get(accessCount).get(LIST_DOUBLE);
+                var repository2 = repositoryArray.get(accessCount).get(LIST_FLOAT);
                 String variableName = groups.substring(accessCount);
                 if (repository1.containsKey(variableName)) {
                     LinkedList<Double> list = (LinkedList<Double>) repository1.get(variableName);

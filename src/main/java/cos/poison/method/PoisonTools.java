@@ -13,7 +13,7 @@ import static bin.apply.sys.item.Separator.SEPARATOR_FILE;
 
 public interface PoisonTools extends LoopToken {
     default String[][] getParams(String[] lines) {
-        if (lines.length == 1) return new String[0][0];
+        if (lines.length == 0) return new String[0][0];
         String[][] params = new String[lines.length-1][3];
         Set<String> set = new HashSet<>();
         for (int i = 1; i<lines.length; i++) {

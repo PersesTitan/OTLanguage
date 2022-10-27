@@ -3,6 +3,7 @@ package cos.http;
 import bin.token.LoopToken;
 import work.StartWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 
 public class CreateServer implements StartWork, LoopToken {
@@ -15,7 +16,7 @@ public class CreateServer implements StartWork, LoopToken {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
 
     }
 

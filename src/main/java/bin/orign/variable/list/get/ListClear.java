@@ -28,9 +28,9 @@ public class ListClear implements VariableToken, StartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         line = line.strip();
-        int count = accessCount(line, repositoryArray.length);
+        int count = accessCount(line, repositoryArray.size());
         if (count == -1) throw VariableException.localNoVariable();
         String variableName = bothEndCut(line, count, type.length());
         getList(count, variableName, repositoryArray).clear();
@@ -42,8 +42,8 @@ public class ListClear implements VariableToken, StartWork {
     }
 
     private LinkedList<Object> getList(int count, String variableName,
-                               Map<String, Map<String, Object>>[] repositoryArray) {
-        var repository = repositoryArray[count];
+                               LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        var repository = repositoryArray.get(count);
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
             Map<String, Object> values = entry.getValue();
             if (values.containsKey(variableName)) {

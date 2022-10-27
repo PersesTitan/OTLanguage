@@ -29,15 +29,15 @@ public class LongSetSum implements ReturnWork, LoopToken, GetSet {
     }
 
     @Override
-    public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
+    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();
             String groups = bothEndCut(group, 1, 1 + typeLen);
             if (groups.matches(VARIABLE_ACCESS)) {
-                int count = accessCount(groups, repositoryArray.length);
+                int count = accessCount(groups, repositoryArray.size());
                 if (count == -1) continue;
-                var repository = repositoryArray[count].get(SET_LONG);
+                var repository = repositoryArray.get(count).get(SET_LONG);
                 String variableName = groups.replaceAll(ACCESS, "");
                 if (repository.containsKey(variableName)) {
                     LinkedHashSet<Long> list = (LinkedHashSet<Long>) repository.get(variableName);

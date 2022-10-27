@@ -4,10 +4,7 @@ import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.StartWork;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -29,13 +26,13 @@ public class SetDelete implements StartWork, LoopToken {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         line = line.strip();
-        int count = accessCount(line, repositoryArray.length);
+        int count = accessCount(line, repositoryArray.size());
         if (count == -1) throw VariableException.localNoVariable();
         line = line.substring(count);   // ~변수-1 -> 변수-1
         String[] tokens = matchSplitError(line, type + "(?=\\d+$)", 2);
-        var repository = repositoryArray[count];
+        var repository = repositoryArray.get(count);
         getSet(repository, tokens[0], Integer.parseInt(tokens[1]));
     }
 

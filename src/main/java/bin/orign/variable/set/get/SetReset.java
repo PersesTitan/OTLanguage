@@ -6,6 +6,7 @@ import bin.token.LoopToken;
 import work.StartWork;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -30,14 +31,14 @@ public class SetReset implements StartWork, LoopToken, GetSet {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         line = line.strip();
-        int count = accessCount(line, repositoryArray.length);
+        int count = accessCount(line, repositoryArray.size());
         if (count == -1) throw VariableException.localNoVariable();
         String[] tokens = bothEndCut(line, count, typeLen).split(VARIABLE_PUT, 2);
         String variableName = tokens[0];
-        if (count > repositoryArray.length) throw VariableException.localNoVariable();
-        var repository = repositoryArray[count];
+        if (count > repositoryArray.size()) throw VariableException.localNoVariable();
+        var repository = repositoryArray.get(count);
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
             Map<String, Object> values = entry.getValue();
             if (values.containsKey(variableName)) {

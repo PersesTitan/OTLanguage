@@ -25,8 +25,7 @@ import static bin.apply.Setting.*;
 import static bin.apply.sys.make.StartLine.errorCount;
 import static bin.apply.sys.make.StartLine.errorLine;
 import static cos.poison.Poison.variableHTML;
-import static cos.poison.PoisonRepository.poisonReturnWorks;
-import static cos.poison.PoisonRepository.poisonStartWorks;
+import static cos.poison.PoisonRepository.*;
 import static cos.poison.controller.HttpServerManager.*;
 
 public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValue, PoisonTools {
@@ -67,8 +66,13 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
                 // 로그 출력
                 printLog(method, path, handlerDao.value());
                 // 동작
-                serverStart(repository, statusCode, nowPath, exchange,
-                        handlerItem.startFinalTotal(), handlerItem.fileName());
+                try {
+                    Repository.repository.addFirst(this.repository);
+                    serverStart(statusCode, nowPath, exchange,
+                            handlerItem.startFinalTotal(), handlerItem.fileName());
+                } finally {
+                    Repository.repository.remove(this.repository);
+                }
                 exchange.sendResponseHeaders(statusCode.get(),0);
                 responseBody.write(getBody(handlerItem.responseValue()));
             } else {
@@ -102,32 +106,22 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         }
     }
 
-    private void serverStart(Map<String, Map<String, Object>> repository,
-                             AtomicInteger statCode, AtomicReference<String> nowPath,
+    private void serverStart(AtomicInteger statCode, AtomicReference<String> nowPath,
                              HttpExchange exchange, String startFinalTotal, String fileName) {
-        poisonReturnWorks.forEach(v -> {
-            v.setExchange(exchange);
-            v.setNowPath(nowPath);
-            v.setStatCode(statCode);
-            returnWorks.add(v);
-        });
+        poisonStartList.forEach(v -> v.setData(exchange, statCode, nowPath));
+        Repository.startWorksV3.putAll(poisonStartWorks);
+        Repository.returnWorksV3.putAll(poisonReturnWorks);
 
-        poisonStartWorks.forEach(v -> {
-            v.setExchange(exchange);
-            v.setNowPath(nowPath);
-            v.setStatCode(statCode);
-            startWorks.add(v);
-        });
         startWorks.add(variableHTML.reset());
 
         try {
-            StartLine.startPoison(startFinalTotal, fileName, repository, Repository.repository);
+            StartLine.startPoison(startFinalTotal, fileName, Repository.repository);
         } catch (Exception e) {
             String error = String.format("Error Line %d (%s)", errorCount.get(), errorLine.get());
             errorMessage(error);
         } finally {
-            poisonReturnWorks.forEach(returnWorks::remove);
-            poisonStartWorks.forEach(startWorks::remove);
+            Repository.startWorksV3.values().forEach(v -> poisonStartWorks.keySet().forEach(v::remove));
+            Repository.returnWorksV3.values().forEach(v -> poisonReturnWorks.keySet().forEach(v::remove));
             startWorks.remove(variableHTML);
         }
     }

@@ -6,6 +6,7 @@ import bin.token.LoopToken;
 import work.ReturnWork;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,17 +28,16 @@ public class FloatSetSum implements ReturnWork, LoopToken, GetSet {
     }
 
     @Override
-    public String start(String line,
-                        Map<String, Map<String, Object>>[] repositoryArray) {
+    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();
             String groups = bothEndCut(group, 1, 1 + typeLen);
             if (groups.matches(VARIABLE_ACCESS)) {
-                int accessCount = accessCount(groups, repositoryArray.length);
+                int accessCount = accessCount(groups, repositoryArray.size());
                 if (accessCount == -1) continue;
-                var repository1 = repositoryArray[accessCount].get(SET_FLOAT);
-                var repository2 = repositoryArray[accessCount].get(SET_DOUBLE);
+                var repository1 = repositoryArray.get(accessCount).get(SET_FLOAT);
+                var repository2 = repositoryArray.get(accessCount).get(SET_DOUBLE);
                 String variableName = groups.replaceAll(ACCESS, "");
                 if (repository1.containsKey(variableName)) {
                     LinkedHashSet<Float> list = (LinkedHashSet<Float>) repository1.get(variableName);

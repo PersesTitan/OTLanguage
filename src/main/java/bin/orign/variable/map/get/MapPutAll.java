@@ -7,6 +7,7 @@ import work.StartWork;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,12 +31,12 @@ public class MapPutAll implements StartWork, LoopToken, GetMap {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] variableTokens = matchSplitError(line.strip(), splitNoCutBack(type), 2);
-        int count = accessCount(variableTokens[0], repositoryArray.length);
+        int count = accessCount(variableTokens[0], repositoryArray.size());
         if (count == -1) throw VariableException.localNoVariable();
         variableTokens[0] = variableTokens[0].substring(count);
-        var repository = repositoryArray[count];
+        var repository = repositoryArray.get(count);
         if (!Repository.getSet(repository).contains(variableTokens[0])) throw VariableException.noDefine();
         for (var entry : repository.entrySet()) {
             var map = entry.getValue();

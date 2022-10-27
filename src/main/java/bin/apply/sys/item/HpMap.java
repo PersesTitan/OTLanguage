@@ -11,8 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static bin.apply.Controller.variableTypeCheck;
-import static bin.apply.Repository.returnWorksV3;
-import static bin.apply.Repository.variable;
+import static bin.apply.Repository.*;
 import static bin.check.VariableTypeCheck.getVariableType;
 import static bin.check.VariableTypeCheck.originList;
 
@@ -71,7 +70,10 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
             hp.put(key, c);
         }
         // 새로운 변수일때 변수 추가
-        if (!containsKey(key)) returnWorksV3.get(VAR_TOKEN).put(key, variable);
+        if (!containsKey(key)) {
+            returnWorksV3.get(VAR_TOKEN).put(key, variable);
+            startWorksV3.get(VAR_TOKEN).put(key, startVariable);
+        }
         Object keyObj = this.getOrDefault(key, null);
         Object valueObj = variableTypeCheck.getObject(variableType, value.toString(), keyObj);
         if (keyObj == null || originList.contains(variableType)) return super.put(key, valueObj);
@@ -82,6 +84,7 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
     public Object remove(Object key) {
         hp.remove(key);
         returnWorksV3.get(VAR_TOKEN).remove(key);
+        startWorksV3.get(VAR_TOKEN).remove(key);
         return super.remove(key);
     }
 
@@ -94,6 +97,7 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
     public void clear() {
         hp.clear();
         returnWorksV3.get(VAR_TOKEN).clear();
+        startWorksV3.get(VAR_TOKEN).clear();
         super.clear();
     }
 

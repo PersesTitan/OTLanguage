@@ -30,7 +30,7 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         // ^[1, 2, 3]^ (test,1,10), ㅇㅁㅇ 변수명
         String[] groups = matchSplitError(line.strip(), PUTIN_TOKEN, 2);
         String[] forEachTokens = matchSplitError(groups[0], FOR, 3); // [, [1, 2, 3], (test,1,10)]
@@ -47,10 +47,10 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
         String variableType = variableToken[0].strip(); // 들어가는 변수 타입
         String variableName = variableToken[1].strip(); // 들어가는 변수명
 
-        int count = accessCount(listValue, repositoryArray.length);
+        int count = accessCount(listValue, repositoryArray.size());
         if (count == -1) throw VariableException.localNoVariable();
         listValue = listValue.substring(count);
-        var rep = repositoryArray[count];
+        var rep = repositoryArray.get(count);
         variableDefineError(variableName, rep);
 
         // ^^문 들어가는 변수
@@ -82,10 +82,9 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
 
     }
 
-    @SafeVarargs
     private void loop(Map<String, Object> rep, String variableName,
                       Set<Object> set, String total, String fileName,
-                      Map<String, Map<String, Object>>... repository) {
+                      LinkedList<Map<String, Map<String, Object>>> repository) {
         for (Object var : set) {
             rep.put(variableName, var);
             if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
@@ -93,10 +92,9 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
         rep.remove(variableName);
     }
 
-    @SafeVarargs
     private void loop(Map<String, Object> rep, String variableName,
                       List<Object> list, String total, String fileName,
-                      Map<String, Map<String, Object>>... repository) {
+                      LinkedList<Map<String, Map<String, Object>>> repository) {
         for (Object var : list) {
             rep.put(variableName, var);
             if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;

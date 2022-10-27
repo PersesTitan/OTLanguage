@@ -28,15 +28,15 @@ public class IntegerListSum implements ReturnWork, LoopToken, GetList {
 
     @Override
     public String start(String line,
-                        Map<String, Map<String, Object>>[] repositoryArray) {
+                        LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();
             String groups = bothEndCut(group, 1, 1 + typeLen);
             if (groups.matches(VARIABLE_ACCESS)) {
-                int accessCount = accessCount(groups, repositoryArray.length);
+                int accessCount = accessCount(groups, repositoryArray.size());
                 if (accessCount == -1) continue;
-                var repository = repositoryArray[accessCount].get(LIST_INTEGER);
+                var repository = repositoryArray.get(accessCount).get(LIST_INTEGER);
                 String variableName = groups.substring(accessCount);
                 if (repository.containsKey(variableName)) {
                     LinkedList<Integer> list = (LinkedList<Integer>) repository.get(variableName);

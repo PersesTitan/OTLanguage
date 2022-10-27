@@ -17,8 +17,10 @@ public interface GetMap {
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
                 .filter(Predicate.not(String::isEmpty))
-                .map(v -> v.split("=", 2))
-                .forEach(v -> map.put(v[0], v[1]));
+                .map(v -> {
+                    if (v.contains("=")) return v.split("=", 2);
+                    else throw VariableException.typeMatch();
+                }).forEach(v -> map.put(v[0], v[1]));
         return map;
     }
 
@@ -29,8 +31,10 @@ public interface GetMap {
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
                 .filter(Predicate.not(String::isEmpty))
-                .map(v -> v.split("=", 2))
-                .forEach(v -> map.put(v[0], v[1].charAt(0)));
+                .map(v -> {
+                    if (v.contains("=")) return v.split("=", 2);
+                    else throw VariableException.typeMatch();
+                }).forEach(v -> map.put(v[0], v[1].charAt(0)));
         return map;
     }
 
@@ -41,8 +45,10 @@ public interface GetMap {
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
                 .filter(Predicate.not(String::isEmpty))
-                .map(v -> v.split("=", 2))
-                .forEach(v -> map.put(v[0], Double.parseDouble(v[1])));
+                .map(v -> {
+                    if (v.contains("=")) return v.split("=", 2);
+                    else throw VariableException.typeMatch();
+                }).forEach(v -> map.put(v[0], Double.parseDouble(v[1])));
         return map;
     }
 
@@ -53,8 +59,10 @@ public interface GetMap {
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
                 .filter(Predicate.not(String::isEmpty))
-                .map(v -> v.split("=", 2))
-                .forEach(v -> map.put(v[0], Float.parseFloat(v[1])));
+                .map(v -> {
+                    if (v.contains("=")) return v.split("=", 2);
+                    else throw VariableException.typeMatch();
+                }).forEach(v -> map.put(v[0], Float.parseFloat(v[1])));
         return map;
     }
 
@@ -65,8 +73,10 @@ public interface GetMap {
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
                 .filter(Predicate.not(String::isEmpty))
-                .map(v -> v.split("=", 2))
-                .forEach(v -> map.put(v[0], Integer.parseInt(v[1])));
+                .map(v -> {
+                    if (v.contains("=")) return v.split("=", 2);
+                    else throw VariableException.typeMatch();
+                }).forEach(v -> map.put(v[0], Integer.parseInt(v[1])));
         return map;
     }
 
@@ -77,7 +87,10 @@ public interface GetMap {
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
                 .filter(Predicate.not(String::isEmpty))
-                .map(v -> v.split("=", 2))
+                .map(v -> {
+                    if (v.contains("=")) return v.split("=", 2);
+                    else throw VariableException.typeMatch();
+                })
                 .forEach(v -> map.put(v[0], Long.parseLong(v[1])));
         return map;
     }
@@ -89,7 +102,10 @@ public interface GetMap {
                 .splitAsStream(line.substring(1, line.length()-1))
                 .map(String::trim)
                 .filter(Predicate.not(String::isEmpty))
-                .map(v -> v.split("=", 2))
+                .map(v -> {
+                    if (v.contains("=")) return v.split("=", 2);
+                    else throw VariableException.typeMatch();
+                })
                 .forEach(v -> map.put(v[0], v[1]));
         return map;
     }

@@ -6,6 +6,7 @@ import bin.token.VariableToken;
 import work.ReturnWork;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -32,7 +33,7 @@ public class Equals implements ReturnWork, StringToken, VariableToken {
     }
 
     @Override
-    public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
+    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();

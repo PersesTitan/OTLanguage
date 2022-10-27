@@ -28,14 +28,14 @@ public class SetGet implements ReturnWork, LoopToken {
 
 
     @Override
-    public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
+    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group(); // :변수>1_
             String cut = bothEndCut(group); // 변수>1
-            int count = accessCount(cut, repositoryArray.length);   // 0
+            int count = accessCount(cut, repositoryArray.size());   // 0
             if (count == -1) continue;
-            var repository = repositoryArray[count];
+            var repository = repositoryArray.get(count);
             // 변수, 1
             String[] tokens = matchSplitError(cut.substring(count), type, 2);
             String value = getValue(repository, Integer.parseInt(tokens[1]), tokens[0]);

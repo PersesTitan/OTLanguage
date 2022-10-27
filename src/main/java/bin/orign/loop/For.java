@@ -9,10 +9,7 @@ import bin.token.LoopToken;
 import bin.token.Token;
 import work.StartWork;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +37,7 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         m.reset(line);
         if (m.find()) {
             String group = m.group().strip(); // 숫자^숫자^숫자
@@ -74,11 +71,10 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
 
     }
 
-    @SafeVarargs
     private void startFor(String line,
                           String variableType, String variableName,
                           String fileName, String total,
-                          Map<String, Map<String, Object>>...repository) {
+                          LinkedList<Map<String, Map<String, Object>>> repository) {
         // line = NUMBER ^ NUMBER ^ NUMBER
         String[] tokens = line.split(BLANK+FOR+BLANK, 3);
 
@@ -91,7 +87,7 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
                 case DOUBLE_VARIABLE -> Arrays.stream(tokens).allMatch(VariableCheck::isDouble);
                 default -> false;
             }) throw VariableException.forTypeMatchError();
-            variableDefineError(variableName, repository[0]);
+            variableDefineError(variableName, repository.get(0));
         }
 
         switch (variableType) {
@@ -146,8 +142,8 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
     private void start(int a, int b, int c,
                        String total, String fileName,
                        String variableName,
-                       Map<String, Map<String, Object>>[] repository) {
-        var rep = repository[0].get(INT_VARIABLE);
+                       LinkedList<Map<String, Map<String, Object>>> repository) {
+        var rep = repository.get(0).get(INT_VARIABLE);
         rep.put(variableName, a);
         for (int repValue; (repValue = (int) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
             if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
@@ -157,7 +153,7 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
 
     private void start(int a, int b, int c,
                        String total, String fileName,
-                       Map<String, Map<String, Object>>[] repository) {
+                       LinkedList<Map<String, Map<String, Object>>> repository) {
         for (int i = a; i < b; i += c) {
             if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
         }
@@ -167,8 +163,8 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
     private void start(long a, long b, long c,
                        String total, String fileName,
                        String variableName,
-                       Map<String, Map<String, Object>>[] repository) {
-        var rep = repository[0].get(LONG_VARIABLE);
+                       LinkedList<Map<String, Map<String, Object>>> repository) {
+        var rep = repository.get(0).get(LONG_VARIABLE);
         rep.put(variableName, a);
         for (long repValue; (repValue = (long) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
             if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
@@ -178,7 +174,7 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
 
     private void start(long a, long b, long c,
                        String total, String fileName,
-                       Map<String, Map<String, Object>>[] repository) {
+                       LinkedList<Map<String, Map<String, Object>>> repository) {
         for (long i = a; i < b; i += c) {
             if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
         }
@@ -186,10 +182,9 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
 
     //FLOAT
     private void start(float a, float b, float c,
-                       String total, String fileName,
-                       String variableName,
-                       Map<String, Map<String, Object>>[] repository) {
-        var rep = repository[0].get(FLOAT_VARIABLE);
+                       String total, String fileName, String variableName,
+                       LinkedList<Map<String, Map<String, Object>>> repository) {
+        var rep = repository.get(0).get(FLOAT_VARIABLE);
         rep.put(variableName, a);
         for (float repValue; (repValue = (float) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
             if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
@@ -199,7 +194,7 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
 
     private void start(float a, float b, float c,
                        String total, String fileName,
-                       Map<String, Map<String, Object>>[] repository) {
+                       LinkedList<Map<String, Map<String, Object>>> repository) {
         for (float i = a; i < b; i += c) {
             if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
         }
@@ -207,10 +202,9 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
 
     //DOUBLE
     private void start(double a, double b, double c,
-                       String total, String fileName,
-                       String variableName,
-                       Map<String, Map<String, Object>>[] repository) {
-        var rep = repository[0].get(DOUBLE_VARIABLE);
+                       String total, String fileName, String variableName,
+                       LinkedList<Map<String, Map<String, Object>>> repository) {
+        var rep = repository.get(0).get(DOUBLE_VARIABLE);
         rep.put(variableName, a);
         for (double repValue; (repValue = (double) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
             if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
@@ -220,7 +214,7 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
 
     private void start(double a, double b, double c,
                        String total, String fileName,
-                       Map<String, Map<String, Object>>[] repository) {
+                       LinkedList<Map<String, Map<String, Object>>> repository) {
         for (double i = a; i < b; i += c) {
             if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
         }

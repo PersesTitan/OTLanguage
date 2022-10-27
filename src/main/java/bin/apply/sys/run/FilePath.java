@@ -9,6 +9,7 @@ import work.StartWork;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -34,7 +35,7 @@ public class FilePath implements LoopToken, StartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         StringTokenizer tokenizer = new StringTokenizer(line.strip());
         tokenizer.nextToken();                  // ㅍㅅㅍ
         // 디렉토리~파일명
@@ -57,7 +58,7 @@ public class FilePath implements LoopToken, StartWork {
 
     }
 
-    private void importFile(File file, Map<String, Map<String, Object>>[] repositoryArray) {
+    private void importFile(File file, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         if (!file.exists()) throw FileException.pathNoHaveError();
         else if (!file.isFile()) throw FileException.isNotFileError();
         else if (!file.canRead()) throw FileException.noReadError();

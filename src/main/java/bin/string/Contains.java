@@ -6,6 +6,7 @@ import bin.token.StringToken;
 import work.ReturnWork;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,8 +32,7 @@ public class Contains implements LoopToken, StringToken, ReturnWork {
     }
 
     @Override
-    public String start(String line,
-                        Map<String, Map<String, Object>>[] repositoryArray) {
+    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             // :ㅇㅁㅇ~ㅉㅇㅉ[반복할 값][리스트]_

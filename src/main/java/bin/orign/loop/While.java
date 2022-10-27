@@ -6,6 +6,7 @@ import bin.token.LoopToken;
 import bin.token.cal.BoolToken;
 import work.StartWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +32,7 @@ public class While implements StartWork, LoopToken, BoolToken {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] tokens = line.strip().split("\\s+", 3);
         if (tokens.length != 3) throw MatchException.grammarError();
         String[] totalTokens = bothEndCut(tokens[2]).split(",", 3);

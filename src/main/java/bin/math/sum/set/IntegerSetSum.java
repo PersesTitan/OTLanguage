@@ -6,6 +6,7 @@ import bin.token.LoopToken;
 import work.ReturnWork;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,15 +29,15 @@ public class IntegerSetSum implements ReturnWork, LoopToken, GetSet {
 
     @Override
     public String start(String line,
-                        Map<String, Map<String, Object>>[] repositoryArray) {
+                        LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();
             String groups = bothEndCut(group, 1, 1 + typeLen);
             if (groups.matches(VARIABLE_ACCESS)) {
-                int count = accessCount(groups, repositoryArray.length);
+                int count = accessCount(groups, repositoryArray.size());
                 if (count == -1) continue;
-                var repository = repositoryArray[count].get(SET_INTEGER);
+                var repository = repositoryArray.get(count).get(SET_INTEGER);
                 String variableName = groups.replaceAll(ACCESS, "");
                 if (repository.containsKey(variableName)) {
                     LinkedHashSet<Integer> list = (LinkedHashSet<Integer>) repository.get(variableName);

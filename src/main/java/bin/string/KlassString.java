@@ -5,6 +5,7 @@ import bin.token.StringToken;
 import work.ReturnWork;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
@@ -35,8 +36,7 @@ public class KlassString implements LoopToken, StringToken, ReturnWork {
     }
 
     @Override
-    public String start(String line,
-                        Map<String, Map<String, Object>>[] repositoryArray) {
+    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group();  // :ㅇㅁㅇ~

@@ -15,9 +15,9 @@ import static bin.token.VariableToken.*;
 
 public interface CreateReturnWorks {
     Matcher matcher = Pattern.compile(String.format(
-            "%s[^%s%s]+%s([^%s%s]*%s)?",
-            VARIABLE_GET_S, VARIABLE_GET_S, VARIABLE_GET_E,
-            VARIABLE_GET_E, VARIABLE_DEFAULT, VARIABLE_GET_E, VARIABLE_DEFAULT)).matcher("");
+            "%s[\\s\\S]+%s([\\s\\S]*%s)?",
+            VARIABLE_GET_S, VARIABLE_GET_E, VARIABLE_DEFAULT))
+            .matcher("");
 
     static String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset(line);

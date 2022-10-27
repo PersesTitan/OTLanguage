@@ -4,7 +4,6 @@ import bin.exception.VariableException;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import cos.poison.root.RootWork;
-import cos.poison.run.replace.GetCookie;
 import cos.poison.work.PoisonStartWork;
 import work.v3.StartWorkV3;
 

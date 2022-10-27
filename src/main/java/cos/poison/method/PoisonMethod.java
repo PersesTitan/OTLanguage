@@ -4,6 +4,7 @@ import cos.http.controller.HttpMethod;
 import cos.poison.Poison;
 import work.StartWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -30,7 +31,7 @@ public class PoisonMethod implements PoisonTools, StartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         // 1. ㅍㅇㅍ~ㅍㅅㅍ, [sub/][ㅇㅅㅇ ㅁ:ㅁ] (start,1,10) => index.html
         // 2. [sub/][ㅇㅅㅇ ㅁ:ㅁ] (start,1,10) => index.html
         // 3. [sub/][ㅇㅅㅇ ㅁ:ㅁ], (start,1,10) => index.html

@@ -6,6 +6,7 @@ import bin.token.VariableToken;
 import work.StartWork;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -28,9 +29,9 @@ public class SetClear implements VariableToken, StartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         line = line.strip();
-        int count = accessCount(line, repositoryArray.length);
+        int count = accessCount(line, repositoryArray.size());
         if (count == -1) throw VariableException.localNoVariable();
         String variableName = bothEndCut(line, count, type.length());
         getSet(count, variableName, repositoryArray).clear();
@@ -42,8 +43,8 @@ public class SetClear implements VariableToken, StartWork {
     }
 
     private LinkedHashSet<Object> getSet(int count, String variableName,
-                               Map<String, Map<String, Object>>[] repositoryArray) {
-        var repository = repositoryArray[count];
+                               LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        var repository = repositoryArray.get(count);
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
             Map<String, Object> values = entry.getValue();
             if (values.containsKey(variableName)) {

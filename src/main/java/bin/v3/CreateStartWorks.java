@@ -4,16 +4,22 @@ import bin.apply.Repository;
 import bin.apply.Setting;
 import work.v3.StartWorkV3;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import static bin.apply.Repository.priorityStartWorksV3;
 import static bin.apply.Repository.startWorksV3;
+import static bin.token.LoopToken.PUTIN_TOKEN;
+import static bin.token.LoopToken.RETURN_TOKEN;
 import static bin.token.Token.*;
+import static bin.token.VariableToken.VARIABLE_ALL;
+import static bin.token.VariableToken.VAR_TOKEN;
 
 public interface CreateStartWorks {
-    static void start(String line, String errorMessage,
-                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+    static boolean start(String line, boolean priority,
+                         LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] tokens = line.split("(?=" + BLANKS + "|" + BL + ")", 2);
         String local = tokens[0];
         String value = tokens.length == 2 ? tokens[1] : "";
@@ -21,26 +27,54 @@ public interface CreateStartWorks {
         String[] params = value.startsWith("[")
                 ? getCheck(value)
                 : new String[]{value.stripLeading()};
-        if (params == null) return;
+        if (params == null) return false;
 
         StringTokenizer tokenizer = new StringTokenizer(local, ACCESS);
         String className = tokenizer.nextToken();
         String methodName = tokenizer.hasMoreTokens() ? tokenizer.nextToken("").substring(1) : "";
-        StartWorkV3 startWork = getStartWork(className, methodName);
-        if (startWork != null) startWork.paramsCheck(params.length, params[0]).start(line, params, repositoryArray);
-        else Setting.runMessage(errorMessage);
+        StartWorkV3 startWork = getStartWork(className, methodName, priority);
+        if (startWork != null) {
+            startWork.paramsCheck(params.length, params[0]).start(line, params, repositoryArray);
+            return true;
+        } else return getStartWork(line, repositoryArray);
     }
 
-    private static StartWorkV3 getStartWork(String klassName, String methodName) {
+    private static boolean getStartWork(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        String[] tokens = line.split("(?!" + VARIABLE_ALL + ")", 2);
+        String local = tokens[0];
+        String value = tokens.length == 2 ? tokens[1].stripLeading() : "";
+        var startWork = getStartWork(VAR_TOKEN, local, false);
+        if (startWork != null) {
+            startWork.start(line, new String[]{local, value}, repositoryArray);
+            return true;
+        } else return false;
+    }
+
+    // StartWork 반환
+    private static StartWorkV3 getStartWork(String klassName, String methodName, boolean priority) {
+        var map = priority ? priorityStartWorksV3 : startWorksV3;
         Map<String, StartWorkV3> startWork;
-        if (startWorksV3.containsKey(klassName)
-                && (startWork = startWorksV3.get(klassName)).containsKey(methodName))
+        if (map.containsKey(klassName)
+                && (startWork = map.get(klassName)).containsKey(methodName))
             return startWork.get(methodName);
         return null;
     }
 
     private static String[] getCheck(String value) {
-        return value.endsWith("]")
+        if (value.contains("(")
+                && (value.strip().endsWith(")")
+                || value.contains(RETURN_TOKEN)
+                || value.contains(PUTIN_TOKEN))) {
+            int loopPoison = value.lastIndexOf('(');
+            String loop = value.substring(loopPoison);          // (test,1,10), (test,1,10) => index.html
+            value = value.substring(0, loopPoison).strip();     // [][]
+            int count = count(value);                           // 2
+            if (!value.endsWith("]")) return null;
+            // value 쪼개기
+            String[] values = Arrays.copyOf(bothEndCut(value).split(BR + BL, count), count+1);
+            values[count] = loop;
+            return values;
+        } else return value.endsWith("]")
                 ? bothEndCut(value).split(BR + BL, count(value))
                 : null;
     }

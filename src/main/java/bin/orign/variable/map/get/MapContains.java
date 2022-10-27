@@ -5,6 +5,7 @@ import bin.orign.variable.both.ContainsTool;
 import bin.token.VariableToken;
 import work.ReturnWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -25,17 +26,17 @@ public class MapContains implements ReturnWork, VariableToken, ContainsTool {
     }
 
     @Override
-    public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
+    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             String group = matcher.group(); // :~변수명???[ㅁㅁ]_
             String token = bothEndCut(group, 1, 2);   // ~변수명???[ㅁㅁ
-            int count = accessCount(token, repositoryArray.length);
+            int count = accessCount(token, repositoryArray.size());
             if (count == -1) continue;
             // 변수명???[ㅁㅁ => 변수명, ㅁㅁ
             String[] tokens = matchSplitError(token.substring(count), MAP_ISEMPTY + BL, 2);
             // 변수명
-            String map = getValue(tokens[0], repositoryArray[count], tokens[1]);
+            String map = getValue(tokens[0], repositoryArray.get(count), tokens[1]);
             if (map != null) line = line.replace(group, map);
         }
         return line;

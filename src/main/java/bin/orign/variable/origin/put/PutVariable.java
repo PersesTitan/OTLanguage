@@ -22,12 +22,12 @@ public class PutVariable implements StartWork, SetVariableValue, GetSet, GetList
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         // value = 변수명, 새로운 값
         String[] values = matchSplitError(line.strip(), VARIABLE_PUT, 2);
-        int accessCount = accessCount(values[0], repositoryArray.length);
+        int accessCount = accessCount(values[0], repositoryArray.size());
         if (accessCount == -1) throw VariableException.localNoVariable();
-        var repository = repositoryArray[accessCount];
+        var repository = repositoryArray.get(accessCount);
         if (!Repository.getSet(repository).contains(values[0])) throw VariableException.noDefine();
         String varType = getVariableType(repository, values[0]); // ㅇㅅㅇ, ㅇㅈㅇ
         repository.get(varType).put(values[0], values[1]);

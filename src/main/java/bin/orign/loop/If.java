@@ -38,7 +38,7 @@ public class If implements LoopToken, StartWork, BoolToken {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         startLine(line.strip(), repositoryArray);
     }
 
@@ -47,7 +47,7 @@ public class If implements LoopToken, StartWork, BoolToken {
 
     }
 
-    private void startLine(String line, Map<String, Map<String, Object>>[] repository) {
+    private void startLine(String line, LinkedList<Map<String, Map<String, Object>>> repository) {
         StringTokenizer tokenizer = new StringTokenizer(line);
         String token;
         if (tokenizer.hasMoreTokens() &&
@@ -74,7 +74,7 @@ public class If implements LoopToken, StartWork, BoolToken {
     }
 
     // FileName, StartPos, EndPos
-    private void startValue(String line, Map<String, Map<String, Object>>[] repository) {
+    private void startValue(String line, LinkedList<Map<String, Map<String, Object>>> repository) {
         String[] values = matchSplitError(line, COMMA, 3);
         if (!LOOP_TOKEN.containsKey(values[0])) throw MatchException.grammarError();
         String total = LOOP_TOKEN.get(values[0]);

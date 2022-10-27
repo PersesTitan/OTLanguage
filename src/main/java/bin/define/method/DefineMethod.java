@@ -7,6 +7,7 @@ import bin.token.LoopToken;
 import work.StartWork;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -36,7 +37,7 @@ public class DefineMethod implements LoopToken, StartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         // ㅁㅅㅁ 메소드명[ㅇㅅㅇ 매개변수] (test,1,10), 변수명
         String[] tokens = line.strip().split(BLANK + RETURN_TOKEN + BLANK, 2);
         // 메소드명, ㅇㅅㅇ 매개변수] (test,1,10)
@@ -57,7 +58,7 @@ public class DefineMethod implements LoopToken, StartWork {
         int end = total.indexOf("\n" + fileInformation[2] + " ");
 
         // 메소드명 = methodToken[0]
-        var repository = repositoryArray[0].get(this.type);
+        var repository = repositoryArray.get(0).get(this.type);
         if (repository.containsKey(methodToken[0])) throw VariableException.definedMethodName();
 
         MethodType methodType = tokens.length == 1 ? MethodType.VOID : MethodType.RETURN;

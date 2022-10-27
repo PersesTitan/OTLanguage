@@ -1,11 +1,13 @@
 package bin.define.item;
 
+import bin.apply.Repository;
 import bin.apply.Setting;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.StartWork;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import static bin.apply.Repository.startWorks;
@@ -23,65 +25,42 @@ public record MethodItem(String[][] params, MethodType methodType, String return
     // ================================================== //
     // ====================== VOID ====================== //
     // ================================================== //
-    public void startVoid(String[] params, Map<String, Map<String, Object>> repositoryArray) {
+    public void startVoid(String[] params, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         getVariable(params, repositoryArray);
-    }
-
-    public void startVoid(String[] params,
-                          Map<String, Map<String, Object>> repositoryArray1,
-                          Map<String, Map<String, Object>> repositoryArray2) {
-        getVariable(params, repositoryArray1, repositoryArray2);
     }
 
     // ================================================== //
     // ===================== RETURN ===================== //
     // ================================================== //
-    public String startReturn(String[] params, Map<String, Map<String, Object>> repositoryArray) {
+    public String startReturn(String[] params, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         getVariable(params, repositoryArray);
-        return getVariable(returnVariable);
-    }
-
-    public String startReturn(String[] params,
-                              Map<String, Map<String, Object>> repositoryArray1,
-                              Map<String, Map<String, Object>> repositoryArray2) {
-        getVariable(params, repositoryArray1, repositoryArray2);
         return getVariable(returnVariable);
     }
 
     // ============================= TOOL ============================= //
     private static final Map<String, Map<String, Object>> repository = (Map<String, Map<String, Object>>) COPY_REPOSITORY.clone();
-    private void getRepository(String[] params) {
+    private void getRepository(String[] params, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         if (params.length != this.params.length) throw VariableException.methodParamsCount();
         repository.values().forEach(Map::clear);
-        PASS:
-        for (int i = 0; i<params.length; i++) {
-            for (StartWork work : startWorks) {
-                String line = String.format("%s %s:%s", this.params[i][0], this.params[i][1], params[i]);
-                if (work.check(line)) {work.start(line, line, getRepository(repository)); break PASS;}
+        try {
+            repositoryArray.addFirst(repository);
+            PASS:
+            for (int i = 0; i<params.length; i++) {
+                for (StartWork work : startWorks) {
+                    String line = String.format("%s %s:%s", this.params[i][0], this.params[i][1], params[i]);
+                    if (work.check(line)) {work.start(line, line, repositoryArray); break PASS;}
+                }
+                Setting.warringMessage(String.format("매개변수 %s 추가에 실패하였습니다.", this.params[i][1]));
             }
-            Setting.warringMessage(String.format("매개변수 %s 추가에 실패하였습니다.", this.params[i][1]));
+        } finally {
+            repositoryArray.remove(repository);
         }
     }
 
-    // 저장소 1개
-    private void getVariable(String[] params, Map<String, Map<String, Object>> repositoryArray) {
-        getRepository(params);
+    private void getVariable(String[] params, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        getRepository(params, repositoryArray);
         String total = getTotal();
-        startStartLine(getFinalTotal(false, total, fileName), total, repository, repositoryArray);
-    }
-
-    // 저장소 2개
-    private void getVariable(String[] params,
-                             Map<String, Map<String, Object>> repositoryArray1,
-                             Map<String, Map<String, Object>> repositoryArray2) {
-        getRepository(params);
-        String total = getTotal();
-        startStartLine(getFinalTotal(false, total, fileName), total, repository, repositoryArray1, repositoryArray2);
-    }
-
-    @SafeVarargs
-    private Map<String, Map<String, Object>>[] getRepository(Map<String, Map<String, Object>>...repository) {
-        return repository;
+        startStartLine(getFinalTotal(false, total, fileName), total, repositoryArray);
     }
 
     // 변수값을 가져오는 작업

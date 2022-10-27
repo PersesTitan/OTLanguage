@@ -6,6 +6,7 @@ import bin.token.VariableToken;
 import work.ReturnWork;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -28,7 +29,7 @@ public class SetIsEmpty implements
     }
 
     @Override
-    public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
+    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         StringBuilder builder = new StringBuilder(line);
         matcher.reset();
         while (matcher.find()) {
@@ -43,7 +44,7 @@ public class SetIsEmpty implements
             variables.setLength(0);
             variables.append(value);
             int count = countAccess(variables);
-            if (count > repositoryArray.length) throw VariableException.localNoVariable();
+            if (count > repositoryArray.size()) throw VariableException.localNoVariable();
 
             LinkedHashSet<Object> set = getSet(count, variables.toString(), repositoryArray);
             replace(builder, group, set.isEmpty() ? "ㅇㅇ" : "ㄴㄴ");
@@ -52,8 +53,8 @@ public class SetIsEmpty implements
     }
 
     private LinkedHashSet<Object> getSet(int count, String variableName,
-                               Map<String, Map<String, Object>>[] repositoryArray) {
-        var repository = repositoryArray[count];
+                               LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        var repository = repositoryArray.get(count);
         for (Map.Entry<String, Map<String, Object>> entry : repository.entrySet()) {
             Map<String, Object> values = entry.getValue();
             if (values.containsKey(variableName)) {
