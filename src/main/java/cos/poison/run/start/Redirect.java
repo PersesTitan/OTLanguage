@@ -9,6 +9,7 @@ import work.ReturnWork;
 import work.StartWork;
 
 import java.net.HttpURLConnection;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,7 +36,7 @@ public class Redirect implements RootWork, LoopToken, PoisonStartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         StringTokenizer tokenizer = new StringTokenizer(line.strip());
         tokenizer.nextToken();
         statCode.set(HttpURLConnection.HTTP_MOVED_TEMP);
