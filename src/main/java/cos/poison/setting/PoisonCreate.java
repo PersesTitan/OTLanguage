@@ -4,6 +4,7 @@ import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.StartWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -30,7 +31,7 @@ public class PoisonCreate implements LoopToken, StartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         line = line.strip();
         if (line.equals(className)) httpServerManager.createServer();
         else if (line.startsWith(className + "[")) {
