@@ -3,6 +3,7 @@ package cos.poison.setting;
 import bin.token.LoopToken;
 import work.StartWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -22,7 +23,7 @@ public class PoisonStart implements LoopToken, StartWork {
 
     @Override
     public void start(String line, String origen,
-                      Map<String, Map<String, Object>>[] repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         httpServerManager.start();
     }
 
