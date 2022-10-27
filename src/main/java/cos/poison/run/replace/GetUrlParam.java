@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpExchange;
 import cos.poison.work.PoisonReturnWork;
 import work.ReturnWork;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,7 +33,7 @@ public class GetUrlParam implements PoisonReturnWork, LoopToken, ChangeHangle {
     }
 
     @Override
-    public String start(String line, Map<String, Map<String, Object>>[] repositoryArray) {
+    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         matcher.reset();
         while (matcher.find()) {
             // :ㅇㄹㅇ ㅁ_
