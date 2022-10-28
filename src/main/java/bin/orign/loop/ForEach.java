@@ -72,9 +72,7 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
                 }
             }
         } else {
-            LinkedList<Object> list = new LinkedList<>();
-
-//            List<Object> list = (List<Object>) changeList(listValue, variableType);
+            List<?> list = changeList(listValue, variableType);
             loop(rep.get(variableType), variableName, list, total, variables[0], repositoryArray);
         }
     }
@@ -95,7 +93,7 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
     }
 
     private void loop(Map<String, Object> rep, String variableName,
-                      List<Object> list, String total, String fileName,
+                      List<?> list, String total, String fileName,
                       LinkedList<Map<String, Map<String, Object>>> repository) {
         for (Object var : list) {
             rep.put(variableName, var);
@@ -104,15 +102,15 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
         rep.remove(variableName);
     }
 
-    private void changeList(LinkedList<Object> list, String listValue, String variableType) {
+    private LinkedList<?> changeList(String listValue, String variableType) {
         return switch (variableType) {
-            case INT_VARIABLE -> setIntegerList(listValue);
-            case LONG_VARIABLE -> setLongList(listValue);
-            case BOOL_VARIABLE -> setBoolList(listValue);
-            case CHARACTER_VARIABLE -> setCharacterList(listValue);
-            case FLOAT_VARIABLE -> setFlotList(listValue);
-            case DOUBLE_VARIABLE -> setDoubleList(listValue);
-            default -> setStringList(list, listValue);
+            case INT_VARIABLE -> setIntegerList(new LinkedList<>(), listValue);
+            case LONG_VARIABLE -> setLongList(new LinkedList<>(), listValue);
+            case BOOL_VARIABLE -> setBoolList(new LinkedList<>(), listValue);
+            case CHARACTER_VARIABLE -> setCharacterList(new LinkedList<>(), listValue);
+            case FLOAT_VARIABLE -> setFlotList(new LinkedList<>(), listValue);
+            case DOUBLE_VARIABLE -> setDoubleList(new LinkedList<>(), listValue);
+            default -> setStringList(new LinkedList<>(), listValue);
         };
     }
 
