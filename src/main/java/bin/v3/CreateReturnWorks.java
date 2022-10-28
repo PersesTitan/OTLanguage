@@ -3,7 +3,6 @@ package bin.v3;
 import bin.exception.MatchException;
 import work.v3.ReturnWorkV3;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -14,13 +13,26 @@ import static bin.apply.Repository.*;
 import static bin.token.VariableToken.*;
 
 public interface CreateReturnWorks {
-    Matcher matcher = Pattern.compile(String.format(
+    Matcher matcher1 = Pattern.compile(String.format(
             "%s[\\s\\S]+%s([\\s\\S]*%s)?",
             VARIABLE_GET_S, VARIABLE_GET_E, VARIABLE_DEFAULT))
             .matcher("");
+    Matcher matcher2 = Pattern.compile(String.format(
+            "%s[^%s%s]+%s([^%s%s]*%s)?",
+            VARIABLE_GET_S, VARIABLE_GET_S,
+            VARIABLE_GET_E, VARIABLE_GET_E,
+            VARIABLE_GET_E, VARIABLE_DEFAULT, VARIABLE_DEFAULT
+    )).matcher("");
 
     static String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        matcher.reset(line);
+        line = startMatcher(matcher2.reset(line), line, repositoryArray);
+        if (line.contains(VARIABLE_GET_S) && line.contains(VARIABLE_GET_E))
+            return startMatcher(matcher1.reset(line), line, repositoryArray);
+        else return line;
+    }
+
+    private static String startMatcher(Matcher matcher, String line,
+                                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         while (matcher.find()) {
             String group = matcher.group();
             // 값_기본값 or 값
@@ -32,7 +44,6 @@ public interface CreateReturnWorks {
                 variable = tokens[0];
                 value = tokens[1];
             }
-
             String sub;
             if ((sub = sub(variable, value, repositoryArray)) != null) {
                 line = line.replaceFirst(Pattern.quote(group), sub);
