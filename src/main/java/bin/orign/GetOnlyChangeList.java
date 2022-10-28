@@ -35,7 +35,7 @@ public interface GetOnlyChangeList extends GetList {
                             .collect(Collectors.toCollection(LinkedList::new));
                 }
             }
-        } else return getStringList(value);
+        } else return setStringList(new LinkedList<>(), value);
         // [1, 2, 3, 4, 5]
         throw VariableException.typeMatch();
     }
