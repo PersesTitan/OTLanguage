@@ -84,7 +84,35 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
         };
     }
 
-    public Object getObject(VariableType variableType, String value, Object object) {
+    // value : <value or :value
+    private String getSetValue(LinkedHashSet<?> set, String value) {
+        if (value.startsWith(SET_ADD)) return value.substring(SET_ADD.length()).strip();
+        else if (value.startsWith(VARIABLE_PUT)) {
+            set.clear();
+            return value.substring(VARIABLE_PUT.length()).strip();
+        } else throw VariableException.noGrammar();
+    }
+
+    // value : <<value or :value
+    private String getListValue(LinkedList<?> list, String value) {
+        if (value.startsWith(LIST_ADD)) return value.substring(LIST_ADD.length()).strip();
+        else if (value.startsWith(VARIABLE_PUT)) {
+            list.clear();
+            return value.substring(VARIABLE_PUT.length()).strip();
+        } else throw VariableException.noGrammar();
+    }
+
+    // value : <<<value or :value
+    private String getMapValue(LinkedHashMap<?, ?> map, String value) {
+        if (value.startsWith(MAP_ADD)) return value.substring(MAP_ADD.length()).strip();
+        else if (value.startsWith(VARIABLE_PUT)) {
+            map.clear();
+            return value.substring(VARIABLE_PUT.length()).strip();
+        } else throw VariableException.noGrammar();
+    }
+
+    public Object getObject(VariableType variableType,
+                            String value, Object object) {
         switch (variableType) {
             case Integer -> {
                 if (!isInteger(value)) throw VariableException.typeMatch();
@@ -111,274 +139,196 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
                 else return Double.parseDouble(value);
             }
             case SetInteger -> {
-                LinkedHashSet<Integer> set;
-                if (value.isBlank()) set = new LinkedHashSet<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashSet<Integer>()
+                        : setIntegerSet(new LinkedHashSet<>(), value);
                 else {
-                    if (value.startsWith(SET_ADD)) set = getIntegerSet(value.substring(SET_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashSet<Integer>) object).clear();
-                        set = getIntegerSet(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedHashSet<Integer> set = (LinkedHashSet<Integer>) object;
+                    return setIntegerSet(set, getSetValue(set, value));
                 }
-                return object == null ? set : ((LinkedHashSet<Integer>) object).addAll(set);
             }
             case SetLong -> {
-                LinkedHashSet<Long> set;
-                if (value.isBlank()) set = new LinkedHashSet<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashSet<Long>()
+                        : setLongSet(new LinkedHashSet<>(), value);
                 else {
-                    if (value.startsWith(SET_ADD)) set = getLongSet(value.substring(SET_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashSet<Long>) object).clear();
-                        set = getLongSet(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedHashSet<Long> set = (LinkedHashSet<Long>) object;
+                    return setLongSet(set, getSetValue(set, value));
                 }
-                return object == null ? set : ((LinkedHashSet<Long>) object).addAll(set);
             }
             case SetBoolean -> {
-                LinkedHashSet<String> set;
-                if (value.isBlank()) set = new LinkedHashSet<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashSet<String>()
+                        : setBoolSet(new LinkedHashSet<>(), value);
                 else {
-                    if (value.startsWith(SET_ADD)) set = getBoolSet(value.substring(SET_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashSet<String>) object).clear();
-                        set = getBoolSet(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedHashSet<String> set = (LinkedHashSet<String>) object;
+                    return setBoolSet(set, getSetValue(set, value));
                 }
-                return object == null ? set : ((LinkedHashSet<String>) object).addAll(set);
             }
             case SetString -> {
-                LinkedHashSet<String> set;
-                if (value.isBlank()) set = new LinkedHashSet<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashSet<String>()
+                        : setStringSet(new LinkedHashSet<>(), value);
                 else {
-                    if (value.startsWith(SET_ADD)) set = getStringSet(value.substring(SET_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashSet<String>) object).clear();
-                        set = getStringSet(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedHashSet<String> set = (LinkedHashSet<String>) object;
+                    return setStringSet(set, getSetValue(set, value));
                 }
-                return object == null ? set : ((LinkedHashSet<String>) object).addAll(set);
             }
             case SetCharacter -> {
-                LinkedHashSet<Character> set;
-                if (value.isBlank()) set = new LinkedHashSet<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashSet<Character>()
+                        : setCharacterSet(new LinkedHashSet<>(), value);
                 else {
-                    if (value.startsWith(SET_ADD)) set = getCharacterSet(value.substring(SET_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashSet<Character>) object).clear();
-                        set = getCharacterSet(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedHashSet<Character> set = (LinkedHashSet<Character>) object;
+                    return setCharacterSet(set, getSetValue(set, value));
                 }
-                return object == null ? set : ((LinkedHashSet<Character>) object).addAll(set);
             }
             case SetFloat -> {
-                LinkedHashSet<Float> set;
-                if (value.isBlank()) set = new LinkedHashSet<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashSet<Float>()
+                        : setFlotSet(new LinkedHashSet<>(), value);
                 else {
-                    if (value.startsWith(SET_ADD)) set = getFlotSet(value.substring(SET_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashSet<Float>) object).clear();
-                        set = getFlotSet(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedHashSet<Float> set = (LinkedHashSet<Float>) object;
+                    return setFlotSet(set, getSetValue(set, value));
                 }
-                return object == null ? set : ((LinkedHashSet<Float>) object).addAll(set);
             }
             case SetDouble -> {
-                LinkedHashSet<Double> set;
-                if (value.isBlank()) set = new LinkedHashSet<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashSet<Double>()
+                        : setDoubleSet(new LinkedHashSet<>(), value);
                 else {
-                    if (value.startsWith(SET_ADD)) set = getDoubleSet(value.substring(SET_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashSet<Double>) object).clear();
-                        set = getDoubleSet(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedHashSet<Double> set = (LinkedHashSet<Double>) object;
+                    return setDoubleSet(set, getSetValue(set, value));
                 }
-                return object == null ? set : ((LinkedHashSet<Double>) object).addAll(set);
             }
-
             case ListInteger -> {
-                LinkedList<Integer> list;
-                if (value.isBlank()) list = new LinkedList<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedList<Integer>()
+                        : setIntegerList(new LinkedList<>(), value);
                 else {
-                    if (value.startsWith(LIST_ADD)) list = getIntegerList(value.substring(LIST_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedList<Integer>) object).clear();
-                        list = getIntegerList(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedList<Integer> list = (LinkedList<Integer>) object;
+                    return setIntegerList(list, getListValue(list, value));
                 }
-                return object == null ? list : ((LinkedList<Integer>) object).addAll(list);
             }
             case ListLong -> {
-                LinkedList<Long> list;
-                if (value.isBlank()) list = new LinkedList<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedList<Long>()
+                        : setLongList(new LinkedList<>(), value);
                 else {
-                    if (value.startsWith(LIST_ADD)) list = getLongList(value.substring(LIST_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedList<Long>) object).clear();
-                        list = getLongList(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedList<Long> list = (LinkedList<Long>) object;
+                    return setLongList(list, getListValue(list, value));
                 }
-                return object == null ? list : ((LinkedList<Long>) object).addAll(list);
             }
             case ListBoolean -> {
-                LinkedList<String> list;
-                if (value.isBlank()) list = new LinkedList<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedList<String>()
+                        : setBoolList(new LinkedList<>(), value);
                 else {
-                    if (value.startsWith(LIST_ADD)) list = getBoolList(value.substring(LIST_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedList<String>) object).clear();
-                        list = getBoolList(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedList<String> list = (LinkedList<String>) object;
+                    return setBoolList(list, getListValue(list, value));
                 }
-                return object == null ? list : ((LinkedList<String>) object).addAll(list);
             }
             case ListString -> {
-                LinkedList<String> list;
-                if (value.isBlank()) list = new LinkedList<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedList<String>()
+                        : setStringList(new LinkedList<>(), value);
                 else {
-                    if (value.startsWith(LIST_ADD)) list = getStringList(value.substring(LIST_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedList<String>) object).clear();
-                        list = getStringList(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedList<String> list = (LinkedList<String>) object;
+                    return setStringList(list, getListValue(list, value));
                 }
-                return object == null ? list : ((LinkedList<String>) object).addAll(list);
             }
             case ListCharacter -> {
-                LinkedList<Character> list;
-                if (value.isBlank()) list = new LinkedList<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedList<Character>()
+                        : setCharacterList(new LinkedList<>(), value);
                 else {
-                    if (value.startsWith(LIST_ADD)) list = getCharacterList(value.substring(LIST_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedList<Character>) object).clear();
-                        list = getCharacterList(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedList<Character> list = (LinkedList<Character>) object;
+                    return setCharacterList(list, getListValue(list, value));
                 }
-                return object == null ? list : ((LinkedList<Character>) object).addAll(list);
             }
             case ListFloat -> {
-                LinkedList<Float> list;
-                if (value.isBlank()) list = new LinkedList<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedList<Float>()
+                        : setFlotList(new LinkedList<>(), value);
                 else {
-                    if (value.startsWith(LIST_ADD)) list = getFlotList(value.substring(LIST_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedList<Float>) object).clear();
-                        list = getFlotList(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedList<Float> list = (LinkedList<Float>) object;
+                    return setFlotList(list, getListValue(list, value));
                 }
-                return object == null ? list : ((LinkedList<Float>) object).addAll(list);
             }
             case ListDouble -> {
-                LinkedList<Double> list;
-                if (value.isBlank()) list = new LinkedList<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedList<Double>()
+                        : setDoubleList(new LinkedList<>(), value);
                 else {
-                    if (value.startsWith(LIST_ADD)) list = getDoubleList(value.substring(LIST_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedList<Double>) object).clear();
-                        list = getDoubleList(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedList<Double> list = (LinkedList<Double>) object;
+                    return setDoubleList(list, getListValue(list, value));
                 }
-                return object == null ? list : ((LinkedList<Double>) object).addAll(list);
             }
 
             case MapInteger -> {
-                LinkedHashMap<String, Integer> map;
-                if (value.isBlank()) map = new LinkedHashMap<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashMap<String, Integer>()
+                        : setIntegerMap(new LinkedHashMap<>(), value);
                 else {
-                    if (value.startsWith(MAP_ADD)) map = getIntegerMap(value.substring(MAP_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashMap<String, Integer>) object).clear();
-                        map = getIntegerMap(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedHashMap<String, Integer> map = (LinkedHashMap<String, Integer>) object;
+                    return setIntegerMap(map, getMapValue(map, value));
                 }
-                if (object != null) ((LinkedHashMap<String, Integer>) object).putAll(map);
-                return map;
             }
             case MapLong -> {
-                LinkedHashMap<String, Long> map;
-                if (value.isBlank()) map = new LinkedHashMap<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashMap<String, Long>()
+                        : setLongMap(new LinkedHashMap<>(), value);
                 else {
-                    if (value.startsWith(MAP_ADD)) map = getLongMap(value.substring(MAP_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashMap<String, Integer>) object).clear();
-                        map = getLongMap(value.substring(VARIABLE_PUT.length()));
-                    } else throw VariableException.noGrammar();
+                    LinkedHashMap<String, Long> map = (LinkedHashMap<String, Long>) object;
+                    return setLongMap(map, getMapValue(map, value));
                 }
-                if (object != null) ((LinkedHashMap<String, Long>) object).putAll(map);
-                return map;
             }
             case MapBoolean -> {
-                LinkedHashMap<String, String> map;
-                if (value.isBlank()) map = new LinkedHashMap<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashMap<String, String>()
+                        : setBoolMap(new LinkedHashMap<>(), value);
                 else {
-                    if (value.startsWith(MAP_ADD)) map = getBoolMap(value.substring(MAP_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashMap<String, String>) object).clear();
-                        map = getBoolMap(value.substring(VARIABLE_PUT.length()));
-                    }
-                    else throw VariableException.noGrammar();
+                    LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) object;
+                    return setBoolMap(map, getMapValue(map, value));
                 }
-                if (object != null) ((LinkedHashMap<String, String>) object).putAll(map);
-                return map;
             }
             case MapString -> {
-                LinkedHashMap<String, String> map;
-                if (value.isBlank()) map = new LinkedHashMap<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashMap<String, String>()
+                        : setStringMap(new LinkedHashMap<>(), value);
                 else {
-                    if (value.startsWith(MAP_ADD)) map = getStringMap(value.substring(MAP_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashMap<String, String>) object).clear();
-                        map = getStringMap(value.substring(VARIABLE_PUT.length()));
-                    }
-                    else throw VariableException.noGrammar();
+                    LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) object;
+                    return setStringMap(map, getMapValue(map, value));
                 }
-                if (object != null) ((LinkedHashMap<String, String>) object).putAll(map);
-                return map;
             }
             case MapCharacter -> {
-                LinkedHashMap<String, Character> map;
-                if (value.isBlank()) map = new LinkedHashMap<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashMap<String, Character>()
+                        : setCharacterMap(new LinkedHashMap<>(), value);
                 else {
-                    if (value.startsWith(MAP_ADD)) map = getCharacterMap(value.substring(MAP_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashMap<String, Character>) object).clear();
-                        map = getCharacterMap(value.substring(VARIABLE_PUT.length()));
-                    }
-                    else throw VariableException.noGrammar();
+                    LinkedHashMap<String, Character> map = (LinkedHashMap<String, Character>) object;
+                    return setCharacterMap(map, getMapValue(map, value));
                 }
-                if (object != null) ((LinkedHashMap<String, Character>) object).putAll(map);
-                return map;
             }
             case MapFloat -> {
-                LinkedHashMap<String, Float> map;
-                if (value.isBlank()) map = new LinkedHashMap<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashMap<String, Float>()
+                        : setFlotMap(new LinkedHashMap<>(), value);
                 else {
-                    if (value.startsWith(MAP_ADD)) map = getFlotMap(value.substring(MAP_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashMap<String, Float>) object).clear();
-                        map = getFlotMap(value.substring(VARIABLE_PUT.length()));
-                    }
-                    else throw VariableException.noGrammar();
+                    LinkedHashMap<String, Float> map = (LinkedHashMap<String, Float>) object;
+                    return setFlotMap(map, getMapValue(map, value));
                 }
-                if (object != null) ((LinkedHashMap<String, Float>) object).putAll(map);
-                return map;
             }
             case MapDouble -> {
-                LinkedHashMap<String, Double> map;
-                if (value.isBlank()) map = new LinkedHashMap<>();
+                if (object == null) return value.isBlank()
+                        ? new LinkedHashMap<String, Double>()
+                        : setDoubleMap(new LinkedHashMap<>(), value);
                 else {
-                    if (value.startsWith(MAP_ADD)) map = getDoubleMap(value.substring(MAP_ADD.length()));
-                    else if (value.startsWith(VARIABLE_PUT)) {
-                        if (object != null) ((LinkedHashMap<String, Double>) object).clear();
-                        map = getDoubleMap(value.substring(VARIABLE_PUT.length()));
-                    }
-                    else throw VariableException.noGrammar();
+                    LinkedHashMap<String, Double> map = (LinkedHashMap<String, Double>) object;
+                    return setDoubleMap(map, getMapValue(map, value));
                 }
-                if (object != null) ((LinkedHashMap<String, Double>) object).putAll(map);
-                return map;
             }
-            default -> {
-                return value;
-            }
+            default -> {return value;}
         }
     }
 }

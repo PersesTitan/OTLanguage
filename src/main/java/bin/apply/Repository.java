@@ -54,6 +54,10 @@ public interface Repository {
         return set;
     }
 
+    static boolean containsVariable(String variable, Map<String, Map<String, Object>> repository) {
+        return TOTAL_LIST.stream().anyMatch(v -> repository.get(v).containsKey(variable));
+    }
+
     // Version 3
     Variable variable = new Variable(1);
     StartVariable startVariable = new StartVariable(2);
@@ -73,16 +77,8 @@ public interface Repository {
         createStartWorks(startWorksV3, klassName, methodName, startWork);
     }
 
-    default void priorityCreateStartWorks(Map<String, Map<String, StartWorkV3>> map,
-                                          String klassName, String methodName, StartWorkV3 startWork) {
-        if (map.containsKey(klassName)) {
-            if (map.get(klassName).containsKey(methodName)) throw VariableException.sameVariable();
-            else map.get(klassName).put(methodName, startWork);
-        } else map.put(klassName, new HashMap<>() {{ put(methodName, startWork); }});
-    }
-
     default void priorityCreateStartWorks(String klassName, String methodName, StartWorkV3 startWork) {
-        priorityCreateStartWorks(priorityStartWorksV3, klassName, methodName, startWork);
+        createStartWorks(priorityStartWorksV3, klassName, methodName, startWork);
     }
 
     default void createReturnWorks(Map<String, Map<String, ReturnWorkV3>> map,

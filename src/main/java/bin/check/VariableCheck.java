@@ -5,6 +5,8 @@ import bin.token.cal.BoolToken;
 
 import java.util.regex.Pattern;
 
+import static bin.check.VariableCheck.isInteger;
+
 public interface VariableCheck {
     // 기본 변수
     static boolean isBoolean(String line) {
@@ -94,7 +96,7 @@ public interface VariableCheck {
         if (line.isBlank()) return true;
         return Pattern.compile(Token.COMMA).splitAsStream(line)
                 .map(String::trim)
-                .map(v -> v.split(Token.MAP_EQUAL, 2))
+                .map(v -> v.split("=", 2))
                 .anyMatch(v -> v.length == 2 && isBoolean(v[1]));
     }
 
@@ -104,7 +106,7 @@ public interface VariableCheck {
         if (line.isBlank()) return true;
         return Pattern.compile(Token.COMMA).splitAsStream(line)
                 .map(String::trim)
-                .map(v -> v.split(Token.MAP_EQUAL, 2))
+                .map(v -> v.split("=", 2))
                 .anyMatch(v -> v.length == 2 && isCharacter(v[1]));
     }
 
@@ -114,7 +116,7 @@ public interface VariableCheck {
         if (line.isBlank()) return true;
         return Pattern.compile(Token.COMMA).splitAsStream(line)
                 .map(String::trim)
-                .map(v -> v.split(Token.MAP_EQUAL, 2))
+                .map(v -> v.split("=", 2))
                 .anyMatch(v -> v.length == 2 && isDouble(v[1]));
     }
 
@@ -124,7 +126,7 @@ public interface VariableCheck {
         if (line.isBlank()) return true;
         return Pattern.compile(Token.COMMA).splitAsStream(line)
                 .map(String::trim)
-                .map(v -> v.split(Token.MAP_EQUAL, 2))
+                .map(v -> v.split("=", 2))
                 .anyMatch(v -> v.length == 2 && isFloat(v[1]));
     }
 
@@ -134,7 +136,7 @@ public interface VariableCheck {
         if (line.isBlank()) return true;
         return Pattern.compile(Token.COMMA).splitAsStream(line)
                 .map(String::trim)
-                .map(v -> v.split(Token.MAP_EQUAL, 2))
+                .map(v -> v.split("=", 2))
                 .anyMatch(v -> v.length == 2 && isInteger(v[1]));
     }
 
@@ -144,7 +146,7 @@ public interface VariableCheck {
         if (line.isBlank()) return true;
         return Pattern.compile(Token.COMMA).splitAsStream(line)
                 .map(String::trim)
-                .map(v -> v.split(Token.MAP_EQUAL, 2))
+                .map(v -> v.split("=", 2))
                 .anyMatch(v -> v.length == 2 && isLong(v[1]));
     }
 
@@ -154,7 +156,7 @@ public interface VariableCheck {
         if (line.isBlank()) return true;
         return Pattern.compile(Token.COMMA).splitAsStream(line)
                 .map(String::trim)
-                .map(v -> v.split(Token.MAP_EQUAL, 2))
+                .map(v -> v.split("=", 2))
                 .anyMatch(v -> v.length == 2);
     }
 }

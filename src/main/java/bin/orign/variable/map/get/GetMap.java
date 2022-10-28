@@ -8,105 +8,105 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.*;
+import static bin.orign.variable.set.get.GetSet.SING;
+import static bin.token.Token.COMMA;
 
 public interface GetMap {
-    default LinkedHashMap<String, String> getBoolMap(String line) {
+    default LinkedHashMap<String, String> setBoolMap(LinkedHashMap<String, String> map, String line) {
         if (!isMapBoolean(line)) throw VariableException.typeMatch();
-        LinkedHashMap<String, String> map = new LinkedHashMap<>();
-        Pattern.compile(Token.COMMA)
-                .splitAsStream(line.substring(1, line.length()-1))
-                .map(String::trim)
-                .filter(Predicate.not(String::isEmpty))
-                .map(v -> {
-                    if (v.contains("=")) return v.split("=", 2);
-                    else throw VariableException.typeMatch();
-                }).forEach(v -> map.put(v[0], v[1]));
+        else {
+            StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), COMMA);
+            while (t.hasMoreTokens()) {
+                String[] tokens = t.nextToken()
+                        .strip()
+                        .split("=", 2);
+                map.put(tokens[0], tokens[1]);
+            }
+        }
         return map;
     }
 
-    default LinkedHashMap<String, Character> getCharacterMap(String line) {
+    default LinkedHashMap<String, Character> setCharacterMap(LinkedHashMap<String, Character> map, String line) {
         if (!isMapCharacter(line)) throw VariableException.typeMatch();
-        LinkedHashMap<String, Character> map = new LinkedHashMap<>();
-        Pattern.compile(Token.COMMA)
-                .splitAsStream(line.substring(1, line.length()-1))
-                .map(String::trim)
-                .filter(Predicate.not(String::isEmpty))
-                .map(v -> {
-                    if (v.contains("=")) return v.split("=", 2);
-                    else throw VariableException.typeMatch();
-                }).forEach(v -> map.put(v[0], v[1].charAt(0)));
+        else {
+            StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), COMMA);
+            while (t.hasMoreTokens()) {
+                String[] tokens = t.nextToken()
+                        .strip()
+                        .split("=", 2);
+                map.put(tokens[0], tokens[1].charAt(0));
+            }
+        }
         return map;
     }
 
-    default LinkedHashMap<String, Double> getDoubleMap(String line) {
+    default LinkedHashMap<String, Double> setDoubleMap(LinkedHashMap<String, Double> map, String line) {
         if (!isMapDouble(line)) throw VariableException.typeMatch();
-        LinkedHashMap<String, Double> map = new LinkedHashMap<>();
-        Pattern.compile(Token.COMMA)
-                .splitAsStream(line.substring(1, line.length()-1))
-                .map(String::trim)
-                .filter(Predicate.not(String::isEmpty))
-                .map(v -> {
-                    if (v.contains("=")) return v.split("=", 2);
-                    else throw VariableException.typeMatch();
-                }).forEach(v -> map.put(v[0], Double.parseDouble(v[1])));
+        else {
+            StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), COMMA);
+            while (t.hasMoreTokens()) {
+                String[] tokens = t.nextToken()
+                        .strip()
+                        .split("=", 2);
+                map.put(tokens[0], Double.parseDouble(tokens[1]));
+            }
+        }
         return map;
     }
 
-    default LinkedHashMap<String, Float> getFlotMap(String line) {
+    default LinkedHashMap<String, Float> setFlotMap(LinkedHashMap<String, Float> map, String line) {
         if (!isMapFloat(line)) throw VariableException.typeMatch();
-        LinkedHashMap<String, Float> map = new LinkedHashMap<>();
-        Pattern.compile(Token.COMMA)
-                .splitAsStream(line.substring(1, line.length()-1))
-                .map(String::trim)
-                .filter(Predicate.not(String::isEmpty))
-                .map(v -> {
-                    if (v.contains("=")) return v.split("=", 2);
-                    else throw VariableException.typeMatch();
-                }).forEach(v -> map.put(v[0], Float.parseFloat(v[1])));
+        else {
+            StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), COMMA);
+            while (t.hasMoreTokens()) {
+                String[] tokens = t.nextToken()
+                        .strip()
+                        .split("=", 2);
+                map.put(tokens[0], Float.parseFloat(tokens[1]));
+            }
+        }
         return map;
     }
 
-    default LinkedHashMap<String, Integer> getIntegerMap(String line) {
+    default LinkedHashMap<String, Integer> setIntegerMap(LinkedHashMap<String, Integer> map, String line) {
         if (!isMapInteger(line)) throw VariableException.typeMatch();
-        LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
-        Pattern.compile(Token.COMMA)
-                .splitAsStream(line.substring(1, line.length()-1))
-                .map(String::trim)
-                .filter(Predicate.not(String::isEmpty))
-                .map(v -> {
-                    if (v.contains("=")) return v.split("=", 2);
-                    else throw VariableException.typeMatch();
-                }).forEach(v -> map.put(v[0], Integer.parseInt(v[1])));
+        else {
+            StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), COMMA);
+            while (t.hasMoreTokens()) {
+                String[] tokens = t.nextToken()
+                        .strip()
+                        .split("=", 2);
+                map.put(tokens[0], Integer.parseInt(tokens[1]));
+            }
+        }
         return map;
     }
 
-    default LinkedHashMap<String, Long> getLongMap(String line) {
+    default LinkedHashMap<String, Long> setLongMap(LinkedHashMap<String, Long> map, String line) {
         if (!isMapLong(line)) throw VariableException.typeMatch();
-        LinkedHashMap<String, Long> map = new LinkedHashMap<>();
-        Pattern.compile(Token.COMMA)
-                .splitAsStream(line.substring(1, line.length()-1))
-                .map(String::trim)
-                .filter(Predicate.not(String::isEmpty))
-                .map(v -> {
-                    if (v.contains("=")) return v.split("=", 2);
-                    else throw VariableException.typeMatch();
-                })
-                .forEach(v -> map.put(v[0], Long.parseLong(v[1])));
+        else {
+            StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), COMMA);
+            while (t.hasMoreTokens()) {
+                String[] tokens = t.nextToken()
+                        .strip()
+                        .split("=", 2);
+                map.put(tokens[0], Long.parseLong(tokens[1]));
+            }
+        }
         return map;
     }
 
-    default LinkedHashMap<String, String> getStringMap(String line) {
+    default LinkedHashMap<String, String> setStringMap(LinkedHashMap<String, String> map, String line) {
         if (!isMapString(line)) throw VariableException.typeMatch();
-        LinkedHashMap<String, String> map = new LinkedHashMap<>();
-        Pattern.compile(Token.COMMA)
-                .splitAsStream(line.substring(1, line.length()-1))
-                .map(String::trim)
-                .filter(Predicate.not(String::isEmpty))
-                .map(v -> {
-                    if (v.contains("=")) return v.split("=", 2);
-                    else throw VariableException.typeMatch();
-                })
-                .forEach(v -> map.put(v[0], v[1]));
+        else {
+            StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), COMMA);
+            while (t.hasMoreTokens()) {
+                String[] tokens = t.nextToken()
+                        .strip()
+                        .split("=", 2);
+                map.put(tokens[0], tokens[1]);
+            }
+        }
         return map;
     }
 }

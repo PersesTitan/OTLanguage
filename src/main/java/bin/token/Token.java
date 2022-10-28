@@ -34,4 +34,5 @@ package bin.token;
     String GREATER_SIGN = ">";
     String EXCLAMATION = "!";
     String AMPERSAND = "&";
+    String REMARK = "#";
 }

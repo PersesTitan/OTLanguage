@@ -10,12 +10,6 @@ import bin.apply.sys.run.TryCatch;
 import bin.define.method.DefineMethod;
 import bin.define.method.MethodReturn;
 import bin.define.method.MethodVoid;
-import bin.math.sum.list.FloatListSum;
-import bin.math.sum.list.IntegerListSum;
-import bin.math.sum.list.LongListSum;
-import bin.math.sum.set.FloatSetSum;
-import bin.math.sum.set.IntegerSetSum;
-import bin.math.sum.set.LongSetSum;
 import bin.orign.loop.For;
 import bin.orign.loop.ForEach;
 import bin.orign.loop.While;
@@ -51,7 +45,7 @@ public class Setting implements Repository {
 
     public static void start(String line, String errorLine,
                              LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        if (line.isBlank()) return;
+        if (line.isBlank() || line.startsWith(REMARK)) return;
 //        final String origen = line;
 //        final String value = new StringTokenizer(line).nextToken();
 
@@ -146,23 +140,23 @@ public class Setting implements Repository {
 //        returnWorks.add(new ListGet(LIST_GET));
 //        returnWorks.add(new MapGet(MAP_GET));
 //        returnWorks.add(new SetGet(SET_GET));
-        returnWorks.add(new MethodReturn());
 //        returnWorks.add(new Join(JOIN));
 //        returnWorks.add(new Split(SPLIT));
 //        returnWorks.add(new SplitRegular(SPLIT_REGULAR));
 //        returnWorks.add(new Contains(CONTAINS));
 //        returnWorks.add(new Equals(STRING_VARIABLE, EQUALS));
-        returnWorks.add(new SetContains(SET_CONTAINS));
-        returnWorks.add(new ListContains(LIST_CONTAINS));
-        returnWorks.add(new MapContains(MAP_CONTAINS));
+//        returnWorks.add(new SetContains(SET_CONTAINS));
+//        returnWorks.add(new ListContains(LIST_CONTAINS));
+//        returnWorks.add(new MapContains(MAP_CONTAINS));
+        returnWorks.add(new MethodReturn());
 
 //        startWorkMap.put(PRINT_SPACE, new PrintSpace(PRINT_SPACE.length()));
 //        startWorkMap.put(PRINT_TAP, new PrintTap(PRINT_TAP.length()));
 //        startWorkMap.put(PRINTLN, new Println(PRINTLN.length()));
 //        startWorkMap.put(PRINT, new Print(PRINT.length()));
 
-        startWorks.add(new SetAdd(SET_ADD));
-        startWorks.add(new ListAdd(LIST_ADD));
+//        startWorks.add(new SetAdd(SET_ADD));
+//        startWorks.add(new ListAdd(LIST_ADD));
         startWorks.add(new PutVariable());
         startWorks.add(new Sleep(SLEEP));
         startWorks.add(new If(IF, ELSE_IF, ELSE));
@@ -176,7 +170,7 @@ public class Setting implements Repository {
         startWorks.add(new TryCatch(TRY_CATCH));
         startWorks.add(new DefineMethod(METHOD));
         startWorks.add(new MethodVoid());
-        startWorks.add(new SetReset(SET_CLEAR));
+//        startWorks.add(new SetReset(SET_CLEAR));
 
         // POISON
         startWorks.add(new Poison(POISON));

@@ -5,6 +5,7 @@ import bin.orign.variable.map.get.GetMap;
 import bin.orign.variable.set.get.GetSet;
 import bin.token.LoopToken;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
@@ -44,32 +45,32 @@ public class GetSetVariable implements GetSet, GetList, GetMap, LoopToken {
             case SET_INTEGER -> {
                 LinkedHashSet<Integer> set = (LinkedHashSet<Integer>) ob;
                 set.clear();
-                set.addAll(getIntegerSet(value));
+                set.addAll(setIntegerSet(set, value));
             }
             case SET_LONG -> {
                 LinkedHashSet<Long> set = (LinkedHashSet<Long>) ob;
                 set.clear();
-                set.addAll(getLongSet(value));
+                set.addAll(setLongSet(set, value));
             }
             case SET_BOOLEAN -> {
                 LinkedHashSet<String> set = (LinkedHashSet<String>) ob;
                 set.clear();
-                set.addAll(getBoolSet(value));
+                set.addAll(setBoolSet(set, value));
             }
             case SET_STRING -> {
                 LinkedHashSet<String> set = (LinkedHashSet<String>) ob;
                 set.clear();
-                set.addAll(getStringSet(value));
+                set.addAll(setStringSet(set, value));
             }
             case SET_CHARACTER -> {
                 LinkedHashSet<Character> set = (LinkedHashSet<Character>) ob;
                 set.clear();
-                set.addAll(getCharacterSet(value));
+                set.addAll(setCharacterSet(set, value));
             }
             case SET_FLOAT -> {
                 LinkedHashSet<Float> set = (LinkedHashSet<Float>) ob;
                 set.clear();
-                set.addAll(getFlotSet(value));
+                set.addAll(setFlotSet(set, value));
             }
         }
     }
@@ -79,37 +80,37 @@ public class GetSetVariable implements GetSet, GetList, GetMap, LoopToken {
             case LIST_INTEGER -> {
                 LinkedList<Integer> set = (LinkedList<Integer>) ob;
                 set.clear();
-                set.addAll(getIntegerList(value));
+                set.addAll(setIntegerList(set, value));
             }
             case LIST_LONG -> {
                 LinkedList<Long> set = (LinkedList<Long>) ob;
                 set.clear();
-                set.addAll(getLongList(value));
+                set.addAll(setLongList(set, value));
             }
             case LIST_BOOLEAN -> {
                 LinkedList<String> set = (LinkedList<String>) ob;
                 set.clear();
-                set.addAll(getBoolList(value));
+                set.addAll(setBoolList(set, value));
             }
             case LIST_STRING -> {
                 LinkedList<String> set = (LinkedList<String>) ob;
                 set.clear();
-                set.addAll(getStringList(value));
+                set.addAll(setStringList(set, value));
             }
             case LIST_CHARACTER -> {
                 LinkedList<Character> set = (LinkedList<Character>) ob;
                 set.clear();
-                set.addAll(getCharacterList(value));
+                set.addAll(setCharacterList(set, value));
             }
             case LIST_FLOAT -> {
                 LinkedList<Float> set = (LinkedList<Float>) ob;
                 set.clear();
-                set.addAll(getFlotList(value));
+                set.addAll(setFlotList(set, value));
             }
             case LIST_DOUBLE -> {
                 LinkedList<Double> set = (LinkedList<Double>) ob;
                 set.clear();
-                set.addAll(getDoubleList(value));
+                set.addAll(setDoubleList(set, value));
             }
         }
     }
@@ -117,39 +118,39 @@ public class GetSetVariable implements GetSet, GetList, GetMap, LoopToken {
     public void setMap(String variableType, Object ob, String value) {
         switch (variableType) {
             case MAP_INTEGER -> {
-                Map<String, Integer> map = (Map<String, Integer>) ob;
+                LinkedHashMap<String, Integer> map = (LinkedHashMap<String, Integer>) ob;
                 map.clear();
-                map.putAll(getIntegerMap(value));
+                setIntegerMap(map, value);
             }
             case MAP_LONG -> {
-                Map<String, Long> map = (Map<String, Long>) ob;
+                LinkedHashMap<String, Long> map = (LinkedHashMap<String, Long>) ob;
                 map.clear();
-                map.putAll(getLongMap(value));
+                setLongMap(map, value);
             }
             case MAP_BOOLEAN -> {
-                Map<String, String> map = (Map<String, String>) ob;
+                LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) ob;
                 map.clear();
-                map.putAll(getBoolMap(value));
+                setBoolMap(map, value);
             }
             case MAP_STRING -> {
-                Map<String, String> map = (Map<String, String>) ob;
+                LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) ob;
                 map.clear();
-                map.putAll(getStringMap(value));
+                setStringMap(map, value);
             }
             case MAP_CHARACTER -> {
-                Map<String, Character> map = (Map<String, Character>) ob;
+                LinkedHashMap<String, Character> map = (LinkedHashMap<String, Character>) ob;
                 map.clear();
-                map.putAll(getCharacterMap(value));
+                setCharacterMap(map, value);
             }
             case MAP_FLOAT -> {
-                Map<String, Float> map = (Map<String, Float>) ob;
+                LinkedHashMap<String, Float> map = (LinkedHashMap<String, Float>) ob;
                 map.clear();
-                map.putAll(getFlotMap(value));
+                setFlotMap(map, value);
             }
             case MAP_DOUBLE -> {
-                Map<String, Double> map = (Map<String, Double>) ob;
+                LinkedHashMap<String, Double> map = (LinkedHashMap<String, Double>) ob;
                 map.clear();
-                map.putAll(getDoubleMap(value));
+                setDoubleMap(map, value);
             }
         }
     }

@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static bin.apply.Controller.*;
@@ -15,13 +17,13 @@ import static bin.apply.sys.item.Separator.SEPARATOR_HOME;
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.token.LoopToken.LOOP_TOKEN;
+import static bin.token.Token.REMARK;
 
 public class Main extends Setting {
 
     public static void main(String[] args) {
-//        List<String[]> test = new ArrayList<>() {{
-//            add(new String[]{"test/origin_test.otl"});
-//        }};
+        String[] test = new String[]{"test/set_test.otl"};
+        for (String t : test) new Main(new String[]{SEPARATOR_HOME, t});
 //        test.forEach(v -> {
 //            try {
 //                new Main(v);
@@ -30,7 +32,7 @@ public class Main extends Setting {
 //            }
 //        });
 
-        args = new String[]{SEPARATOR_HOME, "hello.otl"};
+//        args = new String[]{SEPARATOR_HOME, "hello.otl"};
 //        args = new String[]{SEPARATOR_HOME};
 
         try {
@@ -45,10 +47,10 @@ public class Main extends Setting {
     }
 
     private Main(String[] args) {
-        first();
         if (args.length <= 0) throw FileException.noFindError();
         else if (args.length == 1) runType = RunType.Shell;     // 현재 파일 위치
         else if (args.length == 2) runType = RunType.Normal;    // 현재 파일 이름
+        first();
 
         Setting.path = args[0];
         if (runType.equals(RunType.Normal)) normal(args);
@@ -72,6 +74,7 @@ public class Main extends Setting {
             for (int i = 1;;i++) {
                 String line = reader.readLine();
                 if (line == null) break;
+                else if ((line = line.stripLeading()).startsWith(REMARK) || line.isBlank()) continue;
                 Setting.total.append(i).append(" ").append(line.stripLeading()).append(SEPARATOR_LINE);
             }
             StartLine.startLine(Setting.total.toString(), mainPath, repository);

@@ -72,7 +72,9 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
                 }
             }
         } else {
-            List<Object> list = (List<Object>) changeList(listValue, variableType);
+            LinkedList<Object> list = new LinkedList<>();
+
+//            List<Object> list = (List<Object>) changeList(listValue, variableType);
             loop(rep.get(variableType), variableName, list, total, variables[0], repositoryArray);
         }
     }
@@ -102,15 +104,15 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
         rep.remove(variableName);
     }
 
-    private LinkedList<?> changeList(String listValue, String variableType) {
+    private void changeList(LinkedList<Object> list, String listValue, String variableType) {
         return switch (variableType) {
-            case INT_VARIABLE -> getIntegerList(listValue);
-            case LONG_VARIABLE -> getLongList(listValue);
-            case BOOL_VARIABLE -> getBoolList(listValue);
-            case CHARACTER_VARIABLE -> getCharacterList(listValue);
-            case FLOAT_VARIABLE -> getFlotList(listValue);
-            case DOUBLE_VARIABLE -> getDoubleList(listValue);
-            default -> getStringList(listValue);
+            case INT_VARIABLE -> setIntegerList(listValue);
+            case LONG_VARIABLE -> setLongList(listValue);
+            case BOOL_VARIABLE -> setBoolList(listValue);
+            case CHARACTER_VARIABLE -> setCharacterList(listValue);
+            case FLOAT_VARIABLE -> setFlotList(listValue);
+            case DOUBLE_VARIABLE -> setDoubleList(listValue);
+            default -> setStringList(list, listValue);
         };
     }
 

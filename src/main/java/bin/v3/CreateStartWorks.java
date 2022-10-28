@@ -9,8 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import static bin.apply.Repository.priorityStartWorksV3;
-import static bin.apply.Repository.startWorksV3;
+import static bin.apply.Repository.*;
 import static bin.token.LoopToken.PUTIN_TOKEN;
 import static bin.token.LoopToken.RETURN_TOKEN;
 import static bin.token.Token.*;
@@ -32,7 +31,7 @@ public interface CreateStartWorks {
         StringTokenizer tokenizer = new StringTokenizer(local, ACCESS);
         String className = tokenizer.nextToken();
         String methodName = tokenizer.hasMoreTokens() ? tokenizer.nextToken("").substring(1) : "";
-        StartWorkV3 startWork = getStartWork(className, methodName, priority);
+        StartWorkV3 startWork = getStartWork(className, methodName, priority, repositoryArray);
         if (startWork != null) {
             startWork.paramsCheck(params.length, params[0]).start(line, params, repositoryArray);
             return true;
@@ -43,7 +42,7 @@ public interface CreateStartWorks {
         String[] tokens = line.split("(?!" + VARIABLE_ALL + ")", 2);
         String local = tokens[0];
         String value = tokens.length == 2 ? tokens[1].stripLeading() : "";
-        var startWork = getStartWork(VAR_TOKEN, local, false);
+        var startWork = getStartWork(VAR_TOKEN, local, false, repositoryArray);
         if (startWork != null) {
             startWork.start(line, new String[]{local, value}, repositoryArray);
             return true;
@@ -51,7 +50,13 @@ public interface CreateStartWorks {
     }
 
     // StartWork 반환
-    private static StartWorkV3 getStartWork(String klassName, String methodName, boolean priority) {
+    private static StartWorkV3 getStartWork(String klassName, String methodName, boolean priority,
+                                            LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        if (klassName.equals(VAR_TOKEN)) {
+            int count = variable.accessCount(methodName, repositoryArray.size());
+            if (count == -1) return null;
+            return containsVariable(methodName.substring(count), repositoryArray.get(count)) ? startVariable : null;
+        }
         var map = priority ? priorityStartWorksV3 : startWorksV3;
         Map<String, StartWorkV3> startWork;
         if (map.containsKey(klassName)

@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static bin.apply.Repository.returnWorksV3;
+import static bin.apply.Repository.*;
 import static bin.token.VariableToken.*;
 
 public interface CreateReturnWorks {
@@ -56,7 +56,7 @@ public interface CreateReturnWorks {
         StringTokenizer tokenizer = new StringTokenizer(local, ACCESS);
         String className = tokenizer.nextToken();
         String methodName = tokenizer.hasMoreTokens() ? tokenizer.nextToken("").substring(1) : "";
-        ReturnWorkV3 startWork = getStartWork(className, methodName);
+        ReturnWorkV3 startWork = getStartWork(className, methodName, repositoryArray);
         if (startWork != null) return startWork.paramsCheck(params.length, params[0]).start(line, params, repositoryArray);
         else return varSub(line, def, repositoryArray);
     }
@@ -66,16 +66,22 @@ public interface CreateReturnWorks {
         String[] tokens = line.split("(?!" + VARIABLE_ALL + ")", 2);
         String local = tokens[0];
         String value = tokens.length == 2 ? tokens[1].stripLeading() : "";
-        var startWork = getStartWork(VAR_TOKEN, local);
+        var startWork = getStartWork(VAR_TOKEN, local, repositoryArray);
         if (startWork != null) return startWork.start(local, new String[]{value}, repositoryArray);
         else return def;
     }
 
-    private static ReturnWorkV3 getStartWork(String klassName, String methodName) {
-        Map<String, ReturnWorkV3> returnWorkTestMap;
+    private static ReturnWorkV3 getStartWork(String klassName, String methodName,
+                                             LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        if (klassName.equals(VAR_TOKEN)) {
+            int count = variable.accessCount(methodName, repositoryArray.size());
+            if (count == -1) return null;
+            return containsVariable(methodName.substring(count), repositoryArray.get(count)) ? variable : null;
+        }
+        Map<String, ReturnWorkV3> returnWork;
         if (returnWorksV3.containsKey(klassName)
-                && (returnWorkTestMap = returnWorksV3.get(klassName)).containsKey(methodName))
-            return returnWorkTestMap.get(methodName);
+                && (returnWork = returnWorksV3.get(klassName)).containsKey(methodName))
+            return returnWork.get(methodName);
         return null;
     }
 
