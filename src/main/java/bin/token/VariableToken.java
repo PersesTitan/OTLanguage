@@ -48,12 +48,12 @@ public interface VariableToken extends Token {
 
     String SET_SORT = AMPERSAND;                        // &
     String SET_CLEAR = EXCLAMATION;                     // !
-    String SET_DELETE = HYPHEN;                         // -
+    String SET_DELETE = EXCLAMATION + HYPHEN;           // !-
     String SET_ADD = LESS_SIGN;                         // <
     String SET_GET = GREATER_SIGN;                      // >
     String SET_ISEMPTY = QUESTION;                      // ?
     String SET_SUM = PLUS;                              // +
-    String SET_LENGTH = SL;                             // )
+    String SET_LENGTH = SR;                             // )
     String SET_CONTAINS = SET_ISEMPTY;                  // ?(...)
 
     // LIST
@@ -65,14 +65,14 @@ public interface VariableToken extends Token {
     String LIST_FLOAT = "ㄹㅅㄹ";
     String LIST_DOUBLE = "ㄹㅆㄹ";
 
-    String LIST_SORT = AMPERSAND.repeat(2);             // &&
-    String LIST_CLEAR = EXCLAMATION.repeat(2);          // !!
-    String LIST_DELETE = HYPHEN.repeat(2);              // --
-    String LIST_ADD = LESS_SIGN.repeat(2);              // <<
-    String LIST_GET = GREATER_SIGN.repeat(2);           // >>
-    String LIST_ISEMPTY = QUESTION.repeat(2);           // ??
-    String LIST_LENGTH = SL.repeat(2);                  // ))
-    String LIST_SUM = PLUS.repeat(2);                   // ++
+    String LIST_SORT = AMPERSAND.repeat(2);                    // &&
+    String LIST_CLEAR = EXCLAMATION.repeat(2);                 // !!
+    String LIST_DELETE = EXCLAMATION + HYPHEN.repeat(2);       // !--
+    String LIST_ADD = LESS_SIGN.repeat(2);                     // <<
+    String LIST_GET = GREATER_SIGN.repeat(2);                  // >>
+    String LIST_ISEMPTY = QUESTION.repeat(2);                  // ??
+    String LIST_LENGTH = SR.repeat(2);                         // ))
+    String LIST_SUM = PLUS.repeat(2);                          // ++
     String LIST_CONTAINS = LIST_ISEMPTY;                       // ??(...)
 
     String MAP_INTEGER = "ㅈㅈㅈ";
@@ -83,13 +83,13 @@ public interface VariableToken extends Token {
     String MAP_FLOAT = "ㅈㅅㅈ";
     String MAP_DOUBLE = "ㅈㅆㅈ";
 
-    String MAP_CLEAR = EXCLAMATION.repeat(3);          // !!!
-    String MAP_DELETE = HYPHEN.repeat(3);              // ---
-    String MAP_ADD = LESS_SIGN.repeat(3);              // <<<
-    String MAP_GET = GREATER_SIGN.repeat(3);           // >>>
-    String MAP_ISEMPTY = QUESTION.repeat(3);           // ???
-    String MAP_LENGTH = SL.repeat(3);                  // )))
-    String MAP_CONTAINS = MAP_ISEMPTY;                 // ???(...)
+    String MAP_CLEAR = EXCLAMATION.repeat(3);                   // !!!
+    String MAP_DELETE = EXCLAMATION + HYPHEN.repeat(3);         // !---
+    String MAP_ADD = LESS_SIGN.repeat(3);                       // <<<
+    String MAP_GET = GREATER_SIGN.repeat(3);                    // >>>
+    String MAP_ISEMPTY = QUESTION.repeat(3);                    // ???
+    String MAP_LENGTH = SR.repeat(3);                           // )))
+    String MAP_CONTAINS = MAP_ISEMPTY;                          // ???(...)
 
     // ORIGIN
     List<String> ORIGIN_LIST = new ArrayList<>() {{
