@@ -17,20 +17,14 @@ import static bin.apply.sys.item.Separator.SEPARATOR_HOME;
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.token.LoopToken.LOOP_TOKEN;
-import static bin.token.Token.REMARK;
 
 public class Main extends Setting {
 
     public static void main(String[] args) {
-        String[] test = new String[]{"test/set_test.otl"};
-        for (String t : test) new Main(new String[]{SEPARATOR_HOME, t});
-//        test.forEach(v -> {
-//            try {
-//                new Main(v);
-//            } catch (FileException e) {
-//                FileException.printErrorMessage(e, Setting.path);
-//            }
-//        });
+//        String[] v = {SEPARATOR_HOME, "test/set_test.otl"};
+        String[] v = {SEPARATOR_HOME, "test/list_test.otl"};
+        new Main(v);
+        System.exit(0);
 
 //        args = new String[]{SEPARATOR_HOME, "hello.otl"};
 //        args = new String[]{SEPARATOR_HOME};
@@ -74,7 +68,6 @@ public class Main extends Setting {
             for (int i = 1;;i++) {
                 String line = reader.readLine();
                 if (line == null) break;
-                else if ((line = line.stripLeading()).startsWith(REMARK) || line.isBlank()) continue;
                 Setting.total.append(i).append(" ").append(line.stripLeading()).append(SEPARATOR_LINE);
             }
             StartLine.startLine(Setting.total.toString(), mainPath, repository);
