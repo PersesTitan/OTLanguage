@@ -47,7 +47,7 @@ public class StartVariable extends StartWorkV3 implements MergeToken, ContainsTo
             LinkedHashSet<Object> set = (LinkedHashSet<Object>) repository.getValue().get(variableName);
             if (token.equals(SET_CLEAR)) set.clear();
             else if (token.equals(SET_SORT)) sortSet(set);
-            else if (token.startsWith(SET_DELETE)) delete(set, repository.getKey(), token);
+            else if (token.startsWith(SET_DELETE)) delete(set, repository.getKey(), token.substring(SET_DELETE.length()));
             else if (token.startsWith(SET_ADD)) repository.getValue().put(variableName, token);
             else Setting.warringMessage(line);
         }
@@ -56,7 +56,7 @@ public class StartVariable extends StartWorkV3 implements MergeToken, ContainsTo
             LinkedList<Object> list = (LinkedList<Object>) repository.getValue().get(variableName);
             if (token.equals(LIST_CLEAR)) list.clear();
             else if (token.equals(LIST_SORT)) sortList(repository.getKey(), repository.getValue().get(variableName));
-            else if (token.startsWith(LIST_DELETE)) delete(list, repository.getKey(), token);
+            else if (token.startsWith(LIST_DELETE)) delete(list, repository.getKey(), token.substring(LIST_DELETE.length()));
             else if (token.startsWith(LIST_ADD)) repository.getValue().put(variableName, token);
             else Setting.warringMessage(line);
         }
@@ -64,7 +64,7 @@ public class StartVariable extends StartWorkV3 implements MergeToken, ContainsTo
         else if (MAP_LIST.contains(repository.getKey())) {
             LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) repository.getValue().get(variableName);
             if (token.equals(MAP_CLEAR)) map.clear();
-            else if (token.startsWith(MAP_DELETE)) map.remove(token);
+            else if (token.startsWith(MAP_DELETE)) map.remove(token.substring(MAP_DELETE.length()));
             else if (token.startsWith(MAP_ADD)) repository.getValue().put(variableName, token);
             else if (token.contains(MAP_ADD)) addMap(map, token);
             else Setting.warringMessage(line);
