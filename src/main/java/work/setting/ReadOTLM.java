@@ -56,7 +56,7 @@ public class ReadOTLM implements Repository, MergeToken {
             if (work != null) startWorks.add(work);
         } else if (Objects.equals(modeType, compulsion)) {
             var work = readStartWork(path, ph);
-            if (work != null) priorityWorks.add(work);
+//            if (work != null) priorityWorks.add(work);
         } else if (Objects.equals(modeType, alteration)) {
             var work = readReturnWork(path, ph);
             if (work != null) returnWorks.add(work);
