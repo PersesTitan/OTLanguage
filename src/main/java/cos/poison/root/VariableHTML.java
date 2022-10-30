@@ -5,40 +5,16 @@ import bin.apply.sys.item.HpMap;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
 import work.StartWork;
+import work.v3.StartWorkV3;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class VariableHTML implements LoopToken, StartWork {
+public class VariableHTML extends StartWorkV3 implements LoopToken {
     private final Map<String, Object> map = new HpMap(MODEL);
-    private final Pattern pattern;
-
-    public VariableHTML(String type) {
-        this.pattern = Pattern.compile(START + type + BLANKS + VARIABLE_NAME + VARIABLE_PUT);
-    }
-
-    public boolean check(String line) {
-        return pattern.matcher(line).find();
-    }
-
-    @Override
-    public void start(String line, String origen,
-                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        String[] variables
-                = matchSplitError(matchSplitError(line, BLANKS, 2)[1], VARIABLE_PUT, 2);
-        if (variables[0].startsWith("["))
-            variables[0] = variables[0].replaceFirst(START + BL + "\\d+" + BR, "");
-        if (Repository.noUse.contains(variables[0])) throw VariableException.reservedWorks();
-        else if (map.containsKey(variables[0])) throw VariableException.sameVariable();
-        map.put(variables[0], variables[1]);
-    }
-
-    @Override
-    public void first() {
-
-    }
 
     public VariableHTML reset() {
         map.clear();
@@ -59,5 +35,18 @@ public class VariableHTML implements LoopToken, StartWork {
                 htmlTotal = htmlTotal.replaceAll(Pattern.quote(group), map.get(variableName).toString());
         }
         return htmlTotal;
+    }
+
+    public VariableHTML(int... counts) {
+        super(counts);
+    }
+
+    @Override
+    public void start(String line, String[] params,
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        String[] values = matchSplitError(params[0], VARIABLE_PUT, 2);
+        if (Repository.noUse.contains(values[0])) throw VariableException.reservedWorks();
+        else if (map.containsKey(values[0])) throw VariableException.sameVariable();
+        map.put(values[0], values[1]);
     }
 }

@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import static bin.apply.Controller.*;
@@ -22,11 +20,12 @@ public class Main extends Setting {
 
     public static void main(String[] args) {
 //        String[] v = {SEPARATOR_HOME, "test/set_test.otl"};
-        String[] v = {SEPARATOR_HOME, "test/list_test.otl"};
-        new Main(v);
-        System.exit(0);
+//        String[] v = {SEPARATOR_HOME, "test/list_test.otl"};
+//        String[] v = {SEPARATOR_HOME, "test/map_test.otl"};
+//        new Main(v);
+//        System.exit(0);
 
-//        args = new String[]{SEPARATOR_HOME, "hello.otl"};
+        args = new String[]{SEPARATOR_HOME, "hello.otl"};
 //        args = new String[]{SEPARATOR_HOME};
 
         try {

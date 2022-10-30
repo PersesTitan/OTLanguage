@@ -2,7 +2,7 @@ package cos.poison.root;
 
 import bin.apply.Repository;
 import bin.apply.sys.make.StartLine;
-import bin.orign.variable.origin.put.SetVariableValue;
+import bin.orign.variable.SetVariableValue;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -17,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -28,7 +29,7 @@ import static cos.poison.Poison.variableHTML;
 import static cos.poison.PoisonRepository.*;
 import static cos.poison.controller.HttpServerManager.*;
 
-public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValue, PoisonTools {
+public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValue, PoisonTools, Repository {
     private final Map<String, Map<String, Object>> repository = (Map<String, Map<String, Object>>) COPY_REPOSITORY.clone();
     private final String defaultHtml;
     public HandlerRoot(String defaultHtml) {
@@ -77,7 +78,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
                 responseBody.write(getBody(handlerItem.responseValue()));
             } else {
                 // ==== 에러 동작 ====
-                if (!path.equals("/favicon.ico"))
+                if (!path.equals("/favicon.ico/"))
                     warringMessage("[" + exchange.getRequestMethod() + "][" + path + "]가 정의되어 있지 않습니다.");
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0);
             }
@@ -111,8 +112,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         poisonStartList.forEach(v -> v.setData(exchange, statCode, nowPath));
         Repository.startWorksV3.putAll(poisonStartWorks);
         Repository.returnWorksV3.putAll(poisonReturnWorks);
-
-        startWorks.add(variableHTML.reset());
+        createStartWorks(MODEL, "", variableHTML.reset());
 
         try {
             StartLine.startPoison(startFinalTotal, fileName, Repository.repository);
@@ -122,7 +122,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         } finally {
             Repository.startWorksV3.values().forEach(v -> poisonStartWorks.keySet().forEach(v::remove));
             Repository.returnWorksV3.values().forEach(v -> poisonReturnWorks.keySet().forEach(v::remove));
-            startWorks.remove(variableHTML);
+            startWorksV3.get(MODEL).remove("");
         }
     }
 

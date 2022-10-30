@@ -20,18 +20,18 @@ public class MakeOTLM implements Repository {
         File file = new File(url);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             makeWriter(writer, compulsion);
-            priorityWorks.forEach(v -> {
-                StringBuilder builder = new StringBuilder("module");
-                builder.append(SEPARATOR_FILE).append(compulsion);
-                if (!new File(builder.toString()).mkdirs()) {
-                    builder.append(SEPARATOR_FILE).append(v.getClass().getSimpleName()).append(modelPath);
-                    try {
-                        writer.append("    ").append(v.getClass().getSimpleName());
-                        writer.newLine();
-                    } catch (IOException ignored) {}
-                    makeWork(builder.toString(), v);
-                }
-            });
+//            priorityWorks.forEach(v -> {
+//                StringBuilder builder = new StringBuilder("module");
+//                builder.append(SEPARATOR_FILE).append(compulsion);
+//                if (!new File(builder.toString()).mkdirs()) {
+//                    builder.append(SEPARATOR_FILE).append(v.getClass().getSimpleName()).append(modelPath);
+//                    try {
+//                        writer.append("    ").append(v.getClass().getSimpleName());
+//                        writer.newLine();
+//                    } catch (IOException ignored) {}
+//                    makeWork(builder.toString(), v);
+//                }
+//            });
 
             writer.newLine();
             makeWriter(writer, alteration);

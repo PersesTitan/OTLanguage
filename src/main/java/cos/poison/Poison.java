@@ -11,42 +11,17 @@ import cos.poison.run.replace.GetUrlParam;
 import cos.poison.run.start.DeleteCookie;
 import cos.poison.run.start.Redirect;
 import cos.poison.run.start.SetCookie;
-import cos.poison.setting.PoisonCreate;
-import cos.poison.setting.PoisonStart;
-import work.StartWork;
 import work.v3.StartWorkV3;
 
-import javax.servlet.http.Cookie;
 import java.util.LinkedList;
 import java.util.Map;
 
-import static bin.apply.Repository.startWorks;
-
-public class Poison extends StartWorkV3 implements StartWork, LoopToken, PoisonRepository, Repository {
-    private final String className;
+public class Poison extends StartWorkV3 implements LoopToken, PoisonRepository, Repository {
     public static HttpServerManager httpServerManager = new HttpServerManager();
-    public static VariableHTML variableHTML = new VariableHTML(MODEL);
+    public static VariableHTML variableHTML = new VariableHTML(1);
 
-    public Poison(String className) {
-        this.className = className;
-        first();
-    }
-
-    @Override
-    public boolean check(String line) {
-        return false;
-    }
-
-    @Override
-    public void start(String line, String origen,
-                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {}
-
-    @Override
-    public void first() {
-        startWorks.add(new PoisonCreate(className));
-        startWorks.add(new PoisonStart(className));
-        startWorks.add(new PoisonMethod(className, LoopToken.POISON_GET, HttpMethod.GET));
-        startWorks.add(new PoisonMethod(className, LoopToken.POISON_POST, HttpMethod.POST));
+    public Poison(int... counts) {
+        super(counts);
     }
 
     @Override

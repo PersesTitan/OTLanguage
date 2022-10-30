@@ -1,51 +1,20 @@
 package bin.string;
 
-import bin.token.LoopToken;
-import bin.token.StringToken;
-import work.ReturnWork;
+import work.v3.ReturnWorkV3;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class SplitRegular implements LoopToken, StringToken, ReturnWork {
-    private final int length;
-    private final Matcher matcher;
-
-    // ㅇㅁㅇ~ㅆㅍㅆ[기본값][자르고 싶은 조건]
-    public SplitRegular(String type) {
-        String pattern = merge(VARIABLE_GET_S, STRING_VARIABLE, ACCESS, type);
-        this.length = pattern.length();
-        String patternText = merge(pattern, ARGUMENT.repeat(2), VARIABLE_GET_E);
-        this.matcher = Pattern.compile(patternText).matcher("");
+public class SplitRegular extends ReturnWorkV3 {
+    public SplitRegular(int... counts) {
+        super(counts);
     }
 
     @Override
-    public boolean check(String line) {
-        return matcher.reset(line).find();
-    }
-
-    @Override
-    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        matcher.reset();
-        while (matcher.find()) {
-            // :ㅇㅁㅇ~ㅆㅍㅆ[기본값][자르고 싶은 조건]_
-            String group = matcher.group();
-            // :ㅇㅁㅇ~ㅆㅍㅆ[기본값][자르고 싶은 조건]_ => 기본값, 자르고 싶은 조건
-            String[] tokens =
-                    matchSplitError(
-                            bothEndCut(group, length+1, 2),
-                            BR + BL, 2);
-            line = line.replace(group,
-                    Arrays.toString(tokens[0].split(tokens[1])));
-        }
-        return line;
-    }
-
-    @Override
-    public ReturnWork first() {
-        return this;
+    public String start(String line, String[] params,
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        // :ㅇㅁㅇ~ㅆㅍㅆ[기본값][자르고 싶은 조건]_
+        return Arrays.toString(params[0].split(params[1]));
     }
 }
