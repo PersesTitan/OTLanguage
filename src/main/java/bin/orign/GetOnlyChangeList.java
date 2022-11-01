@@ -1,7 +1,7 @@
 package bin.orign;
 
 import bin.exception.VariableException;
-import bin.orign.variable.list.get.GetList;
+import bin.orign.variable.GetList;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
