@@ -53,6 +53,16 @@ curl https://raw.githubusercontent.com/OTLanguage/download/main/linux.sh | sh
 ```
 <br>
 
+# 개발환경
+#### VSCODE(Visual Studio Code)
+<br>
+
+[Vscode Marketplace Link](https://marketplace.visualstudio.com/items?itemName=PersesTitan.otl)
+
+<br>
+
+![](https://velog.velcdn.com/images/persestitan/post/858b2ba5-c4c2-4b87-83a6-57a409a95e66/image.png)
+
 # 문법
 
 ## 숫자
