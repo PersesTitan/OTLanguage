@@ -71,7 +71,6 @@ public class Main extends Setting {
             }
             StartLine.startLine(Setting.total.toString(), mainPath, repository);
         } catch (IOException ignored) {}
-        pause();
     }
 
     private void shell() {
@@ -110,9 +109,5 @@ public class Main extends Setting {
                 StartLine.startLine(total.toString(), fileName, repository);
             } else StartLine.startLine("1 " + line, fileName, repository);
         }
-    }
-
-    private void pause() {
-        for (;;) {}
     }
 }
