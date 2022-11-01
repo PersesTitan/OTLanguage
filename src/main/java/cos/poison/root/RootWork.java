@@ -6,6 +6,9 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.util.*;
 
+import static bin.token.cal.BoolToken.FALSE;
+import static bin.token.cal.BoolToken.TRUE;
+
 public interface RootWork {
     default void redirect(Headers headers, String newUrl){
         headers.add("Location", newUrl);
@@ -40,5 +43,9 @@ public interface RootWork {
             if (tokens[0].strip().equals(key)) return tokens[1];
         }
         return null;
+    }
+
+    default String isEmptyCookie(Headers headers, String key) {
+        return getCookie(headers, key) != null ? TRUE : FALSE;
     }
 }
