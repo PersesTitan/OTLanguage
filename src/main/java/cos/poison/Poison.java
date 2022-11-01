@@ -2,12 +2,11 @@ package cos.poison;
 
 import bin.apply.Repository;
 import bin.token.LoopToken;
-import cos.http.controller.HttpMethod;
 import cos.poison.controller.HttpServerManager;
-import cos.poison.method.PoisonMethod;
 import cos.poison.root.VariableHTML;
 import cos.poison.run.replace.GetCookie;
 import cos.poison.run.replace.GetUrlParam;
+import cos.poison.run.replace.IsEmptyCookie;
 import cos.poison.run.start.DeleteCookie;
 import cos.poison.run.start.Redirect;
 import cos.poison.run.start.SetCookie;
@@ -32,12 +31,14 @@ public class Poison extends StartWorkV3 implements LoopToken, PoisonRepository, 
         final Redirect redirect = new Redirect(1);
         final GetCookie getCookie = new GetCookie(1);
         final GetUrlParam getUrlParam = new GetUrlParam(1);
+        final IsEmptyCookie isEmptyCookie = new IsEmptyCookie(1);
 
         poisonStartList.add(setCookie);
         poisonStartList.add(deleteCookie);
         poisonStartList.add(redirect);
         poisonStartList.add(getCookie);
         poisonStartList.add(getUrlParam);
+        poisonStartList.add(isEmptyCookie);
 
         createStartWorks(poisonStartWorks, POISON, SET_COOKIE, setCookie);
         createStartWorks(poisonStartWorks, POISON, DELETE_COOKIE, deleteCookie);
@@ -45,5 +46,6 @@ public class Poison extends StartWorkV3 implements LoopToken, PoisonRepository, 
 
         createReturnWorks(poisonReturnWorks, POISON, GET_COOKIE, getCookie);
         createReturnWorks(poisonReturnWorks, POISON, GET_URL, getUrlParam);
+        createReturnWorks(poisonReturnWorks, POISON, ISEMPTY_COOKIE.replace("\\", ""), isEmptyCookie);
     }
 }
