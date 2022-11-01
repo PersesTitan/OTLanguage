@@ -1,14 +1,13 @@
 package bin.orign;
 
-import bin.orign.variable.list.get.GetList;
-import bin.orign.variable.map.get.GetMap;
-import bin.orign.variable.set.get.GetSet;
+import bin.orign.variable.GetList;
+import bin.orign.variable.GetMap;
+import bin.orign.variable.GetSet;
 import bin.token.LoopToken;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.Map;
 
 import static bin.check.VariableCheck.*;
 
