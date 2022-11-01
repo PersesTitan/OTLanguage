@@ -4,7 +4,7 @@ import bin.apply.sys.make.StartLine;
 import bin.check.VariableCheck;
 import bin.exception.VariableException;
 import bin.orign.GetSetVariable;
-import bin.orign.variable.list.get.GetList;
+import bin.orign.variable.GetList;
 import bin.token.LoopToken;
 import work.StartWork;
 
