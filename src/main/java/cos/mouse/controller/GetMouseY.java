@@ -2,6 +2,7 @@ package cos.mouse.controller;
 
 import bin.token.LoopToken;
 import work.ReturnWork;
+import work.v3.ReturnWorkV3;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -9,35 +10,15 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GetMouseY implements ReturnWork, LoopToken {
-    private final String group;
-    private final Pattern pattern;
-    private Matcher matcher;
-
-    public GetMouseY(String className, String type) {
-        this.group = Pattern.quote(className + ACCESS + type);
-        String patternText = startEndMerge(VARIABLE_GET_S, className, ACCESS, type, VARIABLE_GET_E);
-        this.pattern = Pattern.compile(patternText);
+public class GetMouseY extends ReturnWorkV3 implements LoopToken {
+    // 0
+    public GetMouseY(int... counts) {
+        super(counts);
     }
 
     @Override
-    public boolean check(String line) {
-        matcher = pattern.matcher(line);
-        return matcher.find();
-    }
-
-    @Override
-    public String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        matcher.reset();
-        while (matcher.find()) {
-            String y = String.valueOf(MouseInfo.getPointerInfo().getLocation().y);
-            line = line.replaceFirst(group, y);
-        }
-        return line;
-    }
-
-    @Override
-    public ReturnWork first() {
-        return this;
+    public String start(String line, String[] params,
+                        LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        return String.valueOf(MouseInfo.getPointerInfo().getLocation().y);
     }
 }
