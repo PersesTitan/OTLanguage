@@ -17,7 +17,6 @@ import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -25,11 +24,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import static bin.apply.Setting.*;
 import static bin.apply.sys.make.StartLine.errorCount;
 import static bin.apply.sys.make.StartLine.errorLine;
-import static cos.poison.Poison.variableHTML;
 import static cos.poison.PoisonRepository.*;
 import static cos.poison.controller.HttpServerManager.*;
+import static cos.poison.setting.PoisonCreate.variableHTML;
 
-public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValue, PoisonTools, Repository {
+public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValue, PoisonTools {
     private final Map<String, Map<String, Object>> repository = (Map<String, Map<String, Object>>) COPY_REPOSITORY.clone();
     private final String defaultHtml;
     public HandlerRoot(String defaultHtml) {
@@ -112,7 +111,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         poisonStartList.forEach(v -> v.setData(exchange, statCode, nowPath));
         Repository.startWorksV3.putAll(poisonStartWorks);
         Repository.returnWorksV3.putAll(poisonReturnWorks);
-        createStartWorks(MODEL, "", variableHTML.reset());
+        Repository.createStartWorks(MODEL, "", variableHTML.reset());
 
         try {
             StartLine.startPoison(startFinalTotal, fileName, Repository.repository);

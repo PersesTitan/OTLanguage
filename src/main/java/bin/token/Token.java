@@ -14,6 +14,7 @@ package bin.token;
     String CARET = "\\^";
     String DOT = "\\.";
     String QUESTION = "\\?";
+    String QUESTION_S = "?";
     String SL = "\\(";
     String SR = "\\)";
     String ML = "\\{";

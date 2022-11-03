@@ -1,6 +1,7 @@
 package bin.token;
 
 import static bin.token.Token.QUESTION;
+import static bin.token.Token.QUESTION_S;
 
 public interface StringToken {
 
@@ -9,6 +10,9 @@ public interface StringToken {
     String SPLIT_REGULAR = "ㅆㅍㅆ";
     String CONTAINS = QUESTION;
     String EQUALS = "=" + QUESTION;
+
+    String CONTAINS_S = QUESTION_S;
+    String EQUALS_S = "=" + QUESTION_S;
 
     String ADD_ALL = "";        // 합집합
     String RETAIN_ALL = "";     // 교집합

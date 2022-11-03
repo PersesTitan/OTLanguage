@@ -44,8 +44,8 @@ public interface ChangeHangle {
             String start = "Named capturing group <";
             int a = text.indexOf(start) + start.length();
             int b = text.lastIndexOf("> is already defined");
-            if (b == -1 || a-start.length() == -1) throw MatchException.patternMatchError(null);
-            throw MatchException.patternMatchError(text.substring(a, b));
+            if (b == -1 || a-start.length() == -1) throw new MatchException().patternMatchError(null);
+            throw new MatchException().patternMatchError(text.substring(a, b));
         }
     }
 }

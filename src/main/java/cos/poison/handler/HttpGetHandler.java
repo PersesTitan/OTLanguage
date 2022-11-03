@@ -21,7 +21,7 @@ public class HttpGetHandler implements HttpHandlerInf {
             String path = exchange.getRequestURI().getPath();
             return new HandlerDao(parameters.isEmpty() ? "" : parameters.toString(), path, parameters);
         } catch (UnsupportedEncodingException e) {
-            throw ServerException.fileReadError();
+            throw new ServerException().fileReadError();
         }
     }
 }

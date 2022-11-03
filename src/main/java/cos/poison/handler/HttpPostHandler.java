@@ -28,7 +28,7 @@ public class HttpPostHandler implements HttpHandlerInf {
 
             return new HandlerDao(parameters.isEmpty() ? "" : parameters.toString(), path, parameters);
         } catch (IOException ignored) {
-            throw ServerException.fileReadError();
+            throw new ServerException().fileReadError();
         }
     }
 }

@@ -19,15 +19,6 @@ import static bin.token.LoopToken.LOOP_TOKEN;
 public class Main extends Setting {
 
     public static void main(String[] args) {
-//        String[] v = {SEPARATOR_HOME, "test/set_test.otl"};
-//        String[] v = {SEPARATOR_HOME, "test/list_test.otl"};
-//        String[] v = {SEPARATOR_HOME, "test/map_test.otl"};
-//        new Main(v);
-//        System.exit(0);
-
-        args = new String[]{SEPARATOR_HOME, "hello.otl"};
-//        args = new String[]{SEPARATOR_HOME};
-
         try {
             if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win"))
                 new Main(args.length == 0
@@ -35,15 +26,14 @@ public class Main extends Setting {
                     : new String[]{SEPARATOR_HOME, args[0]});
             else new Main(args);
         } catch (FileException e) {
-            FileException.printErrorMessage(e, Setting.mainPath);
+            new FileException().printErrorMessage(e, Setting.mainPath);
         } finally {try {br.close(); bw.close();} catch (IOException ignored) {}}
     }
 
-    private Main(String[] args) {
-        if (args.length <= 0) throw FileException.noFindError();
+    public Main(String[] args) {
+        if (args.length <= 0) throw new FileException().noFindError();
         else if (args.length == 1) runType = RunType.Shell;     // 현재 파일 위치
         else if (args.length == 2) runType = RunType.Normal;    // 현재 파일 이름
-        first();
 
         Setting.path = args[0];
         if (runType.equals(RunType.Normal)) normal(args);
@@ -56,11 +46,10 @@ public class Main extends Setting {
         File file = new File(args[1]); //파일 생성
         Setting.mainPath = file.getAbsolutePath();
         Setting.path = file.getAbsoluteFile().getParent();
-        if (!file.exists()) throw FileException.pathNoHaveError();
-        else if (!file.isFile()) throw FileException.isNotFileError();
-        else if (!file.canRead()) throw FileException.noReadError();
-        else if (!extensionCheck(file.getName())) throw FileException.rightExtension();
-        Setting.firstStart();
+        if (!file.exists()) throw new FileException().pathNoHaveError();
+        else if (!file.isFile()) throw new FileException().isNotFileError();
+        else if (!file.canRead()) throw new FileException().noReadError();
+        else if (!extensionCheck(file.getName())) throw new FileException().rightExtension();
 
         try (FileReader fileReader = new FileReader(mainPath, StandardCharsets.UTF_8);
              BufferedReader reader = new BufferedReader(fileReader)) {
@@ -76,7 +65,6 @@ public class Main extends Setting {
     private void shell() {
         String fileName = "temporary";
         StringBuilder total = new StringBuilder();
-        Setting.firstStart();
         while (true) {
             System.out.print(">>> ");
 

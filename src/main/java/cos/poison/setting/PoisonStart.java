@@ -1,34 +1,20 @@
 package cos.poison.setting;
 
-import bin.token.LoopToken;
-import work.StartWork;
+import work.v3.StartWorkV3;
 
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-import static cos.poison.Poison.httpServerManager;
+import static cos.poison.setting.PoisonCreate.httpServerManager;
 
-public class PoisonStart implements LoopToken, StartWork {
-    private final Pattern pattern;
-
-    public PoisonStart(String className) {
-        this.pattern = Pattern.compile(startEndMerge(className, ACCESS, POISON_START));
+public class PoisonStart extends StartWorkV3 {
+    public PoisonStart(int... counts) {
+        super(counts);
     }
 
     @Override
-    public boolean check(String line) {
-        return pattern.matcher(line).find();
-    }
-
-    @Override
-    public void start(String line, String origen,
+    public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         httpServerManager.start();
-    }
-
-    @Override
-    public void first() {
-
     }
 }

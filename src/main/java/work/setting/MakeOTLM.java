@@ -1,7 +1,6 @@
 package work.setting;
 
 import bin.apply.Repository;
-import bin.apply.Setting;
 import work.ReturnWork;
 import work.StartWork;
 
@@ -12,7 +11,6 @@ import static work.setting.ReadOTLM.*;
 
 public class MakeOTLM implements Repository {
     public static void main(String[] args) {
-        Setting.firstStart();
         new MakeOTLM().start("system.otls");
     }
 

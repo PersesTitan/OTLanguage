@@ -35,8 +35,8 @@ public interface PoisonTools extends LoopToken {
     default String getHtml(String line) {
         String url = Setting.path + SEPARATOR_FILE + line.replace(ACCESS, SEPARATOR_FILE);
         File file = new File(url);
-        if (!file.exists()) throw FileException.noFindError();
-        else if (!file.isFile()) throw FileException.isNotFileError();
+        if (!file.exists()) throw new FileException().noFindError();
+        else if (!file.isFile()) throw new FileException().isNotFileError();
         return url;
     }
 }

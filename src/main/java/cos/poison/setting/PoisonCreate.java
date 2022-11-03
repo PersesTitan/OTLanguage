@@ -1,58 +1,69 @@
 package cos.poison.setting;
 
+import bin.apply.Repository;
 import bin.exception.VariableException;
-import bin.token.LoopToken;
-import work.StartWork;
+import cos.poison.Poison;
+import cos.poison.controller.HttpServerManager;
+import cos.poison.root.VariableHTML;
+import cos.poison.run.replace.GetCookie;
+import cos.poison.run.replace.GetUrlParam;
+import cos.poison.run.replace.IsEmptyCookie;
+import cos.poison.run.start.DeleteCookie;
+import cos.poison.run.start.Redirect;
+import cos.poison.run.start.SetCookie;
+import work.v3.StartWorkV3;
 
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.isInteger;
-import static cos.poison.Poison.httpServerManager;
+import static bin.token.LoopToken.*;
+import static cos.poison.PoisonRepository.*;
 
-public class PoisonCreate implements LoopToken, StartWork {
-    private final String className;
-    private final Pattern pattern;
+public class PoisonCreate extends StartWorkV3 {
+    public static HttpServerManager httpServerManager = new HttpServerManager();
+    public static VariableHTML variableHTML = new VariableHTML(1);
 
-    public PoisonCreate(String className) {
-        this.className = className;
-        String pt1 = merge(BL, "[^", BL, BR, "]+", BR, BL, "\\d+", BR);
-        String pt2 = merge(BLANKS, "[^", BL, BR, "]+");
-        String pt3 = merge(BLANKS, "\\d+");
-        String patternText = startEndMerge(className, orMerge(pt1, pt2, pt3), "?");
-        this.pattern = Pattern.compile(patternText);
+    public PoisonCreate(int... counts) {
+        super(counts);
     }
 
     @Override
-    public boolean check(String line) {
-        return pattern.matcher(line).find();
-    }
-
-    @Override
-    public void start(String line, String origen,
+    public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        line = line.strip();
-        if (line.equals(className)) httpServerManager.createServer();
-        else if (line.startsWith(className + "[")) {
-            String[] tokens =
-                    matchSplitError(bothEndCut(line.replaceFirst(START + className, "")),
-                            BR + BL, 2);
-            String ports = tokens[1].strip();
-            if (!isInteger(ports)) throw VariableException.typeMatch();
-            String host = tokens[0].strip();
-            int port = Integer.parseInt(ports);
-            httpServerManager.createServer(host, port);
+        new Poison().start(line, params, repositoryArray);
+        int count = params.length;
+        if (count == 1 && params[0].isEmpty()) httpServerManager.createServer();
+        else if (count == 1) {
+            if (isInteger(params[0])) httpServerManager.createServer(Integer.parseInt(params[0]));
+            else httpServerManager.createServer(params[0]);
         } else {
-            // url or port
-            String tokens = matchSplitError(line, BLANKS, 2)[1];
-            if (isInteger(tokens)) httpServerManager.createServer(Integer.parseInt(tokens));
-            else httpServerManager.createServer(tokens);
+            if (isInteger(params[1])) httpServerManager.createServer(params[0], Integer.parseInt(params[1]));
+            else throw VariableException.typeMatch();
         }
     }
 
-    @Override
-    public void first() {
+    private void create() {
+        final SetCookie setCookie = new SetCookie(2, 3, 4);
+        final DeleteCookie deleteCookie = new DeleteCookie(1, 2);
+        final Redirect redirect = new Redirect(1);
+        final GetCookie getCookie = new GetCookie(1);
+        final GetUrlParam getUrlParam = new GetUrlParam(1);
+        final IsEmptyCookie isEmptyCookie = new IsEmptyCookie(1);
 
+        poisonStartList.add(setCookie);
+        poisonStartList.add(deleteCookie);
+        poisonStartList.add(redirect);
+        poisonStartList.add(getCookie);
+        poisonStartList.add(getUrlParam);
+        poisonStartList.add(isEmptyCookie);
+
+        Repository.createStartWorks(poisonStartWorks, POISON, SET_COOKIE, setCookie);
+        Repository.createStartWorks(poisonStartWorks, POISON, DELETE_COOKIE, deleteCookie);
+        Repository.createStartWorks(poisonStartWorks, POISON, REDIRECT, redirect);
+
+        Repository.createReturnWorks(poisonReturnWorks, POISON, GET_COOKIE, getCookie);
+        Repository.createReturnWorks(poisonReturnWorks, POISON, GET_URL, getUrlParam);
+        Repository.createReturnWorks(poisonReturnWorks, POISON, ISEMPTY_COOKIE, isEmptyCookie);
     }
 }
