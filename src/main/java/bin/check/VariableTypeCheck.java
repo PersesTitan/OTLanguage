@@ -1,9 +1,9 @@
 package bin.check;
 
 import bin.exception.VariableException;
-import bin.orign.variable.list.get.GetList;
-import bin.orign.variable.map.get.GetMap;
-import bin.orign.variable.set.get.GetSet;
+import bin.orign.variable.GetList;
+import bin.orign.variable.GetMap;
+import bin.orign.variable.GetSet;
 import bin.token.VariableToken;
 
 import java.util.*;
@@ -111,6 +111,30 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
         } else throw VariableException.noGrammar();
     }
 
+    private String getValueSet(String value) {
+        return value.startsWith(SET_ADD)
+                ? value.substring(SET_ADD.length())
+                : (value.startsWith(VARIABLE_PUT)
+                    ? value.substring(VARIABLE_PUT.length())
+                    : value);
+    }
+
+    private String getValueList(String value) {
+        return value.startsWith(LIST_ADD)
+                ? value.substring(LIST_ADD.length())
+                : (value.startsWith(VARIABLE_PUT)
+                ? value.substring(VARIABLE_PUT.length())
+                : value);
+    }
+
+    private String getValueMap(String value) {
+        return value.startsWith(MAP_ADD)
+                ? value.substring(MAP_ADD.length())
+                : (value.startsWith(VARIABLE_PUT)
+                ? value.substring(VARIABLE_PUT.length())
+                : value);
+    }
+
     public Object getObject(VariableType variableType,
                             String value, Object object) {
         switch (variableType) {
@@ -141,7 +165,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case SetInteger -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashSet<Integer>()
-                        : setIntegerSet(new LinkedHashSet<>(), value);
+                        : setIntegerSet(new LinkedHashSet<>(), getValueSet(value));
                 else {
                     LinkedHashSet<Integer> set = (LinkedHashSet<Integer>) object;
                     return setIntegerSet(set, getSetValue(set, value));
@@ -150,7 +174,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case SetLong -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashSet<Long>()
-                        : setLongSet(new LinkedHashSet<>(), value);
+                        : setLongSet(new LinkedHashSet<>(), getValueSet(value));
                 else {
                     LinkedHashSet<Long> set = (LinkedHashSet<Long>) object;
                     return setLongSet(set, getSetValue(set, value));
@@ -159,7 +183,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case SetBoolean -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashSet<String>()
-                        : setBoolSet(new LinkedHashSet<>(), value);
+                        : setBoolSet(new LinkedHashSet<>(), getValueSet(value));
                 else {
                     LinkedHashSet<String> set = (LinkedHashSet<String>) object;
                     return setBoolSet(set, getSetValue(set, value));
@@ -168,7 +192,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case SetString -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashSet<String>()
-                        : setStringSet(new LinkedHashSet<>(), value);
+                        : setStringSet(new LinkedHashSet<>(), getValueSet(value));
                 else {
                     LinkedHashSet<String> set = (LinkedHashSet<String>) object;
                     return setStringSet(set, getSetValue(set, value));
@@ -177,7 +201,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case SetCharacter -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashSet<Character>()
-                        : setCharacterSet(new LinkedHashSet<>(), value);
+                        : setCharacterSet(new LinkedHashSet<>(), getValueSet(value));
                 else {
                     LinkedHashSet<Character> set = (LinkedHashSet<Character>) object;
                     return setCharacterSet(set, getSetValue(set, value));
@@ -186,7 +210,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case SetFloat -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashSet<Float>()
-                        : setFlotSet(new LinkedHashSet<>(), value);
+                        : setFlotSet(new LinkedHashSet<>(), getValueSet(value));
                 else {
                     LinkedHashSet<Float> set = (LinkedHashSet<Float>) object;
                     return setFlotSet(set, getSetValue(set, value));
@@ -195,7 +219,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case SetDouble -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashSet<Double>()
-                        : setDoubleSet(new LinkedHashSet<>(), value);
+                        : setDoubleSet(new LinkedHashSet<>(), getValueSet(value));
                 else {
                     LinkedHashSet<Double> set = (LinkedHashSet<Double>) object;
                     return setDoubleSet(set, getSetValue(set, value));
@@ -204,7 +228,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case ListInteger -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedList<Integer>()
-                        : setIntegerList(new LinkedList<>(), value);
+                        : setIntegerList(new LinkedList<>(), getValueList(value));
                 else {
                     LinkedList<Integer> list = (LinkedList<Integer>) object;
                     return setIntegerList(list, getListValue(list, value));
@@ -213,7 +237,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case ListLong -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedList<Long>()
-                        : setLongList(new LinkedList<>(), value);
+                        : setLongList(new LinkedList<>(), getValueList(value));
                 else {
                     LinkedList<Long> list = (LinkedList<Long>) object;
                     return setLongList(list, getListValue(list, value));
@@ -222,7 +246,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case ListBoolean -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedList<String>()
-                        : setBoolList(new LinkedList<>(), value);
+                        : setBoolList(new LinkedList<>(), getValueList(value));
                 else {
                     LinkedList<String> list = (LinkedList<String>) object;
                     return setBoolList(list, getListValue(list, value));
@@ -231,7 +255,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case ListString -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedList<String>()
-                        : setStringList(new LinkedList<>(), value);
+                        : setStringList(new LinkedList<>(), getValueList(value));
                 else {
                     LinkedList<String> list = (LinkedList<String>) object;
                     return setStringList(list, getListValue(list, value));
@@ -240,7 +264,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case ListCharacter -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedList<Character>()
-                        : setCharacterList(new LinkedList<>(), value);
+                        : setCharacterList(new LinkedList<>(), getValueList(value));
                 else {
                     LinkedList<Character> list = (LinkedList<Character>) object;
                     return setCharacterList(list, getListValue(list, value));
@@ -249,7 +273,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case ListFloat -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedList<Float>()
-                        : setFlotList(new LinkedList<>(), value);
+                        : setFlotList(new LinkedList<>(), getValueList(value));
                 else {
                     LinkedList<Float> list = (LinkedList<Float>) object;
                     return setFlotList(list, getListValue(list, value));
@@ -258,7 +282,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case ListDouble -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedList<Double>()
-                        : setDoubleList(new LinkedList<>(), value);
+                        : setDoubleList(new LinkedList<>(), getValueList(value));
                 else {
                     LinkedList<Double> list = (LinkedList<Double>) object;
                     return setDoubleList(list, getListValue(list, value));
@@ -268,7 +292,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case MapInteger -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashMap<String, Integer>()
-                        : setIntegerMap(new LinkedHashMap<>(), value);
+                        : setIntegerMap(new LinkedHashMap<>(), getValueMap(value));
                 else {
                     LinkedHashMap<String, Integer> map = (LinkedHashMap<String, Integer>) object;
                     return setIntegerMap(map, getMapValue(map, value));
@@ -277,7 +301,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case MapLong -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashMap<String, Long>()
-                        : setLongMap(new LinkedHashMap<>(), value);
+                        : setLongMap(new LinkedHashMap<>(), getValueMap(value));
                 else {
                     LinkedHashMap<String, Long> map = (LinkedHashMap<String, Long>) object;
                     return setLongMap(map, getMapValue(map, value));
@@ -286,7 +310,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case MapBoolean -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashMap<String, String>()
-                        : setBoolMap(new LinkedHashMap<>(), value);
+                        : setBoolMap(new LinkedHashMap<>(), getValueMap(value));
                 else {
                     LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) object;
                     return setBoolMap(map, getMapValue(map, value));
@@ -295,7 +319,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case MapString -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashMap<String, String>()
-                        : setStringMap(new LinkedHashMap<>(), value);
+                        : setStringMap(new LinkedHashMap<>(), getValueMap(value));
                 else {
                     LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) object;
                     return setStringMap(map, getMapValue(map, value));
@@ -304,7 +328,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case MapCharacter -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashMap<String, Character>()
-                        : setCharacterMap(new LinkedHashMap<>(), value);
+                        : setCharacterMap(new LinkedHashMap<>(), getValueMap(value));
                 else {
                     LinkedHashMap<String, Character> map = (LinkedHashMap<String, Character>) object;
                     return setCharacterMap(map, getMapValue(map, value));
@@ -313,7 +337,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case MapFloat -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashMap<String, Float>()
-                        : setFlotMap(new LinkedHashMap<>(), value);
+                        : setFlotMap(new LinkedHashMap<>(), getValueMap(value));
                 else {
                     LinkedHashMap<String, Float> map = (LinkedHashMap<String, Float>) object;
                     return setFlotMap(map, getMapValue(map, value));
@@ -322,7 +346,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case MapDouble -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashMap<String, Double>()
-                        : setDoubleMap(new LinkedHashMap<>(), value);
+                        : setDoubleMap(new LinkedHashMap<>(), getValueMap(value));
                 else {
                     LinkedHashMap<String, Double> map = (LinkedHashMap<String, Double>) object;
                     return setDoubleMap(map, getMapValue(map, value));
