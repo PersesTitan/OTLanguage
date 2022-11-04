@@ -1,46 +1,26 @@
 package bin.apply.sys.run;
 
-import bin.check.VariableCheck;
-import bin.exception.MatchException;
-import bin.token.Token;
-import work.StartWork;
+import bin.exception.VariableException;
+import work.v3.StartWorkV3;
 
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static bin.token.cal.NumberToken.INT;
+import static bin.check.VariableCheck.isLong;
 
-public class Sleep implements Token, StartWork {
-    private final String type;
-    private final Matcher matcher;
-
-    public Sleep(String type) {
-        this.type = type;
-        String patternText = startEndMerge(type, BLANKS, INT);
-        this.matcher = Pattern.compile(patternText).matcher("");
+public class Sleep extends StartWorkV3 {
+    // 1
+    public Sleep(int... counts) {
+        super(counts);
     }
 
     @Override
-    public boolean check(String line) {
-        return matcher.reset(line).find();
-    }
-
-    @Override
-    public void start(String line, String origen,
+    public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        String lines = line.strip().replaceFirst(START+type+BLANK, "");
-        if (!VariableCheck.isLong(lines)) throw MatchException.grammarError();
-        long time = Long.parseLong(lines);
-        if (time < 0) throw MatchException.grammarError();
+        if (!isLong(params[0])) throw VariableException.typeMatch();
+        long time = Long.parseLong(params[0]);
         try {
             Thread.sleep(time);
         } catch (InterruptedException ignored) {}
-    }
-
-    @Override
-    public void first() {
-
     }
 }
