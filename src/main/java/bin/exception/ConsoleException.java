@@ -4,11 +4,13 @@ public class ConsoleException extends RuntimeException {
     private final static String scannerError = "입력에 실패하였습니다.";
     private final static String printError = "출력에 실패하였습니다.";
 
+    public ConsoleException() {}
+
     public ConsoleException(String message) {
         super(message);
     }
 
-    public static void consoleErrorMessage(ConsoleException e, String path, String line, long position) {
+    public void consoleErrorMessage(ConsoleException e, String path, String line, long position) {
         String subMessage = switch (e.getMessage()) {
             case scannerError -> "Input failed.\nplease try again.";
             case printError -> "Output failed.\nplease try again.";
