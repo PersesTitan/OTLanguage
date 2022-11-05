@@ -76,7 +76,7 @@ public interface MergeToken {
     // 갯수 에러 체크
     default String[] matchSplitError(String value, String pattern, int count) {
         String[] values = value.split(pattern, count);
-        if (values.length != count) throw MatchException.grammarError();
+        if (values.length != count) throw new MatchException().grammarError();
         else return values;
     }
 
