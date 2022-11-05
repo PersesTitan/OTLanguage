@@ -3,21 +3,16 @@ import bin.apply.sys.item.RunType;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import static bin.apply.Controller.*;
-import static bin.apply.sys.item.Separator.SEPARATOR_HOME;
-import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
+import static bin.apply.sys.item.Separator.*;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.token.LoopToken.LOOP_TOKEN;
 
 public class Main extends Setting {
-
     public static void main(String[] args) {
         try {
             if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win"))
