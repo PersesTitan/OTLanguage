@@ -1,4 +1,4 @@
-package bin.orign.console;
+package bin.orign.console.normal;
 
 import work.v3.ReturnWorkV3;
 
