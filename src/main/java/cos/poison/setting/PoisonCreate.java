@@ -2,7 +2,6 @@ package cos.poison.setting;
 
 import bin.apply.Repository;
 import bin.exception.VariableException;
-import cos.poison.Poison;
 import cos.poison.controller.HttpServerManager;
 import cos.poison.root.VariableHTML;
 import cos.poison.run.replace.GetCookie;
@@ -31,7 +30,7 @@ public class PoisonCreate extends StartWorkV3 {
     @Override
     public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        new Poison().start(line, params, repositoryArray);
+        create();
         int count = params.length;
         if (count == 1 && params[0].isEmpty()) httpServerManager.createServer();
         else if (count == 1) {
