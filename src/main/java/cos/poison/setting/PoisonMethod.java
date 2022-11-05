@@ -1,7 +1,6 @@
 package cos.poison.setting;
 
-import cos.http.controller.HttpMethod;
-import cos.poison.Poison;
+import cos.poison.controller.HttpMethod;
 import cos.poison.method.PoisonTools;
 import work.v3.StartWorkV3;
 
