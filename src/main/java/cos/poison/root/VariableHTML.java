@@ -45,8 +45,7 @@ public class VariableHTML extends StartWorkV3 implements LoopToken {
     public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] values = matchSplitError(params[0], VARIABLE_PUT, 2);
-        if (Repository.noUse.contains(values[0])) throw VariableException.reservedWorks();
-        else if (map.containsKey(values[0])) throw VariableException.sameVariable();
+        if (map.containsKey(values[0])) throw new VariableException().sameVariable();
         map.put(values[0], values[1]);
     }
 }
