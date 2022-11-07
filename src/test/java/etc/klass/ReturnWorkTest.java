@@ -19,7 +19,7 @@ public abstract class ReturnWorkTest implements Serializable {
     public ReturnWorkTest paramsCheck(int size, String params) {
         if (!(counts == null
                 || (params != null && counts.length == 1 && counts[0] == 0 && params.isEmpty())
-                || Arrays.stream(counts).anyMatch(v -> v == size))) throw MatchException.grammarError();
+                || Arrays.stream(counts).anyMatch(v -> v == size))) throw new MatchException().grammarError();
         return this;
     }
 }
