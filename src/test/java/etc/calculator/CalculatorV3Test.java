@@ -34,7 +34,7 @@ public class CalculatorV3Test {
                 else {
                     String b = tokenizer.nextToken();
                     if (b.equals("ㅇ")) list.add(token + a + b);
-                    else throw MatchException.grammarError();
+                    else throw new MatchException().grammarError();
                 }
             } else list.add(token.strip());
         }
