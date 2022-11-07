@@ -2,6 +2,7 @@ import bin.apply.Setting;
 import bin.apply.sys.make.ChangeHangle;
 import bin.exception.FileException;
 import bin.token.LoopToken;
+import module.download.MakeGitTest;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,7 @@ public class MainTest implements LoopToken, ChangeHangle {
 //        Robot robot = new Robot();
 //        JFrame frame = new JFrame("test");
 
-
+        new MakeGitTest();
         try {
             new Main(new String[]{SEPARATOR_HOME, "hello.otl"});
         } catch (FileException e) {
