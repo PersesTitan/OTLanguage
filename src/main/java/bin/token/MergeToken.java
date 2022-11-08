@@ -7,6 +7,7 @@ import bin.exception.VariableException;
 import java.util.Arrays;
 import java.util.Map;
 
+import static bin.apply.Repository.containsVariable;
 import static bin.token.LoopToken.LOOP_TOKEN;
 import static bin.token.Token.*;
 
@@ -67,10 +68,11 @@ public interface MergeToken {
 
     // 변수
     default void variableDefineError(String variableName, Map<String, Map<String, Object>> repository) {
-        if (variableName.startsWith("["))
-            variableName = variableName.replaceFirst(START + BL + "\\d+" + BR, "");
-        if (Repository.noUse.contains(variableName)) throw VariableException.reservedWorks();
-        else if (Repository.getSet(repository).contains(variableName)) throw VariableException.sameVariable();
+        if (containsVariable(
+            variableName.startsWith("[")
+                ? variableName.substring(variableName.indexOf("]") + 1)
+                : variableName, repository))
+            throw new VariableException().sameVariable();
     }
 
     // 갯수 에러 체크
