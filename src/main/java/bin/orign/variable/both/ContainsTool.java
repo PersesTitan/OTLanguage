@@ -26,14 +26,14 @@ public interface ContainsTool {
         try {
             if (variable.startsWith("Map")) return value;
             else if (variable.endsWith("Character")) {
-                if (value.length() != 1) throw VariableException.typeMatch();
+                if (value.length() != 1) throw new VariableException().typeMatch();
                 else return value.charAt(0);
             } else if (variable.endsWith("Double")) return Double.parseDouble(value);
             else if (variable.endsWith("Float")) return Float.parseFloat(value);
             else if (variable.endsWith("Integer")) return Integer.parseInt(value);
             else if (variable.endsWith("Long")) return Long.parseLong(value);
             else return value;
-        } catch (Exception e) {throw VariableException.typeMatch();}
+        } catch (Exception e) {throw new VariableException().typeMatch();}
     }
 
     // 리스트, 셋 종합 구하기
@@ -49,8 +49,8 @@ public interface ContainsTool {
             else if (variable.endsWith("Double")) return String.valueOf(collection.stream().mapToDouble(v -> (double) v).sum());
             else if (variable.endsWith("Integer")) return String.valueOf(collection.stream().mapToInt(v -> (int) v).sum());
             else if (variable.endsWith("Long")) return String.valueOf(collection.stream().mapToLong(v -> (long) v).sum());
-            throw VariableException.typeMatch();
-        } catch (Exception e) {throw VariableException.typeMatch();}
+            throw new VariableException().typeMatch();
+        } catch (Exception e) {throw new VariableException().typeMatch();}
     }
 
     // Start
@@ -80,14 +80,14 @@ public interface ContainsTool {
         try {
             if (variable.startsWith("Map")) set.remove(value);
             else if (variable.endsWith("Character")) {
-                if (value.length() != 1) throw VariableException.typeMatch();
+                if (value.length() != 1) throw new VariableException().typeMatch();
                 else set.remove(value.charAt(0));
             } else if (variable.endsWith("Double")) set.remove(Double.parseDouble(value));
             else if (variable.endsWith("Float")) set.remove(Float.parseFloat(value));
             else if (variable.endsWith("Integer")) set.remove(Integer.parseInt(value));
             else if (variable.endsWith("Long")) set.remove(Long.parseLong(value));
             else set.remove(value);
-        } catch (Exception e) {throw VariableException.typeMatch();}
+        } catch (Exception e) {throw new VariableException().typeMatch();}
     }
 
     // value get
