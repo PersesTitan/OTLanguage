@@ -1,5 +1,7 @@
 package bin.token.cal;
 
+import static bin.token.Token.TOKEN;
+
 public interface BoolToken {
     // BOOLEAN
     String TRUE = "ㅇㅇ";
@@ -10,9 +12,9 @@ public interface BoolToken {
 
     String BOOL = "(" + TRUE + "|" + FALSE + ")";
 
-    String BIG = "ㅇ>ㅇ";
-    String SMALL = "ㅇ<ㅇ";
-    String SAME = "ㅇ=ㅇ";
-    String BIG_SAME = "ㅇ>=ㅇ";
-    String SMALL_SAME = "ㅇ<=ㅇ";
+    String BIG = TOKEN + ">" + TOKEN;
+    String SMALL = TOKEN + "<" + TOKEN;
+    String SAME = TOKEN + "=" + TOKEN;
+    String BIG_SAME = TOKEN + ">=" + TOKEN;
+    String SMALL_SAME = TOKEN + "<=" + TOKEN;
 }
