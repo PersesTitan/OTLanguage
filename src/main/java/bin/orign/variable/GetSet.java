@@ -15,7 +15,7 @@ public interface GetSet {
 
     default LinkedHashSet<String> setBoolSet(LinkedHashSet<String> set, String line) {
         if (listCheck(line) && isBoolean(line)) set.add(line);
-        else if (isListBoolean(line)) throw VariableException.typeMatch();
+        else if (isListBoolean(line)) throw new VariableException().typeMatch();
         else {
             StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), SING);
             while (t.hasMoreTokens()) set.add(t.nextToken());
@@ -25,7 +25,7 @@ public interface GetSet {
     
     default LinkedHashSet<Character> setCharacterSet(LinkedHashSet<Character> set, String line) {
         if (listCheck(line) && isCharacter(line)) set.add(line.charAt(0));
-        else if (isListCharacter(line)) throw VariableException.typeMatch();
+        else if (isListCharacter(line)) throw new VariableException().typeMatch();
         else {
             StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), SING);
             while (t.hasMoreTokens()) set.add(t.nextToken().charAt(0));
@@ -35,7 +35,7 @@ public interface GetSet {
 
     default LinkedHashSet<Double> setDoubleSet(LinkedHashSet<Double> set, String line) {
         if (listCheck(line) && isDouble(line)) set.add(Double.parseDouble(line));
-        else if (isListDouble(line)) throw VariableException.typeMatch();
+        else if (isListDouble(line)) throw new VariableException().typeMatch();
         else {
             StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), SING);
             while (t.hasMoreTokens()) set.add(Double.parseDouble(t.nextToken()));
@@ -45,7 +45,7 @@ public interface GetSet {
 
     default LinkedHashSet<Float> setFlotSet(LinkedHashSet<Float> set, String line) {
         if (listCheck(line) && isFloat(line)) set.add(Float.parseFloat(line));
-        else if (isListFloat(line)) throw VariableException.typeMatch();
+        else if (isListFloat(line)) throw new VariableException().typeMatch();
         else {
             StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), SING);
             while (t.hasMoreTokens()) set.add(Float.parseFloat(t.nextToken()));
@@ -55,7 +55,7 @@ public interface GetSet {
 
     default LinkedHashSet<Integer> setIntegerSet(LinkedHashSet<Integer> set, String line) {
         if (listCheck(line) && isInteger(line)) set.add(Integer.parseInt(line));
-        else if (isListInteger(line)) throw VariableException.typeMatch();
+        else if (isListInteger(line)) throw new VariableException().typeMatch();
         else {
             StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), SING);
             while (t.hasMoreTokens()) set.add(Integer.parseInt(t.nextToken()));
@@ -65,7 +65,7 @@ public interface GetSet {
 
     default LinkedHashSet<Long> setLongSet(LinkedHashSet<Long> set, String line) {
         if (listCheck(line) && isLong(line)) set.add(Long.parseLong(line));
-        else if (isListLong(line)) throw VariableException.typeMatch();
+        else if (isListLong(line)) throw new VariableException().typeMatch();
         else {
             StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), SING);
             while (t.hasMoreTokens()) set.add(Long.parseLong(t.nextToken()));
@@ -75,7 +75,7 @@ public interface GetSet {
 
     default LinkedHashSet<String> setStringSet(LinkedHashSet<String> set, String line) {
         if (listCheck(line)) set.add(line);
-        else if (!isListString(line)) throw VariableException.typeMatch();
+        else if (!isListString(line)) throw new VariableException().typeMatch();
         else {
             StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), COMMA);
             while (t.hasMoreTokens()) set.add(t.nextToken().strip());
