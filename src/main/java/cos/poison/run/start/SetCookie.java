@@ -31,7 +31,7 @@ public class SetCookie extends StartWorkV3 implements PoisonStartWork, RootWork 
             case 4 -> {
                 if (params[3].matches("[0-9]+"))
                     setCookie(responseHeader, params[0], params[1], params[2], Integer.parseInt(params[3]));
-                else throw VariableException.typeMatch();
+                else throw new VariableException().typeMatch();
             }
         }
     }
