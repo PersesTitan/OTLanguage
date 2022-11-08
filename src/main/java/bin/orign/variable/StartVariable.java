@@ -35,10 +35,10 @@ public class StartVariable extends StartWorkV3 implements MergeToken, ContainsTo
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String variableName = params[0];
         int count = accessCount(variableName, repositoryArray.size());
-        if (count == -1) throw VariableException.localNoVariable();
+        if (count == -1) throw new VariableException().localNoVariable();
         variableName = variableName.substring(count);
         Map.Entry<String, Map<String, Object>> repository = getRepository(variableName, repositoryArray.get(count));
-        if (repository == null) throw VariableException.variableNameMatch();
+        if (repository == null) throw new VariableException().variableNameMatch();
         String token = params[1];
 
         if (token.startsWith(VARIABLE_PUT)) repository.getValue().put(variableName, token.substring(VARIABLE_PUT.length()).strip());
