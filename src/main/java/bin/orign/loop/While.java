@@ -34,9 +34,9 @@ public class While implements StartWork, LoopToken, BoolToken {
     public void start(String line, String origen,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] tokens = line.strip().split("\\s+", 3);
-        if (tokens.length != 3) throw MatchException.grammarError();
+        if (tokens.length != 3) throw new MatchException().grammarError();
         String[] totalTokens = bothEndCut(tokens[2]).split(",", 3);
-        if (totalTokens.length != 3) throw MatchException.grammarError();
+        if (totalTokens.length != 3) throw new MatchException().grammarError();
         boolean bool = tokens[1].equals("ㅇㅇ");
         String total = LOOP_TOKEN.get(totalTokens[0]);
         int start = total.indexOf("\n" + totalTokens[1] + " ");
