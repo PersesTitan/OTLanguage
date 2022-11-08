@@ -38,7 +38,7 @@ public class PoisonCreate extends StartWorkV3 {
             else httpServerManager.createServer(params[0]);
         } else {
             if (isInteger(params[1])) httpServerManager.createServer(params[0], Integer.parseInt(params[1]));
-            else throw VariableException.typeMatch();
+            else throw new VariableException().typeMatch();
         }
     }
 
