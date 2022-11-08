@@ -19,7 +19,7 @@ public interface PoisonTools extends LoopToken {
         Set<String> set = new HashSet<>();
         for (int i = 0; i<params.length; i++) {
             String[] value = matchSplitError(lines[i], "(" + BLANKS + "|" + VARIABLE_PUT + ")", 3);
-            if (set.contains(value[1])) throw VariableException.sameVariable();
+            if (set.contains(value[1])) throw new VariableException().sameVariable();
             else set.add(value[1]);
             params[i][0] = value[0];
             params[i][1] = value[1];
