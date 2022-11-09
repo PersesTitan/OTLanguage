@@ -48,27 +48,27 @@ public class ForEach extends GetSetVariable implements StartWork, LoopToken, Get
         String variableName = variableToken[1].strip(); // 들어가는 변수명
 
         int count = accessCount(listValue, repositoryArray.size());
-        if (count == -1) throw VariableException.localNoVariable();
+        if (count == -1) throw new VariableException().localNoVariable();
         listValue = listValue.substring(count);
         var rep = repositoryArray.get(count);
         variableDefineError(variableName, rep);
 
         // ^^문 들어가는 변수
-        if (!ORIGIN_LIST.contains(variableType)) throw VariableException.forTypeMatchError();
+        if (!ORIGIN_LIST.contains(variableType)) throw new VariableException().forTypeMatchError();
         if (listCheck(listValue)) {
             for (Map.Entry<String, Map<String, Object>> entry : rep.entrySet()) {
                 if (entry.getValue().containsKey(listValue)) {
                     if (SET_LIST.contains(entry.getKey())) {
                         Set<Object> set = (Set<Object>) rep.get(entry.getKey()).get(listValue);
-                        if (getCheck(set, variableType)) throw VariableException.typeMatch();
+                        if (getCheck(set, variableType)) throw new VariableException().typeMatch();
                         loop(rep.get(variableType), variableName, set, total, variables[0], repositoryArray);
                         return;
                     } else if (LIST_LIST.contains(entry.getKey())) {
                         List<Object> list = (List<Object>) rep.get(entry.getKey()).get(listValue);
-                        if (getCheck(list, variableType)) throw VariableException.typeMatch();
+                        if (getCheck(list, variableType)) throw new VariableException().typeMatch();
                         loop(rep.get(variableType), variableName, list, total, variables[0], repositoryArray);
                         return;
-                    } else throw VariableException.typeMatch();
+                    } else throw new VariableException().typeMatch();
                 }
             }
         } else {
