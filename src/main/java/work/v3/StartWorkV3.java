@@ -19,7 +19,12 @@ public abstract class StartWorkV3 implements Serializable {
     public StartWorkV3 paramsCheck(int size, String params) {
         if (!(counts == null
                 || (params != null && counts.length == 1 && counts[0] == 0 && params.isEmpty())
-                || Arrays.stream(counts).anyMatch(v -> v == size))) throw new MatchException().grammarError();
+                || check(size))) throw new MatchException().grammarError();
         return this;
+    }
+
+    private boolean check(int size) {
+        for (int count : counts) if (count == size) return true;
+        return false;
     }
 }
