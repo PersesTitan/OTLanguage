@@ -2,6 +2,7 @@ package bin.token;
 
  public interface Token extends MergeToken {
     String TOKEN = "ㅇ";
+    String NO_TOKEN = "ㄴ";
 
     String START = "^";
     String END = "$";
