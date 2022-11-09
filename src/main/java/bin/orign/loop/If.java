@@ -67,16 +67,16 @@ public class If implements LoopToken, StartWork, BoolToken {
                     } else if (token.equals(typeToken3)) {
                         startValue(bothEndCut(tokenizer.nextToken()), repository);
                         break;
-                    } else throw MatchException.grammarError();
+                    } else throw new MatchException().grammarError();
                 }
             }
-        } else throw MatchException.grammarError();
+        } else throw new MatchException().grammarError();
     }
 
     // FileName, StartPos, EndPos
     private void startValue(String line, LinkedList<Map<String, Map<String, Object>>> repository) {
         String[] values = matchSplitError(line, COMMA, 3);
-        if (!LOOP_TOKEN.containsKey(values[0])) throw MatchException.grammarError();
+        if (!LOOP_TOKEN.containsKey(values[0])) throw new MatchException().grammarError();
         String total = LOOP_TOKEN.get(values[0]);
         int s = total.indexOf("\n" + values[1] + " ");
         int e = total.indexOf("\n" + values[2] + " ");
