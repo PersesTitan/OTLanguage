@@ -1,3 +1,12 @@
+ - ㅈㅈㅈ 정수형(Map&lt;String, Integer&gt;)
+ - ㅈㅉㅈ 쩡수형(Map&lt;String, Long&gt;)
+ - ㅈㅂㅈ 블린형(Map&lt;String, Boolean&gt;)
+ - ㅈㅁㅈ 문자형(Map&lt;String, String&gt;)
+ - ㅈㄱㅈ 글자형(Map&lt;String, Character&gt;)
+ - ㅈㅅㅈ 실수형(Map&lt;String, Float&gt;)
+ - ㅈㅆㅈ 씰수형(Map&lt;String, Double&gt;)
+
+
 ㅈㅈㅈ ㅈㅈㅈ
 ㅈㅉㅈ ㅈㅉㅈ
 ㅈㅂㅈ ㅈㅂㅈ
