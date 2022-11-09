@@ -11,7 +11,7 @@ public class LoopController implements LoopToken, BoolToken {
     public String check(String line) {
         if (line.matches(patternText)) {
             String[] tokens = line.split(BLANK + QUESTION + BLANK, 2);
-            if (tokens.length != 2) throw MatchException.grammarError();    // ㅇㅇ break, continue
+            if (tokens.length != 2) throw new MatchException().grammarError();    // ㅇㅇ break, continue
             else if (tokens[0].equals("ㅇㅇ")) return tokens[1];
             else return "";
         }
