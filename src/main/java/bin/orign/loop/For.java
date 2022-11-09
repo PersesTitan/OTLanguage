@@ -46,20 +46,20 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
             String[] tokens = line.split(PUTIN_TOKEN, 2);
 
             String[] token = bothEndCut(tokens[0].strip()).split(",", 3);
-            if (token.length != 3) throw MatchException.grammarError();
+            if (token.length != 3) throw new MatchException().grammarError();
             String total = LOOP_TOKEN.get(token[0]);
             int start = total.indexOf("\n" + token[1] + " ");
             int end = total.indexOf("\n" + token[2] + " ");
             total = total.substring(start, end);
             if (tokens.length == 1) {
                 String[] numbers = group.split(BLANK+FOR+BLANK, 3);
-                if (numbers.length != 3) throw MatchException.grammarError();
+                if (numbers.length != 3) throw new MatchException().grammarError();
                 startFor(group,
                         getType(numbers[0], numbers[1], numbers[2]),
                         null, token[0], total, repositoryArray);
             } else {
                 String[] variables = tokens[1].strip().split(BLANKS, 2);
-                if (variables.length != 2) throw MatchException.grammarError();
+                if (variables.length != 2) throw new MatchException().grammarError();
                 startFor(group, variables[0], variables[1], token[0],
                         total, repositoryArray);
             }
@@ -79,14 +79,14 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
         String[] tokens = line.split(BLANK+FOR+BLANK, 3);
 
         if (variableName != null) {
-            if (tokens.length != 3) throw MatchException.grammarError();
+            if (tokens.length != 3) throw new MatchException().grammarError();
             if (!switch (variableType) {
                 case INT_VARIABLE -> Arrays.stream(tokens).allMatch(VariableCheck::isInteger);
                 case LONG_VARIABLE -> Arrays.stream(tokens).allMatch(VariableCheck::isLong);
                 case FLOAT_VARIABLE -> Arrays.stream(tokens).allMatch(VariableCheck::isFloat);
                 case DOUBLE_VARIABLE -> Arrays.stream(tokens).allMatch(VariableCheck::isDouble);
                 default -> false;
-            }) throw VariableException.forTypeMatchError();
+            }) throw new VariableException().forTypeMatchError();
             variableDefineError(variableName, repository.get(0));
         }
 
@@ -135,7 +135,7 @@ public class For implements Token, StartWork, LoopToken, VariableCheck {
         else if (isLong(value)) return VariableType.Long;
         else if (isFloat(value)) return VariableType.Float;
         else if (isDouble(value)) return VariableType.Double;
-        else throw VariableException.typeMatch();
+        else throw new VariableException().typeMatch();
     }
 
     // INTEGER
