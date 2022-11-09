@@ -1,14 +1,15 @@
 package bin.token.cal;
 
+import static bin.token.Token.NO_TOKEN;
 import static bin.token.Token.TOKEN;
 
 public interface BoolToken {
     // BOOLEAN
-    String TRUE = "ㅇㅇ";
-    String FALSE = "ㄴㄴ";
+    String TRUE = TOKEN.repeat(2);
+    String FALSE = NO_TOKEN.repeat(2);
     String OR = "ㄸ";
     String AND = "ㄲ";
-    String NOT = "ㅇㄴ";
+    String NOT = TOKEN + NO_TOKEN;
 
     String BOOL = "(" + TRUE + "|" + FALSE + ")";
 
