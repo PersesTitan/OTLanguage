@@ -41,7 +41,7 @@ public class MethodReturn implements LoopToken, ReturnWork {
             var repository = repositoryArray.get(0).get(METHOD);
             if (repository.containsKey(methodName)) {
                 MethodItem methodItem = (MethodItem) repository.get(methodName);
-                if (!methodItem.methodType().equals(MethodType.RETURN)) throw VariableException.methodTypeMatch();
+                if (!methodItem.methodType().equals(MethodType.RETURN)) throw new VariableException().methodTypeMatch();
                 String[] methodParams = methodNames[1].isEmpty() ? new String[0] : methodNames[1].split(BR + BL);
 
                 String oldWord = methodItem.startReturn(methodParams, repositoryArray);
