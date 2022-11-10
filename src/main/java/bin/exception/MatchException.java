@@ -8,6 +8,9 @@ public class MatchException extends RuntimeException {
     private final String loopStyleError = "해당 문법은 마지막에 '{'가 들어가야 합니다.";
     private final String patternMatchError1 = "%s는 이미 존재하거나 규칙에 일치하지 않기 때문에 사용할 수 없습니다.";
     private final String patternMatchError2 = "규칙에 일치하지 않기 때문에 사용할 수 없습니다.";
+    private final String dateFormatError = "Date Format 형식에 일치하지 않습니다.";
+    private final String timeFormatError = "Time Format 형식에 일치하지 않습니다.";
+    private final String grammarTypeError = "타입 또는 문법이 유효하지 않습니다.";
 
     public MatchException() {}
 
@@ -20,6 +23,9 @@ public class MatchException extends RuntimeException {
             case grammarError -> "The grammar does not match.\nPlease check the grammar.";
             case bracketMatchError -> "Curly braces don't match.\nPlease match the pair.";
             case loopStyleError -> "The grammar must have '{' at the end.\nPlease check the grammar again.";
+            case dateFormatError -> "Date Format does not match the format.\nPlease check the format.";
+            case timeFormatError -> "Time Format does not match the format.\nPlease check the format.";
+            case grammarTypeError -> "The type or grammar is invalid.\nPlease check the price.";
             default -> (e.getMessage().equals(patternMatchError2)
                     ? ""
                     : "Error Pattern (" + e.getMessage().replaceFirst(Pattern.quote(patternMatchError1.substring("%s".length())), "") + ")\n")
@@ -35,6 +41,18 @@ public class MatchException extends RuntimeException {
                 error == null
                 ? patternMatchError2
                 : String.format(patternMatchError1, error));
+    }
+
+    public MatchException grammarTypeError() {
+        return new MatchException(grammarTypeError);
+    }
+
+    public MatchException dateFormatError() {
+        return new MatchException(dateFormatError);
+    }
+
+    public MatchException timeFormatError() {
+        return new MatchException(timeFormatError);
     }
 
     public MatchException loopStyleError() {
