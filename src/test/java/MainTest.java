@@ -22,7 +22,7 @@ public class MainTest implements LoopToken, ChangeHangle {
 //        Robot robot = new Robot();
 //        JFrame frame = new JFrame("test");
 
-        new MakeGitTest();
+//        new MakeGitTest();
         try {
             new Main(new String[]{SEPARATOR_HOME, "hello.otl"});
         } catch (FileException e) {
