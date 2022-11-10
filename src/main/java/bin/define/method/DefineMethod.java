@@ -59,7 +59,7 @@ public class DefineMethod implements LoopToken, StartWork {
 
         // 메소드명 = methodToken[0]
         var repository = repositoryArray.get(0).get(this.type);
-        if (repository.containsKey(methodToken[0])) throw VariableException.definedMethodName();
+        if (repository.containsKey(methodToken[0])) throw new VariableException().definedMethodName();
 
         MethodType methodType = tokens.length == 1 ? MethodType.VOID : MethodType.RETURN;
         String returnVariable = tokens.length == 1 ? null : tokens[1];
@@ -78,7 +78,7 @@ public class DefineMethod implements LoopToken, StartWork {
         String[][] param = new String[count][2];
         for (int i = 0; i<count; i++) {
             String[] values = matchSplitError(params[i], BLANKS, 2);
-            if (set.contains(values[1])) throw VariableException.sameVariable();
+            if (set.contains(values[1])) throw new VariableException().sameVariable();
             else set.add(values[1]);
             param[i] = values;
         }
