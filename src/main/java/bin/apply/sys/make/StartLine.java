@@ -7,20 +7,16 @@ import bin.exception.MatchException;
 import bin.exception.ServerException;
 import bin.exception.VariableException;
 import bin.token.LoopToken;
-import bin.v3.CreateStartWorks;
 
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 import static bin.apply.Controller.bracket;
 import static bin.apply.Controller.loopController;
-import static bin.apply.Repository.*;
-import static bin.apply.Setting.lineStart;
 import static bin.apply.Setting.start;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 
@@ -34,17 +30,16 @@ public class StartLine implements LoopToken {
             String finalTotal = getFinalTotal(extensionCheck, total, path);
             startStartLine(finalTotal, total, repositoryArray);
         } catch (VariableException e) {
-            e.printStackTrace();
-            VariableException.variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            new VariableException().variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
             setLine();
         } catch (MatchException e) {
-            MatchException.matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            new MatchException().matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
             setLine();
         } catch (ServerException e) {
-            ServerException.serverErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            new ServerException().serverErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
             setLine();
         } catch (ConsoleException e) {
-            ConsoleException.consoleErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
+            new ConsoleException().consoleErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
             setLine();
         }
     }
@@ -82,14 +77,7 @@ public class StartLine implements LoopToken {
         for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
             if ((line = setError(line, total)).isBlank()) continue;
             start(line, errorLine.get(), repositoryArray);
-
-//            if (CreateStartWorks.start(line, false, repositoryArray)) continue;
-//            if (line.contains(VARIABLE_GET_S) && line.contains(VARIABLE_GET_E)) line = lineStart(line, repositoryArray);
-//            if (CreateStartWorks.start(line, true, repositoryArray)) continue;
-
-//            Setting.runMessage(errorLine.get());
         }
-
     }
 
     public static final AtomicLong errorCount = new AtomicLong(0);

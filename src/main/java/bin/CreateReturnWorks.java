@@ -53,7 +53,8 @@ public interface CreateReturnWorks {
         return line;
     }
 
-    private static String sub(String line, String def,
+    // 값 반환
+    static String sub(String line, String def,
                               LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] tokens = line.split("(?=" + BLANKS + "|" + BL + ")", 2);
         String local = tokens[0];
@@ -118,7 +119,7 @@ public interface CreateReturnWorks {
 
     private static String[] matchSplitError(String value) {
         String[] values = value.split(VARIABLE_GET_E, 2);
-        if (values.length != 2) throw MatchException.grammarError();
+        if (values.length != 2) throw new MatchException().grammarError();
         else return values;
     }
 }

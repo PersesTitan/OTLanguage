@@ -5,32 +5,34 @@ import bin.apply.sys.item.DebugMode;
 import bin.apply.sys.item.HpMap;
 import bin.apply.sys.item.RunType;
 import bin.apply.sys.run.FilePath;
+import bin.apply.sys.run.ForceQuit;
 import bin.apply.sys.run.Sleep;
 import bin.apply.sys.run.TryCatch;
 import bin.define.method.DefineMethod;
 import bin.define.method.MethodReturn;
 import bin.define.method.MethodVoid;
+import bin.orign.console.normal.*;
+import bin.orign.console.normal.Scanner;
+import bin.orign.console.priority.PriorityPrint;
+import bin.orign.console.priority.PriorityPrintSpace;
+import bin.orign.console.priority.PriorityPrintTap;
+import bin.orign.console.priority.PriorityPrintln;
 import bin.orign.loop.For;
 import bin.orign.loop.ForEach;
 import bin.orign.loop.While;
-import bin.orign.variable.list.get.*;
-import bin.orign.variable.map.get.MapContains;
-import bin.orign.variable.map.get.MapDelete;
-import bin.orign.variable.map.get.MapGet;
-import bin.orign.variable.map.get.MapPutAll;
 import bin.orign.loop.If;
-import bin.orign.variable.origin.put.PutVariable;
-import bin.orign.variable.set.get.*;
-import bin.string.*;
-import bin.v3.CreateReturnWorks;
-import bin.v3.CreateStartWorks;
-import cos.poison.Poison;
+import bin.CreateReturnWorks;
+import bin.CreateStartWorks;
+import work.v3.ReturnWorkV3;
+import work.v3.StartWorkV3;
 
+import java.io.*;
 import java.util.*;
 
+import static bin.apply.sys.item.Separator.*;
 import static bin.token.ConsoleToken.*;
 import static bin.token.LoopToken.*;
-import static bin.token.StringToken.*;
+import static bin.token.cal.BoolToken.*;
 import static bin.token.cal.NumberToken.*;
 
 public class Setting implements Repository {
@@ -46,27 +48,22 @@ public class Setting implements Repository {
     public static void start(String line, String errorLine,
                              LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         if (line.isBlank() || line.startsWith(REMARK)) return;
-//        final String origen = line;
-//        final String value = new StringTokenizer(line).nextToken();
 
         if (CreateStartWorks.start(line, true, repositoryArray)) return;
-        if (line.contains(VARIABLE_GET_S) && line.contains(VARIABLE_GET_E)) line = lineStart(line, repositoryArray);
-
+        line = lineStart(line, repositoryArray);
         for (var work : startWorks) {if (work.check(line)) {work.start(line, errorLine, repositoryArray);return;}}
 
         if (CreateStartWorks.start(line, false, repositoryArray)) return;
 
-//        if (startWorkMap.containsKey(value)) {startWorkMap.get(value).start(line, origen, repositoryArray);return;}
         runMessage(errorLine);
-
     }
 
     // ============================================================================== //
     public static String lineStart(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        for (var works : returnWorks) {
-            if (works.check(line)) line = works.start(line, repositoryArray);
+        if (line.contains(VARIABLE_GET_S) && line.contains(VARIABLE_GET_E)) {
+            for (var works : returnWorks) if (works.check(line)) line = works.start(line, repositoryArray);
+            line = CreateReturnWorks.start(line, repositoryArray);
         }
-        line = CreateReturnWorks.start(line, repositoryArray);
         line = Controller.boolCalculator.start(line);
         return line;
     }
@@ -87,103 +84,103 @@ public class Setting implements Repository {
             System.out.printf("%s%s%s\n", Color.RED, message, Color.RESET);
     }
 
-    public static void firstStart() {
-        reset();
-        repository.add(new HashMap<>());
-
-        repository.get(0).put(METHOD, new HashMap<>());
+    static {
         noUse.add(SCANNER);
-        noUse.add(RANDOM_BOOL);
-        noUse.add(RANDOM_DOUBLE);
-        noUse.add(RANDOM_FLOAT);
-        noUse.add(RANDOM_INTEGER);
-        noUse.add(RANDOM_LONG);
+        noUse.add(TRUE);
+        noUse.add(FALSE);
+        noUse.add(NOT);
+        noUse.add(OR);
+        noUse.add(AND);
+        noUse.add(MINUS_CALCULATOR_S);
+
+        repository.add(new HashMap<>());
+        repository.get(0).put(METHOD, new HashMap<>());
+
         TOTAL_LIST.forEach(v -> COPY_REPOSITORY.put(v, new HpMap(v)));
         TOTAL_LIST.forEach(v -> repository.getFirst().put(v, new HpMap(v)));
 
-//        CreateOrigin createOrigin = new CreateOrigin();
-//        CreateList createList = new CreateList();
-//        CreateSet createSet = new CreateSet();
-//        CreateMap createMap = new CreateMap();
-//        ORIGIN_LIST.forEach(v -> startWorkMap.put(v, createOrigin));
-//        LIST_LIST.forEach(v -> startWorkMap.put(v, createList));
-//        SET_LIST.forEach(v -> startWorkMap.put(v, createSet));
-//        MAP_LIST.forEach(v -> startWorkMap.put(v, createMap));
-
-//        priorityWorkMap.put(FORCE_QUIT, new ForceQuit());
-//        priorityWorkMap.put(PRIORITY_PRINT, new PriorityPrint(PRIORITY_PRINT.length()));
-//        priorityWorkMap.put(PRIORITY_PRINTLN, new PriorityPrintln(PRIORITY_PRINTLN.length()));
-//        priorityWorkMap.put(PRIORITY_PRINT_TAP, new PriorityPrintTap(PRIORITY_PRINT_TAP.length()));
-//        priorityWorkMap.put(PRIORITY_PRINT_SPACE, new PriorityPrintSpace(PRIORITY_PRINT_SPACE.length()));
-
-        priorityWorks.add(new ListClear(LIST_CLEAR));
-        priorityWorks.add(new ListSort(LIST_SORT));
-        priorityWorks.add(new SetClear(SET_CLEAR));
-        priorityWorks.add(new SetSort(SET_SORT));
-        priorityWorks.add(new FilePath());
-
-//        returnWorks.add(new SetVariable());
-//        returnWorks.add(new RandomBoolean(RANDOM_BOOL));
-//        returnWorks.add(new RandomDouble(RANDOM_DOUBLE));
-//        returnWorks.add(new RandomFloat(RANDOM_FLOAT));
-//        returnWorks.add(new RandomInteger(RANDOM_INTEGER));
-//        returnWorks.add(new RandomLong(RANDOM_LONG));
-//        returnWorks.add(new Input(SCANNER));
-//        returnWorks.add(new ListIsEmpty(LIST_ISEMPTY));
-//        returnWorks.add(new SetIsEmpty(SET_ISEMPTY));
-//        returnWorks.add(new IntegerListSum(LIST_SUM));
-//        returnWorks.add(new LongListSum(LIST_SUM));
-//        returnWorks.add(new FloatListSum(LIST_SUM));
-//        returnWorks.add(new IntegerSetSum(SET_SUM));
-//        returnWorks.add(new LongSetSum(SET_SUM));
-//        returnWorks.add(new FloatSetSum(SET_SUM));
-//        returnWorks.add(new ListGet(LIST_GET));
-//        returnWorks.add(new MapGet(MAP_GET));
-//        returnWorks.add(new SetGet(SET_GET));
-//        returnWorks.add(new Join(JOIN));
-//        returnWorks.add(new Split(SPLIT));
-//        returnWorks.add(new SplitRegular(SPLIT_REGULAR));
-//        returnWorks.add(new Contains(CONTAINS));
-//        returnWorks.add(new Equals(STRING_VARIABLE, EQUALS));
-//        returnWorks.add(new SetContains(SET_CONTAINS));
-//        returnWorks.add(new ListContains(LIST_CONTAINS));
-//        returnWorks.add(new MapContains(MAP_CONTAINS));
         returnWorks.add(new MethodReturn());
 
-//        startWorkMap.put(PRINT_SPACE, new PrintSpace(PRINT_SPACE.length()));
-//        startWorkMap.put(PRINT_TAP, new PrintTap(PRINT_TAP.length()));
-//        startWorkMap.put(PRINTLN, new Println(PRINTLN.length()));
-//        startWorkMap.put(PRINT, new Print(PRINT.length()));
-
-//        startWorks.add(new SetAdd(SET_ADD));
-//        startWorks.add(new ListAdd(LIST_ADD));
-        startWorks.add(new PutVariable());
-        startWorks.add(new Sleep(SLEEP));
         startWorks.add(new If(IF, ELSE_IF, ELSE));
         startWorks.add(new For());
         startWorks.add(new While(WHITE));
-        startWorks.add(new ListDelete(LIST_DELETE));
-        startWorks.add(new SetDelete(SET_DELETE));
-        startWorks.add(new MapDelete(MAP_DELETE));
-        startWorks.add(new MapPutAll(MAP_ADD));
         startWorks.add(new ForEach());
-        startWorks.add(new TryCatch(TRY_CATCH));
         startWorks.add(new DefineMethod(METHOD));
         startWorks.add(new MethodVoid());
-//        startWorks.add(new SetReset(SET_CLEAR));
 
-        // POISON
-        startWorks.add(new Poison(POISON));
+        try {
+            for (File files : Objects.requireNonNull(new File(MODULE_PATH + SEPARATOR_FILE + COMPULSION).listFiles())) {
+                if (!files.getName().toLowerCase(Locale.ROOT).endsWith(".otlm")) continue;
+                var v = readStart(files);
+                if (v != null) priorityStartWorksV3.putAll(v);
+            }
+
+            for (File files : Objects.requireNonNull(new File(MODULE_PATH + SEPARATOR_FILE + OPERATE).listFiles())) {
+                if (!files.getName().toLowerCase(Locale.ROOT).endsWith(".otlm")) continue;
+                var v = readStart(files);
+                if (v != null) startWorksV3.putAll(v);
+            }
+
+            for (File files : Objects.requireNonNull(new File(MODULE_PATH + SEPARATOR_FILE + ALTERATION).listFiles())) {
+                if (!files.getName().toLowerCase(Locale.ROOT).endsWith(".otlm")) continue;
+                try (ObjectInput input = new ObjectInputStream(new FileInputStream(files))) {
+                    returnWorksV3.putAll(((HashMap<String, Map<String, ReturnWorkV3>>) input.readObject()));
+                } catch (IOException | ClassNotFoundException e) {
+                    Setting.warringMessage(String.format("%s를 모듈에 추가하지 못하였습니다.", files.getName()));
+                }
+            }
+        } catch (NullPointerException ignored) {
+            Setting.errorMessage("모듈 추가에 실패하였습니다.");
+        }
+
+//        CreateOrigin createOrigin = new CreateOrigin();
+//        CreateSet createSet = new CreateSet();
+//        CreateList createList = new CreateList();
+//        CreateMap createMap = new CreateMap();
+//        ORIGIN_LIST.forEach(v -> Repository.createStartWorks(v, "", createOrigin));
+//        SET_LIST.forEach(v -> Repository.createStartWorks(v, "", createSet));
+//        LIST_LIST.forEach(v -> Repository.createStartWorks(v, "", createList));
+//        MAP_LIST.forEach(v -> Repository.createStartWorks(v, "", createMap));
+
+//        Repository.priorityCreateStartWorks(FORCE_QUIT, "", new ForceQuit(0));
+//        Repository.priorityCreateStartWorks(PRIORITY_PRINT, "", new PriorityPrint(1));
+//        Repository.priorityCreateStartWorks(PRIORITY_PRINTLN, "", new PriorityPrintln(1));
+//        Repository.priorityCreateStartWorks(PRIORITY_PRINT_TAP, "", new PriorityPrintTap(1));
+//        Repository.priorityCreateStartWorks(PRIORITY_PRINT_SPACE, "", new PriorityPrintSpace(1));
+//        Repository.priorityCreateStartWorks(TRY_CATCH, "", new TryCatch(1));
+
+//        Repository.createReturnWorks(RANDOM_BOOL, "", new RandomBoolean(1));
+//        Repository.createReturnWorks(RANDOM_DOUBLE, "", new RandomDouble(1, 2));
+//        Repository.createReturnWorks(RANDOM_FLOAT, "", new RandomFloat(1, 2));
+//        Repository.createReturnWorks(RANDOM_INTEGER, "", new RandomInteger(1, 2));
+//        Repository.createReturnWorks(RANDOM_LONG, "", new RandomLong(1, 2));
+//        Repository.createReturnWorks(SCANNER, "", new Scanner(0));
+
+//        Repository.createReturnWorks(STRING_VARIABLE, JOIN, new Join(2));
+//        Repository.createReturnWorks(STRING_VARIABLE, SPLIT, new Split(2));
+//        Repository.createReturnWorks(STRING_VARIABLE, SPLIT_REGULAR, new SplitRegular(2));
+//        Repository.createReturnWorks(STRING_VARIABLE, CONTAINS_S, new Contains(2));
+//        Repository.createReturnWorks(STRING_VARIABLE, EQUALS_S, new Equals(2));
+
+//        Repository.createStartWorks(PRINT, "", new Print(1));
+//        Repository.createStartWorks(PRINTLN, "", new Println(1));
+//        Repository.createStartWorks(PRINT_SPACE, "", new PrintSpace(1));
+//        Repository.createStartWorks(PRINT_TAP, "", new PrintTap(1));
+//        Repository.createStartWorks(SLEEP, "", new Sleep(1));
+//        Repository.createStartWorks(FILE, "", new FilePath(1));
+
+//        Repository.createStartWorks(POISON, "", new PoisonCreate(1, 2));
+//        Repository.createStartWorks(POISON, POISON_START, new PoisonStart(0));
+//        Repository.createStartWorks(POISON, POISON_POST, new PoisonMethod(HttpMethod.POST));
+//        Repository.createStartWorks(POISON, POISON_GET, new PoisonMethod(HttpMethod.GET));
     }
 
-    private static void reset() {
-        priorityWorkMap.clear();
-        startWorkMap.clear();
-        returnWorks.clear();
-        startWorks.clear();
-        repository.clear();
-        priorityWorks.clear();
-        noUse.clear();
-        COPY_REPOSITORY.clear();
+    private static HashMap<String, Map<String, StartWorkV3>> readStart(File file) {
+        try (ObjectInput input = new ObjectInputStream(new FileInputStream(file))) {
+            return (HashMap<String, Map<String, StartWorkV3>>) input.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            Setting.warringMessage(String.format("%s를 모듈에 추가하지 못하였습니다.", file.getName()));
+            return null;
+        }
     }
 }

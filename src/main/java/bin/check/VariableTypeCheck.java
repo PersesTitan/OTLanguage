@@ -90,7 +90,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
         else if (value.startsWith(VARIABLE_PUT)) {
             set.clear();
             return value.substring(VARIABLE_PUT.length()).strip();
-        } else throw VariableException.noGrammar();
+        } else throw new VariableException().noGrammar();
     }
 
     // value : <<value or :value
@@ -99,7 +99,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
         else if (value.startsWith(VARIABLE_PUT)) {
             list.clear();
             return value.substring(VARIABLE_PUT.length()).strip();
-        } else throw VariableException.noGrammar();
+        } else throw new VariableException().noGrammar();
     }
 
     // value : <<<value or :value
@@ -108,7 +108,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
         else if (value.startsWith(VARIABLE_PUT)) {
             map.clear();
             return value.substring(VARIABLE_PUT.length()).strip();
-        } else throw VariableException.noGrammar();
+        } else throw new VariableException().noGrammar();
     }
 
     private String getValueSet(String value) {
@@ -139,27 +139,27 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
                             String value, Object object) {
         switch (variableType) {
             case Integer -> {
-                if (!isInteger(value)) throw VariableException.typeMatch();
+                if (!isInteger(value)) throw new VariableException().typeMatch();
                 else return Integer.parseInt(value);
             }
             case Long -> {
-                if (!isLong(value)) throw VariableException.typeMatch();
+                if (!isLong(value)) throw new VariableException().typeMatch();
                 else return Long.parseLong(value);
             }
             case Boolean -> {
-                if (!isBoolean(value)) throw VariableException.typeMatch();
+                if (!isBoolean(value)) throw new VariableException().typeMatch();
                 else return value;
             }
             case Character -> {
-                if (!isCharacter(value)) throw VariableException.typeMatch();
+                if (!isCharacter(value)) throw new VariableException().typeMatch();
                 else return value.charAt(0);
             }
             case Float -> {
-                if (!isFloat(value)) throw VariableException.typeMatch();
+                if (!isFloat(value)) throw new VariableException().typeMatch();
                 else return Float.parseFloat(value);
             }
             case Double -> {
-                if (!isDouble(value)) throw VariableException.typeMatch();
+                if (!isDouble(value)) throw new VariableException().typeMatch();
                 else return Double.parseDouble(value);
             }
             case SetInteger -> {

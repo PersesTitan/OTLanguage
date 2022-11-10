@@ -17,7 +17,7 @@ public class Sleep extends StartWorkV3 {
     @Override
     public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        if (!isLong(params[0])) throw VariableException.typeMatch();
+        if (!isLong(params[0])) throw new VariableException().typeMatch();
         long time = Long.parseLong(params[0]);
         try {
             Thread.sleep(time);

@@ -52,6 +52,7 @@ public class Bracket implements LoopToken, Token {
                     int oldStart = getLineStart(oldValue);
                     int oldEnd = getLineEnd(oldValue);
                     String newValue = " (" + fileName + "," + (oldStart == 0 ? oldEnd : oldStart) + "," + oldEnd + ") ";
+//                    String newValue = " `" + fileName + "," + (oldStart == 0 ? oldEnd : oldStart) + "," + oldEnd + "` ";
                     copy = copy.replace(total.substring(start-1, end+1), newValue);
                 } else stack.pop();
             } else {
