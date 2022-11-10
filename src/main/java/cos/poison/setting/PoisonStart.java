@@ -16,5 +16,6 @@ public class PoisonStart extends StartWorkV3 {
     public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         httpServerManager.start();
+        while (true) {}
     }
 }
