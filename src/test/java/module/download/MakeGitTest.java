@@ -39,12 +39,12 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class MakeGitTest {
     public MakeGitTest() {
-//        clear();
-//        start1();
-//        new MakeGitTest("origin", "src/main/java/bin");
-//        clear();
-//        start2();
-//        new MakeGitTest("poison", "src/main/java/cos/poison");
+        clear();
+        start1();
+        new MakeGitTest("origin", "src/main/java/bin");
+        clear();
+        start2();
+        new MakeGitTest("poison", "src/main/java/cos/poison");
     }
 
     private static void clear() {
