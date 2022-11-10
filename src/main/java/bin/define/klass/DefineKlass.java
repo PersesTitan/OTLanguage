@@ -66,7 +66,7 @@ public class DefineKlass implements LoopToken, StartWork {
         String[][] param = new String[count][2];
         for (int i = 0; i<count; i++) {
             String[] values = matchSplitError(params[i], BLANKS, 2);
-            if (set.contains(values[1])) throw VariableException.sameVariable();
+            if (set.contains(values[1])) throw new VariableException().sameVariable();
             else set.add(values[1]);
             param[i] = values;
         }
