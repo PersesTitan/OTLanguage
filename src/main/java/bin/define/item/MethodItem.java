@@ -40,7 +40,7 @@ public record MethodItem(String[][] params, MethodType methodType, String return
     // ============================= TOOL ============================= //
     private static final Map<String, Map<String, Object>> repository = (Map<String, Map<String, Object>>) COPY_REPOSITORY.clone();
     private void getRepository(String[] params, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        if (params.length != this.params.length) throw VariableException.methodParamsCount();
+        if (params.length != this.params.length) throw new VariableException().methodParamsCount();
         repository.values().forEach(Map::clear);
         try {
             repositoryArray.addFirst(repository);
