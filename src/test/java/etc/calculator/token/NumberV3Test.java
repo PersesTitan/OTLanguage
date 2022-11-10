@@ -1,20 +1,55 @@
 package etc.calculator.token;
 
+import bin.apply.Setting;
 import bin.exception.MatchException;
+import etc.calculator.bool.BoolV3Test;
+import etc.calculator.bool.CompareV3Test;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
+
+import static bin.apply.Repository.repository;
+import static bin.token.Token.NO_TOKEN;
+import static bin.token.Token.TOKEN;
+import static bin.token.VariableToken.INT_VARIABLE;
+import static bin.token.VariableToken.LIST_INTEGER;
+import static bin.token.cal.BoolToken.*;
 
 public class NumberV3Test implements CalToken {
     public static void main(String[] args) {
-        Stack<String> stack = new Stack<>();
-        stack.addAll(Arrays.asList("1", "+", "2", ">", "15", "%", "2", "*", "23", "+", "16"));
-        new Number().start(stack);
+        NumberV3Test n = new NumberV3Test();
+        BoolV3Test b = new BoolV3Test();
+        CompareV3Test c = new CompareV3Test();
+
+        new Setting();
+
+        repository.get(0).get(INT_VARIABLE).put("변수", 111);
+        repository.get(0).get(LIST_INTEGER).put("리스트", "<<[1, 2, 3]");
+
+        String line = "10 ㅇ+ㅇ 변수 ㅇ+ㅇ 리스트>>6";
+        System.out.println(n.start(line, repository));
     }
 
-    public void start(Stack<String> stack, LinkedList<Map<String, Map<String, Object>>> ra) {
+    private final Stack<String> stack = new Stack<>();
+    public Stack<String> start(String line, LinkedList<Map<String, Map<String, Object>>> ra) {
+        stack.clear();
+        StringTokenizer tokenizer = new StringTokenizer(line, TOKEN + OR + NO_TOKEN + AND, true);
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            if (token.isBlank()) continue;
+            if (token.equals(TOKEN)) {
+                String a = tokenizer.nextToken();
+                if (a.equals(TOKEN)) stack.add(TRUE);
+                else if (a.equals(NO_TOKEN)) stack.add(NOT);
+                else {
+                    if (tokenizer.nextToken().equals(TOKEN)) stack.add(a);
+                    else throw new MatchException().grammarTypeError();
+                }
+            } else if (token.equals(NO_TOKEN)) {
+                if (tokenizer.nextToken().equals(NO_TOKEN)) stack.add(FALSE);
+                else throw new MatchException().grammarTypeError();
+            } else stack.add(token.strip());
+        }
+
         int start, i;
         double total = 0;
         while (containsFirst(stack)) {
@@ -30,7 +65,7 @@ public class NumberV3Test implements CalToken {
                 total = cal(total, getDouble(a, ra), stack.get(i));
             }
             deleteStack(start, i, stack);
-            stack.set(start-1, doubleCheck ? String.valueOf((long) total) : String.valueOf(total));
+            stack.set(start-1, doubleCheck ? checkInteger(total) : String.valueOf(total));
         }
 
         while (containsSecond(stack)) {
@@ -46,10 +81,13 @@ public class NumberV3Test implements CalToken {
                 total = cal(total, getDouble(a, ra), stack.get(i));
             }
             deleteStack(start, i, stack);
-            stack.set(start-1, doubleCheck ? String.valueOf((long) total) : String.valueOf(total));
+            stack.set(start-1, doubleCheck ? checkInteger(total) : String.valueOf(total));
         }
+        return stack;
+    }
 
-        System.out.println(stack);
+    private String checkInteger(double d) {
+        return (d == Math.floor(d) && !Double.isInfinite(d)) ? Long.toString((long) d) : Double.toString(d);
     }
 
     private void deleteStack(int start, int end, Stack<String> stack) {
@@ -75,7 +113,7 @@ public class NumberV3Test implements CalToken {
         int a = stack.indexOf("*");
         if (a != -1) value = value == -1 ? a : Math.min(value, a);
         int b = stack.indexOf("/");
-        if (b != -1) value = value == -1 ? a : Math.min(value, b);
+        if (b != -1) value = value == -1 ? b : Math.min(value, b);
         return value;
     }
 
