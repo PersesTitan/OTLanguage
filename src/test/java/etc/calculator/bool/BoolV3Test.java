@@ -1,21 +1,21 @@
 package etc.calculator.bool;
 
+import bin.CreateReturnWorks;
 import bin.exception.MatchException;
 
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.Stack;
 
 import static bin.token.cal.BoolToken.*;
 
 public class BoolV3Test {
-    public boolean start(Stack<String> stack) {
+    public boolean start(Stack<String> stack, LinkedList<Map<String, Map<String, Object>>> ra) {
         Collections.reverse(stack);
-        boolean bool1 = getBoolean(stack);
+        boolean bool1 = getBoolean(stack, ra);
         while (!stack.isEmpty()) {
-            bool1 = changeBoolean(
-                    bool1,
-                    stack.pop(),
-                    getBoolean(stack));
+            bool1 = changeBoolean(bool1, stack.pop(), getBoolean(stack, ra));
         }
         return bool1;
     }
@@ -28,18 +28,23 @@ public class BoolV3Test {
         };
     }
 
-    private boolean getBoolean(Stack<String> stack) {
+    private boolean getBoolean(Stack<String> stack, LinkedList<Map<String, Map<String, Object>>> ra) {
         String line = stack.pop();
         if (line.equals(NOT)) {
             line = stack.pop();
             if (line.equals(TRUE)) return false;
             else if (line.equals(FALSE)) return true;
-            else throw new MatchException().grammarTypeError();
+            else return get(line, ra);
         } else {
             if (line.equals(TRUE)) return true;
             else if (line.equals(FALSE)) return false;
-            else throw new MatchException().grammarTypeError();
+            else return get(line, ra);
         }
     }
 
+    private boolean get(String line, LinkedList<Map<String, Map<String, Object>>> ra) {
+        String token = CreateReturnWorks.sub(line, null, ra);
+        if (token == null || !(token.equals(FALSE) || token.equals(TRUE))) throw new MatchException().grammarTypeError();
+        else return token.equals(TRUE);
+    }
 }
