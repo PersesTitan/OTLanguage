@@ -41,14 +41,14 @@ public class StartVariable extends StartWorkV3 implements MergeToken, ContainsTo
         if (repository == null) throw new VariableException().variableNameMatch();
         String token = params[1];
 
-        if (token.startsWith(VARIABLE_PUT)) repository.getValue().put(variableName, token.substring(VARIABLE_PUT.length()).strip());
         // SET
-        else if (SET_LIST.contains(repository.getKey())) {
+        if (SET_LIST.contains(repository.getKey())) {
             LinkedHashSet<Object> set = (LinkedHashSet<Object>) repository.getValue().get(variableName);
             if (token.equals(SET_CLEAR)) set.clear();
             else if (token.equals(SET_SORT)) sortSet(set);
             else if (token.startsWith(SET_DELETE)) delete(set, repository.getKey(), token.substring(SET_DELETE.length()));
             else if (token.startsWith(SET_ADD)) repository.getValue().put(variableName, token);
+            else if (token.startsWith(VARIABLE_PUT)) repository.getValue().put(variableName, token.strip());
             else Setting.warringMessage(line);
         }
         // LIST
@@ -58,6 +58,7 @@ public class StartVariable extends StartWorkV3 implements MergeToken, ContainsTo
             else if (token.equals(LIST_SORT)) sortList(repository.getKey(), repository.getValue().get(variableName));
             else if (token.startsWith(LIST_DELETE)) delete(list, repository.getKey(), token.substring(LIST_DELETE.length()));
             else if (token.startsWith(LIST_ADD)) repository.getValue().put(variableName, token);
+            else if (token.startsWith(VARIABLE_PUT)) repository.getValue().put(variableName, token.strip());
             else Setting.warringMessage(line);
         }
         // MAP
@@ -66,9 +67,12 @@ public class StartVariable extends StartWorkV3 implements MergeToken, ContainsTo
             if (token.equals(MAP_CLEAR)) map.clear();
             else if (token.startsWith(MAP_DELETE)) map.remove(token.substring(MAP_DELETE.length()));
             else if (token.startsWith(MAP_ADD)) repository.getValue().put(variableName, token);
+            else if (token.startsWith(VARIABLE_PUT)) repository.getValue().put(variableName, token.strip());
             else if (token.contains(MAP_ADD)) addMap(map, token);
             else Setting.warringMessage(line);
         }
+        // ORIGIN
+        else if (token.startsWith(VARIABLE_PUT)) repository.getValue().put(variableName, token.substring(VARIABLE_PUT.length()).strip());
         else Setting.warringMessage(line);
     }
 
