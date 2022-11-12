@@ -1,6 +1,12 @@
 package etc.calculator.bool;
 
-public class BoolTest extends BoolCalTest {
+import bin.apply.Setting;
+import bin.token.VariableToken;
+import etc.calculator.token.BlankV3Test;
+
+import static bin.apply.Repository.repository;
+
+public class BoolTest extends BoolCalTest implements BlankV3Test {
     public static void main(String[] args) {
         new BoolTest();
 //        long start = System.currentTimeMillis();
@@ -15,9 +21,19 @@ public class BoolTest extends BoolCalTest {
 //            "123455".replaceAll("1", "");
 //        }
 //        System.out.println(System.currentTimeMillis() - start);
+
     }
 
     public BoolTest() {
-        System.out.println(orAnd("(ㅇㅇ ㄸ ㄴㄴ) ㄸ (ㅇㅇ ) ㄲ (ㅇㅇ ㄸ ㄴㄴ)ㄲㅇㅇ"));
+        System.out.println("()asdfs(123,324,3)".substring("() (123,324,3)".lastIndexOf("(")));
+        int a = "()asdfs(123,324,3)".lastIndexOf("(");
+        System.out.println("()asdfs(123,324,3)".substring(0, a));
+        new Setting();
+        repository.get(0).get(VariableToken.BOOL_VARIABLE).put("a", "ㅇㅇ");
+        repository.get(0).get(VariableToken.BOOL_VARIABLE).put("b", "ㄴㄴ");
+        String line = "(1234 ㅇ+ㅇ 1) ㅇ-ㅇ1";
+        String line1 = "1ㅇ+ㅇ13 ㅇ>ㅇ 14 ㄲ ㅇㅇ";
+        System.out.println(getNumber(line, repository));
+        System.out.println(getBool(line1, repository));
     }
 }
