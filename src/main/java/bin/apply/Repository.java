@@ -8,8 +8,10 @@ import work.StartWork;
 import work.v3.ReturnWorkV3;
 import work.v3.StartWorkV3;
 
+import java.io.*;
 import java.util.*;
 
+import static bin.apply.sys.item.Separator.*;
 import static bin.token.LoopToken.*;
 import static bin.token.cal.BoolToken.*;
 
@@ -58,5 +60,14 @@ public interface Repository {
 
     static void createReturnWorks(String klassName, String methodName, ReturnWorkV3 returnWork) {
         createReturnWorks(returnWorksV3, klassName, methodName, returnWork);
+    }
+
+    private static HashMap<String, Map<String, StartWorkV3>> readStart(File file) {
+        try (ObjectInput input = new ObjectInputStream(new FileInputStream(file))) {
+            return (HashMap<String, Map<String, StartWorkV3>>) input.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            Setting.warringMessage(String.format("%s를 모듈에 추가하지 못하였습니다.", file.getName()));
+            return null;
+        }
     }
 }
