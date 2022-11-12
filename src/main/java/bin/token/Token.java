@@ -26,6 +26,7 @@ package bin.token;
     String BR = "\\]";
     String BACKSLASH = "\\\\";
     String PESO = "\\$";
+    String SINGLE_Q = "'";
 
     String NO_PATTERN = "(?<=(^|[^\\\\])(\\\\\\\\)?+)";
     String YES_PATTERN = "(?<=(^|[^\\\\])(\\\\\\\\)?+)\\\\";
