@@ -84,6 +84,27 @@ public class Setting implements Repository {
             System.out.printf("%s%s%s\n", Color.RED, message, Color.RESET);
     }
 
+    // 모듈 반환
+    private static HashMap<String, Map<String, StartWorkV3>> priority() {
+        HashMap<String, Map<String, StartWorkV3>> total = new HashMap<>();
+        for (File files : Objects.requireNonNull(new File(MODULE_PATH + SEPARATOR_FILE + COMPULSION).listFiles())) {
+            if (!files.getName().toLowerCase(Locale.ROOT).endsWith(".otlm")) continue;
+            HashMap<String, Map<String, StartWorkV3>> v = readStart(files);
+            if (v != null) total.putAll(v);
+        }
+        return total;
+    }
+
+    private static HashMap<String, Map<String, StartWorkV3>> start() {
+        HashMap<String, Map<String, StartWorkV3>> total = new HashMap<>();
+        for (File files : Objects.requireNonNull(new File(MODULE_PATH + SEPARATOR_FILE + OPERATE).listFiles())) {
+            if (!files.getName().toLowerCase(Locale.ROOT).endsWith(".otlm")) continue;
+            var v = readStart(files);
+            if (v != null) total.putAll(v);
+        }
+        return total;
+    }
+
     static {
         noUse.add(SCANNER);
         noUse.add(TRUE);
@@ -92,6 +113,7 @@ public class Setting implements Repository {
         noUse.add(OR);
         noUse.add(AND);
         noUse.add(MINUS_CALCULATOR_S);
+        noUse.addAll(MAP_LIST);
 
         repository.add(new HashMap<>());
         repository.get(0).put(METHOD, new HashMap<>());
@@ -111,7 +133,7 @@ public class Setting implements Repository {
         try {
             for (File files : Objects.requireNonNull(new File(MODULE_PATH + SEPARATOR_FILE + COMPULSION).listFiles())) {
                 if (!files.getName().toLowerCase(Locale.ROOT).endsWith(".otlm")) continue;
-                var v = readStart(files);
+                HashMap<String, Map<String, StartWorkV3>> v = readStart(files);
                 if (v != null) priorityStartWorksV3.putAll(v);
             }
 
