@@ -3,11 +3,15 @@ package work.setting;
 import bin.apply.Setting;
 import bin.exception.FileException;
 import work.ReturnWork;
+import work.v3.StartWorkV3;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+
+import static bin.apply.sys.item.Separator.*;
 
 public class ReadModule<T> {
     public T read(String path) {
