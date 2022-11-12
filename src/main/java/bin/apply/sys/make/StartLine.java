@@ -30,6 +30,7 @@ public class StartLine implements LoopToken {
             String finalTotal = getFinalTotal(extensionCheck, total, path);
             startStartLine(finalTotal, total, repositoryArray);
         } catch (VariableException e) {
+            e.printStackTrace();
             new VariableException().variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
             setLine();
         } catch (MatchException e) {
