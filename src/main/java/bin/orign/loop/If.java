@@ -1,85 +1,92 @@
 package bin.orign.loop;
 
 import bin.apply.sys.make.StartLine;
+import bin.calculator.tool.Calculator;
 import bin.exception.MatchException;
 import bin.token.LoopToken;
+import bin.token.MergeToken;
 import bin.token.cal.BoolToken;
 import work.StartWork;
+import work.v3.StartWorkV3;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-public class If implements LoopToken, StartWork, BoolToken {
-    private final String typeToken1;
-    private final String typeToken2;
-    private final String typeToken3;
-    private final Matcher matcher;
+import static bin.apply.sys.make.StartLine.getFinalTotal;
+import static bin.apply.sys.make.StartLine.startStartLine;
+import static bin.calculator.tool.Calculator.*;
+import static bin.exception.MatchException.GrammarTypeClass.NO_ELSE_IF;
+import static bin.exception.MatchException.GrammarTypeClass.VALID;
+import static bin.token.LoopToken.*;
 
-    public If(String type1, String type2, String type3) {
-        String IF_PatternText = START + BLANK + blacksMerge(type1, BOOL, BRACE_STYLE);
-        String IF_ELSE_PatternText = blackMerge("(", blacksMerge(type2, BOOL, BRACE_STYLE), ")*");
-        String ELSE_PatternText = blackMerge("(", blacksMerge(type3, BRACE_STYLE), ")?");
-        this.typeToken1 = type1.replace("\\", "");
-        this.typeToken2 = type2.replace("\\", "");
-        this.typeToken3 = type3.replace("\\", "");
-        this.matcher = Pattern.compile(
-                startEndMerge(
-                    IF_PatternText,
-                    IF_ELSE_PatternText,
-                    ELSE_PatternText))
-                .matcher("");
+public class If extends StartWorkV3 implements MergeToken, Calculator {
+    // 1
+    public If(int... counts) {
+        super(counts);
     }
 
-    @Override
-    public boolean check(String line) {
-        return matcher.reset(line).find();
-    }
+    private final String ELSE_IF = LoopToken.ELSE_IF.replace("\\", "");
+    private final String ELSE = LoopToken.ELSE.replace("\\", "");
 
     @Override
-    public void start(String line, String origen,
+    public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        startLine(line.strip(), repositoryArray);
-    }
+        // ㅇㅇ (test,1,2) ?ㅈ? ㅇㅇ (test,3,4) ?ㅉ? (test,15,16)
+        // [ㅇㅇ (test,1,2),  ?ㅈ? ㅇㅇ (test,3,4),  ?ㅉ? (test,15,16)]
+        LinkedList<String> list = Pattern.compile(getNoMatchFront(BRACE_STYLE))
+                .splitAsStream(params[0].strip())
+                .map(String::strip)
+                .collect(Collectors.toCollection(LinkedList::new));
 
-    @Override
-    public void first() {
+        // if
+        String start = list.removeFirst();
+        int poison = start.lastIndexOf('(');
+        String boolToken = start.substring(0, poison);          // ㅇㅇ ㄸ ㅇㅇ
+        String loopToken = start.substring(poison).strip();     // (test,15,100)
 
-    }
-
-    private void startLine(String line, LinkedList<Map<String, Map<String, Object>>> repository) {
-        StringTokenizer tokenizer = new StringTokenizer(line);
-        String token;
-        if (tokenizer.hasMoreTokens() &&
-            tokenizer.nextToken().equals(typeToken1) &&
-            ((token = tokenizer.nextToken()).equals(TRUE) || token.equals(FALSE))) {
-            if (token.equals(TRUE)) startValue(bothEndCut(tokenizer.nextToken()), repository);
-            else {
-                tokenizer.nextToken();
-                while (tokenizer.hasMoreTokens()) {
-                    token = tokenizer.nextToken();
-                    if (token.equals(typeToken2) &&
-                       ((token = tokenizer.nextToken()).equals(TRUE) || token.equals(FALSE))) {
-                        if (token.equals(TRUE)) {
-                            startValue(bothEndCut(tokenizer.nextToken()), repository);
-                            break;
-                        } else tokenizer.nextToken();
-                    } else if (token.equals(typeToken3)) {
-                        startValue(bothEndCut(tokenizer.nextToken()), repository);
-                        break;
-                    } else throw new MatchException().grammarError();
+        // else
+        final String end = list.getLast().startsWith(ELSE) ? getEndLoop(list.removeLast()) : null;
+        if (getBool(boolToken, repositoryArray)) {
+            loopStart(loopToken, repositoryArray);
+            return;
+        } else if (!list.isEmpty()) {
+            for (String lists : list) {
+                if (!lists.startsWith(ELSE_IF)) throw new MatchException().grammarTypeError(lists, NO_ELSE_IF);
+                // ㅇㅇ (test,3,4)
+                start = lists.substring(ELSE_IF.length()).strip();
+                poison = start.lastIndexOf('(');
+                boolToken = start.substring(0, poison);          // ㅇㅇ ㄸ ㅇㅇ
+                loopToken = start.substring(poison).strip();     // (test,15,100)
+                if (getBool(boolToken, repositoryArray)) {
+                    loopStart(loopToken, repositoryArray);
+                    return;
                 }
             }
-        } else throw new MatchException().grammarError();
+        }
+        if (end != null) loopStart(end, repositoryArray);
     }
 
-    // FileName, StartPos, EndPos
-    private void startValue(String line, LinkedList<Map<String, Map<String, Object>>> repository) {
-        String[] values = matchSplitError(line, COMMA, 3);
-        if (!LOOP_TOKEN.containsKey(values[0])) throw new MatchException().grammarError();
-        String total = LOOP_TOKEN.get(values[0]);
-        int s = total.indexOf("\n" + values[1] + " ");
-        int e = total.indexOf("\n" + values[2] + " ");
-        StartLine.startLine(total.substring(s, e), values[0], repository);
+    // return (test,1,2)
+    private String getEndLoop(String line) {
+        return line.substring(line.lastIndexOf('('));
+    }
+
+    // line = (test,10,15)
+    private void loopStart(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        try {
+            StringTokenizer tokenizer = new StringTokenizer(bothEndCut(line), ",");
+            String fileName = tokenizer.nextToken();
+            String total = LOOP_TOKEN.get(fileName);
+            int s = total.indexOf("\n" + tokenizer.nextToken() + " ");
+            int e = total.indexOf("\n" + tokenizer.nextToken() + " ");
+
+            String finalTotal = getFinalTotal(false, total.substring(s, e), fileName);
+
+            startStartLine(finalTotal, fileName, repositoryArray);
+        } catch (NoSuchElementException e) {
+            throw new MatchException().grammarTypeError(line, VALID);
+        }
     }
 }
