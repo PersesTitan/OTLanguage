@@ -33,7 +33,7 @@ public interface CalToken {
         catch (Exception e) {
             String str = CreateReturnWorks.sub(sing, null, repositoryArray);
             try {return Double.parseDouble(str);}
-            catch (Exception e1) {throw new MatchException().grammarTypeError();}
+            catch (Exception e1) {throw new MatchException().grammarTypeError(str, MatchException.GrammarTypeClass.NUMBER);}
         }
     }
 }
