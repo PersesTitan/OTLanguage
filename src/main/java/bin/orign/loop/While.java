@@ -1,61 +1,51 @@
 package bin.orign.loop;
 
 import bin.apply.sys.make.StartLine;
+import bin.calculator.tool.Calculator;
 import bin.exception.MatchException;
 import bin.token.LoopToken;
+import bin.token.MergeToken;
 import bin.token.cal.BoolToken;
 import work.StartWork;
+import work.v3.StartWorkV3;
 
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static bin.apply.Controller.boolCalculator;
 import static bin.apply.Setting.lineStart;
+import static bin.apply.sys.make.StartLine.getFinalTotal;
+import static bin.apply.sys.make.StartLine.startStartLine;
+import static bin.calculator.tool.Calculator.*;
+import static bin.exception.MatchException.GrammarTypeClass.VALID;
+import static bin.token.LoopToken.LOOP_TOKEN;
 
-public class While implements StartWork, LoopToken, BoolToken {
-    private final String type;
-    private final Matcher matcher;
-
-    public While(String type) {
-        this.type = type;
-        this.matcher =
-                Pattern.compile(startEndMerge(type, BLANKS, BOOL, BLANKS, BRACE_STYLE))
-                .matcher("");
+public class While extends StartWorkV3 implements Calculator, MergeToken {
+    // 1
+    public While(int... counts) {
+        super(counts);
     }
 
     @Override
-    public boolean check(String line) {
-        return matcher.reset(line).find();
-    }
-
-    @Override
-    public void start(String line, String origen,
+    public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        String[] tokens = line.strip().split("\\s+", 3);
-        if (tokens.length != 3) throw new MatchException().grammarError();
-        String[] totalTokens = bothEndCut(tokens[2]).split(",", 3);
-        if (totalTokens.length != 3) throw new MatchException().grammarError();
-        boolean bool = tokens[1].equals("ㅇㅇ");
-        String total = LOOP_TOKEN.get(totalTokens[0]);
-        int start = total.indexOf("\n" + totalTokens[1] + " ");
-        int end = total.indexOf("\n" + totalTokens[2] + " ");
-        total = total.substring(start, end);
+        int poison = params[0].lastIndexOf('(');
+        String start = params[0].substring(0, poison);              // ㅇㅇ ㄸ ㄴㄴ
+        String end = params[0].substring(poison).strip();           // (test,10,14)
 
-        String b = origen.strip()
-                .replaceFirst(START + type, "")
-                .replaceFirst(BRACE_STYLE + END, "")
-                .strip();
+        try {
+            StringTokenizer tokenizer = new StringTokenizer(bothEndCut(end), ",");
+            String fileName = tokenizer.nextToken();
+            String total = LOOP_TOKEN.get(fileName);
+            int s = total.indexOf("\n" + tokenizer.nextToken() + " ");
+            int e = total.indexOf("\n" + tokenizer.nextToken() + " ");
 
-        while (bool) {
-            if (StartLine.startLoop(total, totalTokens[0], repositoryArray).equals(LoopToken.BREAK)) break;
-            bool = lineStart(b, repositoryArray).equals("ㅇㅇ");
+            String finalTotal = getFinalTotal(false, total.substring(s, e), fileName);
+            while (getBool(start, repositoryArray)) {
+                if (Objects.equals(StartLine.startLoop(finalTotal, fileName, repositoryArray), LoopToken.BREAK)) break;
+            }
+        } catch (NoSuchElementException e) {
+            throw new MatchException().grammarTypeError(line, VALID);
         }
-    }
-
-    @Override
-    public void first() {
-
     }
 }
