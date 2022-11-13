@@ -41,12 +41,14 @@ public class NumberV3Test implements CalToken {
                 if (a.equals(TOKEN)) stack.add(TRUE);
                 else if (a.equals(NO_TOKEN)) stack.add(NOT);
                 else {
-                    if (tokenizer.nextToken().equals(TOKEN)) stack.add(a);
-                    else throw new MatchException().grammarTypeError();
+                    String tokens = tokenizer.nextToken();
+                    if (tokens.equals(TOKEN)) stack.add(a);
+                    else throw new MatchException().grammarTypeError(token + a + tokens, MatchException.GrammarTypeClass.TOKEN);
                 }
             } else if (token.equals(NO_TOKEN)) {
-                if (tokenizer.nextToken().equals(NO_TOKEN)) stack.add(FALSE);
-                else throw new MatchException().grammarTypeError();
+                String tokens = tokenizer.nextToken();
+                if (tokens.equals(NO_TOKEN)) stack.add(FALSE);
+                else throw new MatchException().grammarTypeError(token + tokens, MatchException.GrammarTypeClass.TOKEN);
             } else stack.add(token.strip());
         }
 
@@ -62,7 +64,7 @@ public class NumberV3Test implements CalToken {
                 }
                 String a = stack.get(i+1);
                 if (doubleCheck && a.contains(".")) doubleCheck = false;
-                total = cal(total, getDouble(a, ra), stack.get(i));
+                total = number.get(stack.get(i)).apply(total, getDouble(a, ra));
             }
             deleteStack(start, i, stack);
             stack.set(start-1, doubleCheck ? checkInteger(total) : String.valueOf(total));
@@ -78,7 +80,7 @@ public class NumberV3Test implements CalToken {
                 }
                 String a = stack.get(i+1);
                 if (doubleCheck && a.contains(".")) doubleCheck = false;
-                total = cal(total, getDouble(a, ra), stack.get(i));
+                total = number.get(stack.get(i)).apply(total, getDouble(a, ra));
             }
             deleteStack(start, i, stack);
             stack.set(start-1, doubleCheck ? checkInteger(total) : String.valueOf(total));
@@ -95,17 +97,6 @@ public class NumberV3Test implements CalToken {
             stack.remove(start);
             stack.remove(start-1);
         }
-    }
-
-    private double cal(double v1, double v2, String sing) {
-        return switch (sing) {
-            case "+" -> v1 + v2;
-            case "-" -> v1 - v2;
-            case "*" -> v1 * v2;
-            case "/" -> v1 / v2;
-            case "%" -> v1 % v2;
-            default -> throw new MatchException().grammarTypeError();
-        };
     }
 
     private int getFirst(Stack<String> stack) {
