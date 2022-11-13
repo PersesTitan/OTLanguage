@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Stack;
 
+import static bin.exception.MatchException.GrammarTypeClass.OR_AND;
+import static bin.exception.MatchException.GrammarTypeClass.TRUE_FALSE;
 import static bin.token.cal.BoolToken.*;
 
 public class BoolV3Test {
@@ -24,7 +26,7 @@ public class BoolV3Test {
         return switch (sing) {
             case AND -> bool1 && bool2;
             case OR -> bool1 || bool2;
-            default -> throw new MatchException().grammarTypeError();
+            default -> throw new MatchException().grammarTypeError(sing, OR_AND);
         };
     }
 
@@ -44,7 +46,8 @@ public class BoolV3Test {
 
     private boolean get(String line, LinkedList<Map<String, Map<String, Object>>> ra) {
         String token = CreateReturnWorks.sub(line, null, ra);
-        if (token == null || !(token.equals(FALSE) || token.equals(TRUE))) throw new MatchException().grammarTypeError();
+        if (token == null || !(token.equals(FALSE) || token.equals(TRUE)))
+            throw new MatchException().grammarTypeError(token == null ? "" : token, TRUE_FALSE);
         else return token.equals(TRUE);
     }
 }
