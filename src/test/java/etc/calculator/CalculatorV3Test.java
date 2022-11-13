@@ -9,15 +9,6 @@ import java.util.*;
 import java.util.function.BiFunction;
 
 public class CalculatorV3Test {
-    private static final Map<String, BiFunction<BigDecimal, BigDecimal, BigDecimal>> map = new HashMap<>();
-    static {
-        map.put("a", BigDecimal::add);
-        map.put("b", BigDecimal::subtract);
-        map.put("c", BigDecimal::multiply);
-        map.put("d", BigDecimal::divide);
-        map.put("e", BigDecimal::remainder);
-    }
-
     public static void main(String[] args) {
         System.out.println(getBig("100 ㅇ+ㅇ 232 ㅇ>ㅇ 32 ㅇ=ㅇ 393ㅇ<ㅇ23ㅇ>=ㅇ안녕12ㄸㅇㅇ"));
     }
