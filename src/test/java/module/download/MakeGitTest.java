@@ -10,16 +10,21 @@ import bin.orign.console.priority.PriorityPrint;
 import bin.orign.console.priority.PriorityPrintSpace;
 import bin.orign.console.priority.PriorityPrintTap;
 import bin.orign.console.priority.PriorityPrintln;
+import bin.orign.loop.If;
+import bin.orign.loop.While;
 import bin.orign.math.random.*;
 import bin.orign.variable.CreateList;
 import bin.orign.variable.CreateMap;
 import bin.orign.variable.CreateOrigin;
 import bin.orign.variable.CreateSet;
 import bin.string.*;
+import bin.token.LoopToken;
 import cos.poison.controller.HttpMethod;
 import cos.poison.setting.PoisonCreate;
 import cos.poison.setting.PoisonMethod;
 import cos.poison.setting.PoisonStart;
+import etc.loop.IfTest;
+import etc.loop.WhileTest;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -31,6 +36,7 @@ import static bin.apply.Repository.*;
 import static bin.apply.sys.item.Separator.*;
 import static bin.token.ConsoleToken.*;
 import static bin.token.LoopToken.*;
+import static bin.token.LoopToken.WHITE;
 import static bin.token.StringToken.*;
 import static bin.token.VariableToken.FILE;
 import static bin.token.VariableToken.STRING_VARIABLE;
@@ -78,6 +84,9 @@ public class MakeGitTest {
                 try (var output = new ObjectOutputStream(new FileOutputStream(namePath + "/" + COMPULSION + MODULE_EXTENSION))) {
                     output.writeObject(priorityStartWorksV3);
                 } catch (IOException ignored) {}
+                try (var output = new ObjectOutputStream(new FileOutputStream(COMPULSION_PATH + "/" + name + ".otlm"))) {
+                    output.writeObject(priorityStartWorksV3);
+                } catch (IOException ignored) {}
                 br.write(COMPULSION);
                 br.newLine();
             }
@@ -86,12 +95,19 @@ public class MakeGitTest {
                 try (var output = new ObjectOutputStream(new FileOutputStream(namePath + "/" + ALTERATION + MODULE_EXTENSION))) {
                     output.writeObject(returnWorksV3);
                 } catch (IOException ignored) {}
+                try (var output = new ObjectOutputStream(new FileOutputStream(ALTERATION_PATH + "/" + name + ".otlm"))) {
+                    output.writeObject(returnWorksV3);
+                } catch (IOException ignored) {}
+
                 br.write(ALTERATION);
                 br.newLine();
             }
 
             if (!startWorksV3.isEmpty()) {
                 try (var output = new ObjectOutputStream(new FileOutputStream(namePath + "/" + OPERATE + MODULE_EXTENSION))) {
+                    output.writeObject(startWorksV3);
+                } catch (IOException ignored) {}
+                try (var output = new ObjectOutputStream(new FileOutputStream(OPERATE_PATH + "/" + name + ".otlm"))) {
                     output.writeObject(startWorksV3);
                 } catch (IOException ignored) {}
                 br.write(OPERATE);
@@ -121,6 +137,9 @@ public class MakeGitTest {
     }
 
     private static void start1() {
+        String WHITE = LoopToken.WHITE.replace("\\", "");
+        String IF = LoopToken.IF.replace("\\", "");
+
         Repository.priorityCreateStartWorks(FORCE_QUIT, "", new ForceQuit(0));
         Repository.priorityCreateStartWorks(PRIORITY_PRINT, "", new PriorityPrint(1));
         Repository.priorityCreateStartWorks(PRIORITY_PRINTLN, "", new PriorityPrintln(1));
@@ -142,6 +161,8 @@ public class MakeGitTest {
         Repository.createStartWorks(PRINT_TAP, "", new PrintTap(1));
         Repository.createStartWorks(SLEEP, "", new Sleep(1));
         Repository.createStartWorks(FILE, "", new FilePath(1));
+        Repository.createStartWorks(WHITE, "", new While(1));
+        Repository.createStartWorks(IF, "", new If(1));
 
         Repository.createReturnWorks(RANDOM_BOOL, "", new RandomBoolean(1));
         Repository.createReturnWorks(RANDOM_DOUBLE, "", new RandomDouble(1, 2));
