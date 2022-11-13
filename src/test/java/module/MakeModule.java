@@ -20,7 +20,6 @@ public class MakeModule<V> {
 
     public void makeWork(String path, V work) {
         try (ObjectOutput output = new ObjectOutputStream(new FileOutputStream(path))) {
-
             output.writeObject(work);
         } catch (IOException e) {
             e.printStackTrace();
