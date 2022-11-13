@@ -109,6 +109,10 @@ public interface MergeToken {
     }
 
     // NO group
+    default String getNoMatchFront(String token1) {
+        return "(?<=" + token1 + ")";
+    }
+
     default String getNoMatchFront(String token1, String token2) {
         return "(?<=" + token1 + ")" + token2;
     }
