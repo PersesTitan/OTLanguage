@@ -4,7 +4,6 @@ import static bin.token.Token.QUESTION;
 import static bin.token.Token.QUESTION_S;
 
 public interface StringToken {
-
     String JOIN = "ㅉㅇㅉ";
     String SPLIT = "ㅅㅍㅅ";
     String SPLIT_REGULAR = "ㅆㅍㅆ";
