@@ -12,7 +12,7 @@ public class LoopController implements LoopToken, BoolToken {
         if (line.matches(patternText)) {
             String[] tokens = line.split(BLANK + QUESTION + BLANK, 2);
             if (tokens.length != 2) throw new MatchException().grammarError();    // ㅇㅇ break, continue
-            else if (tokens[0].equals("ㅇㅇ")) return tokens[1];
+            else if (tokens[0].equals(TRUE)) return tokens[1];
             else return "";
         }
         return line;
