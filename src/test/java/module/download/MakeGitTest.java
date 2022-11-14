@@ -5,6 +5,7 @@ import bin.apply.sys.run.FilePath;
 import bin.apply.sys.run.ForceQuit;
 import bin.apply.sys.run.Sleep;
 import bin.apply.sys.run.TryCatch;
+import bin.define.method.DefineMethod;
 import bin.orign.console.normal.*;
 import bin.orign.console.priority.PriorityPrint;
 import bin.orign.console.priority.PriorityPrintSpace;
@@ -18,13 +19,15 @@ import bin.orign.variable.CreateMap;
 import bin.orign.variable.CreateOrigin;
 import bin.orign.variable.CreateSet;
 import bin.string.*;
+import bin.string.list.ListAdd;
+import bin.string.list.ListContains;
+import bin.string.list.ListRemove;
+import bin.string.list.ListRetain;
 import bin.token.LoopToken;
 import cos.poison.controller.HttpMethod;
 import cos.poison.setting.PoisonCreate;
 import cos.poison.setting.PoisonMethod;
 import cos.poison.setting.PoisonStart;
-import etc.loop.IfTest;
-import etc.loop.WhileTest;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -36,7 +39,6 @@ import static bin.apply.Repository.*;
 import static bin.apply.sys.item.Separator.*;
 import static bin.token.ConsoleToken.*;
 import static bin.token.LoopToken.*;
-import static bin.token.LoopToken.WHITE;
 import static bin.token.StringToken.*;
 import static bin.token.VariableToken.FILE;
 import static bin.token.VariableToken.STRING_VARIABLE;
@@ -163,6 +165,8 @@ public class MakeGitTest {
         Repository.createStartWorks(FILE, "", new FilePath(1));
         Repository.createStartWorks(WHITE, "", new While(1));
         Repository.createStartWorks(IF, "", new If(1));
+        Repository.createStartWorks(METHOD, "", new DefineMethod(1));
+
 
         Repository.createReturnWorks(RANDOM_BOOL, "", new RandomBoolean(1));
         Repository.createReturnWorks(RANDOM_DOUBLE, "", new RandomDouble(1, 2));
@@ -175,6 +179,12 @@ public class MakeGitTest {
         Repository.createReturnWorks(STRING_VARIABLE, SPLIT_REGULAR, new SplitRegular(2));
         Repository.createReturnWorks(STRING_VARIABLE, CONTAINS_S, new Contains(2));
         Repository.createReturnWorks(STRING_VARIABLE, EQUALS_S, new Equals(2));
+        LIST_LIST.forEach(v -> {
+            Repository.createStartWorks(v, ADD_ALL, new ListAdd(v, 2));
+            Repository.createStartWorks(v, RETAIN_ALL, new ListRetain(v, 2));
+            Repository.createStartWorks(v, REMOVE_ALL, new ListRemove(v, 2));
+            Repository.createReturnWorks(v, CONTAINS_ALL, new ListContains(v, 2));
+        });
     }
 
     private static void start2() {
