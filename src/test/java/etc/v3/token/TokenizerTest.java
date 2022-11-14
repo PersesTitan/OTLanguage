@@ -1,4 +1,4 @@
-package etc.token;
+package etc.v3.token;
 
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
