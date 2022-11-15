@@ -1,8 +1,12 @@
 import bin.apply.Setting;
+import bin.apply.sys.item.SystemSetting;
 import bin.apply.sys.make.ChangeHangle;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
 import bin.token.LoopToken;
+import etc.v3.BoolTest;
+import etc.v3.NumberTest;
+import module.download.MakeGitTest;
 
 import java.awt.*;
 import java.io.IOException;
@@ -19,7 +23,10 @@ public class MainTest implements LoopToken, ChangeHangle {
 //        Robot robot = new Robot();
 //        JFrame frame = new JFrame("test");
 
-//        new MakeGitTest();
+        new MakeGitTest();
+
+        SystemSetting.createStartWorks("0", "", new NumberTest());
+        SystemSetting.createStartWorks("1", "", new BoolTest());
         new Setting();
         try {
             StartLine.developmentMode = true;
