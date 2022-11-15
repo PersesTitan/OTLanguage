@@ -31,6 +31,7 @@ import java.util.*;
 import static bin.apply.Repository.*;
 import static bin.apply.Repository.returnWorksV3;
 import static bin.apply.sys.item.Separator.*;
+import static bin.apply.sys.item.SystemSetting.*;
 import static bin.token.ConsoleToken.*;
 import static bin.token.ConsoleToken.PRIORITY_PRINT_SPACE;
 import static bin.token.LoopToken.*;
@@ -156,45 +157,45 @@ public class MakeGitModule {
 
     //////////////////////////////////////////////////////////////////////////
     private static void start1() {
-        Repository.priorityCreateStartWorks(FORCE_QUIT, "", new ForceQuit(0));
-        Repository.priorityCreateStartWorks(PRIORITY_PRINT, "", new PriorityPrint(1));
-        Repository.priorityCreateStartWorks(PRIORITY_PRINTLN, "", new PriorityPrintln(1));
-        Repository.priorityCreateStartWorks(PRIORITY_PRINT_TAP, "", new PriorityPrintTap(1));
-        Repository.priorityCreateStartWorks(PRIORITY_PRINT_SPACE, "", new PriorityPrintSpace(1));
-        Repository.priorityCreateStartWorks(TRY_CATCH, "", new TryCatch(1));
+        priorityCreateStartWorks(FORCE_QUIT, "", new ForceQuit(0));
+        priorityCreateStartWorks(PRIORITY_PRINT, "", new PriorityPrint(1));
+        priorityCreateStartWorks(PRIORITY_PRINTLN, "", new PriorityPrintln(1));
+        priorityCreateStartWorks(PRIORITY_PRINT_TAP, "", new PriorityPrintTap(1));
+        priorityCreateStartWorks(PRIORITY_PRINT_SPACE, "", new PriorityPrintSpace(1));
+        priorityCreateStartWorks(TRY_CATCH, "", new TryCatch(1));
 
         CreateOrigin createOrigin = new CreateOrigin();
         CreateSet createSet = new CreateSet();
         CreateList createList = new CreateList();
         CreateMap createMap = new CreateMap();
-        ORIGIN_LIST.forEach(v -> Repository.createStartWorks(v, "", createOrigin));
-        SET_LIST.forEach(v -> Repository.createStartWorks(v, "", createSet));
-        LIST_LIST.forEach(v -> Repository.createStartWorks(v, "", createList));
-        MAP_LIST.forEach(v -> Repository.createStartWorks(v, "", createMap));
-        Repository.createStartWorks(PRINT, "", new Print(1));
-        Repository.createStartWorks(PRINTLN, "", new Println(1));
-        Repository.createStartWorks(PRINT_SPACE, "", new PrintSpace(1));
-        Repository.createStartWorks(PRINT_TAP, "", new PrintTap(1));
-        Repository.createStartWorks(SLEEP, "", new Sleep(1));
-        Repository.createStartWorks(FILE, "", new FilePath(1));
+        ORIGIN_LIST.forEach(v -> createStartWorks(v, "", createOrigin));
+        SET_LIST.forEach(v -> createStartWorks(v, "", createSet));
+        LIST_LIST.forEach(v -> createStartWorks(v, "", createList));
+        MAP_LIST.forEach(v -> createStartWorks(v, "", createMap));
+        createStartWorks(PRINT, "", new Print(1));
+        createStartWorks(PRINTLN, "", new Println(1));
+        createStartWorks(PRINT_SPACE, "", new PrintSpace(1));
+        createStartWorks(PRINT_TAP, "", new PrintTap(1));
+        createStartWorks(SLEEP, "", new Sleep(1));
+        createStartWorks(FILE, "", new FilePath(1));
 
-        Repository.createReturnWorks(RANDOM_BOOL, "", new RandomBoolean(1));
-        Repository.createReturnWorks(RANDOM_DOUBLE, "", new RandomDouble(1, 2));
-        Repository.createReturnWorks(RANDOM_FLOAT, "", new RandomFloat(1, 2));
-        Repository.createReturnWorks(RANDOM_INTEGER, "", new RandomInteger(1, 2));
-        Repository.createReturnWorks(RANDOM_LONG, "", new RandomLong(1, 2));
-        Repository.createReturnWorks(SCANNER, "", new Scanner(0));
-        Repository.createReturnWorks(STRING_VARIABLE, JOIN, new Join(2));
-        Repository.createReturnWorks(STRING_VARIABLE, SPLIT, new Split(2));
-        Repository.createReturnWorks(STRING_VARIABLE, SPLIT_REGULAR, new SplitRegular(2));
-        Repository.createReturnWorks(STRING_VARIABLE, CONTAINS_S, new Contains(2));
-        Repository.createReturnWorks(STRING_VARIABLE, EQUALS_S, new Equals(2));
+        createReturnWorks(RANDOM_BOOL, "", new RandomBoolean(1));
+        createReturnWorks(RANDOM_DOUBLE, "", new RandomDouble(1, 2));
+        createReturnWorks(RANDOM_FLOAT, "", new RandomFloat(1, 2));
+        createReturnWorks(RANDOM_INTEGER, "", new RandomInteger(1, 2));
+        createReturnWorks(RANDOM_LONG, "", new RandomLong(1, 2));
+        createReturnWorks(SCANNER, "", new Scanner(0));
+        createReturnWorks(STRING_VARIABLE, JOIN, new Join(2));
+        createReturnWorks(STRING_VARIABLE, SPLIT, new Split(2));
+        createReturnWorks(STRING_VARIABLE, SPLIT_REGULAR, new SplitRegular(2));
+        createReturnWorks(STRING_VARIABLE, CONTAINS_S, new Contains(2));
+        createReturnWorks(STRING_VARIABLE, EQUALS_S, new Equals(2));
     }
 
     private static void start2() {
-        Repository.createStartWorks(POISON, "", new PoisonCreate(1, 2));
-        Repository.createStartWorks(POISON, POISON_START, new PoisonStart(0));
-        Repository.createStartWorks(POISON, POISON_POST, new PoisonMethod(HttpMethod.POST));
-        Repository.createStartWorks(POISON, POISON_GET, new PoisonMethod(HttpMethod.GET));
+        createStartWorks(POISON, "", new PoisonCreate(1, 2));
+        createStartWorks(POISON, POISON_START, new PoisonStart(0));
+        createStartWorks(POISON, POISON_POST, new PoisonMethod(HttpMethod.POST));
+        createStartWorks(POISON, POISON_GET, new PoisonMethod(HttpMethod.GET));
     }
 }
