@@ -1,18 +1,21 @@
 package etc.v3.method.item;
 
 import bin.CreateReturnWorks;
+import bin.apply.sys.item.HpMap;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import static bin.apply.Repository.COPY_REPOSITORY;
+import static bin.apply.Repository.repositoryItems;
 import static bin.apply.sys.make.StartLine.startStartLine;
 import static etc.v3.method.MethodItemTool.resetRepository;
 import static etc.v3.method.MethodItemTool.setParams;
 
 public class MethodItemReturnTest {
-    public final Map<String, Map<String, Object>> repository = new HashMap<>(COPY_REPOSITORY);
+    public final Map<String, Map<String, Object>> repository = new HashMap<>() {{
+        repositoryItems.forEach(v -> put(v, new HpMap(v)));
+    }};
     private final String[][] params;
     private final String finalTotal;
     private final String fileName;
