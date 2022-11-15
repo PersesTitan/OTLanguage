@@ -11,15 +11,11 @@ import java.util.Map;
 
 import static bin.apply.Repository.*;
 import static bin.apply.sys.item.Separator.*;
-import static bin.token.VariableToken.VAR_TOKEN;
 
 public class MakeTest {
 
     public static void main(String[] args) {
         HashMap<String, Map<String, StartWorkV3>> priorityStartWorksV3 = new HashMap<>();
-        HashMap<String, Map<String, StartWorkV3>> startWorksV3 = new HashMap<>() {{put(VAR_TOKEN, new HashMap<>());}};
-        HashMap<String, Map<String, ReturnWorkV3>> returnWorksV3 = new HashMap<>() {{put(VAR_TOKEN, new HashMap<>());}};
-
 
         new Setting();
         System.out.println(COMPULSION_PATH);
