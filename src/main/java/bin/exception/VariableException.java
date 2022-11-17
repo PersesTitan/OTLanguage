@@ -15,6 +15,8 @@ public class VariableException extends RuntimeException {
     private final String methodParamsCount = "매개변수 갯수가 일치하지 않습니다.";
     private final String methodTypeMatch = "메소드 타입이 일치하지 않습니다.";
     private final String cannotInclude = "사용할 수 없는 문자가 포함되어 있습니다.";
+    private final String methodParamsError = "메소드의 파리미터 길이가 유효하지 않습니다.";
+    private final String noDefineMethod = "정의되지 않은 메소드명 입니다.";
 
     public VariableException() {}
 
@@ -36,9 +38,19 @@ public class VariableException extends RuntimeException {
             case methodTypeMatch -> "Method types do not match.\nPlease check the corresponding method type.";
             case variableNameMatch -> "Variable name is not valid.\nPlease check the variable name.";
             case cannotInclude -> "Didn't use : " + String.join(", ", noContains) + "\nContains characters that cannot be included\nPlease change the variable name.";
+            case methodParamsError -> "The parameter length of the method is not valid.\nPlease check the method parameters.";
+            case noDefineMethod -> "Undefined method name.\nPlease check the method name.";
             default -> "";
         };
         ErrorMessage.printErrorMessage(e, subMessage, path, line, position);
+    }
+
+    public VariableException noDefineMethod() {
+        return new VariableException(noDefineMethod);
+    }
+
+    public VariableException methodParamsError() {
+        return new VariableException(methodParamsError);
     }
 
     public VariableException cannotInclude() {
