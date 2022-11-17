@@ -10,6 +10,7 @@ public class FileException extends RuntimeException {
     private final String rightExtension = "해당 확장자 형식을 읽을 수 없습니다.";
     private final String alreadyExistsFileName = "이미 존재하는 파일명입니다.";
     private final String addModuleError = "모듈 추가에 실패하였습니다.";
+    private final String noValidValues = "유효한 값을 받지 못하였습니다.";
 
     public FileException() {}
 
@@ -23,9 +24,10 @@ public class FileException extends RuntimeException {
             case noReadError -> "The file could not be read.\nPlease check if the contents of the file are corrupted.";
             case isNotFileError -> "Only files can be opened.\nPlease check if the path is a file.";
             case pathNoHaveError -> "The file and directory do not exist in that path.\nPlease check the path.";
-            case rightExtension -> "The extension currently readable by OTLanguage is " + SystemSetting.getExtension() + ".";
+            case rightExtension -> "The extension currently readable by OTLanguage is (" + SystemSetting.getExtension() + ").";
             case alreadyExistsFileName -> "This is a file name that already exists.\nPlease change the file name.";
             case addModuleError -> "Failed to add module.\nPlease check if there is a module file.";
+            case noValidValues -> "No valid values were received.\nPlease try again or reinstall.";
             default -> "";
         };
         if (path == null || path.isBlank()) ErrorMessage.printErrorMessage(e, subMessage);
@@ -36,7 +38,10 @@ public class FileException extends RuntimeException {
         if (e.getMessage().equals(pathNoHaveError))
             ErrorMessage.printErrorMessage(e, "The file and directory do not exist in that path.\nPlease check the path.", path, line, position);
         else printErrorMessage(e, path);
+    }
 
+    public FileException noValidValues() {
+        return new FileException(noValidValues);
     }
 
     public FileException addModuleError() {
