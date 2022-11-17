@@ -7,6 +7,7 @@ import bin.token.LoopToken;
 import bin.token.Token;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -52,7 +53,6 @@ public class Bracket implements LoopToken, Token {
                     int oldStart = getLineStart(oldValue);
                     int oldEnd = getLineEnd(oldValue);
                     String newValue = " (" + fileName + "," + (oldStart == 0 ? oldEnd : oldStart) + "," + oldEnd + ") ";
-//                    String newValue = " `" + fileName + "," + (oldStart == 0 ? oldEnd : oldStart) + "," + oldEnd + "` ";
                     copy = copy.replace(total.substring(start-1, end+1), newValue);
                 } else stack.pop();
             } else {
@@ -68,8 +68,9 @@ public class Bracket implements LoopToken, Token {
     }
 
     private void getErrorLine(String total, int pos) {
-        String[] lines = total.substring(0, pos).split("\\n");
-        String line = lines[lines.length-1];
+        total = total.strip();
+        int end = total.lastIndexOf("\n") + 1;
+        String line = total.substring(pos, end);
         StartLine.setError(line, total);
         throw new MatchException().bracketMatchError();
     }
