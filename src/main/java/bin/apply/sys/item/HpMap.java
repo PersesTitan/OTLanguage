@@ -77,8 +77,9 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
         else if (noContains.stream().anyMatch(key::contains)) throw new VariableException().cannotInclude();
 
         Object keyObj = this.getOrDefault(key, null);
-        Object valueObj = variableTypeCheck.getObject(variableType, value.toString(), keyObj);
+        Object valueObj = variableTypeCheck.getObject(variableType, value, keyObj);
         if (keyObj == null || originList.contains(variableType)) return super.put(key, valueObj);
+        else if (variableType.equals(VariableType.Method)) return super.put(key, valueObj);
         else return value;
     }
 
