@@ -1,222 +1,237 @@
 package bin.orign.loop;
 
 import bin.apply.sys.make.StartLine;
-import bin.check.VariableCheck;
-import bin.check.VariableType;
+import bin.calculator.tool.Calculator;
 import bin.exception.MatchException;
 import bin.exception.VariableException;
+import bin.orign.variable.GetList;
 import bin.token.LoopToken;
-import bin.token.Token;
-import work.StartWork;
+import bin.token.MergeToken;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static bin.check.VariableCheck.*;
-import static bin.token.cal.NumberToken.NUMBER;
+import static bin.apply.sys.make.StartLine.getFinalTotal;
+import static bin.token.LoopToken.LOOP_TOKEN;
+import static bin.token.LoopToken.PUTIN_TOKEN;
+import static bin.token.VariableToken.*;
+import static bin.token.VariableToken.LONG_VARIABLE;
 
-public class For implements Token, StartWork, LoopToken, VariableCheck {
-    private final String patternText;
-    private final Matcher matcher;
-    private final Matcher m;
-
-    public For() {
-        this.patternText = blackMerge(NUMBER, FOR, NUMBER, FOR, NUMBER);
-        this.matcher = Pattern.compile(
-                startEndMerge(patternText, BLANKS, BRACE_STYLE, "(", BLANKS, PUTIN, ")?"))
-                .matcher("");
-        this.m = Pattern.compile(START + patternText).matcher("");
-    }
-
-    @Override
+public class For implements Calculator, MergeToken, GetList {
     public boolean check(String line) {
-        return matcher.reset(line).find();
+        return line.chars().filter(v -> v == '^').count() == 2;
     }
 
+    public void start(String line, LinkedList<Map<String, Map<String, Object>>> ra) {
+        try {
+            startTokens(new StringTokenizer(line, "^"), ra);
+        } catch (NoSuchElementException e) {
+            throw new MatchException().grammarError();
+        } catch (ClassCastException | NumberFormatException e) {
+            throw new VariableException().typeMatch();
+        }
+    }
 
-    @Override
-    public void start(String line, String origen,
-                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        m.reset(line);
-        if (m.find()) {
-            String group = m.group().strip(); // 숫자^숫자^숫자
-            // (test,0,1) or (test,0,1)=>ㅇㅈㅇ 변수
-            line = line.replaceFirst(START + BLANK + patternText, "");
-            String[] tokens = line.split(PUTIN_TOKEN, 2);
+    private void startTokens(StringTokenizer tokenizer, LinkedList<Map<String, Map<String, Object>>> ra) {
+        if (tokenizer.countTokens() == 2) {
+            // ^[1, 2, 3, 4]^ (test,1,3)
+            String token1 = tokenizer.nextToken().strip();  // [1, 2, 3, 4]
+            String token2 = tokenizer.nextToken().strip();  // (test,1,3)
 
-            String[] token = bothEndCut(tokens[0].strip()).split(",", 3);
-            if (token.length != 3) throw new MatchException().grammarError();
-            String total = LOOP_TOKEN.get(token[0]);
-            int start = total.indexOf("\n" + token[1] + " ");
-            int end = total.indexOf("\n" + token[2] + " ");
-            total = total.substring(start, end);
-            if (tokens.length == 1) {
-                String[] numbers = group.split(BLANK+FOR+BLANK, 3);
-                if (numbers.length != 3) throw new MatchException().grammarError();
-                startFor(group,
-                        getType(numbers[0], numbers[1], numbers[2]),
-                        null, token[0], total, repositoryArray);
+            // (test,1,3) -> test, 1, 3
+            String variables = null;
+            int position = token2.lastIndexOf('(');
+            token2 = token2.substring(position);
+            if (token2.contains(PUTIN_TOKEN)) {
+                String[] tokens = token2.split(PUTIN_TOKEN, 2);
+                token2 = tokens[0];                 // (test,1,15)
+                variables = tokens[1].strip();      // ㅇㅈㅇ 변수명
+            }
+
+            StringTokenizer st = new StringTokenizer(bothEndCut(token2.strip()), ",");
+            String fileName = st.nextToken();
+            String total = LOOP_TOKEN.get(fileName);
+            int s = total.indexOf("\n" + st.nextToken() + " ");
+            int e = total.indexOf("\n" + st.nextToken() + " ");
+            String finalTotal = getFinalTotal(false, total.substring(s, e), fileName);
+
+            if (variables == null) {
+                if (token1.startsWith("[") && token1.endsWith("]")) {
+                    double d = token1.chars().filter(v -> v == ',').count() + 1;
+                    start(finalTotal, fileName, ra, 0, d,1);
+                } else throw new MatchException().grammarError();
             } else {
-                String[] variables = tokens[1].strip().split(BLANKS, 2);
-                if (variables.length != 2) throw new MatchException().grammarError();
-                startFor(group, variables[0], variables[1], token[0],
-                        total, repositoryArray);
+                StringTokenizer variableToken = new StringTokenizer(variables);
+                String variableType = variableToken.nextToken();
+                String variableName = variableToken.nextToken();
+                variableDefineError(variableName, ra.get(0));
+                List<?> list = getList(token1, variableType, ra);
+                if (list == null) throw new VariableException().typeMatch();
+                var rep = ra.get(0).get(variableType);
+                try {
+                    switch (variableType) {
+                        case INT_VARIABLE -> {
+                            for (Object ob : list) {
+                                int i = (int) ob;
+                                rep.put(variableName, i);
+                                if (Objects.equals(StartLine.startLoop(finalTotal, fileName, ra), LoopToken.BREAK)) break;
+                            }
+                        }
+                        case FLOAT_VARIABLE -> {
+                            for (Object ob : list) {
+                                float i = (float) ob;
+                                rep.put(variableName, i);
+                                if (Objects.equals(StartLine.startLoop(finalTotal, fileName, ra), LoopToken.BREAK)) break;
+                            }
+                        }
+                        case LONG_VARIABLE -> {
+                            for (Object ob : list) {
+                                long i = (long) ob;
+                                rep.put(variableName, i);
+                                if (Objects.equals(StartLine.startLoop(finalTotal, fileName, ra), LoopToken.BREAK)) break;
+                            }
+                        }
+                        case DOUBLE_VARIABLE -> {
+                            for (Object ob : list) {
+                                double i = (double) ob;
+                                rep.put(variableName, i);
+                                if (Objects.equals(StartLine.startLoop(finalTotal, fileName, ra), LoopToken.BREAK)) break;
+                            }
+                        }
+                        default -> throw new VariableException().forTypeMatchError();
+                    }
+                } finally {rep.remove(variableName);}
+            }
+
+        } else if (tokenizer.countTokens() == 3) {
+            // 1^10^1 (test,1,3)
+            double a = getNumber(tokenizer.nextToken(), ra);
+            double b = getNumber(tokenizer.nextToken(), ra);
+            String token = tokenizer.nextToken();
+            int position = token.lastIndexOf('(');
+            double c = getNumber(token.substring(0, position), ra);
+
+            // (test,1,3) -> test, 1, 3
+            String variableName = null;
+            token = token.substring(position).strip();
+            if (token.contains(PUTIN_TOKEN)) {
+                String[] tokens = token.split(PUTIN_TOKEN, 2);
+                token = tokens[0];
+                variableName = tokens[1].strip();
+            }
+
+            StringTokenizer st = new StringTokenizer(bothEndCut(token.strip()), ",");
+            String fileName = st.nextToken();
+            String total = LOOP_TOKEN.get(fileName);
+            int s = total.indexOf("\n" + st.nextToken() + " ");
+            int e = total.indexOf("\n" + st.nextToken() + " ");
+            String finalTotal = getFinalTotal(false, total.substring(s, e), fileName);
+
+            if (variableName == null) start(finalTotal, fileName, ra, a, b, c);
+            else {
+                StringTokenizer variableNameTokens = new StringTokenizer(variableName);
+                createVariable(variableNameTokens.nextToken(), variableNameTokens.nextToken(),
+                        fileName, finalTotal, ra, a, b, c);
             }
         }
     }
 
-    @Override
-    public void first() {
-
+    private void createVariable(String type, String variableName,
+                                String fileName, String finalTotal,
+                                LinkedList<Map<String, Map<String, Object>>> repositoryArray,
+                                double a, double b, double c) {
+        variableDefineError(variableName, repositoryArray.get(0));
+        switch (type) {
+            case INT_VARIABLE -> start(variableName, finalTotal, fileName, repositoryArray, (int) a, (int) b, (int) c);
+            case LONG_VARIABLE -> start(variableName, finalTotal, fileName, repositoryArray, (long) a, (long) b, (long) c);
+            case FLOAT_VARIABLE -> start(variableName, finalTotal, fileName, repositoryArray, (float) a, (float) b, (float) c);
+            case DOUBLE_VARIABLE -> start(variableName, finalTotal, fileName, repositoryArray, a, b, c);
+            default -> throw new VariableException().forTypeMatchError();
+        }
     }
 
-    private void startFor(String line,
-                          String variableType, String variableName,
-                          String fileName, String total,
-                          LinkedList<Map<String, Map<String, Object>>> repository) {
-        // line = NUMBER ^ NUMBER ^ NUMBER
-        String[] tokens = line.split(BLANK+FOR+BLANK, 3);
-
-        if (variableName != null) {
-            if (tokens.length != 3) throw new MatchException().grammarError();
-            if (!switch (variableType) {
-                case INT_VARIABLE -> Arrays.stream(tokens).allMatch(VariableCheck::isInteger);
-                case LONG_VARIABLE -> Arrays.stream(tokens).allMatch(VariableCheck::isLong);
-                case FLOAT_VARIABLE -> Arrays.stream(tokens).allMatch(VariableCheck::isFloat);
-                case DOUBLE_VARIABLE -> Arrays.stream(tokens).allMatch(VariableCheck::isDouble);
-                default -> false;
-            }) throw new VariableException().forTypeMatchError();
-            variableDefineError(variableName, repository.get(0));
+    private List<?> getList(String line, String type,
+                            LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        if (type == null) return setStringList(new LinkedList<>(), bothEndCut(line));
+        else if (line.startsWith("[") && line.endsWith("]")) {
+            // [1, 2, 3, 4]
+            return switch (type) {
+                case INT_VARIABLE -> setIntegerList(new LinkedList<>(), line);
+                case FLOAT_VARIABLE -> setFlotList(new LinkedList<>(), line);
+                case LONG_VARIABLE -> setLongList(new LinkedList<>(), line);
+                case DOUBLE_VARIABLE -> setDoubleList(new LinkedList<>(), line);
+                default -> throw new VariableException().forTypeMatchError();
+            };
+        } else {
+            int accessCount = accessCount(line, repositoryArray.size());
+            line = line.substring(accessCount);
+            return switch (type) {
+                case INT_VARIABLE -> (List<Integer>) repositoryArray.get(accessCount).get(LIST_INTEGER).get(line);
+                case FLOAT_VARIABLE -> (List<Float>) repositoryArray.get(accessCount).get(LIST_FLOAT).get(line);
+                case LONG_VARIABLE -> (List<Long>) repositoryArray.get(accessCount).get(LIST_LONG).get(line);
+                case DOUBLE_VARIABLE -> (List<Double>) repositoryArray.get(accessCount).get(LIST_DOUBLE).get(line);
+                default -> throw new VariableException().forTypeMatchError();
+            };
         }
+    }
 
-        switch (variableType) {
-            case INT_VARIABLE -> {    // INTEGER
-                int a = Integer.parseInt(tokens[0]);
-                int b = Integer.parseInt(tokens[1]);
-                int c = Integer.parseInt(tokens[2]);
-                if (variableName == null) start(a, b, c, total, fileName, repository);
-                else start(a, b, c, total, fileName, variableName, repository);
+    private void start(String variableName,
+                       String finalTotal, String fileName,
+                       LinkedList<Map<String, Map<String, Object>>> repositoryArray,
+                       int a, int b, int c) {
+        var rep = repositoryArray.get(0).get(INT_VARIABLE);
+        try {
+            rep.put(variableName, a);
+            for (int repValue; (repValue = (int) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
+                if (Objects.equals(StartLine.startLoop(finalTotal, fileName, repositoryArray), LoopToken.BREAK)) break;
             }
-            case LONG_VARIABLE -> {    // LONG
-                long a = Long.parseLong(tokens[0]);
-                long b = Long.parseLong(tokens[1]);
-                long c = Long.parseLong(tokens[2]);
-                if (variableName == null) start(a, b, c, total, fileName, repository);
-                else start(a, b, c, total, fileName, variableName, repository);
+        } finally {rep.remove(variableName);}
+    }
+
+    private void start(String variableName,
+                       String finalTotal, String fileName,
+                       LinkedList<Map<String, Map<String, Object>>> repositoryArray,
+                       long a, long b, long c) {
+        var rep = repositoryArray.get(0).get(LONG_VARIABLE);
+        try {
+            rep.put(variableName, a);
+            for (long repValue; (repValue = (long) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
+                if (Objects.equals(StartLine.startLoop(finalTotal, fileName, repositoryArray), LoopToken.BREAK)) break;
             }
-            case FLOAT_VARIABLE -> {    // FLOAT
-                float a = Float.parseFloat(tokens[0]);
-                float b = Float.parseFloat(tokens[1]);
-                float c = Float.parseFloat(tokens[2]);
-                if (variableName == null) start(a, b, c, total, fileName, repository);
-                else start(a, b, c, total, fileName, variableName, repository);
+        } finally {rep.remove(variableName);}
+
+    }
+
+    private void start(String variableName,
+                       String finalTotal, String fileName,
+                       LinkedList<Map<String, Map<String, Object>>> repositoryArray,
+                       float a, float b, float c) {
+        var rep = repositoryArray.get(0).get(LONG_VARIABLE);
+        try {
+            rep.put(variableName, a);
+            for (float repValue; (repValue = (float) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
+                if (Objects.equals(StartLine.startLoop(finalTotal, fileName, repositoryArray), LoopToken.BREAK)) break;
             }
-            case DOUBLE_VARIABLE -> {   // DOUBLE
-                double a = Double.parseDouble(tokens[0]);
-                double b = Double.parseDouble(tokens[1]);
-                double c = Double.parseDouble(tokens[2]);
-                if (variableName == null) start(a, b, c, total, fileName, repository);
-                else start(a, b, c, total, fileName, variableName, repository);
+        } finally {rep.remove(variableName);}
+    }
+
+    private void start(String variableName,
+                       String finalTotal, String fileName,
+                       LinkedList<Map<String, Map<String, Object>>> repositoryArray,
+                       double a, double b, double c) {
+        var rep = repositoryArray.get(0).get(LONG_VARIABLE);
+        try {
+            rep.put(variableName, a);
+            for (double repValue; (repValue = (double) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
+                if (Objects.equals(StartLine.startLoop(finalTotal, fileName, repositoryArray), LoopToken.BREAK)) break;
             }
-        }
+        } finally {rep.remove(variableName);}
     }
 
-    private String getType(String value1, String value2, String value3) {
-        List<VariableType> vars = List.of(getType(value1), getType(value2), getType(value3));
-        if (vars.contains(VariableType.Double)) return DOUBLE_VARIABLE;
-        else if (vars.contains(VariableType.Float)) return FLOAT_VARIABLE;
-        else if (vars.contains(VariableType.Long)) return LONG_VARIABLE;
-        else return INT_VARIABLE;
-    }
-
-    private VariableType getType(String value) {
-        if (isInteger(value)) return VariableType.Integer;
-        else if (isLong(value)) return VariableType.Long;
-        else if (isFloat(value)) return VariableType.Float;
-        else if (isDouble(value)) return VariableType.Double;
-        else throw new VariableException().typeMatch();
-    }
-
-    // INTEGER
-    private void start(int a, int b, int c,
-                       String total, String fileName,
-                       String variableName,
-                       LinkedList<Map<String, Map<String, Object>>> repository) {
-        var rep = repository.get(0).get(INT_VARIABLE);
-        rep.put(variableName, a);
-        for (int repValue; (repValue = (int) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
-            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
-        }
-        rep.remove(variableName);
-    }
-
-    private void start(int a, int b, int c,
-                       String total, String fileName,
-                       LinkedList<Map<String, Map<String, Object>>> repository) {
-        for (int i = a; i < b; i += c) {
-            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
-        }
-    }
-
-    //LONG
-    private void start(long a, long b, long c,
-                       String total, String fileName,
-                       String variableName,
-                       LinkedList<Map<String, Map<String, Object>>> repository) {
-        var rep = repository.get(0).get(LONG_VARIABLE);
-        rep.put(variableName, a);
-        for (long repValue; (repValue = (long) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
-            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
-        }
-        rep.remove(variableName);
-    }
-
-    private void start(long a, long b, long c,
-                       String total, String fileName,
-                       LinkedList<Map<String, Map<String, Object>>> repository) {
-        for (long i = a; i < b; i += c) {
-            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
-        }
-    }
-
-    //FLOAT
-    private void start(float a, float b, float c,
-                       String total, String fileName, String variableName,
-                       LinkedList<Map<String, Map<String, Object>>> repository) {
-        var rep = repository.get(0).get(FLOAT_VARIABLE);
-        rep.put(variableName, a);
-        for (float repValue; (repValue = (float) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
-            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
-        }
-        rep.remove(variableName);
-    }
-
-    private void start(float a, float b, float c,
-                       String total, String fileName,
-                       LinkedList<Map<String, Map<String, Object>>> repository) {
-        for (float i = a; i < b; i += c) {
-            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
-        }
-    }
-
-    //DOUBLE
-    private void start(double a, double b, double c,
-                       String total, String fileName, String variableName,
-                       LinkedList<Map<String, Map<String, Object>>> repository) {
-        var rep = repository.get(0).get(DOUBLE_VARIABLE);
-        rep.put(variableName, a);
-        for (double repValue; (repValue = (double) rep.get(variableName)) < b; rep.put(variableName, repValue + c)) {
-            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
-        }
-        rep.remove(variableName);
-    }
-
-    private void start(double a, double b, double c,
-                       String total, String fileName,
-                       LinkedList<Map<String, Map<String, Object>>> repository) {
-        for (double i = a; i < b; i += c) {
-            if (Objects.equals(StartLine.startLoop(total, fileName, repository), LoopToken.BREAK)) break;
+    private void start(String finalTotal, String fileName,
+                       LinkedList<Map<String, Map<String, Object>>> repositoryArray,
+                       double a, double b, double c) {
+        for (double i = a; i < b; i+=c) {
+            if (Objects.equals(StartLine.startLoop(finalTotal, fileName, repositoryArray), LoopToken.BREAK)) break;
         }
     }
 }
