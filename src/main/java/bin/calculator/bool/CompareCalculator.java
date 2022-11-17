@@ -1,65 +1,29 @@
 package bin.calculator.bool;
 
-import bin.apply.Controller;
-import bin.token.MergeToken;
-import bin.token.Token;
-import bin.token.cal.BoolToken;
-import bin.token.cal.NumberToken;
+import bin.calculator.tool.CalculatorTool;
+import bin.exception.MatchException;
 
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Stack;
 
-public class CompareCalculator implements
-        BoolToken, NumberToken, MergeToken, Token {
-    private final String sings = orMerge(BIG, SMALL, SAME, BIG_SAME, SMALL_SAME);
-    private final String sing = blackMerge(NUMBER, this.sings, NUMBER);
-    private final Matcher singPattern = Pattern.compile(sing).matcher("");
+import static bin.exception.MatchException.GrammarTypeClass.*;
 
-    public String start(String line) {
-        line = Controller.numberCalculator.start(line);
-        return blank(line);
+public class CompareCalculator implements CalculatorTool {
+    public Stack<String> start(Stack<String> stack, LinkedList<Map<String, Map<String, Object>>> ra) {
+        compare.keySet().forEach(v -> search(stack, v, ra));
+        return stack;
     }
 
-    private final Matcher matcher = Pattern.compile(sing).matcher("");
-    private String blank(String line) {
-        String sing = blackMerge(SL, NUMBER, this.sings, NUMBER, BL);
-        matcher.reset(line);
-        while (matcher.find()) {
-            String group = matcher.group().replaceFirst(BLANKS, "");
-            String var = group.substring(1, group.length()-1);
-            line = line.replaceFirst(sing, calculator(var));
+    private void search(Stack<String> stack, String token, LinkedList<Map<String, Map<String, Object>>> ra) {
+        int i;
+        while ((i = stack.indexOf(token)) != -1) {
+            double d1 = getDouble(stack.get(i-1), ra);
+            double d2 = getDouble(stack.get(i+1), ra);
+            if (!compare.containsKey(stack.get(i))) throw new MatchException().grammarTypeError(stack.get(i), COMPARE);
+            stack.set(i, compare.get(stack.get(i)).apply(d1, d2));
+            stack.remove(i+1);
+            stack.remove(i-1);
         }
-        return calculator(line);
-    }
-
-    private String calculator(String line) {
-        singPattern.reset(line);
-        while (singPattern.find()) {
-            String group = singPattern.group();
-            String[] big = group.split(BIG, 2);
-            if (big.length == 2) {line = line.replaceFirst(sing, calculator(big, BIG));continue;}
-            String[] small = group.split(SMALL, 2);
-            if (small.length == 2) {line = line.replaceFirst(sing, calculator(small, SMALL)); continue;}
-            String[] same = group.split(SAME, 2);
-            if (same.length == 2) {line = line.replaceFirst(sing, calculator(same, SAME)); continue;}
-            String[] bigSame = group.split(BIG_SAME, 2);
-            if (bigSame.length == 2) {line = line.replaceFirst(sing, calculator(bigSame, BIG_SAME)); continue;}
-            String[] smallSame = group.split(SMALL_SAME, 2);
-            if (smallSame.length == 2) line = line.replaceFirst(sing, calculator(smallSame, SMALL_SAME));
-        }
-        return line;
-    }
-
-    private String calculator(String[] nums, String sing) {
-        double n1 = Double.parseDouble(nums[0]);
-        double n2 = Double.parseDouble(nums[1]);
-        return switch (sing) {
-            case BIG -> n1 > n2 ? TRUE : FALSE;
-            case SMALL -> n1 < n2 ? TRUE : FALSE;
-            case SAME -> n1 == n2 ? TRUE : FALSE;
-            case BIG_SAME -> n1 >= n2 ? TRUE : FALSE;
-            default -> n1 <= n2 ? TRUE : FALSE;
-        };
     }
 }
