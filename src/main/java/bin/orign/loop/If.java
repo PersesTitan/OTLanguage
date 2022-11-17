@@ -1,16 +1,12 @@
 package bin.orign.loop;
 
-import bin.apply.sys.make.StartLine;
 import bin.calculator.tool.Calculator;
 import bin.exception.MatchException;
 import bin.token.LoopToken;
 import bin.token.MergeToken;
-import bin.token.cal.BoolToken;
-import work.StartWork;
 import work.v3.StartWorkV3;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -45,6 +41,12 @@ public class If extends StartWorkV3 implements MergeToken, Calculator {
         int poison = start.lastIndexOf('(');
         String boolToken = start.substring(0, poison);          // ㅇㅇ ㄸ ㅇㅇ
         String loopToken = start.substring(poison).strip();     // (test,15,100)
+
+        // if 문만 있을때
+        if (list.isEmpty()) {
+            loopStart(loopToken, repositoryArray);
+            return;
+        }
 
         // else
         final String end = list.getLast().startsWith(ELSE) ? getEndLoop(list.removeLast()) : null;
