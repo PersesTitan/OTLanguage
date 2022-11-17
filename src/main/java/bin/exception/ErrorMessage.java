@@ -33,4 +33,14 @@ public interface ErrorMessage {
         if (runType.equals(RunType.Shell)) Setting.errorMessage(message);
         else System.err.println(message);
     }
+
+    static void printErrorMessage(String e, String mes, String subMessage, String path, String line, long position) {
+        String message = "OTLanguage." + e + ": " +
+                mes +
+                (path == null ? "" : "\n\totl file location where it occurred(" + path + ":" + position + ")") +
+                "\n\totl line that occurred(" + line + ")" +
+                (subMessage.isBlank() ? "" : subMessage.replaceAll("(^|\\n)","\n\totl "));
+        if (runType.equals(RunType.Shell)) Setting.errorMessage(message);
+        else System.err.println(message);
+    }
 }
