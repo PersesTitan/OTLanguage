@@ -1,48 +1,29 @@
 package bin.define.method;
 
-import bin.apply.Setting;
-import bin.define.item.MethodItem;
-import bin.define.item.MethodType;
+import bin.define.item.MethodItemVoid;
 import bin.exception.VariableException;
-import bin.token.LoopToken;
-import work.StartWork;
+import work.v3.StartWorkV3;
 
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class MethodVoid implements LoopToken, StartWork {
-    private final Matcher matcher;
+import static bin.token.LoopToken.METHOD;
 
-    public MethodVoid() {
-        String patternText = startEndMerge(VARIABLE_HTML, "((", BL, "[\\S\\s]+", BR, ")+|", BL, BR, ")");
-        this.matcher = Pattern.compile(patternText).matcher("");
-    }
-
+public class MethodVoid extends StartWorkV3 {
     @Override
-    public boolean check(String line) {
-        return matcher.reset(line).find();
-    }
-
-    @Override
-    public void start(String line, String origen,
+    public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        // 메소드명[]       // 메소드명[ㅁㄴㅇㄹ]
-        // 메소드명         // 메소드명, ㅁㄴㅇㄹ
-        String[] methodNames = matchSplitError(bothEndCut(line.strip(), 0, 1), BL, 2);
-        String methodName = methodNames[0];
-        var repository = repositoryArray.get(0).get(METHOD);
-        if (repository.containsKey(methodName)) {
-            MethodItem methodItem = (MethodItem) repository.get(methodName);
-            if (!methodItem.methodType().equals(MethodType.VOID)) throw new VariableException().methodTypeMatch();
-            String[] methodParams = methodNames[1].isEmpty() ? new String[0] : methodNames[1].split(BR + BL);
-            methodItem.startVoid(methodParams, repositoryArray);
-        } else Setting.runMessage(origen);
-    }
+        int position = line.indexOf('[');
+        String variableType = line.substring(0, position);
+        Object startItem = repositoryArray.get(0).get(METHOD).get(variableType);
 
-    @Override
-    public void first() {
-
+        if (startItem == null) throw new VariableException().noDefineMethod();
+        else if (startItem instanceof MethodItemVoid methodItemTest) {
+            if (methodItemTest.getParams() == 0) {
+                if (!(params.length == 1 && params[0].isEmpty())) throw new VariableException().methodParamsError();
+            } else if (methodItemTest.getParams() != params.length)
+                throw new VariableException().methodParamsError();
+            methodItemTest.start(params, repositoryArray);
+        } else throw new VariableException().methodTypeMatch();
     }
 }
