@@ -1,6 +1,7 @@
 package cos.poison.root;
 
 import bin.apply.Repository;
+import bin.apply.sys.item.HpMap;
 import bin.apply.sys.make.StartLine;
 import bin.orign.variable.SetVariableValue;
 import com.sun.net.httpserver.Headers;
@@ -17,11 +18,13 @@ import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static bin.apply.Setting.*;
+import static bin.apply.sys.item.SystemSetting.createStartWorks;
 import static bin.apply.sys.make.StartLine.errorCount;
 import static bin.apply.sys.make.StartLine.errorLine;
 import static cos.poison.PoisonRepository.*;
@@ -29,7 +32,9 @@ import static cos.poison.controller.HttpServerManager.*;
 import static cos.poison.setting.PoisonCreate.variableHTML;
 
 public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValue, PoisonTools {
-    private final Map<String, Map<String, Object>> repository = (Map<String, Map<String, Object>>) COPY_REPOSITORY.clone();
+    private final Map<String, Map<String, Object>> repository = new HashMap<>() {{
+        repositoryItems.forEach(v -> put(v, new HpMap(v)));
+    }};
     private final String defaultHtml;
     public HandlerRoot(String defaultHtml) {
         this.defaultHtml = defaultHtml;
@@ -111,7 +116,7 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         poisonStartList.forEach(v -> v.setData(exchange, statCode, nowPath));
         Repository.startWorksV3.putAll(poisonStartWorks);
         Repository.returnWorksV3.putAll(poisonReturnWorks);
-        Repository.createStartWorks(MODEL, "", variableHTML.reset());
+        createStartWorks(MODEL, "", variableHTML.reset());
 
         try {
             StartLine.startPoison(startFinalTotal, fileName, Repository.repository);
