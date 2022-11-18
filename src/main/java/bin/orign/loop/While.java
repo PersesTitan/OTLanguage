@@ -5,17 +5,11 @@ import bin.calculator.tool.Calculator;
 import bin.exception.MatchException;
 import bin.token.LoopToken;
 import bin.token.MergeToken;
-import bin.token.cal.BoolToken;
-import work.StartWork;
 import work.v3.StartWorkV3;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static bin.apply.Setting.lineStart;
 import static bin.apply.sys.make.StartLine.getFinalTotal;
-import static bin.apply.sys.make.StartLine.startStartLine;
 import static bin.calculator.tool.Calculator.*;
 import static bin.exception.MatchException.GrammarTypeClass.VALID;
 import static bin.token.LoopToken.LOOP_TOKEN;
