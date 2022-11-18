@@ -16,7 +16,6 @@ public interface VariableToken extends Token {
     String VARIABLE_GET_S = ":";
     String VARIABLE_GET_E = "_";
     String VARIABLE_DEFAULT = ";";
-    String VAR_TOKEN = "@otl;";
 
     String FILE_TYPE = "[^~\\s]+";
     String FILE_NAME = "[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]+";
