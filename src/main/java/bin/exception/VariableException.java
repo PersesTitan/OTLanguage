@@ -1,6 +1,8 @@
 package bin.exception;
 
-import static bin.apply.Repository.noContains;
+import java.util.Arrays;
+
+import static bin.token.cal.BoolToken.*;
 
 public class VariableException extends RuntimeException {
     private final String typeMatch = "변수 값이 유효하지 않습니다.";
@@ -37,7 +39,7 @@ public class VariableException extends RuntimeException {
             case methodParamsCount -> "The number of parameters does not match.\nPlease check the number of parameters.";
             case methodTypeMatch -> "Method types do not match.\nPlease check the corresponding method type.";
             case variableNameMatch -> "Variable name is not valid.\nPlease check the variable name.";
-            case cannotInclude -> "Didn't use : " + String.join(", ", noContains) + "\nContains characters that cannot be included\nPlease change the variable name.";
+            case cannotInclude -> "Didn't use : " + String.join(", ", Arrays.asList(OR, AND, NOT, TRUE, FALSE)) + "\nContains characters that cannot be included\nPlease change the variable name.";
             case methodParamsError -> "The parameter length of the method is not valid.\nPlease check the method parameters.";
             case noDefineMethod -> "Undefined method name.\nPlease check the method name.";
             default -> "";
