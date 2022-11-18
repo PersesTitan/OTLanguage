@@ -2,6 +2,7 @@ import bin.apply.Setting;
 import bin.apply.sys.item.RunType;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
+import bin.exception.VariableException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -29,12 +30,13 @@ public class Main extends Setting {
         if (args.length <= 0) throw new FileException().noFindError();
         else if (args.length == 1) runType = RunType.Shell;     // 현재 파일 위치
         else if (args.length == 2) runType = RunType.Normal;    // 현재 파일 이름
+        else throw new FileException().noValidValues();
 
         Setting.path = args[0];
         if (runType.equals(RunType.Normal)) normal(args);
-        else if (runType.equals(RunType.Shell)) {
-            try {shell();} catch (NullPointerException ignored) {}
-        }
+        else try {shell();} catch (NullPointerException ignored) {}
+
+        while (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win")) {}
     }
 
     private void normal(String[] args) {
