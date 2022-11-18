@@ -1,15 +1,18 @@
 package bin.orign.variable;
 
+import bin.orign.variable.both.PutChangeValueVariable;
 import bin.token.MergeToken;
 import work.v3.StartWorkV3;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
 
 import static bin.token.Token.BLANKS;
 import static bin.token.VariableToken.VARIABLE_PUT;
 
-public class CreateOrigin extends StartWorkV3 implements MergeToken {
+public class CreateOrigin extends StartWorkV3
+        implements MergeToken, PutChangeValueVariable {
     public CreateOrigin(int... counts) {
         super(counts);
     }
@@ -20,6 +23,8 @@ public class CreateOrigin extends StartWorkV3 implements MergeToken {
         String[] values = matchSplitError(line, BLANKS, 2);
         String[] tokens = values[1].split(VARIABLE_PUT, 2);
         variableDefineError(tokens[0], repositoryArray.get(0));
+
+        tokens[1] = getOrigin(values[0], tokens[1], repositoryArray);
         repositoryArray.get(0).get(values[0]).put(tokens[0], tokens.length == 2 ? tokens[1] : "");
     }
 }
