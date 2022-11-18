@@ -16,7 +16,7 @@ public interface LoopToken extends VariableToken {
         add(POISON + ACCESS + POISON_POST);
         add(POISON + ACCESS + POISON_GET);
         add(SERVER); add(TRY_CATCH);
-        add(METHOD);
+        add(METHOD); add(KLASS);
     }};
 
     String BRACE_STYLE = SL + FILE_TYPE + ",[0-9]+,[0-9]+" + SR;
