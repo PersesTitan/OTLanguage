@@ -1,17 +1,24 @@
 package bin.orign.variable;
 
+import bin.apply.Controller;
 import bin.apply.Setting;
+import bin.calculator.tool.Calculator;
 import bin.exception.VariableException;
 import bin.orign.variable.both.ContainsTool;
+import bin.orign.variable.both.PutChangeValueVariable;
 import bin.token.MergeToken;
 import bin.token.VariableToken;
 import work.v3.StartWorkV3;
 
 import java.util.*;
 
+import static bin.check.VariableCheck.*;
 import static bin.token.VariableToken.*;
+import static bin.token.cal.BoolToken.FALSE;
+import static bin.token.cal.BoolToken.TRUE;
 
-public class StartVariable extends StartWorkV3 implements MergeToken, ContainsTool {
+public class StartVariable extends StartWorkV3
+        implements MergeToken, ContainsTool, PutChangeValueVariable {
     public StartVariable(int... counts) {
         super(counts);
     }
@@ -72,7 +79,11 @@ public class StartVariable extends StartWorkV3 implements MergeToken, ContainsTo
             else Setting.warringMessage(line);
         }
         // ORIGIN
-        else if (token.startsWith(VARIABLE_PUT)) repository.getValue().put(variableName, token.substring(VARIABLE_PUT.length()).strip());
+        else if (token.startsWith(VARIABLE_PUT)) {
+            String tokens = token.substring(VARIABLE_PUT.length()).strip();
+            String value = getOrigin(repository.getKey(), tokens, repositoryArray);
+            repository.getValue().put(variableName, value);
+        }
         else Setting.warringMessage(line);
     }
 
