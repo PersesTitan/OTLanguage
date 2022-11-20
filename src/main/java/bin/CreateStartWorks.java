@@ -1,7 +1,5 @@
 package bin;
 
-import bin.apply.Repository;
-import bin.apply.Setting;
 import work.v3.StartWorkV3;
 
 import java.util.Arrays;
@@ -10,13 +8,13 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import static bin.apply.Repository.*;
-import static bin.token.LoopToken.PUTIN_TOKEN;
-import static bin.token.LoopToken.RETURN_TOKEN;
-import static bin.token.Token.*;
-import static bin.token.VariableToken.VARIABLE_ALL;
-import static bin.token.VariableToken.VAR_TOKEN;
+import static bin.token.LoopToken.*;
 
 public interface CreateStartWorks {
+    enum StartItem {
+        VARIABLE, METHOD, ETC
+    }
+
     static boolean start(String line, boolean priority,
                          LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] tokens = line.split("(?=" + BLANKS + "|" + BL + ")", 2);
@@ -31,32 +29,42 @@ public interface CreateStartWorks {
         StringTokenizer tokenizer = new StringTokenizer(local, ACCESS);
         String className = tokenizer.nextToken();
         String methodName = tokenizer.hasMoreTokens() ? tokenizer.nextToken("").substring(1) : "";
-        StartWorkV3 startWork = getStartWork(className, methodName, priority, repositoryArray);
+        StartWorkV3 startWork = getStartWork(className, methodName, priority, repositoryArray, StartItem.ETC);
         if (startWork != null) {
             startWork.paramsCheck(params.length, params[0]).start(line, params, repositoryArray);
             return true;
-        } else return !priority && getStartWork(line, repositoryArray);
+        } else return !priority && getStartWork(line, params, repositoryArray);
     }
 
-    private static boolean getStartWork(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+    private static boolean getStartWork(String line, String[] params,
+                                        LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] tokens = line.split("(?!" + VARIABLE_ALL + ")", 2);
-        String local = tokens[0];
+        String local = tokens[0];           // 변수명, 메소드명
         String value = tokens.length == 2 ? tokens[1].stripLeading() : "";
-        var startWork = getStartWork(VAR_TOKEN, local, true, repositoryArray);
+        var startWork = getStartWork(null, local, true, repositoryArray, StartItem.VARIABLE);
         if (startWork != null) {
             startWork.start(line, new String[]{local, value}, repositoryArray);
+            return true;
+        } else if (tokens.length == 2 && (startWork = getStartWork(tokens[0], tokens[1], false, repositoryArray, StartItem.METHOD)) != null) {
+            startWork.start(line, params, repositoryArray);
             return true;
         } else return false;
     }
 
     // StartWork 반환
     private static StartWorkV3 getStartWork(String klassName, String methodName, boolean priority,
-                                            LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        if (klassName.equals(VAR_TOKEN)) {
+                                            LinkedList<Map<String, Map<String, Object>>> repositoryArray,
+                                            StartItem startItem) {
+        if (startItem.equals(StartItem.VARIABLE)) {
             int count = variable.accessCount(methodName, repositoryArray.size());
             if (count == -1) return null;
             return containsVariable(methodName.substring(count), repositoryArray.get(count)) ? startVariable : null;
+        } else if (startItem.equals(StartItem.METHOD)) {
+            if (repositoryArray.get(0).get(METHOD).containsKey(klassName)
+                    && methodName.startsWith("[")
+                    && methodName.endsWith("]")) return methodVoid;
         }
+
         var map = priority ? priorityStartWorksV3 : startWorksV3;
         Map<String, StartWorkV3> startWork;
         if (map.containsKey(klassName)
