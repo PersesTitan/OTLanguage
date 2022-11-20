@@ -1,87 +1,66 @@
 package bin.define.method;
 
-import bin.define.item.MethodItem;
-import bin.define.item.MethodType;
+import bin.define.item.MethodItemReturn;
+import bin.define.item.MethodItemVoid;
 import bin.exception.VariableException;
-import bin.token.LoopToken;
-import work.StartWork;
+import bin.token.MergeToken;
+import work.v3.StartWorkV3;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
 
-public class DefineMethod implements LoopToken, StartWork {
-    private final String type;
-    private final Matcher matcher;
+import static bin.apply.sys.make.StartLine.getFinalTotal;
+import static bin.define.item.MethodItemTool.getParams;
+import static bin.token.LoopToken.*;
+import static bin.token.Token.BL;
+import static bin.token.Token.BR;
 
-    public DefineMethod(String type) {
-        this.type = type;
-        // ㅁㅅㅁ 메소드명[ㅇㅅㅇ 매개변수] (test,1,10) => 변수명
-        // ㅁㅅㅁ 메소드명[ㅇㅅㅇ 매개변수] (test,1,10)
-        String params = orMerge(TOTAL_LIST) + BLANKS + VARIABLE_HTML;
-        String patternText = startEndMerge(
-                type, BLANKS, VARIABLE_HTML,
-                "((", BL, params, BR, ")+|", BL, BR, ")",
-                BLANKS, BRACE_STYLE,
-                "(", BLANK, RETURN, ")?");
-        this.matcher = Pattern.compile(patternText).matcher("");
+public class DefineMethod extends StartWorkV3 implements MergeToken {
+    // 1
+    public DefineMethod(int... counts) {
+        super(counts);
     }
 
+    // ㅁㅅㅁ 메소드명[메게변수][메게변수] (test,1,2) => 변수명
+    // ㅁㅅㅁ 메소드명[메게변수][메게변수] (test,1,2)
     @Override
-    public boolean check(String line) {
-        return matcher.reset(line).find();
-    }
-
-    @Override
-    public void start(String line, String origen,
+    public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        // ㅁㅅㅁ 메소드명[ㅇㅅㅇ 매개변수] (test,1,10), 변수명
-        String[] tokens = line.strip().split(BLANK + RETURN_TOKEN + BLANK, 2);
-        // 메소드명, ㅇㅅㅇ 매개변수] (test,1,10)
-        String[] methodToken = matchSplitError(tokens[0].substring(type.length()).strip(), BL, 2);
-        // ㅇㅅㅇ 매개변수, (test,1,10)
-        // ㅇㅈㅇ 매개변수][ㅇㅅㅇ 매개변수   (test,1,10)
-        String[] methodParams = matchSplitError(methodToken[1], BR + BLANKS, 2);
+        // 메소드명[메게변수][메게변수] (test,1,2) => 변수명
+        // 메소드명[메게변수][메게변수] (test,1,2)
+        int positionStart = params[0].indexOf('[');
+        String methodName = params[0].substring(0, positionStart).strip();  // 메소드 명
+        String parameter = params[0].substring(positionStart);              // [ㅇㅈㅇ ㅁ][ㅇㅁㅇ ㅁㅁ] (test,1,2)
 
-        // [[ㅇㅈㅇ, 매개변수][ㅇㅅㅇ, 매개변수]]
-        String[][] params = methodParams[0].isEmpty()
-            ? new String[0][0]
-            : getParams(methodParams[0].split(BR + BL));
-        // test, 1, 10
-        String[] fileInformation = matchSplitError(bothEndCut(methodParams[1]), ",", 3);
-        String fileName = fileInformation[0];
-        String total = LOOP_TOKEN.get(fileName);
-        int start = total.indexOf("\n" + fileInformation[1] + " ");
-        int end = total.indexOf("\n" + fileInformation[2] + " ");
+        int positionEnd = parameter.lastIndexOf(']') + 1;
+        String parameters = parameter.substring(0, positionEnd);            // [ㅇㅈㅇ ㅁ][ㅇㅁㅇ ㅁㅁ]
+        String loop = parameter.substring(positionEnd).strip();             // (test,1,2), (test,1,2) => 변수명
 
-        // 메소드명 = methodToken[0]
-        var repository = repositoryArray.get(0).get(this.type);
-        if (repository.containsKey(methodToken[0])) throw new VariableException().definedMethodName();
-
-        MethodType methodType = tokens.length == 1 ? MethodType.VOID : MethodType.RETURN;
-        String returnVariable = tokens.length == 1 ? null : tokens[1];
-        repository.put(methodToken[0], new MethodItem(params, methodType, returnVariable, fileName, start, end));
-    }
-
-    @Override
-    public void first() {
-
-    }
-
-    private final Set<String> set = new HashSet<>();
-    private String[][] getParams(String[] params) {
-        set.clear();
-        int count = params.length;
-        String[][] param = new String[count][2];
-        for (int i = 0; i<count; i++) {
-            String[] values = matchSplitError(params[i], BLANKS, 2);
-            if (set.contains(values[1])) throw new VariableException().sameVariable();
-            else set.add(values[1]);
-            param[i] = values;
+        String returnValue = null;
+        if (loop.contains(RETURN_TOKEN)) {
+            String[] tokens = loop.split(RETURN_TOKEN, 2);
+            loop = tokens[0].strip();                   // (test,1,2)
+            returnValue = tokens[1].strip();            // 변수명
         }
-        return param;
+
+        // [ㅇㅈㅇ ㅁ][ㅇㅁㅇ ㅁㅁ] => ㅇㅈㅇ ㅁ][ㅇㅁㅇ ㅁㅁ
+        parameters = bothEndCut(parameters);
+        // [] => [] or [ㅇㅈㅇ ㅁ][ㅇㅁㅇ ㅁㅁ] => [[ㅇㅈㅇ, ㅁ], [ㅇㅁㅇ, ㅁㅁ]]
+        final String[][] methodParameters = parameters.isEmpty()    // [[ㅇㅈㅇ, ㅁ], [ㅇㅁㅇ, ㅁㅁ]]
+                ? new String[0][0]
+                : getParams(parameters.split(BR + BL));
+
+        // (test,1,2) => test, 1, 2
+        final StringTokenizer tokenizer = new StringTokenizer(bothEndCut(loop), ",");
+        String fileName = tokenizer.nextToken();
+        String total = LOOP_TOKEN.get(fileName);
+        int s = total.indexOf("\n" + tokenizer.nextToken() + " ");
+        int e = total.indexOf("\n" + tokenizer.nextToken() + " ");
+        String finalTotal = getFinalTotal(false, total.substring(s, e), fileName).strip();
+
+        var rep = repositoryArray.get(0).get(METHOD);
+        if (rep.containsKey(methodName)) throw new VariableException().definedMethodName();
+
+        if (returnValue == null) rep.put(methodName, new MethodItemVoid(methodParameters, finalTotal, fileName));
+        else rep.put(methodName, new MethodItemReturn(methodParameters, finalTotal, fileName, returnValue));
     }
 }
