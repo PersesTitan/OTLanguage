@@ -1,24 +1,33 @@
 package bin.check;
 
+import bin.exception.VariableException;
 import bin.token.Token;
 import bin.token.cal.BoolToken;
 
 import java.util.regex.Pattern;
 
 import static bin.check.VariableCheck.isInteger;
+import static bin.token.cal.BoolToken.*;
 
 public interface VariableCheck {
     // 기본 변수
     static boolean isBoolean(String line) {
         line = line.strip();
         if (line.isBlank()) return false;
-        return line.equals(BoolToken.FALSE) || line.equals(BoolToken.TRUE);
+        return line.equals(FALSE) || line.equals(TRUE);
     }
     static boolean isCharacter(String line) {try {return line.length() == 1;} catch (Exception e) {return false;}}
     static boolean isDouble(String line) {try {Double.parseDouble(line);return true;} catch (Exception e) {return false;}}
     static boolean isFloat(String line) {try {Float.parseFloat(line);return true;} catch (Exception e) {return false;}}
     static boolean isInteger(String line) {try {Integer.parseInt(line);return true;} catch (Exception e) {return false;}}
     static boolean isLong(String line) {try {Long.parseLong(line);return true;} catch (Exception e) {return false;}}
+
+    static String getBoolean(String line) {if (line.equals(FALSE) || line.equals(TRUE)) return line;else throw new VariableException().typeMatch();}
+    static char getCharacter(String line) {if (line.length() == 1) return line.charAt(0);else throw new VariableException().typeMatch();}
+    static double getDouble(String line) {try {return Double.parseDouble(line);} catch (Exception e) {throw new VariableException().typeMatch();}}
+    static float getFloat(String line) {try {return Float.parseFloat(line);} catch (Exception e) {throw new VariableException().typeMatch();}}
+    static int getInteger(String line) {try {return Integer.parseInt(line);} catch (Exception e) {throw new VariableException().typeMatch();}}
+    static long getLong(String line) {try {return Long.parseLong(line);} catch (Exception e) {throw new VariableException().typeMatch();}}
 
     static boolean listCheck(String line) {
         return !line.startsWith("[") || !line.endsWith("]");
