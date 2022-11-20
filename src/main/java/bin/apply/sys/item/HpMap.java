@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.Set;
 
 import static bin.apply.Controller.variableTypeCheck;
-import static bin.apply.Repository.noContains;
 import static bin.apply.Repository.noUse;
 import static bin.check.VariableTypeCheck.getVariableType;
 import static bin.check.VariableTypeCheck.originList;
+import static bin.token.cal.BoolToken.*;
 
 public class HpMap extends HashMap<String, Object> implements Map<String, Object>, VariableToken {
     private final Map<String, Integer> hp = new HashMap<>();
@@ -74,7 +74,9 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
 
         // 예약어 확인
         if (noUse.contains(key)) throw new VariableException().reservedWorks();
-        else if (noContains.stream().anyMatch(key::contains)) throw new VariableException().cannotInclude();
+        // 사용 불가 단어
+        else if (key.contains(OR) || key.contains(AND) || key.contains(NOT) || key.contains(TRUE) || key.contains(FALSE))
+            throw new VariableException().cannotInclude();
 
         Object keyObj = this.getOrDefault(key, null);
         Object valueObj = variableTypeCheck.getObject(variableType, value, keyObj);
