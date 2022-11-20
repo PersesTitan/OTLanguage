@@ -13,10 +13,7 @@ import java.util.*;
 
 import static bin.apply.Controller.forStart;
 import static bin.apply.sys.item.Separator.*;
-import static bin.token.ConsoleToken.*;
 import static bin.token.LoopToken.*;
-import static bin.token.cal.BoolToken.*;
-import static bin.token.cal.NumberToken.*;
 
 public class Setting implements Repository {
     public static final StringBuilder total = new StringBuilder();
@@ -64,15 +61,6 @@ public class Setting implements Repository {
     }
 
     static {
-        noUse.add(SCANNER);
-        noUse.add(TRUE);
-        noUse.add(FALSE);
-        noUse.add(NOT);
-        noUse.add(OR);
-        noUse.add(AND);
-        noUse.add(MINUS_CALCULATOR_S);
-        noUse.addAll(MAP_LIST);
-
         try {
             for (File files : Objects.requireNonNull(new File(MODULE_PATH + SEPARATOR_FILE + COMPULSION).listFiles())) {
                 if (!files.getName().toLowerCase(Locale.ROOT).endsWith(".otlm")) continue;
