@@ -1,20 +1,14 @@
 package bin.apply.sys.run;
 
 import bin.apply.Setting;
-import bin.apply.sys.item.Separator;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
-import bin.token.LoopToken;
-import work.StartWork;
 import work.v3.StartWorkV3;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static bin.apply.sys.item.Separator.SEPARATOR_FILE;
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
