@@ -2,6 +2,9 @@ import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class Install {
     // system.otls
@@ -25,25 +28,43 @@ public class Install {
         String urlPath = "https://raw.githubusercontent.com/OTLanguage/module/main/" + fileName + "/system.otls";
         try (BufferedReader reader = readUrl(urlPath)) {
             System.out.printf("%s다운로드를 시작합니다...%s\n", "\033[0;32m", "\033[0m");
-            for (String line : reader.lines().toList()) {
+            List<String> list = reader.lines().toList();
+            int count = 1;
+            for (String line : list) {
+                if (!line.isBlank()) {
+                    System.out.printf("%s(%d/%d)install%s", "\033[0;32m", list.size(), count++, "\033[0m");
+                    System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                }
                 if (bool) {
                     if (line.startsWith(COMPULSION)) {
+                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
                         String urlValue = getModule(fileName, COMPULSION + ".otlm");
                         String localPath = getDownloadPath(fileName, COMPULSION);
                         install(urlValue, localPath);
+                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                        System.out.printf("%s add module %s", "\033[0;32m", "\033[0m");
                     } else if (line.startsWith(ALTERATION)) {
+                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
                         String urlValue = getModule(fileName, ALTERATION + ".otlm");
                         String localPath = getDownloadPath(fileName, ALTERATION);
                         install(urlValue, localPath);
+                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                        System.out.printf("%s add module %s", "\033[0;32m", "\033[0m");
                     } else if (line.startsWith(OPERATE)) {
+                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
                         String urlValue = getModule(fileName, OPERATE + ".otlm");
                         String localPath = getDownloadPath(fileName, OPERATE);
                         install(urlValue, localPath);
+                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                        System.out.printf("%s add module %s", "\033[0;32m", "\033[0m");
                     } else bool = false;
                 } else {
+                    System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
                     String urlValue = getKlass(fileName, line + ".class");
                     String localPath = getDownloadPath(line);
                     install(urlValue, localPath);
+                    System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                    System.out.printf("%s add %s", "\033[0;32m", "\033[0m");
                 }
                 if (!line.isBlank()) System.out.println(line);
             }
@@ -59,10 +80,14 @@ public class Install {
 
     // 설치하는 로직
     private void install(String urlValue, String localPath) {
+        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
         new File(localPath.substring(0, localPath.lastIndexOf(SEPARATOR_FILE))).mkdirs();
+        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
         try (ReadableByteChannel rbc = Channels.newChannel(new URL(urlValue).openStream());
              FileOutputStream fo = new FileOutputStream(localPath)) {
+            System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
             fo.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
         } catch (IOException e) {
             e.printStackTrace();
         }
