@@ -5,6 +5,8 @@ import bin.exception.FileException;
 import bin.exception.VariableException;
 
 import java.io.*;
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
@@ -16,10 +18,11 @@ import static bin.token.LoopToken.LOOP_TOKEN;
 public class Main extends Setting {
     public static void main(String[] args) {
         try {
-            if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win"))
+            if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win")) {
                 new Main(args.length == 0
                     ? new String[]{SEPARATOR_HOME}
                     : new String[]{SEPARATOR_HOME, args[0]});
+            }
             else new Main(args);
         } catch (FileException e) {
             new FileException().printErrorMessage(e, Setting.mainPath);
