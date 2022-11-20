@@ -1,5 +1,8 @@
 package bin.check;
 
+import bin.calculator.tool.Calculator;
+import bin.define.item.MethodItemReturn;
+import bin.define.item.MethodItemVoid;
 import bin.exception.VariableException;
 import bin.orign.variable.GetList;
 import bin.orign.variable.GetMap;
@@ -9,6 +12,7 @@ import bin.token.VariableToken;
 import java.util.*;
 
 import static bin.check.VariableCheck.*;
+import static bin.token.LoopToken.METHOD;
 
 public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap {
     public static final Set<VariableType> originList = new HashSet<>() {{
@@ -19,36 +23,6 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
         add(VariableType.Float);
         add(VariableType.Double);
         add(VariableType.String);
-    }};
-
-    public static final Set<VariableType> listList = new HashSet<>() {{
-        add(VariableType.ListInteger);
-        add(VariableType.ListLong);
-        add(VariableType.ListBoolean);
-        add(VariableType.ListString);
-        add(VariableType.ListCharacter);
-        add(VariableType.ListFloat);
-        add(VariableType.ListDouble);
-    }};
-
-    public static final Set<VariableType> setList = new HashSet<>() {{
-        add(VariableType.SetInteger);
-        add(VariableType.SetLong);
-        add(VariableType.SetBoolean);
-        add(VariableType.SetString);
-        add(VariableType.SetCharacter);
-        add(VariableType.SetFloat);
-        add(VariableType.SetDouble);
-    }};
-
-    public static final Set<VariableType> mapList = new HashSet<>() {{
-        add(VariableType.MapInteger);
-        add(VariableType.MapLong);
-        add(VariableType.MapBoolean);
-        add(VariableType.MapString);
-        add(VariableType.MapCharacter);
-        add(VariableType.MapFloat);
-        add(VariableType.MapDouble);
     }};
 
     public static VariableType getVariableType(String variableType) {
@@ -80,6 +54,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
             case MAP_CHARACTER -> VariableType.MapCharacter;
             case MAP_FLOAT -> VariableType.MapFloat;
             case MAP_DOUBLE -> VariableType.MapDouble;
+            case METHOD -> VariableType.Method;
             default -> VariableType.String;
         };
     }
@@ -136,8 +111,13 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
     }
 
     public Object getObject(VariableType variableType,
-                            String value, Object object) {
+                            Object values, Object object) {
+        String value = values.toString();
         switch (variableType) {
+            case Method -> {
+                if (values instanceof MethodItemReturn || values instanceof MethodItemVoid) return values;
+                else throw new VariableException().methodTypeMatch();
+            }
             case Integer -> {
                 if (!isInteger(value)) throw new VariableException().typeMatch();
                 else return Integer.parseInt(value);
@@ -288,7 +268,6 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
                     return setDoubleList(list, getListValue(list, value));
                 }
             }
-
             case MapInteger -> {
                 if (object == null) return value.isBlank()
                         ? new LinkedHashMap<String, Integer>()
