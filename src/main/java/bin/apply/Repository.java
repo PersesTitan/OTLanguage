@@ -10,8 +10,10 @@ import work.v3.StartWorkV3;
 
 import java.util.*;
 
+import static bin.token.ConsoleToken.SCANNER;
 import static bin.token.LoopToken.*;
 import static bin.token.cal.BoolToken.*;
+import static bin.token.cal.NumberToken.MINUS_CALCULATOR_S;
 
 public interface Repository {
     List<String> repositoryItems = new ArrayList<>(TOTAL_LIST) {{
@@ -23,8 +25,12 @@ public interface Repository {
         }});
     }};
 
-    Set<String> noUse = new HashSet<>();
-    List<String> noContains = Arrays.asList(TOKEN, OR, AND, NO_TOKEN);
+    Set<String> noUse = new HashSet<>() {{
+        add(SCANNER); add(TRUE); add(FALSE);
+        add(NOT); add(OR); add(AND);
+        add(MINUS_CALCULATOR_S);
+        addAll(MAP_LIST);
+    }};
 
     static boolean containsVariable(String variable, Map<String, Map<String, Object>> repository) {
         return TOTAL_LIST.stream().anyMatch(v -> repository.get(v).containsKey(variable));
