@@ -10,13 +10,15 @@ public interface LoopToken extends VariableToken {
     Set<String> LOOP_SET = new HashSet<>() {{
         add("[^\\^\\n]+" + FOR + "[^\\^\\n]+" + FOR + "[^\\^\\n]+");
         add(FOR + "[^\\^\\n]+" + FOR);
-        add(IF); add(ELSE_IF);
-        add(ELSE); add(WHITE);
+        add(IF);
+        add(ELSE_IF);
+        add(ELSE);
+        add(WHITE);
+        add(TRY_CATCH); add(METHOD); add(KLASS);
 
         add(POISON + ACCESS + POISON_POST);
         add(POISON + ACCESS + POISON_GET);
-        add(SERVER); add(TRY_CATCH);
-        add(METHOD); add(KLASS);
+        add(SERVER);
     }};
 
     String BRACE_STYLE = SL + FILE_TYPE + ",[0-9]+,[0-9]+" + SR;
