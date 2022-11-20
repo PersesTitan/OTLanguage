@@ -70,6 +70,7 @@ public class StartLine implements LoopToken, Calculator {
                                    LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
             line = loopController.check(setError(line, total).strip());
+            line = Setting.lineStart(line, repositoryArray);
             if (line.endsWith(BREAK) || line.endsWith(CONTINUE)) {
                 // FINISH, CONTINUE, BREAK
                 String lines = returnLoop(line.strip(), repositoryArray);
@@ -104,7 +105,7 @@ public class StartLine implements LoopToken, Calculator {
                                    LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
             if ((line = setError(line, total)).isBlank()) continue;
-            start(line, errorLine.get(), repositoryArray);
+            Setting.start(line, errorLine.get(), repositoryArray);
         }
     }
 
