@@ -1,58 +1,29 @@
 package bin.define.method;
 
-import bin.define.item.MethodItem;
-import bin.define.item.MethodType;
+import bin.define.item.MethodItemReturn;
 import bin.exception.VariableException;
-import bin.token.LoopToken;
-import work.ReturnWork;
+import work.v3.ReturnWorkV3;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class MethodReturn implements LoopToken, ReturnWork {
-    private final Matcher matcher;
+import static bin.token.LoopToken.METHOD;
 
-    public MethodReturn() {
-        String patternText = merge(
-                VARIABLE_GET_S, VARIABLE_HTML,
-                "((", BL, "[\\S\\s]+", BR, ")+|", BL, BR, ")",
-                VARIABLE_GET_E);
-        this.matcher = Pattern.compile(patternText).matcher("");
-    }
-
+public class MethodReturn extends ReturnWorkV3 {
     @Override
-    public boolean check(String line) {
-        return this.matcher.reset(line).find();
-    }
-
-    @Override
-    public String start(String line,
+    public String start(String line, String[] params,
                         LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        matcher.reset();
-        while (matcher.find()) {
-            // :메소드명[]_     :메소드명[ㅇㅈㅇ ㅁㄴㅇㄹ][ㅇㅅㅇ ㅁㄴㅇㄹ]
-            String group = matcher.group();
-            // 메소드명,    메소드명, ㅇㅈㅇ][ㅇㅈㅇ ㅁㄴㅇㄹ
-            String[] methodNames = matchSplitError(bothEndCut(group.strip(), 1, 2), BL, 2);
-            String methodName = methodNames[0];
-            var repository = repositoryArray.get(0).get(METHOD);
-            if (repository.containsKey(methodName)) {
-                MethodItem methodItem = (MethodItem) repository.get(methodName);
-                if (!methodItem.methodType().equals(MethodType.RETURN)) throw new VariableException().methodTypeMatch();
-                String[] methodParams = methodNames[1].isEmpty() ? new String[0] : methodNames[1].split(BR + BL);
+        int position = line.indexOf('[');
+        String variableType = line.substring(0, position);
+        Object startItem = repositoryArray.get(0).get(METHOD).get(variableType);
 
-                String oldWord = methodItem.startReturn(methodParams, repositoryArray);
-                if (oldWord != null) line = line.replace(group, oldWord);
-            }
-        }
-        return line;
-    }
-
-    @Override
-    public ReturnWork first() {
-        return this;
+        if (startItem == null) throw new VariableException().noDefineMethod();
+        else if (startItem instanceof MethodItemReturn methodItemReturn) {
+            if (methodItemReturn.getParams() == 0) {
+                if (!(params.length == 1 && params[0].isEmpty())) throw new VariableException().methodParamsError();
+            } else if (methodItemReturn.getParams() != params.length)
+                throw new VariableException().methodParamsError();
+            return methodItemReturn.start(params, repositoryArray);
+        } else throw new VariableException().methodTypeMatch();
     }
 }
