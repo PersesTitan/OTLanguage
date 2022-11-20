@@ -3,10 +3,7 @@ package bin.calculator.number;
 import bin.calculator.tool.CalculatorTool;
 import bin.exception.MatchException;
 
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Stack;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import static bin.exception.MatchException.*;
 import static bin.token.Token.NO_TOKEN;
@@ -14,28 +11,44 @@ import static bin.token.Token.TOKEN;
 import static bin.token.cal.BoolToken.*;
 
 public class NumberCalculator implements CalculatorTool {
-    private final Stack<String> stack = new Stack<>();
+    private final StringBuilder builder = new StringBuilder();
     public Stack<String> getStack(String line) {
-        stack.clear();
+        List<String> list = new ArrayList<>();
         StringTokenizer tokenizer = new StringTokenizer(line, TOKEN + OR + NO_TOKEN + AND, true);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            if (token.isBlank()) continue;
+            if (token.isEmpty()) continue;
             if (token.equals(TOKEN)) {
                 String a = tokenizer.nextToken();
-                if (a.equals(TOKEN)) stack.add(TRUE);
-                else if (a.equals(NO_TOKEN)) stack.add(NOT);
+                if (a.equals(TOKEN)) list.add(TRUE);           // ㅇㅇ
+                else if (a.equals(NO_TOKEN)) list.add(NOT);    // ㅇㄴ
                 else {
-                    String tokens = tokenizer.nextToken();
-                    if (tokens.equals(TOKEN)) stack.add(a);
-                    else throw new MatchException().grammarTypeError(token + a + tokens, GrammarTypeClass.TOKEN);
+                    if (compare.containsKey(a) || number.containsKey(a)) {
+                        list.add(a);
+                        String b = tokenizer.nextToken();
+                        if (!b.equals(TOKEN)) throw new MatchException().grammarTypeError(token + a + b, MatchException.GrammarTypeClass.TOKEN);
+                    } else list.add(token + a);
                 }
             } else if (token.equals(NO_TOKEN)) {
-                String tokens = tokenizer.nextToken();
-                if (tokens.equals(NO_TOKEN)) stack.add(FALSE);
-                else throw new MatchException().grammarTypeError(token + tokens, GrammarTypeClass.TOKEN);
-            } else stack.add(token.strip());
+                String a = tokenizer.nextToken();
+                if (a.equals(NO_TOKEN)) list.add(NOT);         // ㄴㄴ
+                else list.add(token + a);
+            } else list.add(token);
         }
+
+        Stack<String> stack = new Stack<>();
+        list.forEach(v -> {
+            if (compare.containsKey(v) || number.containsKey(v)
+                    || v.equals(NOT) || v.equals(TRUE) || v.equals(FALSE) || v.equals(OR) || v.equals(AND)) {
+                if (!builder.isEmpty()) {
+                    stack.add(builder.toString().strip());
+                    builder.setLength(0);
+                }
+                stack.add(v);
+            } else builder.append(v.strip());
+        });
+        if (!builder.isEmpty()) stack.add(builder.toString().strip());
+        builder.setLength(0);
         return stack;
     }
 
