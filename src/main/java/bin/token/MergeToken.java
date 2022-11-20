@@ -6,6 +6,7 @@ import bin.exception.VariableException;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import static bin.apply.Repository.containsVariable;
 import static bin.token.LoopToken.LOOP_TOKEN;
@@ -93,12 +94,13 @@ public interface MergeToken {
     // input = (test,1,10)
     default String[] getLoopTotal(String input) {
         // test, 1, 10
-        String[] variables = matchSplitError(bothEndCut(input), ",", 3);
-        String total = LOOP_TOKEN.get(variables[0]);
-        int start = total.indexOf("\n" + variables[1] + " ");
-        int end = total.indexOf("\n" + variables[2] + " ");
+        StringTokenizer tokenizer = new StringTokenizer(bothEndCut(input), ",");
+        String fileName = tokenizer.nextToken();
+        String total = LOOP_TOKEN.get(fileName);
+        int start = total.indexOf("\n" + tokenizer.nextToken() + " ");
+        int end = total.indexOf("\n" + tokenizer.nextToken() + " ");
         // test, total
-        return new String[]{variables[0], total.substring(start, end)};
+        return new String[]{fileName, total.substring(start, end)};
     }
 
     default String getLoopTotal(String[] input) {
