@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bin.apply.Repository.*;
+import static bin.token.LoopToken.METHOD;
 import static bin.token.VariableToken.*;
 
 public interface CreateReturnWorks {
@@ -24,6 +25,10 @@ public interface CreateReturnWorks {
             VARIABLE_GET_E, VARIABLE_GET_E,
             VARIABLE_GET_E, VARIABLE_DEFAULT, VARIABLE_DEFAULT
     )).matcher("");
+
+    enum ReturnItem {
+        VARIABLE, METHOD, ETC
+    }
 
     static String start(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         line = startMatcher(matcher2.reset(line), line, repositoryArray);
@@ -63,36 +68,48 @@ public interface CreateReturnWorks {
         String[] params = value.startsWith("[")
                 ? getCheck(value)
                 : new String[]{value.stripLeading()};
-        if (params == null) return varSub(line, def, repositoryArray);
+        if (params == null) return varSub(line, def, null, repositoryArray);
 
         if (local.startsWith(ACCESS)) {
-            return varSub(local, def, repositoryArray);
+            return varSub(local, def, params, repositoryArray);
         }
         StringTokenizer tokenizer = new StringTokenizer(local, ACCESS);
         String className = tokenizer.nextToken();
         String methodName = tokenizer.hasMoreTokens() ? tokenizer.nextToken("").substring(1) : "";
-        ReturnWorkV3 startWork = getStartWork(className, methodName, repositoryArray);
+        ReturnWorkV3 startWork = getStartWork(className, methodName, repositoryArray, ReturnItem.ETC);
         if (startWork != null) return startWork.paramsCheck(params.length, params[0]).start(line, params, repositoryArray);
-        else return varSub(line, def, repositoryArray);
+        else return varSub(line, def, params, repositoryArray);
     }
 
-    private static String varSub(String line, String def,
+    private static String varSub(String line, String def, String[] params,
                                  LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] tokens = line.split("(?!" + VARIABLE_ALL + ")", 2);
         String local = tokens[0];
         String value = tokens.length == 2 ? tokens[1].stripLeading() : "";
-        var startWork = getStartWork(VAR_TOKEN, local, repositoryArray);
+        var startWork = getStartWork(null, local, repositoryArray, ReturnItem.VARIABLE);
         if (startWork != null) return startWork.start(local, new String[]{value}, repositoryArray);
+        // 메소드 로직
+        else if (params != null
+                && tokens.length == 2
+                && (startWork = getStartWork(tokens[0], tokens[1], repositoryArray, ReturnItem.METHOD)) != null) {
+            return startWork.start(line, params, repositoryArray);
+        }
         else return def;
     }
 
     private static ReturnWorkV3 getStartWork(String klassName, String methodName,
-                                             LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        if (klassName.equals(VAR_TOKEN)) {
+                                             LinkedList<Map<String, Map<String, Object>>> repositoryArray,
+                                             ReturnItem returnItem) {
+        if (returnItem.equals(ReturnItem.VARIABLE)) {
             int count = variable.accessCount(methodName, repositoryArray.size());
             if (count == -1) return null;
             return containsVariable(methodName.substring(count), repositoryArray.get(count)) ? variable : null;
+        } else if (returnItem.equals(ReturnItem.METHOD)) {
+            if (repositoryArray.get(0).get(METHOD).containsKey(klassName)
+                    && methodName.startsWith("[")
+                    && methodName.endsWith("]")) return methodReturn;
         }
+
         Map<String, ReturnWorkV3> returnWork;
         if (returnWorksV3.containsKey(klassName)
                 && (returnWork = returnWorksV3.get(klassName)).containsKey(methodName))
