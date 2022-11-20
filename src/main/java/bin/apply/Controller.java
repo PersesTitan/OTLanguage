@@ -24,12 +24,10 @@ public interface Controller {
     VariableTypeCheck variableTypeCheck = new VariableTypeCheck();
     For forStart = new For();
 
-
     AggregationList aggregationList = new AggregationList();
     // 입력, 출력
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
 
     static String scanner() {
         try {
