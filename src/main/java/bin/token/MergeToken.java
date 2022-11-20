@@ -1,15 +1,18 @@
 package bin.token;
 
 import bin.apply.Repository;
+import bin.apply.sys.make.StartLine;
 import bin.exception.MatchException;
 import bin.exception.VariableException;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 import static bin.apply.Repository.containsVariable;
-import static bin.token.LoopToken.LOOP_TOKEN;
+import static bin.apply.sys.make.StartLine.startStartLine;
+import static bin.token.LoopToken.*;
 import static bin.token.Token.*;
 
 public interface MergeToken {
@@ -103,7 +106,7 @@ public interface MergeToken {
         return new String[]{fileName, total.substring(start, end)};
     }
 
-    default String getLoopTotal(String[] input) {
+    default String getLoopTotal(String... input) {
         String total = LOOP_TOKEN.get(input[0]);
         int start = total.indexOf("\n" + input[1] + " ");
         int end = total.indexOf("\n" + input[2] + " ");
@@ -121,5 +124,65 @@ public interface MergeToken {
 
     default String getNoMatchBack(String token1, String token2) {
         return token1 + "(?=" + token2 + ")";
+    }
+
+    // (test,1,14) => ㅇㅁㅇ 변수명
+    default String[] getLoop(String line) {
+        line = line.strip();
+        // (test,1,14) <= ㅇㅁㅇ 변수명
+        if (line.contains(PUTIN_TOKEN)) {
+            // (test,1,14), ㅇㅁㅇ 변수명
+            String[] tokens = line.split(PUTIN_TOKEN, 2);
+            tokens[0] = tokens[0].strip();      // (test,1,14)
+            if (!(tokens[0].startsWith("(") && tokens[0].endsWith(")"))) throw new MatchException().grammarError();
+            String loop = bothEndCut(tokens[0]);            // test,1,14
+            String variable = tokens[1].strip();            // ㅇㅁㅇ 변수명
+
+            StringTokenizer loopToken = new StringTokenizer(loop, ",");
+            StringTokenizer variableToken = new StringTokenizer(variable);
+
+            String fileName = loopToken.nextToken();             // test
+            String start = loopToken.nextToken();                // 1
+            String end = loopToken.nextToken();                  // 14
+
+            String variableType = variableToken.nextToken();     // ㅇㅁㅇ
+            String variableName = variableToken.nextToken();     // 변수명
+
+            return new String[]{fileName, start, end, variableType, variableName};
+        } else if (line.contains(RETURN_TOKEN)) {
+            // (test,1,14) => 변수명
+            String[] tokens = line.split(RETURN_TOKEN, 2);
+            tokens[0] = tokens[0].strip();      // (test,1,14)
+            if (!(tokens[0].startsWith("(") && tokens[0].endsWith(")"))) throw new MatchException().grammarError();
+            String loop = bothEndCut(tokens[0]);                // test,1,14
+            String variableName = tokens[1].strip();            // ㅇㅁㅇ 변수명
+
+            StringTokenizer loopToken = new StringTokenizer(loop, ",");
+
+            String fileName = loopToken.nextToken();             // test
+            String start = loopToken.nextToken();                // 1
+            String end = loopToken.nextToken();                  // 14
+
+            return new String[]{fileName, start, end, variableName};
+        } else {
+            if (!(line.startsWith("(") && line.endsWith(")"))) throw new MatchException().grammarError();
+            String loop = bothEndCut(line.strip());     // (test,1,14) -> test,1,14
+
+            StringTokenizer loopToken = new StringTokenizer(loop, ",");
+
+            String fileName = loopToken.nextToken();             // test
+            String start = loopToken.nextToken();                // 1
+            String end = loopToken.nextToken();                  // 14
+
+            return new String[]{fileName, start, end};
+        }
+    }
+
+    // fileName : test  // start : 1    // end : 15
+    default void start(String fileName, String start, String end,
+                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        String total = getLoopTotal(fileName, start, end);
+        String finalTotal = StartLine.getFinalTotal(false, total, fileName);
+        startStartLine(finalTotal, total, repositoryArray);
     }
 }
