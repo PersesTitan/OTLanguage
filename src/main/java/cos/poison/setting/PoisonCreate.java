@@ -15,6 +15,8 @@ import work.v3.StartWorkV3;
 import java.util.LinkedList;
 import java.util.Map;
 
+import static bin.apply.sys.item.SystemSetting.createReturnWorks;
+import static bin.apply.sys.item.SystemSetting.createStartWorks;
 import static bin.check.VariableCheck.isInteger;
 import static bin.token.LoopToken.*;
 import static cos.poison.PoisonRepository.*;
@@ -57,12 +59,12 @@ public class PoisonCreate extends StartWorkV3 {
         poisonStartList.add(getUrlParam);
         poisonStartList.add(isEmptyCookie);
 
-        Repository.createStartWorks(poisonStartWorks, POISON, SET_COOKIE, setCookie);
-        Repository.createStartWorks(poisonStartWorks, POISON, DELETE_COOKIE, deleteCookie);
-        Repository.createStartWorks(poisonStartWorks, POISON, REDIRECT, redirect);
+        createStartWorks(poisonStartWorks, POISON, SET_COOKIE, setCookie);
+        createStartWorks(poisonStartWorks, POISON, DELETE_COOKIE, deleteCookie);
+        createStartWorks(poisonStartWorks, POISON, REDIRECT, redirect);
 
-        Repository.createReturnWorks(poisonReturnWorks, POISON, GET_COOKIE, getCookie);
-        Repository.createReturnWorks(poisonReturnWorks, POISON, GET_URL, getUrlParam);
-        Repository.createReturnWorks(poisonReturnWorks, POISON, ISEMPTY_COOKIE, isEmptyCookie);
+        createReturnWorks(poisonReturnWorks, POISON, GET_COOKIE, getCookie);
+        createReturnWorks(poisonReturnWorks, POISON, GET_URL, getUrlParam);
+        createReturnWorks(poisonReturnWorks, POISON, ISEMPTY_COOKIE, isEmptyCookie);
     }
 }
