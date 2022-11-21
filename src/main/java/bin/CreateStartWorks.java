@@ -27,6 +27,7 @@ public interface CreateStartWorks {
         if (params == null) return false;
 
         StringTokenizer tokenizer = new StringTokenizer(local, ACCESS);
+        if (!tokenizer.hasMoreTokens()) return false;
         String className = tokenizer.nextToken();
         String methodName = tokenizer.hasMoreTokens() ? tokenizer.nextToken("").substring(1) : "";
         StartWorkV3 startWork = getStartWork(className, methodName, priority, repositoryArray, StartItem.ETC);
@@ -65,7 +66,9 @@ public interface CreateStartWorks {
                     && methodName.endsWith("]")) return methodVoid;
         }
 
-        var map = priority ? priorityStartWorksV3 : startWorksV3;
+        var map = priority
+                ? priorityStartWorksV3
+                : startWorksV3;
         Map<String, StartWorkV3> startWork;
         if (map.containsKey(klassName)
                 && (startWork = map.get(klassName)).containsKey(methodName))
