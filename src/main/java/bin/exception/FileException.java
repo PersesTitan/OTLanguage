@@ -2,6 +2,8 @@ package bin.exception;
 
 import bin.apply.sys.item.SystemSetting;
 
+import static bin.apply.sys.item.Separator.SYSTEM_PATH;
+
 public class FileException extends RuntimeException {
     private final String noFindError = "파일을 찾을 수 없습니다.";
     private final String pathNoHaveError = "해당 경로에 파일 및 디렉토리가 존재하지 않습니다.";
@@ -11,6 +13,7 @@ public class FileException extends RuntimeException {
     private final String alreadyExistsFileName = "이미 존재하는 파일명입니다.";
     private final String addModuleError = "모듈 추가에 실패하였습니다.";
     private final String noValidValues = "유효한 값을 받지 못하였습니다.";
+    private final String didNotReadSystemFile = "system.otls파일을 읽어올 수 없습니다.";
 
     public FileException() {}
 
@@ -28,6 +31,7 @@ public class FileException extends RuntimeException {
             case alreadyExistsFileName -> "This is a file name that already exists.\nPlease change the file name.";
             case addModuleError -> "Failed to add module.\nPlease check if there is a module file.";
             case noValidValues -> "No valid values were received.\nPlease try again or reinstall.";
+            case didNotReadSystemFile -> "Unable to read system.otls file.\nPlease check if the file is present and check if it is damaged.\nPath : " + SYSTEM_PATH;
             default -> "";
         };
         if (path == null || path.isBlank()) ErrorMessage.printErrorMessage(e, subMessage);
@@ -38,6 +42,10 @@ public class FileException extends RuntimeException {
         if (e.getMessage().equals(pathNoHaveError))
             ErrorMessage.printErrorMessage(e, "The file and directory do not exist in that path.\nPlease check the path.", path, line, position);
         else printErrorMessage(e, path);
+    }
+
+    public FileException didNotReadSystemFile() {
+        return new FileException(didNotReadSystemFile);
     }
 
     public FileException noValidValues() {
