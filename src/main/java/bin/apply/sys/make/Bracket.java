@@ -1,6 +1,5 @@
 package bin.apply.sys.make;
 
-import bin.apply.sys.run.LoopBracket;
 import bin.exception.FileException;
 import bin.exception.MatchException;
 import bin.token.LoopToken;
@@ -13,77 +12,112 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Bracket implements LoopToken, Token {
-    private final String endPattern = "(" + BLANK + orMerge(RETURN, PUTIN) + ")?";
-    private final String loopStartPattern =
-            orMerge(START, "\\n") + LINE_NUMBER + BLANK + orMerge(LOOP_SET) + "[^\\n]*\\{?(?=\\s*(\\n|$))";
-    private final String loopEndPattern =
-            orMerge(START, "\\n") + LINE_NUMBER + BLANK + MR + "(?=" + BLANK + endPattern + "\\s*(\\n|$))";
-    private final Pattern pattern = Pattern.compile(orMerge(loopStartPattern, loopEndPattern));
-    private final Matcher matcher = pattern.matcher("");
+import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
+import static bin.apply.sys.make.StartLine.errorCount;
+import static bin.apply.sys.make.StartLine.errorLine;
+
+public class Bracket implements LoopToken, Token, LoopBracket {
+    // 싱글톤 패턴 생성
+    private Bracket() {}
+    private static Bracket bracket;
+    public static Bracket getInstance() {
+        if (bracket == null) {
+            synchronized (Bracket.class) {
+                bracket = new Bracket();
+            }
+        } return bracket;
+    }
+    private final String startPatternText = String.format("(?<=(^|%s)\\d+ )[^%s]*\\{",
+            SEPARATOR_LINE, SEPARATOR_LINE);
+    private final String endPatternText = String.format("(?<=%s\\d+ )}\\s*(%s|%s)?\\s*(?=%s|$)",
+            SEPARATOR_LINE, PUTIN, RETURN, SEPARATOR_LINE);
+    private final String patternText = String.format("(%s|%s)", startPatternText, endPatternText);
     private final Stack<Integer> stack = new Stack<>();
+    private final Matcher matcher = Pattern.compile(patternText).matcher("");
 
     public String bracket(String total, File file) {
         return bracket(total, file.getName(), true);
     }
 
     public String bracket(String total, String fileName, boolean fileCheck) {
-        total = total.replaceAll("(^|\\n)" + LINE_NUMBER + "\\s*(?=(\\n|$))", "");
-        String copy = total;
-
         if (fileCheck) {
-            fileName = fileName.split(DOT, 2)[0];
+            total = total.replaceAll("(^|\\n)" + LINE_NUMBER + "\\s*(?=(\\n|$))", "");
+            int fileEx = fileName.lastIndexOf('.'); // 확장자 위치
+            if (fileEx != -1) fileName = fileName.substring(0, fileEx);
             if (LOOP_TOKEN.containsKey(fileName)) throw new FileException().alreadyExistsFileName();
             LOOP_TOKEN.put(fileName, total);
         }
 
-        if (!(copy.contains("{") && copy.contains("}"))) return copy;
+        if (!(total.contains("{") && total.contains("}"))) return total;
         stack.clear();
-        matcher.reset(copy);
+        matcher.reset(total);
         while (matcher.find()) {
-            String group = matcher.group().strip();
-            if (Pattern.compile(MR + BLANK + END).matcher(group).find()) {
+            String group = matcher.group();
+            if (startCheck(group)) stack.add(matcher.end());
+            else if (group.startsWith("}")) {
                 if (stack.isEmpty()) {
-                    StartLine.setError(group, total);
-                    throw new MatchException().bracketMatchError();
+                    int a = cutLine(total, matcher.start());
+                    int b = total.indexOf(SEPARATOR_LINE, a);
+                    throwError(total.substring(a, b));
                 } else if (stack.size() == 1) {
-                    int start = stack.pop()+1;
-                    int end = matcher.end()-1;
-                    String oldValue = total.substring(start, end).strip();
-                    int oldStart = getLineStart(oldValue);
-                    int oldEnd = getLineEnd(oldValue);
-                    String newValue = " (" + fileName + "," + (oldStart == 0 ? oldEnd : oldStart) + "," + oldEnd + ") ";
-                    copy = copy.replace(total.substring(start-1, end+1), newValue);
+                    int start = stack.pop() - 1;
+                    int end = matcher.start() + 1;
+                    String newWord = String.format(" (%s,%s,%s) ", fileName, startLine(total, start), endLine(total, end));
+                    total = total.replace(total.substring(start, end), newWord);
+                    matcher.reset(total);
                 } else stack.pop();
-            } else {
-                if (!group.endsWith("{")) {
-                    StartLine.setError(group, total);
-                    throw new MatchException().loopStyleError();
-                } else stack.add(matcher.end()-1);
             }
         }
+        if (!stack.isEmpty()) {
+            throwError(total, stack.pop());
+            throw new MatchException().bracketMatchError();
+        }
 
-        if (!stack.isEmpty()) getErrorLine(total, stack.pop());
-        return LoopBracket.deleteEnter(copy);
+        return check(total)
+                ? deleteEnter(total)
+                : total;
     }
 
-    private void getErrorLine(String total, int pos) {
-        total = total.strip();
-        int end = total.lastIndexOf("\n") + 1;
-        String line = total.substring(pos, end);
-        StartLine.setError(line, total);
+    // (...) {\n14
+    private String startLine(String total, int start) {
+        int s = total.indexOf(SEPARATOR_LINE, start) + 1;
+        int e = total.indexOf(' ', s);
+        return total.substring(s, e);
+    }
+
+    private String endLine(String total, int end) {
+        int cut = cutLine(total, end);
+        int start = total.indexOf(' ', cut);
+        return total.substring(cut, start);
+    }
+
+    // \n \r
+    private final char lineToken = SEPARATOR_LINE.charAt(0);
+    private int cutLine(String builder, int start) {
+        while (true) {
+            if (builder.charAt(--start) == lineToken) return start + 1;
+            else if (start <= 0) return 0;
+        }
+    }
+
+    // $ㅅ$ ㅇㅇ {
+    private boolean startCheck(String line) {
+        if (!line.strip().endsWith("{")) return false;
+        for (String loopSet : LOOP_SET) {
+            if (line.startsWith(loopSet)) return true;
+        }
+        return line.chars().filter(v -> v == '^').count() == 2;
+    }
+
+    private void throwError(String total, int s) {
+        String line = total.substring(cutLine(total, s), s);
+        throwError(line);
+    }
+
+    private void throwError(String line) {
+        int start = line.indexOf(' ');
+        errorCount.set(Long.parseLong(line.substring(0, start)));
+        errorLine.set(line.substring(start + 1));
         throw new MatchException().bracketMatchError();
-    }
-
-    private int getLineStart(String total) {
-        Matcher matcher = Pattern.compile(START + LINE_NUMBER).matcher(total);
-        if (matcher.find()) return Integer.parseInt(matcher.group().trim());
-        else return 0;
-    }
-
-    private int getLineEnd(String total) {
-        Matcher matcher = Pattern.compile(LINE_NUMBER.trim() + END).matcher(total);
-        if (matcher.find()) return Integer.parseInt(matcher.group().trim());
-        else return total.length();
     }
 }
