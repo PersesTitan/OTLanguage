@@ -17,4 +17,9 @@ public class LoopController implements LoopToken, BoolToken {
         }
         return line;
     }
+
+    public static void main(String[] args) {
+        String line = "ddd?ddd ? ㅇㅁㅇ";
+        System.out.println(new LoopController().check(line));
+    }
 }
