@@ -1,6 +1,5 @@
 package bin.apply.sys.make;
 
-import bin.apply.Repository;
 import bin.apply.Setting;
 import bin.apply.sys.item.RunType;
 import bin.calculator.tool.Calculator;
@@ -14,9 +13,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
-import static bin.apply.Controller.bracket;
-import static bin.apply.Controller.loopController;
-import static bin.apply.Setting.start;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.calculator.tool.Calculator.*;
 
@@ -54,8 +50,8 @@ public class StartLine implements LoopToken, Calculator {
 
     public static String getFinalTotal(boolean extensionCheck, String total, String path) {
         return extensionCheck
-                ? bracket.bracket(total, new File(path))
-                : bracket.bracket(total, path, false);
+                ? Bracket.getInstance().bracket(total, new File(path))
+                : Bracket.getInstance().bracket(total, path, false);
     }
 
     public static void startStartLine(String finalTotal, String total,
@@ -68,8 +64,8 @@ public class StartLine implements LoopToken, Calculator {
 
     public static String startLoop(String total, String fileName,
                                    LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
-            line = loopController.check(setError(line, total).strip());
+        for (var line : Bracket.getInstance().bracket(total, fileName, false).lines().toList()) {
+            line = setError(line, total).strip();
             line = Setting.lineStart(line, repositoryArray);
             if (line.endsWith(BREAK) || line.endsWith(CONTINUE)) {
                 // FINISH, CONTINUE, BREAK
@@ -103,7 +99,7 @@ public class StartLine implements LoopToken, Calculator {
 
     public static void startPoison(String total, String fileName,
                                    LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        for (var line : bracket.bracket(total, fileName, false).lines().toList()) {
+        for (var line : Bracket.getInstance().bracket(total, fileName, false).lines().toList()) {
             if ((line = setError(line, total)).isBlank()) continue;
             Setting.start(line, errorLine.get(), repositoryArray);
         }
@@ -115,16 +111,17 @@ public class StartLine implements LoopToken, Calculator {
     public static String setError(String line, String total) {
         if (line.isBlank()) return "";
         else if (LOOP_TOKEN.containsKey(total)) total = LOOP_TOKEN.get(total);
-        String[] tokens = line.split(" ", 2);
-        String lineCount = tokens[0];
+
+        int i = line.indexOf(' ');
+        String lineCount = i == -1 ? line : line.substring(0, i);
         errorCount.set(Integer.parseInt(lineCount));
-        if (tokens.length == 2) {
+        if (i != -1) {
             int start = total.indexOf("\n" + lineCount + " ") + 1;
             int end = total.indexOf("\n", start);
             if (end == -1) end = total.length();
             String lines = total.substring(start + lineCount.length() + 1, end);
             errorLine.set(lines);
-            return tokens[1];
+            return line.substring(i + 1);
         } else return "";
     }
 }
