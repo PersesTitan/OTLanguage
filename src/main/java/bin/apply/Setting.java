@@ -5,13 +5,13 @@ import bin.apply.sys.item.DebugMode;
 import bin.apply.sys.item.RunType;
 import bin.CreateReturnWorks;
 import bin.CreateStartWorks;
+import bin.orign.loop.For;
 import work.v3.ReturnWorkV3;
 import work.v3.StartWorkV3;
 
 import java.io.*;
 import java.util.*;
 
-import static bin.apply.Controller.forStart;
 import static bin.apply.sys.item.Separator.*;
 import static bin.token.LoopToken.*;
 
@@ -31,7 +31,7 @@ public class Setting implements Repository {
         if (CreateStartWorks.start(line, true, repositoryArray)) return;
         line = lineStart(line, repositoryArray);
 
-        if (forStart.check(line)) {forStart.start(line, repositoryArray);return;}
+        if (For.getInstance().check(line)) {For.getInstance().start(line, repositoryArray);return;}
         if (CreateStartWorks.start(line, false, repositoryArray)) return;
 
         runMessage(errorLine);
