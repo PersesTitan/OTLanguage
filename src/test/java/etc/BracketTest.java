@@ -6,7 +6,6 @@ import bin.token.MergeToken;
 
 import java.io.File;
 import java.util.Stack;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +30,8 @@ public class BracketTest implements MergeToken {
     public String bracket(String total, String fileName, boolean fileCheck) {
         if (fileCheck) {
             total = total.replaceAll("(^|\\n)" + LINE_NUMBER + "\\s*(?=(\\n|$))", "");
-            fileName = new StringTokenizer(fileName, ".").nextToken();
+            int fileEx = fileName.lastIndexOf('.'); // 확장자 위치
+            if (fileEx != -1) fileName = fileName.substring(0, fileEx);
             if (LOOP_TOKEN.containsKey(fileName)) throw new FileException().alreadyExistsFileName();
             LOOP_TOKEN.put(fileName, total);
         }
@@ -47,9 +47,8 @@ public class BracketTest implements MergeToken {
                     int a = cutLine(total, matcher.start());
                     int b = total.indexOf(SEPARATOR_LINE, a);
                     throwError(total.substring(a, b));
-                }
-                else if (stack.size() == 1) {
-                    int start = stack.pop()-1;
+                } else if (stack.size() == 1) {
+                    int start = stack.pop() - 1;
                     int end = matcher.start() + 1;
                     String newWord = String.format(" (%s,%s,%s) ", fileName, startLine(total, start), endLine(total, end));
                     total = total.replace(total.substring(start, end), newWord);
@@ -78,6 +77,7 @@ public class BracketTest implements MergeToken {
         return total.substring(cut, start);
     }
 
+    // \n \r
     private final char lineToken = SEPARATOR_LINE.charAt(0);
     private int cutLine(String builder, int start) {
         while (true) {
