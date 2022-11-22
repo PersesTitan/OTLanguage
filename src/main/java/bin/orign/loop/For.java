@@ -17,6 +17,18 @@ import static bin.token.VariableToken.*;
 import static bin.token.VariableToken.LONG_VARIABLE;
 
 public class For implements Calculator, MergeToken, GetList {
+    // 싱글톤 패턴 생성
+    private For() {}
+    private static For forStart;
+    public static For getInstance() {
+        if (forStart == null) {
+            synchronized (For.class) {
+                forStart = new For();
+            }
+        }
+        return forStart;
+    }
+
     public boolean check(String line) {
         return line.chars().filter(v -> v == '^').count() == 2;
     }
