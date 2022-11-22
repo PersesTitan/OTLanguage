@@ -18,12 +18,13 @@ import static bin.token.LoopToken.LOOP_TOKEN;
 public class Main extends Setting {
     public static void main(String[] args) {
         try {
+            // window
             if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win")) {
                 new Main(args.length == 0
                     ? new String[]{SEPARATOR_HOME}
                     : new String[]{SEPARATOR_HOME, args[0]});
-            }
-            else new Main(args);
+                while (true) {}
+            } else new Main(args);
         } catch (FileException e) {
             new FileException().printErrorMessage(e, Setting.mainPath);
         } finally {try {br.close(); bw.close();} catch (IOException ignored) {}}
@@ -38,8 +39,6 @@ public class Main extends Setting {
         Setting.path = args[0];
         if (runType.equals(RunType.Normal)) normal(args);
         else try {shell();} catch (NullPointerException ignored) {}
-
-        while (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win")) {}
     }
 
     private void normal(String[] args) {
@@ -63,6 +62,7 @@ public class Main extends Setting {
     }
 
     private void shell() {
+        // 임시 파일명
         String fileName = "temporary";
         StringBuilder total = new StringBuilder();
         while (true) {
