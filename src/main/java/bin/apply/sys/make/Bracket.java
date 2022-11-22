@@ -25,7 +25,8 @@ public class Bracket implements LoopToken, Token, LoopBracket {
             synchronized (Bracket.class) {
                 bracket = new Bracket();
             }
-        } return bracket;
+        }
+        return bracket;
     }
     private final String startPatternText = String.format("(?<=(^|%s)\\d+ )[^%s]*\\{",
             SEPARATOR_LINE, SEPARATOR_LINE);
