@@ -1,24 +1,49 @@
 package bin.token;
 
+import bin.apply.Setting;
+import bin.exception.FileException;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+
+import static bin.apply.sys.item.Separator.INSTALL_PATH;
+import static bin.apply.sys.item.Separator.SYSTEM_PATH;
+import static bin.apply.sys.make.StartLine.developmentMode;
+import static java.nio.charset.StandardCharsets.*;
 
 public interface LoopToken extends VariableToken {
     Map<String, String> LOOP_TOKEN = new HashMap<>();
     Set<String> LOOP_SET = new HashSet<>() {{
-        add("[^\\^\\n]+" + FOR + "[^\\^\\n]+" + FOR + "[^\\^\\n]+");
-        add(FOR + "[^\\^\\n]+" + FOR);
-        add(IF);
-        add(ELSE_IF);
-        add(ELSE);
-        add(WHITE);
-        add(TRY_CATCH); add(METHOD); add(KLASS);
+//        add("[^\\^\\n]+" + FOR + "[^\\^\\n]+" + FOR + "[^\\^\\n]+");
+//        add(FOR + "[^\\^\\n]+" + FOR);
+//        add(IF);
+//        add(ELSE_IF);
+//        add(ELSE);
+//        add(WHITE);
+//        add(TRY_CATCH);
+//        add(METHOD);
+//        add(KLASS);
 
-        add(POISON + ACCESS + POISON_POST);
-        add(POISON + ACCESS + POISON_GET);
-        add(SERVER);
+//        add(POISON + ACCESS + POISON_POST);
+//        add(POISON + ACCESS + POISON_GET);
+//        add(SERVER);
+        try (BufferedReader br = new BufferedReader(new FileReader(SYSTEM_PATH, UTF_8))) {
+            br.lines()
+                    .filter(Predicate.not(String::isBlank))
+                    .map(String::strip)
+                    .forEach(this::add);
+        } catch (IOException i) {
+            if (developmentMode) i.printStackTrace();
+            new FileException().printErrorMessage(new FileException().didNotReadSystemFile(), Setting.mainPath);
+            System.exit(0);
+        }
     }};
 
     String BRACE_STYLE = SL + FILE_TYPE + ",[0-9]+,[0-9]+" + SR;
@@ -39,6 +64,9 @@ public interface LoopToken extends VariableToken {
     String TRY_CATCH = "ㅠㅅㅠ";
     String METHOD = "ㅁㅅㅁ";
     String KLASS = "ㅋㅅㅋ";
+    String IF_ = "?ㅅ?";
+    String ELSE_IF_ = "?ㅈ?";
+    String ELSE_ = "?ㅉ?";
 
     // LOOP
     String FOR = CARET;                 // ^
