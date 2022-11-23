@@ -7,7 +7,7 @@ import static bin.calculator.tool.CalculatorTool.compare;
 import static bin.token.LoopToken.ELSE_IF;
 import static bin.token.cal.BoolToken.*;
 
-public class MatchException extends RuntimeException {
+public class MatchException extends RuntimeException implements ExceptionMessage {
     private final String grammarError = "문법이 일치하지 않습니다.";
     private final String bracketMatchError = "중괄호 짝이 일치하지 않습니다.";
     private final String loopStyleError = "해당 문법은 마지막에 '{'가 들어가야 합니다.";
@@ -25,7 +25,8 @@ public class MatchException extends RuntimeException {
         super(message);
     }
 
-    public void matchErrorMessage(MatchException e, String path, String line, long position) {
+    @Override
+    public void errorMessage(RuntimeException e, String path, String line, long position) {
         String subMessage = switch (e.getMessage()) {
             case grammarError -> "The grammar does not match.\nPlease check the grammar.";
             case bracketMatchError -> "Curly braces don't match.\nPlease match the pair.";
