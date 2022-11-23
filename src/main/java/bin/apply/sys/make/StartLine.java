@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
+import static bin.apply.sys.item.Separator.EXT_REP;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.calculator.tool.Calculator.*;
 
@@ -21,31 +22,23 @@ public class StartLine implements LoopToken, Calculator {
     public static void startLine(String total, String path,
                                  LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         boolean extensionCheck = extensionCheck(path);
-        if (extensionCheck) errorPath.set(path);
         try {
             String finalTotal = getFinalTotal(extensionCheck, total, path);
             startStartLine(finalTotal, total, repositoryArray);
-        } catch (VariableException e) {
-            new VariableException().variableErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            setLine(e);
-        } catch (MatchException e) {
-            new MatchException().matchErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            setLine(e);
-        } catch (ServerException e) {
-            new ServerException().serverErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            setLine(e);
-        } catch (ConsoleException e) {
-            new ConsoleException().consoleErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            setLine(e);
-        } catch (CosException e) {
-            new CosException().cosErrorMessage(e, errorPath.get(), errorLine.get(), errorCount.get());
-            setLine(e);
+        } catch (VariableException | MatchException | ServerException | ConsoleException | CosException e) {
+            errorMessage(e, e);
         }
     }
 
     private static void setLine(RuntimeException e) {
         if (developmentMode) e.printStackTrace();
         if (Setting.runType.equals(RunType.Normal)) System.exit(0);
+    }
+
+    private static void errorMessage(RuntimeException r, ExceptionMessage e) {
+        String p = errorPath.get() + "." + EXT_REP.get(errorPath.get());
+        e.errorMessage(r, p, errorLine.get(), errorCount.get());
+        setLine(r);
     }
 
     public static String getFinalTotal(boolean extensionCheck, String total, String path) {
