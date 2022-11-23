@@ -12,9 +12,9 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static bin.apply.sys.item.Separator.EXT_REP;
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
-import static bin.apply.sys.make.StartLine.errorCount;
-import static bin.apply.sys.make.StartLine.errorLine;
+import static bin.apply.sys.make.StartLine.*;
 
 public class Bracket implements LoopToken, Token, LoopBracket {
     // 싱글톤 패턴 생성
@@ -37,10 +37,14 @@ public class Bracket implements LoopToken, Token, LoopBracket {
     private final Matcher matcher = Pattern.compile(patternText).matcher("");
 
     public String bracket(String total, File file) {
-        return bracket(total, file.getName(), true);
+        String fileName = file.getName();
+        int count = fileName.indexOf('.');
+        EXT_REP.put(fileName.substring(0, count), fileName.substring(count+1));
+        return bracket(total, fileName.substring(0, count), true);
     }
 
     public String bracket(String total, String fileName, boolean fileCheck) {
+        errorPath.set(fileName);
         if (fileCheck) {
             total = total.replaceAll("(^|\\n)" + LINE_NUMBER + "\\s*(?=(\\n|$))", "");
             int fileEx = fileName.lastIndexOf('.'); // 확장자 위치
