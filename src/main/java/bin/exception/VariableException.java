@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import static bin.token.cal.BoolToken.*;
 
-public class VariableException extends RuntimeException {
+public class VariableException extends RuntimeException implements ExceptionMessage {
     private final String typeMatch = "변수 값이 유효하지 않습니다.";
     private final String variableNameMatch = "변수명이 유효하지 않습니다.";
     private final String sameVariable = "이미 존재하는 변수명입니다.";
@@ -26,7 +26,8 @@ public class VariableException extends RuntimeException {
         super(message);
     }
 
-    public void variableErrorMessage(VariableException e, String path, String line, long position) {
+    @Override
+    public void errorMessage(RuntimeException e, String path, String line, long position) {
         String subMessage = switch (e.getMessage()) {
             case typeMatch -> "The variable value is invalid.\nPlease check the variable type.";
             case sameVariable -> "Variable name that already exists.\nReserved words or already used variable names cannot be reused.";
