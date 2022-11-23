@@ -23,12 +23,8 @@ public class Ceil extends ReturnWorkV3 implements Calculator {
     public String start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String value = getNumberStr(params[0], repositoryArray);
-        try {
-            if (line.startsWith(FLOAT_VARIABLE)) return String.valueOf(Math.round(getFloat(value)));
-            else if (line.startsWith(DOUBLE_VARIABLE)) return String.valueOf(Math.round(getDouble(value)));
-            else return null;
-        } catch (VariableException e) {
-            return null;
-        }
+        if (line.startsWith(FLOAT_VARIABLE)) return String.valueOf(Math.round(getFloat(value)));
+        else if (line.startsWith(DOUBLE_VARIABLE)) return String.valueOf(Math.round(getDouble(value)));
+        else return null;
     }
 }
