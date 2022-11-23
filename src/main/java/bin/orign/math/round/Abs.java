@@ -22,14 +22,10 @@ public class Abs extends ReturnWorkV3 implements Calculator {
     public String start(String line, String[] params,
                         LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String value = getNumberStr(params[0], repositoryArray);
-        try {
-            if (line.startsWith(INT_VARIABLE)) return String.valueOf(Math.abs(getInteger(value)));
-            else if (line.startsWith(LONG_VARIABLE)) return String.valueOf(Math.abs(getLong(value)));
-            else if (line.startsWith(FLOAT_VARIABLE)) return String.valueOf(Math.abs(getFloat(value)));
-            else if (line.startsWith(DOUBLE_VARIABLE)) return String.valueOf(Math.abs(getDouble(value)));
-            else return null;
-        } catch (VariableException e) {
-            return null;
-        }
+        if (line.startsWith(INT_VARIABLE)) return String.valueOf(Math.abs(getInteger(value)));
+        else if (line.startsWith(LONG_VARIABLE)) return String.valueOf(Math.abs(getLong(value)));
+        else if (line.startsWith(FLOAT_VARIABLE)) return String.valueOf(Math.abs(getFloat(value)));
+        else if (line.startsWith(DOUBLE_VARIABLE)) return String.valueOf(Math.abs(getDouble(value)));
+        else return null;
     }
 }
