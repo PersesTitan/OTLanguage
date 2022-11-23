@@ -4,12 +4,16 @@ import bin.apply.Setting;
 import bin.apply.sys.make.StartLine;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public interface Separator {
     String SEPARATOR_FILE = System.getProperty("file.separator");              // /
     String SEPARATOR_PATH = System.getProperty("path.separator");              // :
     String SEPARATOR_LINE = System.getProperty("line.separator");              // \n \r
     String SEPARATOR_HOME = System.getProperty("user.home");                   // /User/name
+
+    Map<String, String> EXT_REP = new HashMap<>();
 
     String MODULE_EXTENSION = ".otlm";
     String SYSTEM_EXTENSION = ".otls";
