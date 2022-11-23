@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static bin.apply.sys.item.Separator.*;
+import static bin.token.Token.ACCESS;
 
 public class Install {
     // system.otls
@@ -29,6 +30,7 @@ public class Install {
 
     private final int MODULE = 0;
     private final int CLASS = 1;
+    private final int FILE = 2;
 
     // fileName: poison
     private Install(String fileName) {
@@ -68,6 +70,7 @@ public class Install {
                 switch (line) {
                     case "module:" -> type = MODULE;
                     case "class:" -> type = CLASS;
+                    case "file:" -> type = FILE;
                 }
             } else builder.append(line).append("\n");
         }
@@ -130,6 +133,16 @@ public class Install {
                 System.out.printf("%s add %s", "\033[0;32m", "\033[0m");
                 System.out.println(line);
             });
+
+            case FILE -> total.lines().forEach(line -> {
+                print(size);
+                System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                String urlValue = getFiles(fileName, line);
+                String localPath = getFilesPath(fileName, line.replace(ACCESS, SEPARATOR_FILE));
+                install(urlValue, localPath);
+                System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                System.out.println(line);
+            });
         }
     }
 
@@ -166,6 +179,17 @@ public class Install {
         fileName = fileName.substring(fileName.lastIndexOf("~") + 1);
         // fileName = cos~poison~method
         return String.format("https://raw.githubusercontent.com/OTLanguage/module/main/%s/%s", moduleName, fileName);
+    }
+
+    // moduleName : music
+    // fileName: A.wav
+    private String getFiles(String name, String fileName) {
+        fileName = fileName.replace(ACCESS, "/");
+        return String.format("https://raw.githubusercontent.com/OTLanguage/module/main/%s/%s", name, fileName);
+    }
+
+    private String getFilesPath(String name, String file) {
+        return getPath(MODULE_PATH, name, file);
     }
 
     // fileName: cos~work~compulsion
