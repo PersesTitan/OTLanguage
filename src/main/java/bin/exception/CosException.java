@@ -2,6 +2,8 @@ package bin.exception;
 
 import java.util.StringTokenizer;
 
+import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
+
 public class CosException extends RuntimeException {
 
     public CosException() {}
@@ -11,9 +13,10 @@ public class CosException extends RuntimeException {
     }
 
     public void cosErrorMessage(CosException e, String path, String line, long position) {
-        StringTokenizer tokenizer = new StringTokenizer(e.getMessage(), "`");
-        String mes = tokenizer.nextToken();
-        String subMessage = tokenizer.nextToken();
+        String message = e.getMessage();
+        int i = message.indexOf(SEPARATOR_LINE);
+        String mes = message.substring(0, i);
+        String subMessage = message.substring(i + 1);
         ErrorMessage.printErrorMessage(e.getClass().getSimpleName(), mes, subMessage, path, line, position);
     }
 }

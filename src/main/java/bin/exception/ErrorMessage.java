@@ -35,6 +35,7 @@ public interface ErrorMessage {
     }
 
     static void printErrorMessage(String e, String mes, String subMessage, String path, String line, long position) {
+        subMessage = subMessage.strip();
         String message = "OTLanguage." + e + ": " +
                 mes +
                 (path == null ? "" : "\n\totl file location where it occurred(" + path + ":" + position + ")") +
