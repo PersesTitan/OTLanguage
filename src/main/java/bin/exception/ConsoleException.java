@@ -1,6 +1,6 @@
 package bin.exception;
 
-public class ConsoleException extends RuntimeException {
+public class ConsoleException extends RuntimeException implements ExceptionMessage {
     private final static String scannerError = "입력에 실패하였습니다.";
     private final static String printError = "출력에 실패하였습니다.";
 
@@ -10,7 +10,8 @@ public class ConsoleException extends RuntimeException {
         super(message);
     }
 
-    public void consoleErrorMessage(ConsoleException e, String path, String line, long position) {
+    @Override
+    public void errorMessage(RuntimeException e, String path, String line, long position) {
         String subMessage = switch (e.getMessage()) {
             case scannerError -> "Input failed.\nplease try again.";
             case printError -> "Output failed.\nplease try again.";
