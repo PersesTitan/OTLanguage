@@ -1,10 +1,8 @@
 package bin.exception;
 
-import java.util.StringTokenizer;
-
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 
-public class CosException extends RuntimeException {
+public class CosException extends RuntimeException implements ExceptionMessage {
 
     public CosException() {}
 
@@ -12,7 +10,8 @@ public class CosException extends RuntimeException {
         super(message);
     }
 
-    public void cosErrorMessage(CosException e, String path, String line, long position) {
+    @Override
+    public void errorMessage(RuntimeException e, String path, String line, long position) {
         String message = e.getMessage();
         int i = message.indexOf(SEPARATOR_LINE);
         String mes = message.substring(0, i);
