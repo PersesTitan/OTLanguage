@@ -1,6 +1,6 @@
 package etc.v3.klass.str;
 
-import etc.v3.klass.ReturnWorkTest;
+import etc.v3.klass.v2.ReturnWorkTest;
 
 import java.util.LinkedList;
 import java.util.Map;
