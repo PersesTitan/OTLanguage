@@ -37,6 +37,8 @@ import bin.string.position.SubString;
 import bin.string.tocase.ToLower;
 import bin.string.tocase.ToUpper;
 import bin.token.LoopToken;
+import cos.shell.CreateShell;
+import cos.shell.StartShell;
 import cos.music.replace.GetLoop;
 import cos.music.replace.GetPitch;
 import cos.music.replace.GetSpeed;
@@ -50,10 +52,10 @@ import etc.gui.OGUITest;
 import etc.gui.item.*;
 import etc.gui.replace.*;
 import etc.gui.start.*;
-import etc.music.start.*;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,9 +67,10 @@ import static bin.apply.sys.item.SystemSetting.*;
 import static bin.token.ConsoleToken.*;
 import static bin.token.LoopToken.*;
 import static bin.token.StringToken.*;
-import static bin.token.VariableToken.FILE;
 import static bin.token.VariableToken.STRING_VARIABLE;
 import static bin.token.cal.NumberToken.*;
+import static cos.shell.JavaRepository.JAVA;
+import static cos.shell.JavaRepository.JAVA_START;
 import static etc.gui.setting.RepositoryTest.*;
 import static etc.music.paly.MusicRepository.*;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -82,6 +85,8 @@ public class MakeGitTest {
         new MakeGitTest("gui", "src/main/java/cos/gui");
         clear(); start4();
         new MakeGitTest("music", "src/main/java/cos/music");
+        clear(); start5();
+        new MakeGitTest("shell", "src/main/java/cos/shell");
     }
 
     private static void clear() {
@@ -223,6 +228,9 @@ public class MakeGitTest {
 
                 String klassName = file.getAbsolutePath() + "/" + f.getName().substring(0, f.getName().length()-".java".length()) + ".class";
                 copy(value.replace("~", SEPARATOR_FILE), klassName);
+                String pa = getPath(INSTALL_PATH, "analyzer", value.replace("~", SEPARATOR_FILE)) + ".class";
+                new File(pa).getParentFile().mkdirs();
+                copy(value.replace("~", SEPARATOR_FILE), pa);
             }
 
             if (!files.isEmpty()) {
@@ -253,7 +261,7 @@ public class MakeGitTest {
         system.add(IF_);
         system.add(ELSE_IF_);
         system.add(ELSE_);
-        system.add(WHITE);
+        system.add(WHITE_);
         system.add(TRY_CATCH);
         system.add(METHOD);
         system.add(KLASS);
@@ -370,9 +378,14 @@ public class MakeGitTest {
     }
 
     private static void start4() {
-        for (File file : Objects.requireNonNull(new File("music").listFiles())) {
+        new File(MODULE_PATH + "/music").mkdirs();
+        for (File file : Objects.requireNonNull(new File("module/music").listFiles())) {
             String name = file.getName();
-            if (name.endsWith(".wav")) files.add(name);
+            if (name.endsWith(".wav")) {
+                files.add(name);
+                cp("music", file);
+                cp1("music", file);
+            }
         }
 
         CreateMusic createMusic = new CreateMusic(1);
@@ -387,5 +400,38 @@ public class MakeGitTest {
         createReturnWorks(MUSIC, PITCH, new GetPitch(1));
         createReturnWorks(MUSIC, SPEED, new GetSpeed(1));
         createReturnWorks(MUSIC, LOOP, new GetLoop(1));
+    }
+
+    private static void start5() {
+        new File(MODULE_PATH + "/shell").mkdirs();
+        for (File file : Objects.requireNonNull(new File("module/groovy").listFiles())) {
+            String name = file.getName();
+            if (name.endsWith(".jar")) {
+                files.add(name);
+                cp("shell", file);
+                cp1("shell", file);
+            }
+        }
+
+        system.add(JAVA + ACCESS + JAVA_START);
+
+        createStartWorks(JAVA, "", new CreateShell());
+        createStartWorks(JAVA, JAVA_START, new StartShell());
+    }
+
+    private static void cp(String name, File file) {
+        String path = MODULE_PATH + "/" + name + "/" + file.getName();
+        if (!new File(path).isFile()) {
+            try {Files.copy(file.toPath(), Path.of(path), REPLACE_EXISTING);}
+            catch (IOException ignored) {}
+        }
+    }
+
+    private static void cp1(String name, File file) {
+        String path = getPath(SEPARATOR_HOME, "Documents/GitHub/module", name, file.getName());
+        if (!new File(path).isFile()) {
+            try {Files.copy(file.toPath(), Path.of(path), REPLACE_EXISTING);}
+            catch (IOException ignored) {}
+        }
     }
 }
