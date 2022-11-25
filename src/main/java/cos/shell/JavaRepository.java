@@ -1,4 +1,4 @@
-package cos.java;
+package cos.shell;
 
 public interface JavaRepository {
     String JAVA = "ㅉㅂㅉ";

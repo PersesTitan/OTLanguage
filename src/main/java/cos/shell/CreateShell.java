@@ -1,4 +1,4 @@
-package cos.java;
+package cos.shell;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
