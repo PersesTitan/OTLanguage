@@ -151,7 +151,6 @@ public class Install {
         System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
     }
 
-
     /*
      * 파일은 다운로드 하는 로직
      */
