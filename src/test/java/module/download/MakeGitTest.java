@@ -69,8 +69,8 @@ import static bin.token.LoopToken.*;
 import static bin.token.StringToken.*;
 import static bin.token.VariableToken.STRING_VARIABLE;
 import static bin.token.cal.NumberToken.*;
-import static cos.shell.JavaRepository.JAVA;
-import static cos.shell.JavaRepository.JAVA_START;
+import static cos.shell.JavaRepository.SHELL;
+import static cos.shell.JavaRepository.SHELL_START;
 import static etc.gui.setting.RepositoryTest.*;
 import static etc.music.paly.MusicRepository.*;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -413,10 +413,10 @@ public class MakeGitTest {
             }
         }
 
-        system.add(JAVA + ACCESS + JAVA_START);
+        system.add(SHELL + ACCESS + SHELL_START);
 
-        createStartWorks(JAVA, "", new CreateShell());
-        createStartWorks(JAVA, JAVA_START, new StartShell());
+        createStartWorks(SHELL, "", new CreateShell());
+        createStartWorks(SHELL, SHELL_START, new StartShell());
     }
 
     private static void cp(String name, File file) {
