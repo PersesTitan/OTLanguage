@@ -18,7 +18,25 @@ import static bin.token.cal.BoolToken.*;
 
 public class MakeTest {
     public static void main(String[] args) {
-        String a = "asd.af.otl";
-        System.out.println(a.substring(0, a.lastIndexOf('.')));
+        int hangle_start = '\uAC00';
+        int hangle_end = '\uD7A3' + 1;
+        Random random = new Random();
+        System.out.println(hangle_start);
+        System.out.println(hangle_end);
+        System.out.println((char) random.nextInt(hangle_start, hangle_end));
+        System.out.println((char) random.nextInt(hangle_start, hangle_end));
+        System.out.println((char) random.nextInt(hangle_start, hangle_end));
+        System.out.println((char) random.nextInt(hangle_start, hangle_end));
+        System.out.println(UUID.randomUUID());
+        System.out.println(UUID.randomUUID());
+        System.out.println(UUID.randomUUID());
+        System.out.println(UUID.randomUUID());
+        System.out.println(UUID.randomUUID());
+    }
+
+    private final static int START_VALUE = 44032;
+    private final static int END_VALUE = 55204;
+    private static String getRandom() {
+
     }
 }
