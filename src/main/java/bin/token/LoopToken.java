@@ -21,22 +21,8 @@ import static java.nio.charset.StandardCharsets.*;
 public interface LoopToken extends VariableToken {
     Map<String, String> LOOP_TOKEN = new HashMap<>();
     Set<String> LOOP_SET = new HashSet<>() {{
-//        add("[^\\^\\n]+" + FOR + "[^\\^\\n]+" + FOR + "[^\\^\\n]+");
-//        add(FOR + "[^\\^\\n]+" + FOR);
-//        add(IF);
-//        add(ELSE_IF);
-//        add(ELSE);
-//        add(WHITE);
-//        add(TRY_CATCH);
-//        add(METHOD);
-//        add(KLASS);
-
-//        add(POISON + ACCESS + POISON_POST);
-//        add(POISON + ACCESS + POISON_GET);
-//        add(SERVER);
         try (BufferedReader br = new BufferedReader(new FileReader(SYSTEM_PATH, UTF_8))) {
-            br.lines()
-                    .filter(Predicate.not(String::isBlank))
+            br.lines().filter(Predicate.not(String::isBlank))
                     .map(String::strip)
                     .forEach(this::add);
         } catch (IOException i) {
@@ -71,6 +57,7 @@ public interface LoopToken extends VariableToken {
     // LOOP
     String FOR = CARET;                 // ^
     String WHITE = PESO + "ㅅ" + PESO;
+    String WHITE_ = "$ㅅ$";
 
     // SERVER
     String SERVER = "ㅅㅂㅅ";
@@ -88,4 +75,8 @@ public interface LoopToken extends VariableToken {
     String ISEMPTY_COOKIE = COOKIE + QUESTION_S;
     String DELETE_COOKIE = COOKIE + HYPHEN;
     String GET_URL = "ㅇㄹㅇ";
+
+    // SHELL
+    String SHELL = "ㅉㅂㅉ";
+    String SHELL_START = "ㅅㅌㅅ";
 }
