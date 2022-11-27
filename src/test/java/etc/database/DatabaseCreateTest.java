@@ -30,6 +30,7 @@ public class DatabaseCreateTest extends StartWorkV3 {
     }
 
     private final String klassName;
+    public static Statement stmt;
 
     // 1, 3
     public DatabaseCreateTest(String klassName, int... counts) {
@@ -46,7 +47,7 @@ public class DatabaseCreateTest extends StartWorkV3 {
             Connection con = params.length == 1
                     ? DriverManager.getConnection(url)
                     : DriverManager.getConnection(url, params[1], params[2]);
-
+            stmt = con.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
         }
