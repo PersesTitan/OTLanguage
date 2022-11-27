@@ -69,8 +69,6 @@ import static bin.token.LoopToken.*;
 import static bin.token.StringToken.*;
 import static bin.token.VariableToken.STRING_VARIABLE;
 import static bin.token.cal.NumberToken.*;
-import static cos.shell.JavaRepository.SHELL;
-import static cos.shell.JavaRepository.SHELL_START;
 import static etc.gui.setting.RepositoryTest.*;
 import static etc.music.paly.MusicRepository.*;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
