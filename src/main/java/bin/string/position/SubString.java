@@ -1,6 +1,7 @@
 package bin.string.position;
 
 import bin.calculator.tool.Calculator;
+import bin.exception.MatchException;
 import work.v3.ReturnWorkV3;
 
 import java.util.LinkedList;
@@ -21,7 +22,11 @@ public class SubString extends ReturnWorkV3 implements Calculator {
         if (params.length == 2) return params[0].substring(getInteger(number));
         else {
             String number1 = getNumberStr(params[2], repositoryArray);
-            return params[0].substring(getInteger(number), getInteger(number1));
+            try {
+                return params[0].substring(getInteger(number), getInteger(number1));
+            } catch (StringIndexOutOfBoundsException e) {
+                throw new MatchException().grammarError();
+            }
         }
     }
 }
