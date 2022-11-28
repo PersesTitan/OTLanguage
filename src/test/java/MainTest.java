@@ -3,9 +3,6 @@ import bin.apply.sys.make.ChangeHangle;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
 import bin.token.LoopToken;
-import etc.groovy.variable.SetVariableTest;
-import etc.gui.replace.*;
-import etc.gui.start.*;
 import module.download.MakeGitTest;
 
 import java.awt.*;
@@ -38,7 +35,9 @@ public class MainTest implements LoopToken, ChangeHangle {
         new Setting();
 
         try {
-            new Main(new String[]{SEPARATOR_HOME, "hello.otl"});
+//            new Main(new String[]{SEPARATOR_HOME, "hello.otl"});
+            new Main(new String[]{SEPARATOR_HOME, "web.otl"});
+//            new Main(new String[]{SEPARATOR_HOME});
 
 //            new Main(new String[]{SEPARATOR_HOME, "icon.otlm"});
 
