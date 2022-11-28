@@ -1,5 +1,6 @@
 import bin.apply.Setting;
 import bin.apply.sys.item.RunType;
+import bin.apply.sys.make.Bracket;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
 import bin.exception.VariableException;
@@ -12,6 +13,7 @@ import java.util.Locale;
 
 import static bin.apply.Controller.*;
 import static bin.apply.sys.item.Separator.*;
+import static bin.apply.sys.item.SystemSetting.extension;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.token.LoopToken.LOOP_TOKEN;
 
@@ -23,10 +25,11 @@ public class Main extends Setting {
                 new Main(args.length == 0
                     ? new String[]{SEPARATOR_HOME}
                     : new String[]{SEPARATOR_HOME, args[0]});
-                while (true) {}
+                System.in.read();
             } else new Main(args);
         } catch (FileException e) {
             new FileException().printErrorMessage(e, Setting.mainPath);
+        } catch (IOException ignored) {
         } finally {try {br.close(); bw.close();} catch (IOException ignored) {}}
     }
 
@@ -38,7 +41,17 @@ public class Main extends Setting {
 
         Setting.path = args[0];
         if (runType.equals(RunType.Normal)) normal(args);
-        else try {shell();} catch (NullPointerException ignored) {}
+        else {
+            try {
+                // 임시 파일 생성
+                File file = File.createTempFile("otl_", extension[0]);
+                // 프로그램이 종료되면 임시파일 삭제
+                file.deleteOnExit();
+                Setting.mainPath = file.getAbsolutePath();
+                Setting.path = file.getAbsoluteFile().getParent();
+                shell(file);
+            } catch (NullPointerException | IOException e) {if (StartLine.developmentMode) e.printStackTrace();}
+        }
     }
 
     private void normal(String[] args) {
@@ -58,18 +71,19 @@ public class Main extends Setting {
                 Setting.total.append(i).append(" ").append(line.stripLeading()).append(SEPARATOR_LINE);
             }
             StartLine.startLine(Setting.total.toString(), mainPath, repository);
-        } catch (IOException ignored) {}
+        } catch (IOException e) {if (StartLine.developmentMode) e.printStackTrace();}
     }
 
-    private void shell() {
-        // 임시 파일명
-        String fileName = "temporary";
+    private void shell(File file) {
+        Bracket.getInstance().bracket("", file);
+        String fileName = file.getName().substring(0, file.getName().indexOf('.'));
+
         StringBuilder total = new StringBuilder();
         while (true) {
             System.out.print(">>> ");
-
             String line = scanner().strip();
-            if (line.equals("1 끝")) break;
+
+            if (line.equals("끝")) break;
             else if (line.endsWith("{")) {
                 boolean check = false;
                 int count = 0;
@@ -88,14 +102,13 @@ public class Main extends Setting {
                         if (check) break;
                         else {
                             System.out.print("--- ");
-                            line = scanner().strip();
-                            check = line.equals("");
+                            check = scanner().strip().equals("");
                         }
                     }
                 }
                 LOOP_TOKEN.put(fileName, total.toString());
                 StartLine.startLine(total.toString(), fileName, repository);
-            } else StartLine.startLine("1 " + line, fileName, repository);
+            } else Setting.start(line, line, repository);
         }
     }
 }
