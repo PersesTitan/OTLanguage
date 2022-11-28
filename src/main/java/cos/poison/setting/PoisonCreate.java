@@ -1,6 +1,5 @@
 package cos.poison.setting;
 
-import bin.apply.Repository;
 import bin.exception.VariableException;
 import cos.poison.controller.HttpServerManager;
 import cos.poison.root.VariableHTML;
