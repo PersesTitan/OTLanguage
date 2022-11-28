@@ -20,6 +20,7 @@ import bin.string.*;
 import cos.poison.controller.HttpMethod;
 import cos.poison.setting.PoisonCreate;
 import cos.poison.setting.PoisonMethod;
+import cos.poison.setting.PoisonPassURL;
 import cos.poison.setting.PoisonStart;
 import work.v3.ReturnWorkV3;
 import work.v3.StartWorkV3;
@@ -39,6 +40,7 @@ import static bin.token.StringToken.*;
 import static bin.token.VariableToken.FILE;
 import static bin.token.VariableToken.MAP_LIST;
 import static bin.token.cal.NumberToken.*;
+import static cos.poison.PoisonRepository.POISON_PASS_URL;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class MakeGitModule {
