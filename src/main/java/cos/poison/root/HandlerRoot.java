@@ -82,8 +82,11 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
                 responseBody.write(getBody(handlerItem.responseValue()));
             } else {
                 // ==== 에러 동작 ====
-                if (!path.equals("/favicon.ico/"))
-                    warringMessage("[" + exchange.getRequestMethod() + "][" + path + "]가 정의되어 있지 않습니다.");
+                for (String url : passUrl) {
+                    if (path.equals(url)) return;
+                }
+
+                warringMessage("[" + exchange.getRequestMethod() + "][" + path + "]가 정의되어 있지 않습니다.");
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0);
             }
         } catch (IllegalArgumentException e) {
