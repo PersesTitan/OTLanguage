@@ -37,6 +37,7 @@ import bin.string.position.SubString;
 import bin.string.tocase.ToLower;
 import bin.string.tocase.ToUpper;
 import bin.token.LoopToken;
+import cos.poison.setting.PoisonPassURL;
 import cos.shell.CreateShell;
 import cos.shell.StartShell;
 import cos.music.replace.GetLoop;
@@ -69,6 +70,7 @@ import static bin.token.LoopToken.*;
 import static bin.token.StringToken.*;
 import static bin.token.VariableToken.STRING_VARIABLE;
 import static bin.token.cal.NumberToken.*;
+import static cos.poison.PoisonRepository.POISON_PASS_URL;
 import static etc.gui.setting.RepositoryTest.*;
 import static etc.music.paly.MusicRepository.*;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -343,6 +345,7 @@ public class MakeGitTest {
         system.add(POISON + ACCESS + POISON_GET);
         createStartWorks(POISON, "", new PoisonCreate(1, 2));
         createStartWorks(POISON, POISON_START, new PoisonStart(0));
+        createStartWorks(POISON, POISON_PASS_URL, new PoisonPassURL(1));
         createStartWorks(POISON, POISON_POST, new PoisonMethod(HttpMethod.POST));
         createStartWorks(POISON, POISON_GET, new PoisonMethod(HttpMethod.GET));
     }
