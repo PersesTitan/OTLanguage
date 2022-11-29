@@ -2,7 +2,6 @@ package cos.poison.setting;
 
 import bin.exception.VariableException;
 import cos.poison.controller.HttpServerManager;
-import cos.poison.root.VariableHTML;
 import cos.poison.run.replace.GetCookie;
 import cos.poison.run.replace.GetUrlParam;
 import cos.poison.run.replace.IsEmptyCookie;
@@ -22,7 +21,6 @@ import static cos.poison.PoisonRepository.*;
 
 public class PoisonCreate extends StartWorkV3 {
     public static HttpServerManager httpServerManager = new HttpServerManager();
-    public static VariableHTML variableHTML = new VariableHTML(1);
 
     public PoisonCreate(int... counts) {
         super(counts);
