@@ -138,8 +138,8 @@ public class ReturnKlassMapTest implements LoopToken {
         createMap(STRING_VARIABLE, JOIN, new JoinTest(2));
         createMap(STRING_VARIABLE, SPLIT, new SplitTest(2));
         createMap(STRING_VARIABLE, SPLIT_REGULAR, new SplitRegularTest(2));
-        createMap(STRING_VARIABLE, CONTAINS.replace("\\", ""), new ContainsTest(2));
-        createMap(STRING_VARIABLE, EQUALS.replace("\\", ""), new EqualsTest(2));
+        createMap(STRING_VARIABLE, CONTAINS, new ContainsTest(2));
+        createMap(STRING_VARIABLE, EQUALS, new EqualsTest(2));
 
         // 변수
         ReturnWorkTest getVariable = new ReturnWorkTest() {
