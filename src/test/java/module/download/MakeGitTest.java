@@ -1,10 +1,7 @@
 package module.download;
 
 import bin.apply.sys.item.SystemSetting;
-import bin.apply.sys.run.FilePath;
-import bin.apply.sys.run.ForceQuit;
-import bin.apply.sys.run.Sleep;
-import bin.apply.sys.run.TryCatch;
+import bin.apply.sys.run.*;
 import bin.define.klass.DefineKlass;
 import bin.define.method.DefineMethod;
 import bin.orign.console.normal.*;
@@ -37,6 +34,7 @@ import bin.string.position.SubString;
 import bin.string.tocase.ToLower;
 import bin.string.tocase.ToUpper;
 import bin.token.LoopToken;
+import bin.token.VariableToken;
 import cos.poison.setting.PoisonPassURL;
 import cos.shell.CreateShell;
 import cos.shell.StartShell;
@@ -301,6 +299,7 @@ public class MakeGitTest {
         createReturnWorks(RANDOM_INTEGER, "", new RandomInteger(1, 2));
         createReturnWorks(RANDOM_LONG, "", new RandomLong(1, 2));
         createReturnWorks(SCANNER, "", new Scanner(0));
+        createReturnWorks(VariableToken.SYSTEM, SYSTEM_IS_CHECK, new IsCheck(1));
         createReturnWorks(STRING_VARIABLE, JOIN, new Join(2));
         createReturnWorks(STRING_VARIABLE, SPLIT, new Split(2));
         createReturnWorks(STRING_VARIABLE, SPLIT_REGULAR, new SplitRegular(2));
