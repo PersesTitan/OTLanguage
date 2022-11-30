@@ -21,7 +21,7 @@ public class Main extends Setting {
     public static void main(String[] args) {
         try {
             // window
-            if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win")) {
+            if (isWindow) {
                 new Main(args.length == 0
                     ? new String[]{SEPARATOR_HOME}
                     : new String[]{SEPARATOR_HOME, args[0]});
