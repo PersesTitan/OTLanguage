@@ -1,5 +1,6 @@
 package cos.poison.run.start;
 
+import bin.calculator.tool.Calculator;
 import bin.exception.VariableException;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -12,9 +13,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SetCookie extends StartWorkV3 implements PoisonStartWork, RootWork {
+public class SetCookie extends StartWorkV3 implements PoisonStartWork, RootWork, Calculator {
     private Headers responseHeader;
-
+    // cookieKey, cookieValue, path, maxAge
     public SetCookie(int... counts) {
         super(counts);
     }
@@ -29,8 +30,9 @@ public class SetCookie extends StartWorkV3 implements PoisonStartWork, RootWork 
                 else setCookie(responseHeader, params[0], params[1], params[2], -1);
             }
             case 4 -> {
-                if (params[3].matches("[0-9]+"))
-                    setCookie(responseHeader, params[0], params[1], params[2], Integer.parseInt(params[3]));
+                double age = getNumber(params[3], repositoryArray);
+                if (age >= 0)
+                    setCookie(responseHeader, params[0], params[1], params[2], (int) age);
                 else throw new VariableException().typeMatch();
             }
         }
