@@ -1,8 +1,11 @@
 package cos.poison.root;
 
 import bin.apply.Repository;
+import bin.apply.Setting;
 import bin.apply.sys.item.HpMap;
+import bin.apply.sys.item.RunType;
 import bin.apply.sys.make.StartLine;
+import bin.exception.*;
 import bin.orign.variable.SetVariableValue;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -25,11 +28,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static bin.apply.Setting.*;
 import static bin.apply.sys.item.SystemSetting.createStartWorks;
-import static bin.apply.sys.make.StartLine.errorCount;
-import static bin.apply.sys.make.StartLine.errorLine;
+import static bin.apply.sys.make.StartLine.*;
 import static cos.poison.PoisonRepository.*;
 import static cos.poison.controller.HttpServerManager.*;
-import static cos.poison.setting.PoisonCreate.variableHTML;
 
 public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValue, PoisonTools {
     private final Map<String, Map<String, Object>> repository = new HashMap<>() {{
@@ -98,7 +99,10 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
     // Body Value
     private byte[] getBody(String responseValue) throws IOException {
         if (responseValue.endsWith(".html"))
-            return variableHTML.replace(Files.readString(Path.of(getHtml(responseValue)))).getBytes();
+            return VariableHTML
+                    .getInstance()
+                    .replace(Files.readString(Path.of(getHtml(responseValue))))
+                    .getBytes();
         else return responseValue.getBytes(StandardCharsets.UTF_16);
     }
 
@@ -119,13 +123,15 @@ public class HandlerRoot implements HttpHandler, HttpRepository, SetVariableValu
         poisonStartList.forEach(v -> v.setData(exchange, statCode, nowPath));
         Repository.startWorksV3.putAll(poisonStartWorks);
         Repository.returnWorksV3.putAll(poisonReturnWorks);
-        createStartWorks(MODEL, "", variableHTML.reset());
+        createStartWorks(MODEL, "", VariableHTML.getInstance().reset());
 
         try {
             StartLine.startPoison(startFinalTotal, fileName, Repository.repository);
-        } catch (Exception e) {
-            String error = String.format("Error Line %d (%s)", errorCount.get(), errorLine.get());
-            errorMessage(error);
+        } catch (VariableException | MatchException | ServerException | ConsoleException | CosException e) {
+            RunType cpRunType = runType;
+            runType = RunType.Shell;
+            errorMessage(e, e);
+            runType = cpRunType;
         } finally {
             Repository.startWorksV3.values().forEach(v -> poisonStartWorks.keySet().forEach(v::remove));
             Repository.returnWorksV3.values().forEach(v -> poisonReturnWorks.keySet().forEach(v::remove));
