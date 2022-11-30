@@ -3,6 +3,7 @@ import bin.apply.sys.make.ChangeHangle;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
 import bin.token.LoopToken;
+import cos.poison.controller.HttpMethod;
 import module.download.MakeGitTest;
 
 import java.awt.*;
@@ -31,6 +32,12 @@ public class MainTest implements LoopToken, ChangeHangle {
 //        Robot robot = new Robot();
 //        JFrame frame = new JFrame("test");
 
+
+//        AnsiConsole.systemInstall();
+//        System.out.println(ansi().fg(Ansi.Color.RED).a("Hello").reset());
+//        System.out.println(ansi().bg(Ansi.Color.RED).a("Hello").reset());
+//        System.exit(0);
+        
         new MakeGitTest();
         new Setting();
 
