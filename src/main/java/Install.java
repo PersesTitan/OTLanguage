@@ -96,32 +96,32 @@ public class Install {
     private void runDownload(int type, String total, String fileName, long size) throws IOException {
         switch (type) {
             case MODULE ->
-                total.lines().forEach(line -> {
-                    print(size);
-                    if (line.startsWith(COMPULSION)) {
-                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
-                        String urlValue = getModule(fileName, COMPULSION + ".otlm");
-                        String localPath = getDownloadPath(fileName, COMPULSION);
-                        install(urlValue, localPath);
-                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
-                        System.out.printf("%s add module %s", "\033[0;32m", "\033[0m");
-                    } else if (line.startsWith(ALTERATION)) {
-                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
-                        String urlValue = getModule(fileName, ALTERATION + ".otlm");
-                        String localPath = getDownloadPath(fileName, ALTERATION);
-                        install(urlValue, localPath);
-                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
-                        System.out.printf("%s add module %s", "\033[0;32m", "\033[0m");
-                    } else if (line.startsWith(OPERATE)) {
-                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
-                        String urlValue = getModule(fileName, OPERATE + ".otlm");
-                        String localPath = getDownloadPath(fileName, OPERATE);
-                        install(urlValue, localPath);
-                        System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
-                        System.out.printf("%s add module %s", "\033[0;32m", "\033[0m");
-                    }
-                    System.out.println(line);
-                });
+                    total.lines().forEach(line -> {
+                        print(size);
+                        if (line.startsWith(COMPULSION)) {
+                            System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                            String urlValue = getModule(fileName, COMPULSION + ".otlm");
+                            String localPath = getDownloadPath(fileName, COMPULSION);
+                            install(urlValue, localPath);
+                            System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                            System.out.printf("%s add module %s", "\033[0;32m", "\033[0m");
+                        } else if (line.startsWith(ALTERATION)) {
+                            System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                            String urlValue = getModule(fileName, ALTERATION + ".otlm");
+                            String localPath = getDownloadPath(fileName, ALTERATION);
+                            install(urlValue, localPath);
+                            System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                            System.out.printf("%s add module %s", "\033[0;32m", "\033[0m");
+                        } else if (line.startsWith(OPERATE)) {
+                            System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                            String urlValue = getModule(fileName, OPERATE + ".otlm");
+                            String localPath = getDownloadPath(fileName, OPERATE);
+                            install(urlValue, localPath);
+                            System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
+                            System.out.printf("%s add module %s", "\033[0;32m", "\033[0m");
+                        }
+                        System.out.println(line);
+                    });
 
             case CLASS -> total.lines().forEach(line -> {
                 print(size);
