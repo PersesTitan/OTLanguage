@@ -23,9 +23,6 @@ public class If extends StartWorkV3 implements MergeToken, Calculator {
         super(counts);
     }
 
-    private final String ELSE_IF = LoopToken.ELSE_IF.replace("\\", "");
-    private final String ELSE = LoopToken.ELSE.replace("\\", "");
-
     @Override
     public void start(String line, String[] params,
                       LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
@@ -35,7 +32,6 @@ public class If extends StartWorkV3 implements MergeToken, Calculator {
                 .splitAsStream(params[0].strip())
                 .map(String::strip)
                 .collect(Collectors.toCollection(LinkedList::new));
-
         // if
         String start = list.removeFirst();
         int poison = start.lastIndexOf('(');
@@ -44,20 +40,20 @@ public class If extends StartWorkV3 implements MergeToken, Calculator {
 
         // if 문만 있을때
         if (list.isEmpty()) {
-            loopStart(loopToken, repositoryArray);
+            if (getBool(boolToken, repositoryArray)) loopStart(loopToken, repositoryArray);
             return;
         }
 
         // else
-        final String end = list.getLast().startsWith(ELSE) ? getEndLoop(list.removeLast()) : null;
+        final String end = list.getLast().startsWith(ELSE_) ? getEndLoop(list.removeLast()) : null;
         if (getBool(boolToken, repositoryArray)) {
             loopStart(loopToken, repositoryArray);
             return;
         } else if (!list.isEmpty()) {
             for (String lists : list) {
-                if (!lists.startsWith(ELSE_IF)) throw new MatchException().grammarTypeError(lists, NO_ELSE_IF);
+                if (!lists.startsWith(ELSE_IF_)) throw new MatchException().grammarTypeError(lists, NO_ELSE_IF);
                 // ㅇㅇ (test,3,4)
-                start = lists.substring(ELSE_IF.length()).strip();
+                start = lists.substring(ELSE_IF_.length()).strip();
                 poison = start.lastIndexOf('(');
                 boolToken = start.substring(0, poison);          // ㅇㅇ ㄸ ㅇㅇ
                 loopToken = start.substring(poison).strip();     // (test,15,100)

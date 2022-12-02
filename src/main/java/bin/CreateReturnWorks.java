@@ -77,8 +77,10 @@ public interface CreateReturnWorks {
         String className = tokenizer.nextToken();
         String methodName = tokenizer.hasMoreTokens() ? tokenizer.nextToken("").substring(1) : "";
         ReturnWorkV3 startWork = getStartWork(className, methodName, repositoryArray, ReturnItem.ETC);
-        if (startWork != null) return startWork.paramsCheck(params.length, params[0]).start(line, params, repositoryArray);
-        else return varSub(line, def, params, repositoryArray);
+        if (startWork != null) {
+            String v = startWork.paramsCheck(params.length, params[0]).start(line, params, repositoryArray);
+            return v == null ? def : v;
+        } else return varSub(line, def, params, repositoryArray);
     }
 
     private static String varSub(String line, String def, String[] params,

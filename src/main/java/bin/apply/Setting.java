@@ -6,6 +6,7 @@ import bin.apply.sys.item.RunType;
 import bin.CreateReturnWorks;
 import bin.CreateStartWorks;
 import bin.orign.loop.For;
+import org.fusesource.jansi.Ansi;
 import work.v3.ReturnWorkV3;
 import work.v3.StartWorkV3;
 
@@ -14,6 +15,7 @@ import java.util.*;
 
 import static bin.apply.sys.item.Separator.*;
 import static bin.token.LoopToken.*;
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class Setting implements Repository {
     public static final StringBuilder total = new StringBuilder();

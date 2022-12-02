@@ -6,8 +6,6 @@ import bin.token.LoopToken;
 import bin.token.Token;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,8 +56,15 @@ public class Bracket implements LoopToken, Token, LoopBracket {
         matcher.reset(total);
         while (matcher.find()) {
             String group = matcher.group();
-            if (startCheck(group)) stack.add(matcher.end());
-            else if (group.startsWith("}")) {
+            if (startCheck(group)) {
+                if (group.startsWith(SHELL + ACCESS + SHELL_START)) {
+                    int start = matcher.end();
+                    int end = passBracket(total, start);
+                    String newWord = String.format(" (%s,%s,%s) ", fileName, startLine(total, start), endLine(total, end));
+                    total = total.replace(total.substring(start - 1, end), newWord);
+                    matcher.reset(total);
+                } else stack.add(matcher.end());
+            } else if (group.startsWith("}")) {
                 if (stack.isEmpty()) {
                     int a = cutLine(total, matcher.start());
                     int b = total.indexOf(SEPARATOR_LINE, a);
@@ -81,6 +86,28 @@ public class Bracket implements LoopToken, Token, LoopBracket {
         return check(total)
                 ? deleteEnter(total)
                 : total;
+    }
+
+    // 괄호를 무시해야하는 로직
+    private int passBracket(String total, int pos) {
+        boolean strBool = true;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = pos; i < total.length(); i++) {
+            char c = total.charAt(i);
+            switch (c) {
+                case '\"', '\'' -> strBool = !strBool;
+                case '{' -> {
+                    if (strBool) stack.add(i);
+                }
+                case '}' -> {
+                    if (strBool) {
+                        if (stack.isEmpty()) return i;
+                        stack.pop();
+                    }
+                }
+            }
+        }
+        return pos;
     }
 
     // (...) {\n14

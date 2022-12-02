@@ -146,7 +146,9 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
                 if (object == null) return value.isBlank()
                         ? new LinkedHashSet<Integer>()
                         : setIntegerSet(new LinkedHashSet<>(), getValueSet(value));
-                else {
+                else if (object instanceof LinkedHashSet<?>) {
+                    return setIntegerSet((LinkedHashSet<Integer>) object, getValueSet(value));
+                } else {
                     LinkedHashSet<Integer> set = (LinkedHashSet<Integer>) object;
                     return setIntegerSet(set, getSetValue(set, value));
                 }

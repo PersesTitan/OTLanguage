@@ -7,8 +7,8 @@ public interface StringToken {
     String JOIN = "ㅉㅇㅉ";
     String SPLIT = "ㅅㅍㅅ";
     String SPLIT_REGULAR = "ㅆㅍㅆ";
-    String CONTAINS = QUESTION;
-    String EQUALS = "=" + QUESTION;
+    String CONTAINS = QUESTION_S;
+    String EQUALS = "=" + QUESTION_S;
 
     String CONTAINS_S = QUESTION_S;         // ?
     String EQUALS_S = "=" + QUESTION_S;     // =?

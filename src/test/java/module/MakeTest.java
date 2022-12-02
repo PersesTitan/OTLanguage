@@ -1,34 +1,27 @@
 package module;
 
+import javax.validation.Valid;
 import java.util.*;
 
 public class MakeTest {
     public static void main(String[] args) {
-        String total = """
-                                
-                ㅉㅂㅉ
-                ㅉㅂㅉ~ㅅㅌㅅ {
-                    리스트 << 5;
-                    리스트.add(15);
-                    블린3=false
-                    System.out.println(리스트);
-                    System.out.println("안녕");
-                    if (true) {
-                        System.out.println("안녕1");
-                    }
-                    else if (false) {
-                        System.out.println("안녕2");
-                    }
-                }
-                                
-                                
-                ㅆㅁㅆ :블린1_
-                ㅆㅁㅆ :블린2_
-                ㅆㅁㅆ :블린3_
-                """;
+        List<Class<?>> list = new ArrayList<>();
+        list.add(String.class);
+        list.add(List.class);
+        System.out.println(list);
 
-        start(total, 1);
+        list.forEach(v -> {
+
+        });
+
     }
+
+    private static void check(Class<?> klass, Object ob) {
+    }
+
+//    public static <V> V change(V klass, Object ob) {
+//
+//    }
 
     private static int start(String total, int position) {
         boolean strBool = true;

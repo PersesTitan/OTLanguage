@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 import static bin.apply.sys.item.Separator.EXT_REP;
+import static bin.apply.sys.item.SystemSetting.extension;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.calculator.tool.Calculator.*;
 
@@ -35,8 +36,8 @@ public class StartLine implements LoopToken, Calculator {
         if (Setting.runType.equals(RunType.Normal)) System.exit(0);
     }
 
-    private static void errorMessage(RuntimeException r, ExceptionMessage e) {
-        String p = errorPath.get() + "." + EXT_REP.get(errorPath.get());
+    public static void errorMessage(RuntimeException r, ExceptionMessage e) {
+        String p = errorPath.get() + "." + EXT_REP.getOrDefault(errorPath.get(), extension[0]);
         e.errorMessage(r, p, errorLine.get(), errorCount.get());
         setLine(r);
     }

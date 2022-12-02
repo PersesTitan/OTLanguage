@@ -1,5 +1,7 @@
 package bin.apply.sys.item;
 
+import static bin.apply.sys.item.Separator.isWindow;
+
 public interface Color {
     // Reset
     String RESET = "\033[0m";  // Text Reset

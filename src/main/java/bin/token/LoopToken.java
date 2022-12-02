@@ -73,7 +73,7 @@ public interface LoopToken extends VariableToken {
     String GET_COOKIE = COOKIE;
     String SET_COOKIE = COOKIE;
     String ISEMPTY_COOKIE = COOKIE + QUESTION_S;
-    String DELETE_COOKIE = COOKIE + HYPHEN;
+    String DELETE_COOKIE = COOKIE + HYPHEN_;
     String GET_URL = "ㅇㄹㅇ";
 
     // SHELL

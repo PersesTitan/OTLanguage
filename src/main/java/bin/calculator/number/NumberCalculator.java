@@ -31,7 +31,7 @@ public class NumberCalculator implements CalculatorTool {
                 }
             } else if (token.equals(NO_TOKEN)) {
                 String a = tokenizer.nextToken();
-                if (a.equals(NO_TOKEN)) list.add(NOT);         // ㄴㄴ
+                if (a.equals(NO_TOKEN)) list.add(FALSE);         // ㄴㄴ
                 else list.add(token + a);
             } else list.add(token);
         }

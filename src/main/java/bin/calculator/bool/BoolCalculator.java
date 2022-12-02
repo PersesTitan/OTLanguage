@@ -37,7 +37,7 @@ public class BoolCalculator {
             line = stack.pop();
             if (line.equals(TRUE)) return false;
             else if (line.equals(FALSE)) return true;
-            else return get(line, ra);
+            else return !get(line, ra);
         } else {
             if (line.equals(TRUE)) return true;
             else if (line.equals(FALSE)) return false;

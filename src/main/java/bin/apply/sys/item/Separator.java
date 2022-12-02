@@ -5,9 +5,11 @@ import bin.apply.sys.make.StartLine;
 
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public interface Separator {
+    boolean isWindow = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win");
     String SEPARATOR_FILE = System.getProperty("file.separator");              // /
     String SEPARATOR_PATH = System.getProperty("path.separator");              // :
     String SEPARATOR_LINE = System.getProperty("line.separator");              // \n \r
@@ -25,7 +27,7 @@ public interface Separator {
     // /User/name/.otl
     String INSTALL_PATH = StartLine.developmentMode
         ? getPath(SEPARATOR_HOME, ".otl")
-        : Paths.get(Setting.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent().toString();
+        : System.getenv().getOrDefault("OTL_HOME", getPath(SEPARATOR_HOME, ".otl"));
     String MODULE_PATH = getPath(INSTALL_PATH, MODULE);           // /User/name/.otl/module
     String COMPULSION_PATH = getPath(MODULE_PATH, COMPULSION);    // /User/name/.otl/module/compulsion
     String ALTERATION_PATH = getPath(MODULE_PATH, ALTERATION);    // /User/name/.otl/module/alteration
@@ -33,6 +35,7 @@ public interface Separator {
     // /User/name/.otl/module/system.otls
     String SYSTEM_PATH = getPath(MODULE_PATH, "system" + SYSTEM_EXTENSION);
 
+//    System.getenv("OTL_HOME")
     static String getPath(String...line) {
         return String.join(SEPARATOR_FILE, line);
     }
