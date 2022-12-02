@@ -13,6 +13,7 @@ package bin.token;
     String STAR = "\\*";
     String PIPE = "\\|";
     String HYPHEN = "\\-";
+    String HYPHEN_ = "-";
     String PLUS = "\\+";
     String CARET = "\\^";
     String DOT = "\\.";
@@ -22,6 +23,10 @@ package bin.token;
     String SR = "\\)";
     String ML = "\\{";
     String MR = "\\}";
+
+    String ML_ = "{";
+    String MR_ = "}";
+
     String BL = "\\[";
     String BR = "\\]";
     String BACKSLASH = "\\\\";
