@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class CreateRobot extends StartWorkV3 implements SetIcon {
+    public static Robot robot;
     // 0
     public CreateRobot(int... counts) {
         super(counts);
@@ -20,7 +21,7 @@ public class CreateRobot extends StartWorkV3 implements SetIcon {
         System.setProperty("java.awt.headless", "false");
         setIcon("icon.otlm");       // 아이콘
         try {
-            final Robot robot = new Robot();
+            robot = new Robot();
         } catch (AWTException e) {
             throw new KeyboardException().awtError();
         } catch (SecurityException e) {
