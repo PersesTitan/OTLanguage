@@ -21,6 +21,9 @@ public interface VariableToken extends Token {
     String FILE_NAME = "[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z$_-]+";
 
     // SYSTEM
+    String SYSTEM = "ㅅㅆㅅ";
+    String SYSTEM_IS_CHECK = "?";
+
     String FORCE_QUIT = "ㄲㅌㄲ";
     String SLEEP = "=_=";
     String FILE = "ㅍㅅㅍ";
