@@ -1,6 +1,7 @@
 package bin.apply.sys.item;
 
 import bin.check.VariableType;
+import bin.check.VariableTypeCheck;
 import bin.exception.VariableException;
 import bin.token.VariableToken;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static bin.apply.Controller.variableTypeCheck;
 import static bin.apply.Repository.noUse;
 import static bin.check.VariableTypeCheck.getVariableType;
 import static bin.check.VariableTypeCheck.originList;
@@ -79,7 +79,7 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
             throw new VariableException().cannotInclude();
 
         Object keyObj = this.getOrDefault(key, null);
-        Object valueObj = variableTypeCheck.getObject(variableType, value, keyObj);
+        Object valueObj = VariableTypeCheck.getInstance().getObject(variableType, value, keyObj);
         if (keyObj == null || originList.contains(variableType)) return super.put(key, valueObj);
         else if (variableType.equals(VariableType.Method)) return super.put(key, valueObj);
         else return value;
