@@ -16,8 +16,8 @@ import static bin.token.VariableToken.*;
 
 public interface CreateReturnWorks {
     Matcher matcher1 = Pattern.compile(String.format(
-            "%s[^%s][\\s\\S]*%s([\\s\\S]*%s)?",
-            VARIABLE_GET_S, VARIABLE_GET_S, VARIABLE_GET_E, VARIABLE_DEFAULT))
+                    "%s[^%s][\\s\\S]*%s([\\s\\S]*%s)?",
+                    VARIABLE_GET_S, VARIABLE_GET_S, VARIABLE_GET_E, VARIABLE_DEFAULT))
             .matcher("");
     Matcher matcher2 = Pattern.compile(String.format(
             "%s[^%s%s]+%s([^%s%s]*%s)?",
@@ -60,7 +60,7 @@ public interface CreateReturnWorks {
 
     // 값 반환
     static String sub(String line, String def,
-                              LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+                      LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         String[] tokens = line.split("(?=" + BLANKS + "|" + BL + ")", 2);
         String local = tokens[0];
         String value = tokens.length == 2 ? tokens[1] : "";
@@ -90,7 +90,7 @@ public interface CreateReturnWorks {
         String value = tokens.length == 2 ? tokens[1].stripLeading() : "";
         var startWork = getStartWork(null, local, repositoryArray, ReturnItem.VARIABLE);
         if (startWork != null) return startWork.start(local, new String[]{value}, repositoryArray);
-        // 메소드 로직
+            // 메소드 로직
         else if (params != null
                 && tokens.length == 2
                 && (startWork = getStartWork(tokens[0], tokens[1], repositoryArray, ReturnItem.METHOD)) != null) {
