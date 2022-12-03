@@ -17,7 +17,6 @@ public interface Controller {
     AllCompareCalculator allCompareCalculator = new AllCompareCalculator();
 
     GetSetVariable getSetVariable = new GetSetVariable();
-    VariableTypeCheck variableTypeCheck = new VariableTypeCheck();
 
     AggregationList aggregationList = new AggregationList();
     // 입력, 출력
