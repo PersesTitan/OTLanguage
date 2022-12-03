@@ -9,11 +9,6 @@ public class MakeTest {
         list.add(String.class);
         list.add(List.class);
         System.out.println(list);
-
-        list.forEach(v -> {
-
-        });
-
     }
 
     private static void check(Class<?> klass, Object ob) {
