@@ -1,6 +1,5 @@
 package bin.check;
 
-import bin.calculator.tool.Calculator;
 import bin.define.item.MethodItemReturn;
 import bin.define.item.MethodItemVoid;
 import bin.exception.VariableException;
@@ -15,6 +14,17 @@ import static bin.check.VariableCheck.*;
 import static bin.token.LoopToken.METHOD;
 
 public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap {
+    private static VariableTypeCheck variableTypeCheck;
+    private VariableTypeCheck() {}
+    public static VariableTypeCheck getInstance() {
+        if (variableTypeCheck == null) {
+            synchronized (VariableTypeCheck.class) {
+                variableTypeCheck = new VariableTypeCheck();
+            }
+        }
+        return variableTypeCheck;
+    }
+
     public static final Set<VariableType> originList = new HashSet<>() {{
         add(VariableType.Integer);
         add(VariableType.Long);
