@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static bin.apply.sys.item.Separator.INSTALL_PATH;
 import static bin.apply.sys.item.Separator.SYSTEM_PATH;
 import static bin.apply.sys.make.StartLine.developmentMode;
 import static java.nio.charset.StandardCharsets.*;
