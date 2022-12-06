@@ -71,7 +71,10 @@ public class Main extends Setting {
                 Setting.total.append(i).append(" ").append(line.stripLeading()).append(SEPARATOR_LINE);
             }
             StartLine.startLine(Setting.total.toString(), mainPath, repository);
-        } catch (IOException e) {if (StartLine.developmentMode) e.printStackTrace();}
+        } catch (IOException e) {
+            if (StartLine.developmentMode) e.printStackTrace();
+            throw new FileException().noReadError();
+        }
     }
 
     private void shell(File file) {
