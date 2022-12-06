@@ -148,7 +148,7 @@ public class Bracket implements LoopToken, Token, LoopBracket {
 
     private void throwError(String line) {
         int start = line.indexOf(' ');
-        errorCount.set(Long.parseLong(line.substring(0, start)));
+        errorCount.set(Long.parseLong(line.substring(0, start).strip()));
         errorLine.set(line.substring(start + 1));
         throw new MatchException().bracketMatchError();
     }
