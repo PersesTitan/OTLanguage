@@ -1,3 +1,4 @@
+import bin.apply.sys.item.Separator;
 import bin.apply.sys.make.StartLine;
 
 import java.io.*;
@@ -19,9 +20,9 @@ public class Install {
         else System.out.printf("%s파일명을 입력해주세요.%s\n", "\033[0;31m", "\033[0m");
     }
 
-    private static final String SEPARATOR_HOME = System.getProperty("user.home");
-    private static final String SEPARATOR_FILE = System.getProperty("file.separator");
-    private static final String INSTALL_PATH = SEPARATOR_HOME + SEPARATOR_FILE + ".otl";
+    private static final String INSTALL_PATH = StartLine.developmentMode
+            ? Separator.INSTALL_PATH
+            : System.getenv().getOrDefault("OTL_HOME", getPath(SEPARATOR_HOME, ".otl"));
     private static final String MODULE_PATH = INSTALL_PATH + SEPARATOR_FILE + "module" + SEPARATOR_FILE;
 
     String COMPULSION = "compulsion";   // 강제
