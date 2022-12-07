@@ -1,5 +1,6 @@
 package bin.apply.sys.run;
 
+import bin.apply.Controller;
 import bin.apply.Setting;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
@@ -45,6 +46,7 @@ public class FilePath extends StartWorkV3 {
         else if (!extensionCheck(file.getName())) throw new FileException().rightExtension();
 
         StringBuilder builder = new StringBuilder();
+        Controller.readFile(file.getAbsolutePath(), builder);
         try (FileReader fileReader = new FileReader(file, StandardCharsets.UTF_8);
              BufferedReader reader = new BufferedReader(fileReader)) {
             for (int i=1;;i++) {
