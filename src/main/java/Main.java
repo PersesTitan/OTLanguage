@@ -3,34 +3,36 @@ import bin.apply.sys.item.RunType;
 import bin.apply.sys.make.Bracket;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
-import bin.exception.VariableException;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 
 import static bin.apply.Controller.*;
 import static bin.apply.sys.item.Separator.*;
 import static bin.apply.sys.item.SystemSetting.extension;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.token.LoopToken.LOOP_TOKEN;
+import static bin.token.Token.REMARK;
 
 public class Main extends Setting {
     public static void main(String[] args) {
         try {
-            // window
-            if (isWindow) {
-                new Main(args.length == 0
-                    ? new String[]{SEPARATOR_HOME}
-                    : new String[]{SEPARATOR_HOME, args[0]});
-                System.in.read();
-            } else new Main(args);
+            if (isWindow) startWindow(args);
+            else new Main(args);
         } catch (FileException e) {
             new FileException().printErrorMessage(e, Setting.mainPath);
-        } catch (IOException ignored) {
+            if (isWindow) {
+                try {System.in.read();}
+                catch (IOException ignored) {}
+            }
         } finally {try {br.close(); bw.close();} catch (IOException ignored) {}}
+    }
+
+    // OS : window
+    private static void startWindow(String[] args) {
+        new Main(args.length == 0
+                ? new String[]{INSTALL_PATH}
+                : new String[]{INSTALL_PATH, args[0]});
     }
 
     public Main(String[] args) {
@@ -39,7 +41,6 @@ public class Main extends Setting {
         else if (args.length == 2) runType = RunType.Normal;    // 현재 파일 이름
         else throw new FileException().noValidValues();
 
-        Setting.path = args[0];
         if (runType.equals(RunType.Normal)) normal(args);
         else {
             try {
@@ -68,7 +69,11 @@ public class Main extends Setting {
             for (int i = 1;;i++) {
                 String line = reader.readLine();
                 if (line == null) break;
-                Setting.total.append(i).append(" ").append(line.stripLeading()).append(SEPARATOR_LINE);
+                line = line.stripLeading();
+                Setting.total.append(i)
+                        .append(" ")
+                        .append(line.startsWith(REMARK) ? "" : line)
+                        .append(SEPARATOR_LINE);
             }
             StartLine.startLine(Setting.total.toString(), mainPath, repository);
         } catch (IOException e) {
