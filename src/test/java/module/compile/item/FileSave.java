@@ -3,6 +3,7 @@ package module.compile.item;
 import bin.apply.sys.make.Bracket;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
+import lombok.ToString;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -11,6 +12,7 @@ import static bin.apply.sys.item.Separator.EXT_REP;
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 import static bin.token.LoopToken.LOOP_TOKEN;
 
+@ToString
 public class FileSave implements Serializable {
     private String total;
     private String finalTotal;
@@ -47,10 +49,7 @@ public class FileSave implements Serializable {
 
     @Serial
     private void readObject(ObjectInputStream oi) throws IOException, ClassNotFoundException {
-        this.fileName = (String) oi.readObject();
-        this.finalTotal = (String) oi.readObject();
-        this.separator = (String) oi.readObject();
-        this.total = (String) oi.readObject();
+        oi.defaultReadObject();
 
         EXT_REP.put(fileName, separator);
         LOOP_TOKEN.put(fileName, total);
