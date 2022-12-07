@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static bin.apply.sys.item.Separator.SYSTEM_PATH;
+import static bin.apply.sys.item.Separator.isWindow;
 import static bin.apply.sys.make.StartLine.developmentMode;
 import static java.nio.charset.StandardCharsets.*;
 
@@ -27,7 +28,7 @@ public interface LoopToken extends VariableToken {
         } catch (IOException i) {
             if (developmentMode) i.printStackTrace();
             new FileException().printErrorMessage(new FileException().didNotReadSystemFile(), Setting.mainPath);
-            System.exit(0);
+            if (!isWindow) System.exit(0);
         }
     }};
 
