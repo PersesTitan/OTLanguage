@@ -57,7 +57,7 @@ public class CreateItem {
         return new Scrollbar();
     }
 
-    public static JTextComponent createTextComponent() {
-        return new JTextComponent();
-    }
+//    public static JTextComponent createTextComponent() {
+//        return new JTextComponent();
+//    }
 }
