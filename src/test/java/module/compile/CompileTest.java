@@ -15,8 +15,9 @@ public class CompileTest {
 //        new MakeGitTest();
 //        new Setting();
 
-//        new CompileTest(new File("web.otl"));
+        new CompileTest(new File("web.otl"));
         FileSave fileSave = input("item.otli");
+        System.out.println(fileSave);
 
         Setting.mainPath = new File("web.otl").getAbsolutePath();
         Setting.path = new File("web.otl").getAbsoluteFile().getParent();
