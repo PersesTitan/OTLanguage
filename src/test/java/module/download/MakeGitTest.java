@@ -115,6 +115,49 @@ public class MakeGitTest {
     String ALTERATION = "alteration";   // 변경
     String OPERATE = "operate";         // 동작
 
+    private void priority(String path) {
+        makeDir(path);
+        try (var output = new ObjectOutputStream(new FileOutputStream(path))) {
+            output.writeObject(priorityStartWorksV3);
+        } catch (IOException ignored) {}
+    }
+
+    private void priority(File file) {
+        priority(file.getParent());
+    }
+
+    private void returnWork(String path) {
+        makeDir(path);
+        try (var output = new ObjectOutputStream(new FileOutputStream(path))) {
+            output.writeObject(returnWorksV3);
+        } catch (IOException ignored) {}
+    }
+
+    private void returnWork(File path) {
+        returnWork(path.getAbsolutePath());
+    }
+
+    private void start(String path) {
+        makeDir(path);
+        try (var output = new ObjectOutputStream(new FileOutputStream(path))) {
+            output.writeObject(startWorksV3);
+        } catch (IOException ignored) {}
+    }
+
+    private void start(File path) {
+        start(path.getAbsolutePath());
+    }
+
+    private void makeDir(String path) {
+        File file = new File(path).getParentFile();
+        if (file.isDirectory()) return;
+        file.mkdirs();
+    }
+
+    private void makeDir(File file) {
+        makeDir(file.getAbsolutePath());
+    }
+
     // name : poison
     private MakeGitTest(String name, String fileName) {
         // 기본 세팅 확인
@@ -125,12 +168,12 @@ public class MakeGitTest {
         String namePath2 = null;
         if (bool) namePath2 = SEPARATOR_HOME + "/Documents/GitHub/.otl/module/";
         File file = new File(namePath);
-        file.mkdirs();
+        makeDir(file);
 
         // 기본 값 추가
         if (bool) {
             File file1 = new File(namePath2);
-            if (!file1.isFile()) file1.mkdirs();
+            makeDir(file1);
             try (BufferedWriter bw = new BufferedWriter(
                     new FileWriter(namePath2 + "/system.otls", false))) {
                 system.forEach(v -> {
@@ -158,57 +201,27 @@ public class MakeGitTest {
             br.write(MODULE);
             br.newLine();
             if (!priorityStartWorksV3.isEmpty()) {
-                try (var output = new ObjectOutputStream(new FileOutputStream(namePath + "/" + COMPULSION + MODULE_EXTENSION))) {
-                    output.writeObject(priorityStartWorksV3);
-                } catch (IOException ignored) {}
-                try (var output = new ObjectOutputStream(new FileOutputStream(COMPULSION_PATH + "/" + name + ".otlm"))) {
-                    output.writeObject(priorityStartWorksV3);
-                } catch (IOException ignored) {}
-                if (bool) {
-                    File file1 = new File(namePath2 + "compulsion/" + name + ".otlm");
-                    file1.getParentFile().mkdirs();
-                    try (var output = new ObjectOutputStream(new FileOutputStream(file1))) {
-                        output.writeObject(priorityStartWorksV3);
-                    } catch (IOException ignored) {}
-                }
+                priority(namePath + "/" + COMPULSION + MODULE_EXTENSION);
+                priority(COMPULSION_PATH + "/" + name + ".otlm");
+                if (bool) priority(namePath2 + "compulsion/" + name + MODULE_EXTENSION);
                 br.write("   ");
                 br.write(COMPULSION);
                 br.newLine();
             }
 
             if (!returnWorksV3.isEmpty()) {
-                try (var output = new ObjectOutputStream(new FileOutputStream(namePath + "/" + ALTERATION + MODULE_EXTENSION))) {
-                    output.writeObject(returnWorksV3);
-                } catch (IOException ignored) {}
-                try (var output = new ObjectOutputStream(new FileOutputStream(ALTERATION_PATH + "/" + name + ".otlm"))) {
-                    output.writeObject(returnWorksV3);
-                } catch (IOException ignored) {}
-                if (bool) {
-                    File file1 = new File(namePath2 + "alteration/" + name + ".otlm");
-                    file1.getParentFile().mkdirs();
-                    try (var output = new ObjectOutputStream(new FileOutputStream(file1))) {
-                        output.writeObject(priorityStartWorksV3);
-                    } catch (IOException ignored) {}
-                }
+                returnWork(namePath + "/" + ALTERATION + MODULE_EXTENSION);
+                returnWork(ALTERATION_PATH + "/" + name + ".otlm");
+                if (bool) returnWork(namePath2 + "alteration/" + name + MODULE_EXTENSION);
                 br.write("   ");
                 br.write(ALTERATION);
                 br.newLine();
             }
 
             if (!startWorksV3.isEmpty()) {
-                try (var output = new ObjectOutputStream(new FileOutputStream(namePath + "/" + OPERATE + MODULE_EXTENSION))) {
-                    output.writeObject(startWorksV3);
-                } catch (IOException ignored) {}
-                try (var output = new ObjectOutputStream(new FileOutputStream(OPERATE_PATH + "/" + name + ".otlm"))) {
-                    output.writeObject(startWorksV3);
-                } catch (IOException ignored) {}
-                if (bool) {
-                    File file1 = new File(namePath2 + "operate/" + name + ".otlm");
-                    file1.getParentFile().mkdirs();
-                    try (var output = new ObjectOutputStream(new FileOutputStream(file1))) {
-                        output.writeObject(startWorksV3);
-                    } catch (IOException ignored) {}
-                }
+                start(namePath + "/" + OPERATE + MODULE_EXTENSION);
+                start(OPERATE_PATH + "/" + name + MODULE_EXTENSION);
+                if (bool) start(namePath2 + "operate/" + name + ".otlm");
                 br.write("   ");
                 br.write(OPERATE);
                 br.newLine();
@@ -227,7 +240,7 @@ public class MakeGitTest {
                 String klassName = file.getAbsolutePath() + "/" + f.getName().substring(0, f.getName().length()-".java".length()) + ".class";
                 copy(value.replace("~", SEPARATOR_FILE), klassName);
                 String pa = getPath(INSTALL_PATH, "analyzer", value.replace("~", SEPARATOR_FILE)) + ".class";
-                new File(pa).getParentFile().mkdirs();
+                makeDir(pa);
                 copy(value.replace("~", SEPARATOR_FILE), pa);
             }
 
