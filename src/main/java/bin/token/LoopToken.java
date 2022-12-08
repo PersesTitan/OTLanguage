@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import static bin.apply.Setting.debugMode;
 import static bin.apply.sys.item.Separator.SYSTEM_PATH;
 import static bin.apply.sys.item.Separator.isWindow;
 import static bin.apply.sys.make.StartLine.developmentMode;
@@ -28,7 +29,8 @@ public interface LoopToken extends VariableToken {
         } catch (IOException i) {
             if (developmentMode) i.printStackTrace();
             new FileException().printErrorMessage(new FileException().didNotReadSystemFile(), Setting.mainPath);
-            if (!isWindow) System.exit(0);
+            // 운영체제가 윈도우가 아니거나 디버깅모드가 컴파일이 아닐때 종료 허용
+            if (!isWindow || debugMode.isNoCompile()) System.exit(0);
         }
     }};
 
