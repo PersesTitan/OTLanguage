@@ -1,3 +1,4 @@
+import bin.apply.Controller;
 import bin.apply.Setting;
 import bin.apply.sys.item.RunType;
 import bin.apply.sys.make.Bracket;
@@ -5,14 +6,12 @@ import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 import static bin.apply.Controller.*;
 import static bin.apply.sys.item.Separator.*;
 import static bin.apply.sys.item.SystemSetting.extension;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.token.LoopToken.LOOP_TOKEN;
-import static bin.token.Token.REMARK;
 
 public class Main extends Setting {
     public static void main(String[] args) {
@@ -63,23 +62,9 @@ public class Main extends Setting {
         else if (!file.isFile()) throw new FileException().isNotFileError();
         else if (!file.canRead()) throw new FileException().noReadError();
         else if (!extensionCheck(file.getName())) throw new FileException().rightExtension();
-
-        try (FileReader fileReader = new FileReader(mainPath, StandardCharsets.UTF_8);
-             BufferedReader reader = new BufferedReader(fileReader)) {
-            for (int i = 1;;i++) {
-                String line = reader.readLine();
-                if (line == null) break;
-                line = line.stripLeading();
-                Setting.total.append(i)
-                        .append(" ")
-                        .append(line.startsWith(REMARK) ? "" : line)
-                        .append(SEPARATOR_LINE);
-            }
-            StartLine.startLine(Setting.total.toString(), mainPath, repository);
-        } catch (IOException e) {
-            if (StartLine.developmentMode) e.printStackTrace();
-            throw new FileException().noReadError();
-        }
+        // 파일을 읽고 Setting.total 에 값을 넣는 작업
+        Controller.readFile(mainPath, Setting.total);
+        StartLine.startLine(Setting.total.toString(), mainPath, repository);
     }
 
     private void shell(File file) {
