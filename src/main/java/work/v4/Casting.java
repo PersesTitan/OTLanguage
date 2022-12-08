@@ -16,6 +16,10 @@ import static bin.token.Token.ACCESS;
 import static bin.token.cal.BoolToken.TRUE;
 
 public interface Casting extends Calculator {
+    static <V> V cast(Class<V> klass, Object o) {
+        return klass.cast(o);
+    }
+
     default Object casting(VariableType type, String value) {
         return switch (type) {
             case Boolean -> Calculator.getBool(value, Repository.repository);
