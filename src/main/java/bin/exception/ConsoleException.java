@@ -20,11 +20,11 @@ public class ConsoleException extends RuntimeException implements ExceptionMessa
         ErrorMessage.printErrorMessage(e, subMessage, path, line, position);
     }
 
-    public static ConsoleException printError() {
+    public ConsoleException printError() {
         return new ConsoleException(printError);
     }
 
-    public static ConsoleException scannerError() {
+    public ConsoleException scannerError() {
         return new ConsoleException(scannerError);
     }
 }
