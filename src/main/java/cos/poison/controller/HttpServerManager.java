@@ -2,6 +2,7 @@ package cos.poison.controller;
 
 import bin.apply.Setting;
 import bin.apply.sys.make.ChangeHangle;
+import bin.exception.ServerException;
 import bin.token.MergeToken;
 import com.sun.net.httpserver.HttpServer;
 import cos.poison.handler.HttpGetHandler;
@@ -51,6 +52,12 @@ public class HttpServerManager implements HttpRepository, MergeToken, ChangeHang
                 startServerPrint();
             } catch (Exception e) {Setting.errorMessage("서버 실행에 실패하였습니다.");}
         } else Setting.errorMessage("서버가 존재하지 않습니다.");
+    }
+
+    public void stop() {
+        if (httpServer != null) {
+            httpServer.stop(0);
+        } else throw new ServerException().noHaveError();
     }
 
     // "text/html;charset=UTF-8"
