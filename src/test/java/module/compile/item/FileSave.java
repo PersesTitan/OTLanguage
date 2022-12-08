@@ -1,74 +1,71 @@
 package module.compile.item;
 
+import bin.apply.Controller;
+import bin.apply.Setting;
+import bin.apply.sys.item.DebugMode;
 import bin.apply.sys.make.Bracket;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+import static bin.apply.Repository.repository;
+import static bin.apply.Setting.*;
+import static bin.apply.Setting.mainPath;
 import static bin.apply.sys.item.Separator.EXT_REP;
-import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
 import static bin.token.LoopToken.LOOP_TOKEN;
 
+@Getter
 @ToString
 public class FileSave implements Serializable {
-    private String total;
-    private String finalTotal;
+    private final String total;
+    private final String finalTotal;
 
-    private String fileName;      // test
-    private String separator;     // .otl
+    private final String fileName;      // test
+    private final String separator;     // .otl
 
-    public FileSave(File file) {
+    private final Set<String> useModel = new LinkedHashSet<>();
+
+    public FileSave(File file, Set<String> useModel) {
+        this.useModel.addAll(useModel);
+        mainPath = file.getAbsolutePath();
+        path = file.getAbsoluteFile().getParent();
+        debugMode = DebugMode.COMPILE;
         // set EXT_REP
         String fileName = file.getName();
         int count = fileName.indexOf('.');
         this.fileName  = fileName.substring(0, count);
         this.separator = fileName.substring(count+1);
-
-        this.finalTotal = Bracket.getInstance().bracket(getTotal(file), file);
-        this.total = LOOP_TOKEN.get(this.fileName);
+        // 에러 발생하는지 확인
+        Controller.readFile(mainPath, Setting.total);
+        check();
+        // set total
+        this.total = Setting.total.toString();
+        String total = LOOP_TOKEN.get(this.fileName);
+        this.finalTotal = Bracket.getInstance().bracket(total, this.fileName, false);
     }
 
-    private String getTotal(File file) {
-        StringBuilder total = new StringBuilder();
-        try (FileReader fr = new FileReader(file, StandardCharsets.UTF_8);
-             BufferedReader reader = new BufferedReader(fr)) {
-            for (int i = 1;;i++) {
-                String line = reader.readLine();
-                if (line == null) break;
-                total.append(i).append(" ").append(line.stripLeading()).append(SEPARATOR_LINE);
-            }
-        } catch (IOException e) {
+    private void check() {
+        try {
+            StartLine.startLine(Setting.total.toString(), mainPath, repository);
+        } catch (Exception e) {
             if (StartLine.developmentMode) e.printStackTrace();
-            throw new FileException().noReadError();
+            throw new FileException().compileError();
         }
-        return total.toString();
     }
 
     @Serial
-    private void readObject(ObjectInputStream oi) throws IOException, ClassNotFoundException {
-        oi.defaultReadObject();
-
-        EXT_REP.put(fileName, separator);
-        LOOP_TOKEN.put(fileName, total);
-        oi.close();
-    }
-
-    public String getTotal() {
-        return total;
-    }
-
-    public String getFinalTotal() {
-        return finalTotal;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public String getSeparator() {
-        return separator;
+    private void readObject(ObjectInputStream oi) {
+        try (oi) {
+            oi.defaultReadObject();
+            EXT_REP.put(fileName, separator);
+            LOOP_TOKEN.put(fileName, total);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
