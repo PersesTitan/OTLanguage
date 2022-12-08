@@ -1,7 +1,6 @@
 package bin.exception;
 
 import bin.apply.Setting;
-import bin.apply.sys.item.Color;
 import bin.apply.sys.item.RunType;
 
 import static bin.apply.Setting.runType;
