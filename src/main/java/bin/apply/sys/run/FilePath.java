@@ -46,15 +46,8 @@ public class FilePath extends StartWorkV3 {
         else if (!extensionCheck(file.getName())) throw new FileException().rightExtension();
 
         StringBuilder builder = new StringBuilder();
-        Controller.readFile(file.getAbsolutePath(), builder);
-        try (FileReader fileReader = new FileReader(file, StandardCharsets.UTF_8);
-             BufferedReader reader = new BufferedReader(fileReader)) {
-            for (int i=1;;i++) {
-                String line = reader.readLine();
-                if (line == null) break;
-                builder.append(i).append(" ").append(line.stripLeading()).append(SEPARATOR_LINE);
-            }
-        } catch (IOException ignored) {}
+        // 파일 전체를 읽고 builder 에 값을 넣기
+        Controller.readFile(file, builder);
         String path = errorPath.get();
         StartLine.startLine(builder.toString(), file.getAbsolutePath(), repositoryArray);
         errorPath.set(path);
