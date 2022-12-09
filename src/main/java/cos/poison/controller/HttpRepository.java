@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static cos.poison.controller.HttpServerManager.httpServer;
+import static cos.poison.setting.PoisonCreate.httpServerManager;
 
 public interface HttpRepository {
     String dateFormat = "yyyy-MM-dd H:mm:ss";
@@ -39,13 +40,7 @@ public interface HttpRepository {
                 new SimpleDateFormat(dateFormat).format(new Date()),
                 Color.RESET, Color.GREEN, Color.RESET);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.printf("%s[%s]%s%s[Poison Server 종료]%s \n",
-                    Color.YELLOW,
-                    new SimpleDateFormat(dateFormat).format(new Date()),
-                    Color.RESET, Color.GREEN, Color.RESET);
-            httpServer.stop(0);
-        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> httpServerManager.stop()));
     }
 
     default void printLog(HttpMethod method, String path, String query) {
