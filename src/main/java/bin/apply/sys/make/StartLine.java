@@ -13,7 +13,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
+import static bin.apply.Setting.debugMode;
 import static bin.apply.sys.item.Separator.EXT_REP;
+import static bin.apply.sys.item.Separator.isWindow;
 import static bin.apply.sys.item.SystemSetting.extension;
 import static bin.apply.sys.item.SystemSetting.extensionCheck;
 import static bin.calculator.tool.Calculator.*;
@@ -33,7 +35,10 @@ public class StartLine implements LoopToken, Calculator {
 
     private static void setLine(RuntimeException e) {
         if (developmentMode) e.printStackTrace();
-        if (Setting.runType.equals(RunType.Normal)) System.exit(0);
+        if (Setting.runType.equals(RunType.Normal)) {
+            // 운영체제가 윈도우가 아니거나 디버깅모드가 컴파일이 아닐때 종료 허용
+            if (!isWindow || debugMode.isNoCompile()) System.exit(0);
+        }
     }
 
     public static void errorMessage(RuntimeException r, ExceptionMessage e) {
