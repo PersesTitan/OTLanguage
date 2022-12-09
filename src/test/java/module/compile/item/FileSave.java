@@ -2,7 +2,6 @@ package module.compile.item;
 
 import bin.apply.Controller;
 import bin.apply.Setting;
-import bin.apply.sys.item.DebugMode;
 import bin.apply.sys.make.Bracket;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
@@ -10,7 +9,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.io.*;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 import static bin.apply.Repository.repository;
@@ -28,13 +27,12 @@ public class FileSave implements Serializable {
     private final String fileName;      // test
     private final String separator;     // .otl
 
-    private final Set<String> useModel = new LinkedHashSet<>();
+    private final Set<String> useModel = new HashSet<>();
 
     public FileSave(File file, Set<String> useModel) {
         this.useModel.addAll(useModel);
         mainPath = file.getAbsolutePath();
         path = file.getAbsoluteFile().getParent();
-        debugMode = DebugMode.COMPILE;
         // set EXT_REP
         String fileName = file.getName();
         int count = fileName.indexOf('.');
@@ -62,10 +60,13 @@ public class FileSave implements Serializable {
     private void readObject(ObjectInputStream oi) {
         try (oi) {
             oi.defaultReadObject();
+
+
             EXT_REP.put(fileName, separator);
             LOOP_TOKEN.put(fileName, total);
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            if (StartLine.developmentMode) e.printStackTrace();
+            throw new FileException().compileError();
         }
     }
 }
