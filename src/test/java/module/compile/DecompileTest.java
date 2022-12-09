@@ -1,6 +1,10 @@
 package module.compile;
 
+import bin.apply.Repository;
 import bin.apply.Setting;
+import bin.apply.sys.compile.Decompile;
+import bin.apply.sys.item.SystemSetting;
+import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
 import module.compile.item.FileSave;
 
@@ -8,21 +12,10 @@ import java.io.*;
 import java.util.Locale;
 
 public class DecompileTest {
-    String separator = ".otli";
-    public void start(File file) {
-        if (file.getName().toLowerCase(Locale.ROOT).endsWith(separator)) {
-            FileSave fileSave = input(file.getAbsolutePath());
-            Setting.mainPath = file.getAbsolutePath();
-            Setting.path = file.getParentFile().getAbsolutePath();
-        } else throw new FileException().rightExtension();
-    }
-
-    private FileSave input(String fileName) {
-        try (ObjectInput input = new ObjectInputStream(new FileInputStream(fileName))) {
-            if (input.readObject() instanceof FileSave fileSave) return fileSave;
-            else throw new FileException().noReadError();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new FileException().noFindError();
-        }
+    ///////////////////////////
+    ////////// 테스트 ///////////
+    ///////////////////////////
+    public static void main(String[] args) {
+        new Decompile(new File("web.otlc"));
     }
 }
