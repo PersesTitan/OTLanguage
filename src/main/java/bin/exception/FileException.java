@@ -2,6 +2,8 @@ package bin.exception;
 
 import bin.apply.sys.item.SystemSetting;
 
+import java.io.File;
+
 import static bin.apply.sys.item.Separator.SYSTEM_PATH;
 
 public class FileException extends RuntimeException {
@@ -14,6 +16,7 @@ public class FileException extends RuntimeException {
     private final String addModuleError = "모듈 추가에 실패하였습니다.";
     private final String noValidValues = "유효한 값을 받지 못하였습니다.";
     private final String didNotReadSystemFile = "system.otls파일을 읽어올 수 없습니다.";
+    private final String compileError = "컴파일 할 수 없습니다.";
 
     public FileException() {}
 
@@ -32,6 +35,7 @@ public class FileException extends RuntimeException {
             case addModuleError -> "Failed to add module.\nPlease check if there is a module file.";
             case noValidValues -> "No valid values were received.\nPlease try again or reinstall.";
             case didNotReadSystemFile -> "Unable to read system.otls file.\nPlease check if the file is present and check if it is damaged.\nPath : " + SYSTEM_PATH;
+            case compileError -> "Unable to compile. \nPlease solve the error and try again.";
             default -> "";
         };
         if (path == null || path.isBlank()) ErrorMessage.printErrorMessage(e, subMessage);
@@ -40,8 +44,14 @@ public class FileException extends RuntimeException {
 
     public void printErrorMessage(FileException e, String path, String line, long position) {
         if (e.getMessage().equals(pathNoHaveError))
-            ErrorMessage.printErrorMessage(e, "The file and directory do not exist in that path.\nPlease check the path.", path, line, position);
+            ErrorMessage.printErrorMessage(e,
+                    "The file and directory do not exist in that path.\n" +
+                    "Please check the path.", path, line, position);
         else printErrorMessage(e, path);
+    }
+
+    public FileException compileError() {
+        return new FileException(compileError);
     }
 
     public FileException didNotReadSystemFile() {
