@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static bin.apply.Setting.debugMode;
+import static bin.apply.sys.compile.Decompile.isDecompile;
 import static bin.apply.sys.item.Separator.SYSTEM_PATH;
 import static bin.apply.sys.item.Separator.isWindow;
 import static bin.apply.sys.make.StartLine.developmentMode;
@@ -22,15 +23,18 @@ import static java.nio.charset.StandardCharsets.*;
 public interface LoopToken extends VariableToken {
     Map<String, String> LOOP_TOKEN = new HashMap<>();
     Set<String> LOOP_SET = new HashSet<>() {{
-        try (BufferedReader br = new BufferedReader(new FileReader(SYSTEM_PATH, UTF_8))) {
-            br.lines().filter(Predicate.not(String::isBlank))
-                    .map(String::strip)
-                    .forEach(this::add);
-        } catch (IOException i) {
-            if (developmentMode) i.printStackTrace();
-            new FileException().printErrorMessage(new FileException().didNotReadSystemFile(), Setting.mainPath);
-            // 운영체제가 윈도우가 아니거나 디버깅모드가 컴파일이 아닐때 종료 허용
-            if (!isWindow || debugMode.isNoCompile()) System.exit(0);
+        // 디컴파일 파일이 아닐때
+        if (!isDecompile) {
+            try (BufferedReader br = new BufferedReader(new FileReader(SYSTEM_PATH, UTF_8))) {
+                br.lines().filter(Predicate.not(String::isBlank))
+                        .map(String::strip)
+                        .forEach(this::add);
+            } catch (IOException i) {
+                if (developmentMode) i.printStackTrace();
+                new FileException().printErrorMessage(new FileException().didNotReadSystemFile(), Setting.mainPath);
+                // 운영체제가 윈도우가 아니거나 디버깅모드가 컴파일이 아닐때 종료 허용
+                if (!isWindow || debugMode.isNoCompile()) System.exit(0);
+            }
         }
     }};
 
