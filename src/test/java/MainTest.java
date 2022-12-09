@@ -44,7 +44,7 @@ public class MainTest implements LoopToken, ChangeHangle {
         try {
 //            new Main(new String[]{SEPARATOR_HOME, "hello.otl"});
 //            new Main(new String[]{SEPARATOR_HOME, "web.otl"});
-//            new Main(new String[]{SEPARATOR_HOME});
+            new Main(new String[]{SEPARATOR_HOME, "web.otlc"});
 
 //            new Main(new String[]{SEPARATOR_HOME, "icon.otlm"});
 
