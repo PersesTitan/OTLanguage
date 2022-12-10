@@ -1,9 +1,7 @@
 package bin.apply.sys.item;
 
-import bin.apply.Setting;
 import bin.apply.sys.make.StartLine;
 
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
