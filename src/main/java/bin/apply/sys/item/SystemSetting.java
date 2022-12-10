@@ -20,6 +20,13 @@ public interface SystemSetting {
                 .anyMatch(fileName::endsWith);
     }
 
+    static boolean extensionCheck(String fileName, String option) {
+        fileName = fileName.toLowerCase(Locale.ROOT);
+        return Arrays.stream(extension)
+                .map(v -> v.concat(option))
+                .anyMatch(fileName::endsWith);
+    }
+
     static String getExtension() {
         return String.join(", ", extension);
     }
