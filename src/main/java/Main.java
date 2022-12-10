@@ -1,5 +1,6 @@
 import bin.apply.Controller;
 import bin.apply.Setting;
+import bin.apply.sys.compile.Decompile;
 import bin.apply.sys.item.RunType;
 import bin.apply.sys.make.Bracket;
 import bin.apply.sys.make.StartLine;
@@ -50,7 +51,9 @@ public class Main extends Setting {
                 Setting.mainPath = file.getAbsolutePath();
                 Setting.path = file.getAbsoluteFile().getParent();
                 shell(file);
-            } catch (NullPointerException | IOException e) {if (StartLine.developmentMode) e.printStackTrace();}
+            } catch (NullPointerException | IOException e) {
+                if (StartLine.developmentMode) e.printStackTrace();
+            }
         }
     }
 
@@ -61,10 +64,15 @@ public class Main extends Setting {
         if (!file.exists()) throw new FileException().pathNoHaveError();
         else if (!file.isFile()) throw new FileException().isNotFileError();
         else if (!file.canRead()) throw new FileException().noReadError();
-        else if (!extensionCheck(file.getName())) throw new FileException().rightExtension();
-        // 파일을 읽고 Setting.total 에 값을 넣는 작업
-        Controller.readFile(mainPath, Setting.total);
-        StartLine.startLine(Setting.total.toString(), mainPath, repository);
+        else if (extensionCheck(file.getName())) {
+            // 파일을 읽고 Setting.total 에 값을 넣는 작업
+            Controller.readFile(mainPath, Setting.total);
+            StartLine.startLine(Setting.total.toString(), mainPath, repository);
+        } else {
+            if (extensionCheck(file.getName(), "c")) {
+                new Decompile(file); // 컴파일 된 파일 실행
+            } else throw new FileException().rightExtension();
+        }
     }
 
     private void shell(File file) {
