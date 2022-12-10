@@ -1,6 +1,7 @@
 package cos.poison.controller;
 
 import bin.apply.Setting;
+import bin.apply.sys.item.Color;
 import bin.apply.sys.make.ChangeHangle;
 import bin.exception.ServerException;
 import bin.token.MergeToken;
@@ -13,6 +14,8 @@ import cos.poison.root.HandlerRoot;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,8 +59,13 @@ public class HttpServerManager implements HttpRepository, MergeToken, ChangeHang
 
     public void stop() {
         if (httpServer != null) {
+            System.out.printf("%s[%s]%s%s[Poison Server 종료]%s \n",
+                    Color.YELLOW,
+                    new SimpleDateFormat(dateFormat).format(new Date()),
+                    Color.RESET, Color.GREEN, Color.RESET);
             httpServer.stop(0);
-        } else throw new ServerException().noHaveError();
+            httpServer = null;
+        }
     }
 
     // "text/html;charset=UTF-8"
