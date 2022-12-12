@@ -6,16 +6,12 @@ import bin.apply.sys.item.RunType;
 import bin.CreateReturnWorks;
 import bin.CreateStartWorks;
 import bin.orign.loop.For;
-import org.fusesource.jansi.Ansi;
-import work.v3.ReturnWorkV3;
-import work.v3.StartWorkV3;
 
 import java.io.*;
 import java.util.*;
 
 import static bin.apply.sys.item.Separator.*;
 import static bin.token.LoopToken.*;
-import static org.fusesource.jansi.Ansi.ansi;
 
 public class Setting implements Repository {
     public static final StringBuilder total = new StringBuilder();
@@ -53,44 +49,40 @@ public class Setting implements Repository {
     }
 
     public static void warringMessage(String message) {
-        if (debugMode.ordinal() < DebugMode.WARRING.ordinal())
+        if (debugMode.check(DebugMode.WARRING))
             System.out.printf("%s%s%s\n", Color.YELLOW, message, Color.RESET);
     }
 
     public static void errorMessage(String message) {
-        if (debugMode.ordinal() < DebugMode.ERROR.ordinal())
+        if (debugMode.check(DebugMode.ERROR))
             System.out.printf("%s%s%s\n", Color.RED, message, Color.RESET);
     }
 
     static {
         try {
-            for (File files : Objects.requireNonNull(new File(MODULE_PATH + SEPARATOR_FILE + COMPULSION).listFiles())) {
-                if (!files.getName().toLowerCase(Locale.ROOT).endsWith(".otlm")) continue;
-                readStart(files, priorityStartWorksV3);
-            }
-
-            for (File files : Objects.requireNonNull(new File(MODULE_PATH + SEPARATOR_FILE + OPERATE).listFiles())) {
-                if (!files.getName().toLowerCase(Locale.ROOT).endsWith(".otlm")) continue;
-                readStart(files, startWorksV3);
-            }
-
-            for (File files : Objects.requireNonNull(new File(MODULE_PATH + SEPARATOR_FILE + ALTERATION).listFiles())) {
-                if (!files.getName().toLowerCase(Locale.ROOT).endsWith(".otlm")) continue;
-                try (ObjectInput input = new ObjectInputStream(new FileInputStream(files))) {
-                    returnWorksV3.putAll(((HashMap<String, Map<String, ReturnWorkV3>>) input.readObject()));
-                } catch (IOException | ClassNotFoundException e) {
-                    Setting.warringMessage(String.format("%s를 모듈에 추가하지 못하였습니다.", files.getName()));
-                }
-            }
+            final String path =  MODULE_PATH + SEPARATOR_FILE;
+            final File[] file1 = new File(path + COMPULSION).listFiles(Setting::checkModel);
+            final File[] file2 = new File(path + OPERATE).listFiles(Setting::checkModel);
+            final File[] file3 = new File(path + ALTERATION).listFiles(Setting::checkModel);
+            if (file1 != null) for (File files : file1) readStart(files, priorityStartWorksV3);
+            else Setting.errorMessage(path.concat(COMPULSION).concat(" 모듈 추가에 실패하였습니다."));
+            if (file2 != null) for (File files : file2) readStart(files, startWorksV3);
+            else Setting.errorMessage(path.concat(OPERATE).concat(" 모듈 추가에 실패하였습니다."));
+            if (file3 != null) for (File files : file3) readStart(files, returnWorksV3);
+            else Setting.errorMessage(path.concat(ALTERATION).concat(" 모듈 추가에 실패하였습니다."));
         } catch (NullPointerException ignored) {
             Setting.errorMessage("모듈 추가에 실패하였습니다.");
         }
     }
 
-    private static void readStart(File file, HashMap<String, Map<String, StartWorkV3>> map) {
+    private static boolean checkModel(File file) {
+        return file.getName().toLowerCase(Locale.ROOT).endsWith(MODULE_EXTENSION);
+    }
+
+    private static <V> void readStart(File file, HashMap<String, Map<String, V>> map) {
         try (ObjectInput input = new ObjectInputStream(new FileInputStream(file))) {
-            map.putAll((HashMap<String, Map<String, StartWorkV3>>) input.readObject());
-        } catch (IOException | ClassNotFoundException e) {
+            map.putAll((HashMap<String, Map<String, V>>) input.readObject());
+        } catch (IOException | ClassNotFoundException ignored) {
             Setting.warringMessage(String.format("%s를 모듈에 추가하지 못하였습니다.", file.getName()));
         }
     }
