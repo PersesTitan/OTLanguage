@@ -16,8 +16,9 @@ import static bin.token.Token.ACCESS;
 public class Install {
     // system.otls
     public static void main(String[] args) {
-        if (args.length != 0) new Install(args[0]);
-        else System.out.printf("%s파일명을 입력해주세요.%s\n", "\033[0;31m", "\033[0m");
+        new Install("origin");
+//        if (args.length != 0) new Install(args[0]);
+//        else System.out.printf("%s파일명을 입력해주세요.%s\n", "\033[0;31m", "\033[0m");
     }
 
     private static final String INSTALL_PATH = StartLine.developmentMode
@@ -94,7 +95,7 @@ public class Install {
         }
     }
 
-    private void runDownload(int type, String total, String fileName, long size) throws IOException {
+    private void runDownload(int type, String total, String fileName, long size) {
         switch (type) {
             case MODULE ->
                     total.lines().forEach(line -> {
@@ -127,7 +128,9 @@ public class Install {
             case CLASS -> total.lines().forEach(line -> {
                 print(size);
                 System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
-                String urlValue = getKlass(fileName, line + ".class");
+                String urlValue = line.endsWith(".class")
+                        ? getKlass(fileName, line)
+                        : getKlass(fileName, line + ".class");
                 String localPath = getDownloadPath(line);
                 install(urlValue, localPath);
                 System.out.printf("%s.%s", "\033[0;32m", "\033[0m");
@@ -196,7 +199,9 @@ public class Install {
     private String getDownloadPath(String type) {
         // HOME/User/.otl / analyzer / cos/work/compulsion
         String path = INSTALL_PATH + SEPARATOR_FILE + "analyzer" + SEPARATOR_FILE + type.replace("~", SEPARATOR_FILE);
-        return path + ".class";
+        return path.endsWith(".class")
+                ? path
+                : path + ".class";
     }
 
     // moduleName: origin
