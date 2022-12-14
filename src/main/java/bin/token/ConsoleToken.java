@@ -11,6 +11,4 @@ public interface ConsoleToken {
     String PRINT_TAP = "ㅅㅁㅆ";
 
     String SCANNER = "ㅅㅇㅅ";
-
-    String FILE = "ㅍㅅㅍ";
 }
