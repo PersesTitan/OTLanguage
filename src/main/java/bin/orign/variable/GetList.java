@@ -25,11 +25,11 @@ public interface GetList {
     }
 
     default LinkedList<Character> setCharacterList(LinkedList<Character> set, String line) {
-        if (listCheck(line) && isCharacter(line)) set.add(line.charAt(0));
+        if (listCheck(line) && isCharacter(line)) set.add(getCharacter(line));
         else if (isListCharacter(line)) throw new VariableException().typeMatch();
         else {
             StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), SING);
-            while (t.hasMoreTokens()) set.add(t.nextToken().charAt(0));
+            while (t.hasMoreTokens()) set.add(getCharacter(t.nextToken()));
         }
         return set;
     }
@@ -55,11 +55,11 @@ public interface GetList {
     }
 
     default LinkedList<Integer> setIntegerList(LinkedList<Integer> set, String line) {
-        if (listCheck(line) && isInteger(line)) set.add(Integer.parseInt(line));
+        if (listCheck(line) && isInteger(line)) set.add(getInteger(line));
         else if (isListInteger(line)) throw new VariableException().typeMatch();
         else {
             StringTokenizer t = new StringTokenizer(line.substring(1, line.length()-1), SING);
-            while (t.hasMoreTokens()) set.add(Integer.parseInt(t.nextToken()));
+            while (t.hasMoreTokens()) set.add(getInteger(t.nextToken()));
         }
         return set;
     }
