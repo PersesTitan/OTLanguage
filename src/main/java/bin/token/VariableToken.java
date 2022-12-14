@@ -27,6 +27,7 @@ public interface VariableToken extends Token {
     String FORCE_QUIT = "ㄲㅌㄲ";
     String SLEEP = "=_=";
     String FILE = "ㅍㅅㅍ";
+    String FILE_READ_ALL_LINE = "ㅇㄹㅇ";
 
     String NUMBER_LIST = String.join(BLANK, BL, NUMBER, "(", ",", NUMBER + ")*", BR);
 
