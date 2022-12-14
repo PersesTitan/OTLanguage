@@ -36,11 +36,11 @@ public class MainTest implements LoopToken, ChangeHangle {
 //        AnsiConsole.systemInstall();
 //        System.out.println(ansi().fg(Ansi.Color.RED).a("Hello").reset());
 //        System.out.println(ansi().bg(Ansi.Color.RED).a("Hello").reset());
-//        System.exit(0);
-        
+
         new MakeGitTest();
         new Setting();
 
+        System.exit(0);
         try {
 //            new Main(new String[]{SEPARATOR_HOME, "hello.otl"});
 //            new Main(new String[]{SEPARATOR_HOME, "web.otl"});
