@@ -14,10 +14,6 @@ public class MakeTest {
     private static void check(Class<?> klass, Object ob) {
     }
 
-//    public static <V> V change(V klass, Object ob) {
-//
-//    }
-
     private static int start(String total, int position) {
         boolean strBool = true;
         Stack<Integer> stack = new Stack<>();
