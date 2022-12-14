@@ -1,6 +1,7 @@
 package bin.orign.variable.both;
 
 import bin.calculator.tool.Calculator;
+import bin.exception.VariableException;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -15,8 +16,11 @@ public interface PutChangeValueVariable extends Calculator {
                              LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         return switch (variableType) {
             case INT_VARIABLE -> {
-                if (isInteger(value)) yield value;
-                else yield getNumberStr(value, repositoryArray);
+                try {
+                    yield Integer.toString(getInteger(value));
+                } catch (VariableException e) {
+                    yield getNumberStr(value, repositoryArray);
+                }
             }
             case FLOAT_VARIABLE -> {
                 if (isFloat(value)) yield value;
