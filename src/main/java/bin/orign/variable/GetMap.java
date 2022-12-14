@@ -30,7 +30,7 @@ public interface GetMap {
                 String[] tokens = t.nextToken()
                         .strip()
                         .split("=", 2);
-                map.put(tokens[0], tokens[1].charAt(0));
+                map.put(tokens[0], getCharacter(t.nextToken()));
             }
         }
         return map;
@@ -72,7 +72,7 @@ public interface GetMap {
                 String[] tokens = t.nextToken()
                         .strip()
                         .split("=", 2);
-                map.put(tokens[0], Integer.parseInt(tokens[1]));
+                map.put(tokens[0], getInteger(tokens[1]));
             }
         }
         return map;
