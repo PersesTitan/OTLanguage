@@ -61,7 +61,7 @@ public class Bracket implements LoopToken, Token, LoopBracket {
                     int start = matcher.end();
                     int end = passBracket(total, start);
                     String newWord = String.format(" (%s,%s,%s) ", fileName, startLine(total, start), endLine(total, end));
-                    total = total.replace(total.substring(start - 1, end), newWord);
+                    total = total.replace(total.substring(start - 1, end + 1), newWord);
                     matcher.reset(total);
                 } else stack.add(matcher.end());
             } else if (group.startsWith("}")) {
