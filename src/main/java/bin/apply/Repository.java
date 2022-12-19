@@ -1,8 +1,6 @@
 package bin.apply;
 
 import bin.apply.sys.item.HpMap;
-import bin.define.method.MethodReturn;
-import bin.define.method.MethodVoid;
 import bin.orign.variable.StartVariable;
 import bin.orign.variable.Variable;
 import work.v3.ReturnWorkV3;
@@ -39,8 +37,6 @@ public interface Repository {
     // Version 3
     Variable variable = new Variable(1);
     StartVariable startVariable = new StartVariable(2);
-    MethodVoid methodVoid = new MethodVoid();
-    MethodReturn methodReturn = new MethodReturn();
 
     HashMap<String, Map<String, StartWorkV3>> priorityStartWorksV3 = new HashMap<>();
     HashMap<String, Map<String, StartWorkV3>> startWorksV3 = new HashMap<>();
