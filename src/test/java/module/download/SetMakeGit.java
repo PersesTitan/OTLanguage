@@ -4,6 +4,8 @@ import bin.apply.sys.item.SystemSetting;
 import bin.apply.sys.run.*;
 import bin.define.klass.DefineKlass;
 import bin.define.method.DefineMethod;
+import bin.file.FileLineFor;
+import bin.file.FileReadAll;
 import bin.orign.console.normal.*;
 import bin.orign.console.priority.PriorityPrint;
 import bin.orign.console.priority.PriorityPrintSpace;
@@ -13,6 +15,8 @@ import bin.orign.loop.If;
 import bin.orign.loop.While;
 import bin.orign.math.Max;
 import bin.orign.math.Min;
+import bin.orign.math.cal.DownPoint;
+import bin.orign.math.cal.UpPoint;
 import bin.orign.math.random.*;
 import bin.orign.math.round.Abs;
 import bin.orign.math.round.Ceil;
@@ -23,18 +27,23 @@ import bin.orign.variable.CreateMap;
 import bin.orign.variable.CreateOrigin;
 import bin.orign.variable.CreateSet;
 import bin.string.*;
+import bin.string.blank.StringTrim;
+import bin.string.blank.StringTrimPoint;
+import bin.string.character.StringCharFor;
+import bin.string.character.StringSplitFor;
+import bin.string.character.StringSplitRegularFor;
 import bin.string.list.ListAdd;
 import bin.string.list.ListContains;
 import bin.string.list.ListRemove;
 import bin.string.list.ListRetain;
-import bin.string.pattern.MatcherFind;
+import bin.string.pattern.*;
 import bin.string.position.Index;
 import bin.string.position.LastIndex;
 import bin.string.position.SubString;
 import bin.string.tocase.ToLower;
 import bin.string.tocase.ToUpper;
-import bin.token.LoopToken;
-import bin.token.VariableToken;
+import bin.string.with.EndsWith;
+import bin.string.with.StartsWith;
 import cos.music.replace.GetLoop;
 import cos.music.replace.GetPitch;
 import cos.music.replace.GetSpeed;
@@ -85,9 +94,18 @@ public interface SetMakeGit {
         system.add(TRY_CATCH);
         system.add(METHOD);
         system.add(KLASS);
+        system.add(FILE + ACCESS + FILE_LINE_FOR);
+        system.add(STRING_VARIABLE + ACCESS + STRING_CHAR_FOR);
+        system.add(STRING_VARIABLE + ACCESS + SPLIT_FOR);
+        system.add(STRING_VARIABLE + ACCESS + SPLIT_REGULAR_FOR);
+        system.add(STRING_VARIABLE + ACCESS + PATTERN_FOR);
 
-        String WHITE = LoopToken.WHITE.replace("\\", "");
-        String IF = LoopToken.IF.replace("\\", "");
+        // SHORT LOOP
+        createStartWorks(FILE, FILE_LINE_FOR, new FileLineFor());
+        createStartWorks(STRING_VARIABLE, STRING_CHAR_FOR, new StringCharFor());
+        createStartWorks(STRING_VARIABLE, SPLIT_FOR, new StringSplitFor());
+        createStartWorks(STRING_VARIABLE, SPLIT_REGULAR_FOR, new StringSplitRegularFor());
+        createStartWorks(STRING_VARIABLE, PATTERN_FOR, new MatcherGroupFor());
 
         priorityCreateStartWorks(FORCE_QUIT, "", new ForceQuit(0));
         priorityCreateStartWorks(PRIORITY_PRINT, "", new PriorityPrint(1));
@@ -109,11 +127,13 @@ public interface SetMakeGit {
         createStartWorks(PRINT_SPACE, "", new PrintSpace(1));
         createStartWorks(PRINT_TAP, "", new PrintTap(1));
         createStartWorks(SLEEP, "", new Sleep(1));
-        createStartWorks(FILE, "", new FilePath(1));
-        createStartWorks(WHITE, "", new While(1));
-        createStartWorks(IF, "", new If(1));
+        createStartWorks(WHITE_, "", new While(1));
+        createStartWorks(IF_, "", new If(1));
         createStartWorks(METHOD, "", new DefineMethod(1));
         createStartWorks(KLASS, "", new DefineKlass(1));
+
+        createStartWorks(FILE, "", new FilePath(1));
+        createReturnWorks(FILE, FILE_READ_ALL_LINE, new FileReadAll());
 
         createReturnWorks(RANDOM_BOOL, "", new RandomBoolean(1));
         createReturnWorks(RANDOM_DOUBLE, "", new RandomDouble(1, 2));
@@ -122,6 +142,10 @@ public interface SetMakeGit {
         createReturnWorks(RANDOM_LONG, "", new RandomLong(1, 2));
         createReturnWorks(SCANNER, "", new Scanner(0));
         createReturnWorks(SYSTEM, SYSTEM_IS_CHECK, new IsCheck(1));
+        createReturnWorks(STRING_VARIABLE, FILE_START_WITH, new StartsWith());
+        createReturnWorks(STRING_VARIABLE, FILE_END_WITH, new EndsWith());
+
+        createReturnWorks(STRING_VARIABLE, SET_LENGTH, new StringLength());
         createReturnWorks(STRING_VARIABLE, JOIN, new Join(2));
         createReturnWorks(STRING_VARIABLE, SPLIT, new Split(2));
         createReturnWorks(STRING_VARIABLE, SPLIT_REGULAR, new SplitRegular(2));
@@ -133,6 +157,12 @@ public interface SetMakeGit {
         createReturnWorks(STRING_VARIABLE, INDEX, new Index(2, 3));
         createReturnWorks(STRING_VARIABLE, LAST_INDEX, new LastIndex(2, 3));
         createReturnWorks(STRING_VARIABLE, SUBSTRING, new SubString(2, 3));
+        createReturnWorks(STRING_VARIABLE, STRING_TRIM, new StringTrim());
+        createReturnWorks(STRING_VARIABLE, REPLACE, new StringReplace());
+        createReturnWorks(STRING_VARIABLE, REPLACE_FIRST, new StringReplaceFirst());
+        createReturnWorks(STRING_VARIABLE, REPLACE_REGULAR, new StringReplaceRegular());
+        createReturnWorks(STRING_VARIABLE, REPEAT, new Repeat());
+        createStartWorks(STRING_VARIABLE, STRING_TRIM_POINT, new StringTrimPoint());
         LIST_LIST.forEach(v -> {
             createStartWorks(v, ADD_ALL, new ListAdd(v, 2));
             createStartWorks(v, RETAIN_ALL, new ListRetain(v, 2));
@@ -158,6 +188,8 @@ public interface SetMakeGit {
         Arrays.asList(INT_VARIABLE, LONG_VARIABLE, FLOAT_VARIABLE, DOUBLE_VARIABLE).forEach(v -> {
             createReturnWorks(v, MAX, max);
             createReturnWorks(v, MIN, min);
+            createStartWorks(v, UP, new UpPoint(v));
+            createStartWorks(v, DOWN, new DownPoint(v));
         });
     }
 
@@ -227,8 +259,6 @@ public interface SetMakeGit {
     // Shell
     default void start5() {
         new File(MODULE_PATH + "/shell").mkdirs();
-        File[] jar = new File("module/groovy").listFiles();
-
         for (File file : Objects.requireNonNull(new File("module/groovy").listFiles())) {
             String name = file.getName();
             if (name.endsWith(".jar")) {
