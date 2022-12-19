@@ -16,9 +16,8 @@ import static bin.token.Token.ACCESS;
 public class Install {
     // system.otls
     public static void main(String[] args) {
-        new Install("origin");
-//        if (args.length != 0) new Install(args[0]);
-//        else System.out.printf("%s파일명을 입력해주세요.%s\n", "\033[0;31m", "\033[0m");
+        if (args.length != 0) new Install(args[0]);
+        else System.out.printf("%s파일명을 입력해주세요.%s\n", "\033[0;31m", "\033[0m");
     }
 
     private static final String INSTALL_PATH = StartLine.developmentMode
