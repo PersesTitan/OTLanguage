@@ -54,23 +54,26 @@ public class MakeGitTest implements SetMakeGit, CreateGitDir {
         String namePath = SEPARATOR_HOME + "/Documents/GitHub/module/" + name;
         String namePath2 = null;
         if (bool) namePath2 = SEPARATOR_HOME + "/Documents/GitHub/.otl/module/";
+
         File file = new File(namePath);
         makeDir(file);
-
         // 기본 값 추가
         if (bool) {
             File file1 = new File(namePath2);
             makeDir(file1);
-            try (FileWriter fw = new FileWriter(namePath2 + "/system.otls", false);
-                 BufferedWriter bw = new BufferedWriter(fw)) {
+            try (BufferedWriter bw = getSystem(namePath2);
+                 BufferedWriter bw1 = getSystem(MODULE_PATH)) {
                 for (String v : system) {
                     bw.write(v.replace("\\", ""));
                     bw.newLine();
+                    // 기본 설치 위치
+                    bw1.write(v.replace("\\", ""));
+                    bw1.newLine();
                 }
             } catch (IOException e) {e.printStackTrace();}
         }
 
-        try (BufferedWriter br = new BufferedWriter(new FileWriter(namePath + "/system.otls", false))) {
+        try (BufferedWriter br = getSystem(namePath)) {
             br.write(SYSTEM);
             br.newLine();
             for (String systemItem : system) {
@@ -90,9 +93,24 @@ public class MakeGitTest implements SetMakeGit, CreateGitDir {
             // class 파일 복사 및 가져오기 & 값 복사
             List<File> fileList = copyFiles(br, fileName);
             for (File f : fileList) {
+                // 모듈
                 String path = getPath(file.getAbsolutePath(), f.getName());
                 File copyPath = new File(path);
                 copy(f, copyPath);
+                // 기본
+                String path1 = getPath(INSTALL_PATH, "analyzer", f.toString().substring("out/production/classes/".length()));
+                File file1 = new File(path1);
+                makeDir(file1);
+                copy(f, file1);
+            }
+
+            // origin 추가시 work 값 추가
+            if (bool) {
+                for (File v : copyFiles(br, "src/main/java/work")) {
+                    String path = getPath(file.getAbsolutePath(), v.getName());
+                    File copyPath = new File(path);
+                    copy(v, copyPath);
+                }
             }
 
             if (!files.isEmpty()) {
