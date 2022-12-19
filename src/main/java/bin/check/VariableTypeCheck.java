@@ -325,7 +325,7 @@ public class VariableTypeCheck implements VariableToken, GetSet, GetList, GetMap
                     yield setDoubleMap(map, getMapValue(map, value));
                 }
             }
-            default -> value;
+            case String -> value;
         };
     }
 }
