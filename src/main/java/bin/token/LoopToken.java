@@ -18,6 +18,8 @@ import static bin.apply.sys.compile.Decompile.isDecompile;
 import static bin.apply.sys.item.Separator.SYSTEM_PATH;
 import static bin.apply.sys.item.Separator.isWindow;
 import static bin.apply.sys.make.StartLine.developmentMode;
+import static bin.token.StringToken.SPLIT;
+import static bin.token.StringToken.SPLIT_REGULAR;
 import static java.nio.charset.StandardCharsets.*;
 
 public interface LoopToken extends VariableToken {
@@ -59,6 +61,12 @@ public interface LoopToken extends VariableToken {
     String IF_ = "?ㅅ?";
     String ELSE_IF_ = "?ㅈ?";
     String ELSE_ = "?ㅉ?";
+
+    // SHORT LOOP
+    String FILE_LINE_FOR = "$";
+    String STRING_CHAR_FOR = "$";
+    String SPLIT_FOR = SPLIT + "$";
+    String SPLIT_REGULAR_FOR = SPLIT_REGULAR + "$";
 
     // LOOP
     String FOR = CARET;                 // ^
