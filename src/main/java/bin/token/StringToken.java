@@ -9,10 +9,18 @@ public interface StringToken {
     String SPLIT_REGULAR = "ㅆㅍㅆ";
     String CONTAINS = QUESTION_S;
     String EQUALS = "=" + QUESTION_S;
+    String REPLACE = "ㅂㅎㅂ";
+    String REPLACE_REGULAR = "ㅃㅎㅃ";
+    String REPLACE_FIRST = "ㅃㅎㅂ";
+    String REPEAT = "ㅇㄹㅇ";
+
+    String STRING_TRIM = "ㅌㄹㅌ";
+    String STRING_TRIM_POINT = STRING_TRIM + "*";
 
     String CONTAINS_S = QUESTION_S;         // ?
     String EQUALS_S = "=" + QUESTION_S;     // =?
     String PATTERN = "ㅍㅌㅍ";
+    String PATTERN_FOR = PATTERN + "$";
 
     String TO_LOWER = "ㅅㅁㅅ";
     String TO_UPPER = "ㄷㅁㄷ";
@@ -34,4 +42,8 @@ public interface StringToken {
 
     String MAX = "ㅋㄴㅋ";     // 큰 값
     String MIN = "ㅈㄱㅈ";     // 작은 값
+
+    // POINT
+    String UP = "+*";
+    String DOWN = "-*";
 }
