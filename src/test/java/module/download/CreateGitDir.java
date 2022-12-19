@@ -36,13 +36,11 @@ public interface CreateGitDir {
     // br = 파일 쓰기
     // name = 모듈 이름(ex.origin, poison)
     // filePath = src/main/java/origin
-    default List<File> copyFiles(BufferedWriter br, String... filePath) throws IOException {
+    default List<File> copyFiles(BufferedWriter br, String filePath) throws IOException {
         List<File> files = new ArrayList<>();
-        for (String fileP : filePath) {
-            fileP = fileP.substring("src/main/java/".length());
-            File startFile = new File("out/production/classes/" + fileP);
-            getFile(files, startFile);
-        }
+        filePath = filePath.substring("src/main/java/".length());
+        File startFile = new File("out/production/classes/" + filePath);
+        getFile(files, startFile);
 
         List<String> list = files.stream()
                 .map(File::toString)
@@ -72,13 +70,13 @@ public interface CreateGitDir {
      * @param name origin
      * @param bool true (is origin)
      */
-    default <V> void createModule(HashMap<String, Map<String, V>> repository, BufferedWriter br, MakeGitTest.Type type, String name,
+    default <V> void createModule(HashMap<String, Map<String, V>> repository, BufferedWriter br,
+                                  MakeGitTest.Type type, String name,
                                   boolean bool, String namePath, String namePath2) throws IOException {
         if (!repository.isEmpty()) {
             createModule(getPath(namePath, type.getName() + MODULE_EXTENSION), repository);
             createModule(getPath(MODULE_PATH, type.getName(), name + MODULE_EXTENSION), repository);
             if (bool) createModule(getPath(namePath2, type.getName(), name + MODULE_EXTENSION), repository);
-
             br.write("   ");
             br.write(type.getName());
             br.newLine();
@@ -105,5 +103,11 @@ public interface CreateGitDir {
         try (var output = new ObjectOutputStream(new FileOutputStream(path))) {
             output.writeObject(repository);
         } catch (IOException ignored) {}
+    }
+
+    // system.otls 값 쓰는 메소드
+    default BufferedWriter getSystem(String path) throws IOException {
+        FileWriter fw = new FileWriter(path + "/system.otls", false);
+        return new BufferedWriter(fw);
     }
 }
