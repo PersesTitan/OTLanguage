@@ -37,7 +37,10 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
 
     @Override
     public boolean containsKey(Object key) {
-        return super.containsKey(key);
+        String k = key.toString();
+        if (k.startsWith("["))
+            k = k.substring(k.indexOf("]") + 1);
+        return super.containsKey(k);
     }
 
     @Override
@@ -75,7 +78,8 @@ public class HpMap extends HashMap<String, Object> implements Map<String, Object
         // 예약어 확인
         if (noUse.contains(key)) throw new VariableException().reservedWorks();
         // 사용 불가 단어
-        else if (key.contains(OR) || key.contains(AND) || key.contains(NOT) || key.contains(TRUE) || key.contains(FALSE))
+        else if (key.contains(OR) || key.contains(AND)
+                || key.contains(NOT) || key.contains(TRUE) || key.contains(FALSE))
             throw new VariableException().cannotInclude();
 
         Object keyObj = this.getOrDefault(key, null);
