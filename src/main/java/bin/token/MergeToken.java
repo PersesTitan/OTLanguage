@@ -2,15 +2,15 @@ package bin.token;
 
 import bin.apply.Repository;
 import bin.apply.sys.make.StartLine;
+import bin.exception.FileException;
 import bin.exception.MatchException;
 import bin.exception.VariableException;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.io.File;
+import java.util.*;
 
 import static bin.apply.Repository.containsVariable;
+import static bin.apply.sys.item.Separator.SEPARATOR_FILE;
 import static bin.apply.sys.make.StartLine.startStartLine;
 import static bin.token.LoopToken.*;
 import static bin.token.Token.*;
@@ -68,6 +68,15 @@ public interface MergeToken {
             else break;
         }
         return  count >= repLen ? -1 : count;
+    }
+
+    static int access(String line, int repLen) {
+        int count = 0;
+        for (int i = 0; i < line.length(); i++) {
+            if (line.charAt(i) == ACCESS.charAt(0)) count++;
+            else break;
+        }
+        return count >= repLen ? -1 : count;
     }
 
     // 변수
@@ -184,5 +193,37 @@ public interface MergeToken {
         String total = getLoopTotal(fileName, start, end);
         String finalTotal = StartLine.getFinalTotal(false, total, fileName);
         startStartLine(finalTotal, total, repositoryArray);
+    }
+
+    default boolean loopStart(String fileName, String start, String end,
+                              LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        String total = getLoopTotal(fileName, start, end);
+        String finalTotal = StartLine.getFinalTotal(false, total, fileName);
+        return Objects.equals(StartLine.startLoop(finalTotal, fileName, repositoryArray), LoopToken.BREAK);
+    }
+
+    // 매개변수 (test,1,10) <= ㅇㅁㅇ 변수
+    default String[] cutLoop(String line) {
+        int start = line.lastIndexOf('(');
+        // args = [1]
+        // loop = (test,9,11)  <= ㅇㅁㅇ 라인
+        String args = line.substring(0, start).strip().replace(ACCESS, SEPARATOR_FILE);
+        String loop = line.substring(start).strip();
+        return new String[] {args, loop};
+    }
+
+    default void checkFile(File file) {
+        if (!file.exists()) throw new FileException().pathNoHaveError();
+        else if (!file.isFile()) throw new FileException().isNotFileError();
+        else if (!file.canRead()) throw new FileException().noReadError();
+    }
+
+    // 변수 값 반환
+    default Map<String, Object> getVariable(String variableName,
+                                            Map<String, Map<String, Object>> repositoryArray) {
+        for (Map.Entry<String, Map<String, Object>> repository : repositoryArray.entrySet()) {
+            if (repository.getValue().containsKey(variableName)) return repository.getValue();
+        }
+        throw new VariableException().variableNameMatch();
     }
 }
