@@ -17,10 +17,10 @@ public abstract class ReturnWorkV3 implements Serializable {
     public abstract String start(String line, String[] params, LinkedList<Map<String, Map<String, Object>>> repositoryArray);
 
     public ReturnWorkV3 paramsCheck(int size, String params) {
-        if (!(counts == null
-                || (params != null && counts.length == 1 && counts[0] == 0 && params.isEmpty())
-                || check(size))) throw new MatchException().grammarError();
-        return this;
+        if (counts == null) return this;
+        else if (params != null && counts.length == 1 && counts[0] == 0 && params.isEmpty()) return this;
+        else if (check(size)) return this;
+        else throw new MatchException().grammarError();
     }
 
     private boolean check(int size) {
