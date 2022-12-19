@@ -2,6 +2,7 @@ package bin.apply.sys.make;
 
 import bin.apply.Setting;
 import bin.apply.sys.item.RunType;
+import bin.apply.sys.item.SystemSetting;
 import bin.calculator.tool.Calculator;
 import bin.exception.*;
 import bin.token.LoopToken;
@@ -61,39 +62,29 @@ public class StartLine implements LoopToken, Calculator {
                 .forEach(line -> Setting.start(line, errorLine.get(), repositoryArray));
     }
 
+    private final static String FINISH = "FINISH";
     public static String startLoop(String total, String fileName,
                                    LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
         for (var line : Bracket.getInstance().bracket(total, fileName, false).lines().toList()) {
             line = setError(line, total).strip();
-            line = Setting.lineStart(line, repositoryArray);
-            if (line.endsWith(BREAK) || line.endsWith(CONTINUE)) {
-                // FINISH, CONTINUE, BREAK
-                String lines = returnLoop(line.strip(), repositoryArray);
-                if (line.equals(CONTINUE)) continue;
-                if (!lines.equals(finish)) return lines;
+            line = Setting.lineStart(line, repositoryArray).strip();
+
+            if (line.equals(BREAK)) return BREAK;
+            else if (line.equals(CONTINUE)) return CONTINUE;
+            else if (line.endsWith(BREAK)) {
+                if (getBoolean(line, repositoryArray)) return BREAK;
+            } else if (line.endsWith(CONTINUE)) {
+                if (getBoolean(line, repositoryArray)) return CONTINUE;
             } else Setting.start(line, errorLine.get(), repositoryArray);
         }
-        return finish;
+        return FINISH;
     }
 
-    private final static String finish = "FINISH";
-    private static String returnLoop(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
-        if (line.equals(BREAK)) return BREAK;
-        else if (line.equals(CONTINUE)) return CONTINUE;
-        else if (line.endsWith(BREAK)) {
-            int position = line.lastIndexOf('?');
-            return line.substring(position + 1).strip().equals(BREAK)
-                    && getBool(line.substring(0, position), repositoryArray)
-                    ? BREAK
-                    : finish;
-        } else if (line.endsWith(CONTINUE)) {
-            int position = line.lastIndexOf('?');
-            return line.substring(position + 1).strip().equals(CONTINUE)
-                    && getBool(line.substring(0, position), repositoryArray)
-                    ? CONTINUE
-                    : finish;
-        }
-        return "";
+    // line = ㅇㅇ ㄸ ㄴㄴ
+    private static boolean getBoolean(String line, LinkedList<Map<String, Map<String, Object>>> repositoryArray) {
+        int position = line.lastIndexOf('?');
+        if (position == -1) throw new MatchException().grammarError();
+        return getBool(line.substring(0, position), repositoryArray);
     }
 
     public static void startPoison(String total, String fileName,
