@@ -1,6 +1,5 @@
 package module;
 
-import bin.apply.Repository;
 import bin.apply.sys.run.FilePath;
 import bin.apply.sys.run.ForceQuit;
 import bin.apply.sys.run.Sleep;
@@ -17,12 +16,12 @@ import bin.orign.variable.CreateMap;
 import bin.orign.variable.CreateOrigin;
 import bin.orign.variable.CreateSet;
 import bin.string.*;
+import bin.string.pattern.Split;
+import bin.string.pattern.SplitRegular;
 import cos.poison.controller.HttpMethod;
 import cos.poison.setting.PoisonCreate;
 import cos.poison.setting.PoisonMethod;
-import cos.poison.setting.PoisonPassURL;
 import cos.poison.setting.PoisonStart;
-import work.v3.ReturnWorkV3;
 import work.v3.StartWorkV3;
 
 import java.io.*;
@@ -40,7 +39,6 @@ import static bin.token.StringToken.*;
 import static bin.token.VariableToken.FILE;
 import static bin.token.VariableToken.MAP_LIST;
 import static bin.token.cal.NumberToken.*;
-import static cos.poison.PoisonRepository.POISON_PASS_URL;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class MakeGitModule {
@@ -107,20 +105,6 @@ public class MakeGitModule {
                         output.writeObject(returnWorksV3);
                     } catch (IOException ignored) {}
                 }
-
-//                if (lists != null) {
-//                    for (File f : lists) {
-//                        int start = (System.getProperty("user.home") + "/Documents/Java/OTLanguage/src/main/java/").length();
-//                        int end = f.getAbsolutePath().length() - ".java".length();
-//                        String value = f.getAbsolutePath().substring(start, end).replace("/", ".");
-//                        br.newLine();
-//                        br.write(value.replace(".", "~"));
-//
-//                        String fileName = f.getName();
-//                        String klassName = file.getAbsolutePath() + "/" + fileName.substring(0, fileName.length()-".java".length()) + ".class";
-//                        copy(value.replace(".", SEPARATOR_FILE), klassName);
-//                    }
-//                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -140,21 +124,6 @@ public class MakeGitModule {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        for (var a : map.values().stream().toList()) {
-//            for (var v : a.values().stream().toList()) {
-//                String klassPath = v.getClass().getName();
-//                br.newLine();
-//                br.write(klassPath.replace(".", "~"));
-//                String klassName = p + "/" + v.getClass().getSimpleName() + ".class";
-//                copy(klassPath.replace(".", SEPARATOR_FILE), klassName);
-//            }
-//        }
-    }
-
-    private void copy(String klassPath, String klassName) throws IOException {
-        String path = "out/production/classes/" + klassPath + ".class";
-        Files.copy(new File(path).toPath(), new File(klassName).toPath(), REPLACE_EXISTING);
     }
 
     //////////////////////////////////////////////////////////////////////////
