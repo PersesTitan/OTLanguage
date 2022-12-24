@@ -3,6 +3,8 @@ package work.v4;
 import bin.exception.MatchException;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.Map;
 
 public abstract class ReturnWork implements Serializable {
     private final WorkItem[] workItems;
@@ -10,7 +12,7 @@ public abstract class ReturnWork implements Serializable {
         this.workItems = workItems;
     }
 
-    public abstract void start(String line, Object[] params);
+    public abstract void start(String line, Object[] params, LinkedList<Map<String, Map<String, Object>>> repositoryArray);
 
     public Object[] paramsCheck(int size, String[] params) {
         if (params.length == 1 && params[0].isEmpty() && size == 0) return new Object[0];
