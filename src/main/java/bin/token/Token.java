@@ -29,6 +29,8 @@ package bin.token;
 
     String BL = "\\[";
     String BR = "\\]";
+    String BL_ = "[";
+    String BR_ = "]";
     String BACKSLASH = "\\\\";
     String PESO = "\\$";
     String SINGLE_Q = "'";
