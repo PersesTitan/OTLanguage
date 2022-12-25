@@ -1,0 +1,22 @@
+JarIndex-Version: 1.0
+
+tess4j-5.4.0.jar
+META-INF
+META-INF/maven
+META-INF/maven/net.sourceforge.tess4j
+META-INF/maven/net.sourceforge.tess4j/tess4j
+com
+com/recognition
+com/recognition/software
+com/recognition/software/jdeskew
+net
+net/sourceforge
+net/sourceforge/tess4j
+net/sourceforge/tess4j/util
+tessdata
+tessdata/configs
+win32-x86-64
+win32-x86
+readme.html
+versionchanges.txt
+
