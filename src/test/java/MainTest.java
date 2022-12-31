@@ -3,6 +3,7 @@ import bin.apply.sys.make.ChangeHangle;
 import bin.apply.sys.make.StartLine;
 import bin.exception.FileException;
 import bin.token.LoopToken;
+import com.google.common.math.DoubleMath;
 import cos.poison.controller.HttpMethod;
 import module.download.MakeGitTest;
 
@@ -40,11 +41,12 @@ public class MainTest implements LoopToken, ChangeHangle {
         new MakeGitTest();
         new Setting();
 
-        System.exit(0);
+//        System.exit(0);
         try {
-//            new Main(new String[]{SEPARATOR_HOME, "hello.otl"});
+            new Main(new String[]{SEPARATOR_HOME, "test/list_test.otl"});
+//            new Main(new String[]{SEPARATOR_HOME, "umm.otl"});
 //            new Main(new String[]{SEPARATOR_HOME, "web.otl"});
-            new Main(new String[]{SEPARATOR_HOME, "web.otlc"});
+//            new Main(new String[]{SEPARATOR_HOME, "web.otlc"});
 
 //            new Main(new String[]{SEPARATOR_HOME, "icon.otlm"});
 
