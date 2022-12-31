@@ -74,6 +74,12 @@ public class MakeGitTest implements SetMakeGit, CreateGitDir {
         }
 
         try (BufferedWriter br = getSystem(namePath)) {
+            for (String str : files) {
+                String path1 = getPath("module", name, str);
+                String path2 = getPath(MODULE_PATH, name, str);
+                copy(new File(path1), new File(path2));
+            }
+
             br.write(SYSTEM);
             br.newLine();
             for (String systemItem : system) {
@@ -91,7 +97,7 @@ public class MakeGitTest implements SetMakeGit, CreateGitDir {
             br.newLine();
             br.write(CLASS);
             // class 파일 복사 및 가져오기 & 값 복사
-            List<File> fileList = copyFiles(br, fileName);
+            List<File> fileList = copyFiles(br, fileName, bool);
             for (File f : fileList) {
                 // 모듈
                 String path = getPath(file.getAbsolutePath(), f.getName());
@@ -106,7 +112,7 @@ public class MakeGitTest implements SetMakeGit, CreateGitDir {
 
             // origin 추가시 work 값 추가
             if (bool) {
-                for (File v : copyFiles(br, "src/main/java/work")) {
+                for (File v : copyFiles(br, "src/main/java/work", true)) {
                     String path = getPath(file.getAbsolutePath(), v.getName());
                     File copyPath = new File(path);
                     copy(v, copyPath);
