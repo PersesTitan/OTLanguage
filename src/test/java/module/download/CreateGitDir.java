@@ -36,7 +36,7 @@ public interface CreateGitDir {
     // br = 파일 쓰기
     // name = 모듈 이름(ex.origin, poison)
     // filePath = src/main/java/origin
-    default List<File> copyFiles(BufferedWriter br, String filePath) throws IOException {
+    default List<File> copyFiles(BufferedWriter br, String filePath, boolean bool) throws IOException {
         List<File> files = new ArrayList<>();
         filePath = filePath.substring("src/main/java/".length());
         File startFile = new File("out/production/classes/" + filePath);
@@ -47,6 +47,15 @@ public interface CreateGitDir {
                 .map(v -> v.substring("out/production/classes/".length()))
                 .map(v -> v.replace("/", "~"))
                 .toList();
+
+        if (bool) {
+            getFile(files, new File("out/production/classes/work"));
+            copy(new File("out/production/classes/Install.class"),
+                    new File(getPath(INSTALL_PATH, "analyzer", "Install.class")));
+            copy(new File("out/production/classes/Main.class"),
+                    new File(getPath(INSTALL_PATH, "analyzer", "Main.class")));
+        }
+
         // 파일 라인 값 추가하기
         for (String line : list) {
             br.newLine();
@@ -107,7 +116,9 @@ public interface CreateGitDir {
 
     // system.otls 값 쓰는 메소드
     default BufferedWriter getSystem(String path) throws IOException {
-        FileWriter fw = new FileWriter(path + "/system.otls", false);
+        String file = path + "/system.otls";
+        makeDir(file);
+        FileWriter fw = new FileWriter(file, false);
         return new BufferedWriter(fw);
     }
 }
