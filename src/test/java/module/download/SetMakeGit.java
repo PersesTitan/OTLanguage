@@ -233,13 +233,11 @@ public interface SetMakeGit {
 
     default void start4() {
         new File(MODULE_PATH + "/music").mkdirs();
-        for (File file : Objects.requireNonNull(new File("module/music").listFiles())) {
-            String name = file.getName();
-            if (name.endsWith(".wav")) {
-                files.add(name);
-                cp("music", file);
-                cp1("music", file);
-            }
+        File[] fs = new File("module/music").listFiles(v -> v.getName().endsWith(".wav"));
+        for (File file : fs) {
+            files.add(file.getName());
+            cp("music", file);
+            cp1("music", file);
         }
 
         CreateMusic createMusic = new CreateMusic(1);
@@ -259,7 +257,7 @@ public interface SetMakeGit {
     // Shell
     default void start5() {
         new File(MODULE_PATH + "/shell").mkdirs();
-        for (File file : Objects.requireNonNull(new File("module/groovy").listFiles())) {
+        for (File file : Objects.requireNonNull(new File("module/shell").listFiles())) {
             String name = file.getName();
             if (name.endsWith(".jar")) {
                 files.add(name);
@@ -276,16 +274,15 @@ public interface SetMakeGit {
 
     private void cp(String name, File file) {
         String path = MODULE_PATH + "/" + name + "/" + file.getName();
-        if (!new File(path).isFile()) {
-            try {
-                Files.copy(file.toPath(), Path.of(path), REPLACE_EXISTING);}
+        if (new File(path).isFile()) {
+            try {Files.copy(file.toPath(), Path.of(path), REPLACE_EXISTING);}
             catch (IOException ignored) {}
         }
     }
 
     private void cp1(String name, File file) {
         String path = getPath(SEPARATOR_HOME, "Documents/GitHub/module", name, file.getName());
-        if (!new File(path).isFile()) {
+        if (new File(path).isFile()) {
             try {Files.copy(file.toPath(), Path.of(path), REPLACE_EXISTING);}
             catch (IOException ignored) {}
         }
