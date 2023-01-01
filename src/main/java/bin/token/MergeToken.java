@@ -67,7 +67,7 @@ public interface MergeToken {
             if (line.charAt(i) == ACCESS.charAt(0)) count++;
             else break;
         }
-        return  count >= repLen ? -1 : count;
+        return count >= repLen ? -1 : count;
     }
 
     static int access(String line, int repLen) {
