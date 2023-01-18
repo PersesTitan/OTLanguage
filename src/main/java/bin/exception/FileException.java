@@ -17,6 +17,8 @@ public class FileException extends RuntimeException {
     private final String noValidValues = "유효한 값을 받지 못하였습니다.";
     private final String didNotReadSystemFile = "system.otls파일을 읽어올 수 없습니다.";
     private final String compileError = "컴파일 할 수 없습니다.";
+    private final String didNotReadURL = "해당 URL를 읽을 수 없습니다.";
+    private final String didCreateTemp = "임시 파일 생성에 실패하였습니다.";
 
     public FileException() {}
 
@@ -36,6 +38,8 @@ public class FileException extends RuntimeException {
             case noValidValues -> "No valid values were received.\nPlease try again or reinstall.";
             case didNotReadSystemFile -> "Unable to read system.otls file.\nPlease check if the file is present and check if it is damaged.\nPath : " + SYSTEM_PATH;
             case compileError -> "Unable to compile. \nPlease solve the error and try again.";
+            case didNotReadURL -> String.join("The URL could not be read.\nPlease check the link. (%s)", url);
+            case didCreateTemp -> "Temporary file creation failed.\nPlease check the file settings and path.";
             default -> "";
         };
         if (path == null || path.isBlank()) ErrorMessage.printErrorMessage(e, subMessage);
@@ -48,6 +52,16 @@ public class FileException extends RuntimeException {
                     "The file and directory do not exist in that path.\n" +
                     "Please check the path.", path, line, position);
         else printErrorMessage(e, path);
+    }
+
+    public FileException didCreateTemp() {
+        return new FileException(didCreateTemp);
+    }
+
+    private String url;
+    public FileException didNotReadURL(String url) {
+        this.url = url;
+        return new FileException(didNotReadURL);
     }
 
     public FileException compileError() {
