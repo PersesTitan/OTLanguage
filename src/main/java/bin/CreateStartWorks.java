@@ -1,5 +1,6 @@
 package bin;
 
+import bin.define.method.MethodVoid;
 import work.v3.StartWorkV3;
 
 import java.util.Arrays;
@@ -9,6 +10,7 @@ import java.util.StringTokenizer;
 
 import static bin.apply.Repository.*;
 import static bin.token.LoopToken.*;
+import static bin.token.MergeToken.access;
 
 public interface CreateStartWorks {
     enum Item {
@@ -61,9 +63,12 @@ public interface CreateStartWorks {
             if (count == -1) return null;
             return containsVariable(methodName.substring(count), repositoryArray.get(count)) ? startVariable : null;
         } else if (startItem.equals(Item.METHOD)) {
-            if (repositoryArray.get(0).get(METHOD).containsKey(klassName)
+            int count = access(klassName, repositoryArray.size());
+            if (count == -1) return null;
+            klassName = klassName.substring(count);
+            if (repositoryArray.get(count).get(METHOD).containsKey(klassName)
                     && methodName.startsWith("[")
-                    && methodName.endsWith("]")) return methodVoid;
+                    && methodName.endsWith("]")) return MethodVoid.getInstance();
         }
 
         var map = priority
