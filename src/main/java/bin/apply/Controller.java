@@ -10,12 +10,18 @@ import bin.exception.FileException;
 import bin.orign.GetSetVariable;
 import bin.orign.loop.For;
 import bin.string.list.AggregationList;
+import org.apache.taglibs.standard.util.UrlUtil;
 
 import java.io.*;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Locale;
 
 import static bin.apply.Setting.debugMode;
+import static bin.apply.sys.item.Separator.SEPARATOR_FILE;
 import static bin.apply.sys.item.Separator.SEPARATOR_LINE;
+import static bin.token.Token.ACCESS;
 import static bin.token.Token.REMARK;
 
 public interface Controller {
@@ -81,6 +87,44 @@ public interface Controller {
         } catch (IOException e) {
             if (StartLine.developmentMode) e.printStackTrace();
             throw new FileException().noReadError();
+        }
+    }
+
+    // URL
+    static boolean isURL(String url) {
+        if (url.toLowerCase(Locale.ROOT).startsWith("http")) {
+            try {
+                new URL(url).toURI();
+                return true;
+            } catch (URISyntaxException | MalformedURLException e) {
+                return false;
+            }
+        } else return false;
+    }
+
+    static void readURL(String link, StringBuilder total) throws RuntimeException {
+        try {
+            final URL url = new URL(link);
+            try (InputStream ips = url.openConnection().getInputStream();
+                 InputStreamReader isr = new InputStreamReader(ips);
+                 BufferedReader reader = new BufferedReader(isr)) {
+                // 링크 읽기
+                reader.lines().forEach(line -> total.append(SEPARATOR_LINE).append(line));
+            }
+        } catch (IOException e) {
+            throw new FileException().didNotReadURL(link);
+        }
+    }
+
+    // 임시 파일 생성
+    static File createTempFile(String fileName, String suffix, String content) {
+        try {
+            File file = File.createTempFile(fileName.replace(ACCESS, SEPARATOR_FILE), suffix);
+            file.deleteOnExit();
+            Files.write(file.toPath(), content.getBytes());
+            return file;
+        } catch (IOException e) {
+            throw new FileException().didCreateTemp();
         }
     }
 }
