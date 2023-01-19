@@ -1,5 +1,6 @@
 package bin;
 
+import bin.define.method.MethodReturn;
 import bin.exception.MatchException;
 import work.v3.ReturnWorkV3;
 
@@ -12,6 +13,7 @@ import java.util.regex.Pattern;
 
 import static bin.apply.Repository.*;
 import static bin.token.LoopToken.METHOD;
+import static bin.token.MergeToken.access;
 import static bin.token.VariableToken.*;
 
 public interface CreateReturnWorks {
@@ -107,9 +109,12 @@ public interface CreateReturnWorks {
             if (count == -1) return null;
             return containsVariable(methodName.substring(count), repositoryArray.get(count)) ? variable : null;
         } else if (returnItem.equals(ReturnItem.METHOD)) {
-            if (repositoryArray.get(0).get(METHOD).containsKey(klassName)
+            int count = access(klassName, repositoryArray.size());
+            if (count == -1) return null;
+            klassName = klassName.substring(count);
+            if (repositoryArray.get(count).get(METHOD).containsKey(klassName)
                     && methodName.startsWith("[")
-                    && methodName.endsWith("]")) return methodReturn;
+                    && methodName.endsWith("]")) return MethodReturn.getInstance();
         }
 
         Map<String, ReturnWorkV3> returnWork;
