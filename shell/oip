@@ -1,0 +1,59 @@
+#!/bin/sh
+
+abort() {
+  printf "%s\n" "$@" >&2
+  exit 1
+}
+
+finish() {
+  printf "%s\n" "$@" >&2
+  exit 0
+}
+
+# shellcheck disable=SC2046
+OTL_HOME="$(dirname $(dirname "$0"))"
+
+# shellcheck disable=SC2034
+case "${SHELL}" in
+  "/bin/bash"|*bash*) ALIAS=~/.bashrc ;;
+  "/bin/zsh"|*zsh*) ALIAS=~/.zshrc ;;
+  *) abort "${SHELL} - Unsupported Shell." ;;
+esac
+
+installFile() {
+  wget https://github.com/OTLanguage/module/raw/main/"${1}" -P "${2}"
+}
+
+# shellcheck disable=SC2039
+installModule() {
+  READ_HTTP="$(wget https://raw.githubusercontent.com/OTLanguage/module/main/"${1}"/system.otls -q -O -)"
+  if [ -z "${READ_HTTP}" ]; then
+    abort "The '${1}' module was not found"
+  fi
+  TYPE=""
+  for line in ${READ_HTTP} ; do
+    if [[ "$line" == *: ]]; then
+      TYPE="${line:0:${#line}-1}"
+    elif [ -z "${TYPE}" ] || [ -z "${line}" ]; then
+      continue
+    else
+      case "${TYPE}" in
+        "class") FILE_PATH="${OTL_HOME}/analyzer/cos/$(echo "$line" | sed -e "s/~/\//g")" ;;
+        "jar") FILE_PATH="${OTL_HOME}/module/${1}/${line}" ;;
+        "other") FILE_PATH="${OTL_HOME}/module/${1}/${line}" ;;
+        *) abort "This type cannot be downloaded ${TYPE}" ;;
+      esac
+      FILE_NAME=$(basename "${FILE_PATH}")
+      DOWNLOAD_PATH="${FILE_PATH:0:${#FILE_PATH}-${#FILE_NAME}-1}"
+      install_file "${1}/${FILE_NAME}" "${DOWNLOAD_PATH}"
+    fi
+  done
+}
+
+
+case "${1}" in
+    "${installOption}")
+      ;;
+esac
+
+echo "$(basename "${0}")"
