@@ -21,11 +21,30 @@ case "${SHELL}" in
 esac
 
 installFile() {
-  wget https://github.com/OTLanguage/module/raw/main/"${1}" -P "${2}"
+  wget https://github.com/OTLanguage/module/raw/main/"${1}" -O "${2}"
+}
+
+# 1 : url, 2 : file name
+urlCheck() {
+  URL="$(wget "${1}" -q -O -)"
+  if [ -z "${URL}" ]; then
+    abort "The '${2}' file was not found"
+  fi
+}
+
+# ex) 1 : ".class", 2 : "file path"
+removeDir() {
+  rm -f "${2}/"*"${1}"
+  for dir in "${2}"/* ; do
+    if [ -d "${dir}" ]; then
+      removeDir "${1}" "${dir}"
+    fi
+  done
+  rm -d "${2}"
 }
 
 # shellcheck disable=SC2039
-installModule() {
+install1() {
   READ_HTTP="$(wget https://raw.githubusercontent.com/OTLanguage/module/main/"${1}"/system.otls -q -O -)"
   if [ -z "${READ_HTTP}" ]; then
     abort "The '${1}' module was not found"
@@ -45,15 +64,86 @@ installModule() {
       esac
       FILE_NAME=$(basename "${FILE_PATH}")
       DOWNLOAD_PATH="${FILE_PATH:0:${#FILE_PATH}-${#FILE_NAME}-1}"
-      install_file "${1}/${FILE_NAME}" "${DOWNLOAD_PATH}"
+      installFile "${1}/${FILE_NAME}" "${DOWNLOAD_PATH}"
     fi
   done
+  exit 0
 }
 
+# 1 : model name, 2 : add model
+install2() {
+  EXT="$(wget https://raw.githubusercontent.com/OTLanguage/module/main/"${1}"/add.otls -q -O -)"
+  if [ -z "${EXT}" ]; then
+    abort "${1} is a module that does not exist"
+  fi
+  FILE_NAME="${2}${EXT}"
+  rm "${OTL_HOME}/module/${1}/${FILE_NAME}"
+  wget https://github.com/OTLanguage/module/raw/main/"${1}"/"${FILE_NAME}" -P "${OTL_HOME}/module/${1}"
+  exit 0
+}
 
-case "${1}" in
-    "${installOption}")
+# shellcheck disable=SC2162 disable=SC2039
+update0() {
+  read -p "Do you want to reinstall the OTLanguage file? (y/n) : " CHECK
+  if [ "${CHECK}" != "y" ]; then
+    finish "Cancel the deletion"
+  fi
+  removeDir ".class" "${OTL_HOME}/analyzer/bin"
+  removeDir ".class" "${OTL_HOME}/analyzer/work"
+  rm -f "${OTL_HOME}/analyzer/Main"*".class"
+  wget https://github.com/OTLanguage/download-tool/raw/main/analyzer.zip -P "${OTL_HOME}"
+  unzip "${OTL_HOME}/analyzer.zip" -d "${OTL_HOME}/analyzer"
+  rm -f "${OTL_HOME}/analyzer.zip"
+  exit 0
+}
+
+# shellcheck disable=SC2162 disable=SC2039
+update1() {
+  read -p "Do you want to reinstall the ${1} file? (y/n) : " CHECK
+  if [ "${CHECK}" != "y" ]; then
+    finish "Cancel the updates"
+  fi
+  modulePath="${OTL_HOME}/analyzer/cos/${1}"
+  if [ -d "${modulePath}" ]; then
+    removeDir ".class" "${modulePath}"
+    rm -f "${OTL_HOME}/module/${1}/"*".jar"
+
+    mkdir "${modulePath}"
+    install1 "${1}"
+    exit 0
+  else
+    abort "This module is not downloaded"
+  fi
+}
+
+# 1 : module name, 2 : add name
+
+io="install"
+up="update"
+re="remove"
+
+# Cancel the deletion
+
+option="${1}"
+shift
+# shellcheck disable=SC2039
+case "${option}" in
+    "${io}")
+      case ${#@} in
+        1) install1 "${1}" ;;
+        2) install2 "${1}" "${2}" ;;
+      esac
+      ;;
+    "${up}")
+      case ${#@} in
+        0) update0 ;;
+        1) update1 "${1}" ;;
+      esac
+      ;;
+    "${re}")
+      case ${#@} in
+      esac
       ;;
 esac
 
-echo "$(basename "${0}")"
+abort "option : ${io}, ${up}, ${re}"
