@@ -11,7 +11,7 @@ public class LoopMap extends HashMap<String, MethodMap> {
     private static final long serialVersionUID = -4460826311801706685L;
 
     public <T extends LoopCountMap> void put(String klass, String method, LoopWork work, T map) {
-        if (super.containsKey(klass)) super.get(klass).put(method, map.get());
+        if (super.containsKey(klass)) super.get(klass).put(method, work);
         else super.put(klass, new MethodMap(method, map));
     }
 
