@@ -3,10 +3,13 @@ package bin.apply.repository.loop;
 import bin.exception.MatchException;
 import bin.exception.VariableException;
 import bin.token.check.CheckToken;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import work.LoopWork;
 
 import java.util.HashMap;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoopCountMap extends HashMap<Integer, LoopWork> {
     public LoopCountMap(LoopWork work) {
         this.put(work);
