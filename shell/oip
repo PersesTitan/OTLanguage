@@ -117,13 +117,11 @@ update1() {
 }
 
 # 1 : module name, 2 : add name
-
 io="install"
 up="update"
 re="remove"
 
 # Cancel the deletion
-
 option="${1}"
 shift
 # shellcheck disable=SC2039
