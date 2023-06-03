@@ -33,6 +33,15 @@ findJar() {
   echo "${OTL_HOME}/${1}/*.jar"
 }
 
+# shellcheck disable=SC2006 disable=SC2039
+version() {
+  if [ ${#@} = 1 ]; then
+    abort "option error"
+  else
+    finish "OTLanguage version " `${OTL_START} -Dfile.encoding=UTF-8 -classPath "${JAR_PATH[0]}" Main "${1}"`
+  fi
+}
+
 # shellcheck disable=SC2039 disable=SC2034
 case ${#@} in
   0) ARGS=() ;;
@@ -54,8 +63,11 @@ fi
 
 # shellcheck disable=SC2039
 JAR_FILES=("${OTL_HOME}/analyzer")
+
+# shellcheck disable=SC2039 disable=SC2006
 while [ -n "${1}" ]; do
   case "${1}" in
+    "-version") version "-v" ;;
     *) break ;;
   esac
   shift
@@ -69,7 +81,8 @@ if [ ${#ARGS[@]} = 0 ]; then
   JAR_PATH=$(IFS=: ; echo "${JAR_FILES[*]}")
   $OTL_START -Dfile.encoding=UTF-8 -classPath "${JAR_PATH}" Main ""
 else
-  for module in `${OTL_START} -Dfile.encoding=UTF-8 -classPath "${JAR_PATH[0]}" Main 'SHELL' "${ARGS[0]}"` ; do
+  # compile shell
+  for module in `${OTL_START} -Dfile.encoding=UTF-8 -classPath "${JAR_PATH[0]}" Main "-c" "${ARGS[0]}"` ; do
     JAR_FILES+=(`findJar "${module}"`)
   done
   JAR_PATH=$(IFS=: ; echo "${JAR_FILES[*]}")
