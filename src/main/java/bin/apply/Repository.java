@@ -1,44 +1,64 @@
 package bin.apply;
 
-import bin.apply.sys.item.HpMap;
-import bin.orign.variable.StartVariable;
-import bin.orign.variable.Variable;
-import work.v3.ReturnWorkV3;
-import work.v3.StartWorkV3;
+import bin.apply.create.CreateOtherList;
+import bin.apply.create.CreateOtherMap;
+import bin.apply.create.CreateOtherSet;
+import bin.apply.mode.TypeMode;
+import bin.apply.repository.CodesMap;
+import bin.apply.repository.create.CreateMap;
+import bin.apply.repository.loop.LoopMap;
+import bin.apply.repository.method.KlassMap;
+import bin.apply.repository.variable.AccessList;
+import bin.apply.work.other.ForEachOtherList;
+import bin.apply.work.other.ForEachOtherMap;
+import bin.apply.work.other.ForEachOtherSet;
+import bin.token.work.StringToken;
+import bin.token.work.SystemToken;
+import bin.apply.work.system.CreateSystem;
+import bin.apply.work.error.CreateThrow;
+import bin.token.work.ThrowToken;
+import bin.apply.work.loop.ForEachList;
+import bin.apply.work.loop.ForEachMap;
+import bin.apply.work.loop.ForEachSet;
+import bin.apply.work.loop.ForEachString;
+import bin.apply.work.system.*;
 
-import java.util.*;
-
-import static bin.token.ConsoleToken.SCANNER;
-import static bin.token.LoopToken.*;
-import static bin.token.cal.BoolToken.*;
-import static bin.token.cal.NumberToken.MINUS_CALCULATOR_S;
+import static bin.token.KlassToken.*;
+import static work.ResetWork.*;
 
 public interface Repository {
-    List<String> repositoryItems = new ArrayList<>(TOTAL_LIST) {{
-        add(METHOD);
+    AccessList repositoryArray = new AccessList();
+    CreateMap createWorks = new CreateMap() {{
+        create(SYSTEM, new CreateSystem());
+        create(ThrowToken.THROW, new CreateThrow());
+        create(TypeMode.INTEGER, Integer.class);
+        create(TypeMode.LONG, Long.class);
+        create(TypeMode.BOOLEAN, Boolean.class);
+        create(TypeMode.STRING, String.class);
+        create(TypeMode.CHARACTER, Character.class);
+        create(TypeMode.FLOAT, Float.class);
+        create(TypeMode.DOUBLE, Double.class);
+        put(LIST, new CreateOtherList());
+        put(SET, new CreateOtherSet());
+        put(MAP, new CreateOtherMap());
     }};
-    LinkedList<Map<String, Map<String, Object>>> repository = new LinkedList<>() {{
-        add(new HashMap<>() {{
-            repositoryItems.forEach(v -> put(v, new HpMap(v)));
-        }});
+    KlassMap methodWorks = new KlassMap() {{
+        SystemToken.reset(this);
+        ThrowToken.reset(this);
+        StringToken.reset(this);
     }};
 
-    Set<String> noUse = new HashSet<>() {{
-        add(SCANNER); add(TRUE); add(FALSE);
-        add(NOT); add(OR); add(AND);
-        add(MINUS_CALCULATOR_S);
-        addAll(MAP_LIST);
+    LoopMap loopWorks = new LoopMap() {{
+        put(SYSTEM, SystemToken.WHILE, new While());
+        put(s, SystemToken.FOR_EACH, new ForEachString());
+        put(SET, SystemToken.FOR_EACH, new ForEachOtherSet());
+        put(LIST, SystemToken.FOR_EACH, new ForEachOtherList());
+        put(MAP, SystemToken.FOR_EACH, new ForEachOtherMap());
+        for (TypeMode mode : TypeMode.values()) {
+            put(mode.getSet(), SystemToken.FOR_EACH, new ForEachSet(mode));
+            put(mode.getList(), SystemToken.FOR_EACH, new ForEachList(mode));
+            put(mode.getMap(), SystemToken.FOR_EACH, new ForEachMap(mode));
+        }
     }};
-
-    static boolean containsVariable(String variable, Map<String, Map<String, Object>> repository) {
-        return TOTAL_LIST.stream().anyMatch(v -> repository.get(v).containsKey(variable));
-    }
-
-    // Version 3
-    Variable variable = new Variable(1);
-    StartVariable startVariable = new StartVariable(2);
-
-    HashMap<String, Map<String, StartWorkV3>> priorityStartWorksV3 = new HashMap<>();
-    HashMap<String, Map<String, StartWorkV3>> startWorksV3 = new HashMap<>();
-    HashMap<String, Map<String, ReturnWorkV3>> returnWorksV3 = new HashMap<>();
+    CodesMap code = new CodesMap();
 }
