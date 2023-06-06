@@ -6,7 +6,7 @@ import bin.apply.item.ParamItem;
 import bin.apply.work.error.ThrowItem;
 import bin.apply.line.LineTool;
 import bin.apply.line.parser.LoopLine;
-import bin.apply.work.ThrowToken;
+import bin.token.work.ThrowToken;
 import bin.exception.Error;
 import bin.exception.MatchException;
 import bin.exception.VariableException;
