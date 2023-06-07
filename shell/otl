@@ -3,6 +3,7 @@
 # shellcheck disable=SC2046
 OTL_HOME="$(dirname $(dirname "$0"))"
 OTL_START="${OTL_HOME}/run-tool/bin/otl"
+#OTL_RUN="${OTL_START} -Dfile.encoding=UTF-8 -classpath"
 
 abort() {
   printf "%s\n" "$@" >&2
@@ -30,17 +31,29 @@ findJar() {
   if ! [ -d "${OTL_HOME}/${1}" ]; then
     abort "The '${1}' module was not found"
   fi
-  echo "${OTL_HOME}/${1}/*.jar"
+  echo "${OTL_HOME}/${1}/"*.jar
 }
 
 # shellcheck disable=SC2006 disable=SC2039
 version() {
-  if [ ${#@} = 1 ]; then
+  if [ ${#@} != 1 ]; then
     abort "option error"
   else
-    finish "OTLanguage version " `${OTL_START} -Dfile.encoding=UTF-8 -classPath "${JAR_PATH[0]}" Main "${1}"`
+    finish "OTLanguage version $(${OTL_START} -Dfile.encoding=UTF-8 -classpath "${JAR_FILES[0]}" Main "${1}")"
   fi
 }
+
+# shellcheck disable=SC2039
+JAR_FILES=("${OTL_HOME}/analyzer")
+
+# shellcheck disable=SC2039 disable=SC2006
+while [ -n "${1}" ]; do
+  case "${1}" in
+    "--version"|"-v") version "-v" ;;
+    *) break ;;
+  esac
+  shift
+done
 
 # shellcheck disable=SC2039 disable=SC2034
 case ${#@} in
@@ -61,30 +74,18 @@ if ! [ -x "${OTL_START}" ]; then
   abort "Unable to execute '$(basename "${OTL_START}")' file."
 fi
 
-# shellcheck disable=SC2039
-JAR_FILES=("${OTL_HOME}/analyzer")
-
-# shellcheck disable=SC2039 disable=SC2006
-while [ -n "${1}" ]; do
-  case "${1}" in
-    "-version") version "-v" ;;
-    *) break ;;
-  esac
-  shift
-done
-
-# shellcheck disable=SC2039 disable=SC2006 disable=SC2207 disable=SC2116
+# shellcheck disable=SC2039 disable=SC2006 disable=SC2207 disable=SC2116 disable=SC2045
 if [ ${#ARGS[@]} = 0 ]; then
-  for module in `echo "${OTL_HOME}/module/*"` ; do
+  for module in `ls "${OTL_HOME}/module"` ; do
     JAR_FILES+=(`findJar "${module}"`)
   done
   JAR_PATH=$(IFS=: ; echo "${JAR_FILES[*]}")
-  $OTL_START -Dfile.encoding=UTF-8 -classPath "${JAR_PATH}" Main ""
+  $OTL_START -Dfile.encoding=UTF-8 -classpath "${JAR_PATH}" Main ""
 else
   # compile shell
-  for module in `${OTL_START} -Dfile.encoding=UTF-8 -classPath "${JAR_PATH[0]}" Main "-c" "${ARGS[0]}"` ; do
+  for module in `${OTL_START} -Dfile.encoding=UTF-8 -classpath "${JAR_PATH[0]}" Main "-c" "${ARGS[0]}"` ; do
     JAR_FILES+=(`findJar "${module}"`)
   done
   JAR_PATH=$(IFS=: ; echo "${JAR_FILES[*]}")
-  $OTL_START -Dfile.encoding=UTF-8 -classPath "${JAR_PATH}" Main "" "${ARGS[@]}"
+  $OTL_START -Dfile.encoding=UTF-8 -classpath "${JAR_PATH}" Main "" "${ARGS[@]}"
 fi

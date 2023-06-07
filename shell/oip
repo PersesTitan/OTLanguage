@@ -21,7 +21,7 @@ case "${SHELL}" in
 esac
 
 installFile() {
-  wget https://github.com/OTLanguage/module/raw/main/"${1}" -O "${2}"
+  wget https://github.com/OTLanguage/module/raw/main/"${1}" -P "${2}"
 }
 
 # 1 : url, 2 : file name
@@ -35,7 +35,7 @@ urlCheck() {
 # ex) 1 : ".class", 2 : "file path"
 removeDir() {
   rm -f "${2}/"*"${1}"
-  for dir in "${2}"/* ; do
+  for dir in "${2}/"* ; do
     if [ -d "${dir}" ]; then
       removeDir "${1}" "${dir}"
     fi
@@ -43,15 +43,25 @@ removeDir() {
   rm -d "${2}"
 }
 
-# shellcheck disable=SC2039
+# shellcheck disable=SC2039 disable=SC2162
 install1() {
   READ_HTTP="$(wget https://raw.githubusercontent.com/OTLanguage/module/main/"${1}"/system.otls -q -O -)"
   if [ -z "${READ_HTTP}" ]; then
     abort "The '${1}' module was not found"
+  elif [ -d "${OTL_HOME}/module/${1}" ] || [ -d "${OTL_HOME}/analyzer/cos/${1}" ] ; then
+    # 설치 되어 있는지 확인
+    read -p "The ${1} file already exists. Do you want to reinstall? (y/n) : " CHECK
+    if [ "${CHECK}" = "y" ]; then
+      rm -rf "${OTL_HOME}/module/${1}"
+      rm -rf "${OTL_HOME}/analyzer/cos/${1}"
+    else
+      finish "Cancel the install"
+    fi
   fi
   TYPE=""
   for line in ${READ_HTTP} ; do
     if [[ "$line" == *: ]]; then
+      # class, jar, other
       TYPE="${line:0:${#line}-1}"
     elif [ -z "${TYPE}" ] || [ -z "${line}" ]; then
       continue
@@ -62,24 +72,37 @@ install1() {
         "other") FILE_PATH="${OTL_HOME}/module/${1}/${line}" ;;
         *) abort "This type cannot be downloaded ${TYPE}" ;;
       esac
-      FILE_NAME=$(basename "${FILE_PATH}")
+      FILE_NAME=$(basename "${FILE_PATH}") # ex) Reset.class
       DOWNLOAD_PATH="${FILE_PATH:0:${#FILE_PATH}-${#FILE_NAME}-1}"
       installFile "${1}/${FILE_NAME}" "${DOWNLOAD_PATH}"
     fi
   done
-  exit 0
+  finish "install finish"
 }
 
 # 1 : model name, 2 : add model
+# shellcheck disable=SC2162 disable=SC2039
 install2() {
   EXT="$(wget https://raw.githubusercontent.com/OTLanguage/module/main/"${1}"/add.otls -q -O -)"
   if [ -z "${EXT}" ]; then
     abort "${1} is a module that does not exist"
   fi
   FILE_NAME="${2}${EXT}"
-  rm "${OTL_HOME}/module/${1}/${FILE_NAME}"
-  wget https://github.com/OTLanguage/module/raw/main/"${1}"/"${FILE_NAME}" -P "${OTL_HOME}/module/${1}"
-  exit 0
+  # 추가 파일이 존재하는지 확인
+  if [ -f "${OTL_HOME}/module/${1}/${FILE_NAME}" ]; then
+    # 파일이 존재할때 재설치 확인
+    read -p "The ${FILE_NAME} file already exists. Do you want to reinstall? (y/n) : " CHECK
+    if [ "${CHECK}" = "y" ]; then
+      rm "${OTL_HOME}/module/${1}/${FILE_NAME}"
+      wget https://github.com/OTLanguage/module/raw/main/"${1}"/"${FILE_NAME}" -P "${OTL_HOME}/module/${1}"
+      finish "reinstall finish"
+    else
+      finish "Cancel the install"
+    fi
+  else
+    wget https://github.com/OTLanguage/module/raw/main/"${1}"/"${FILE_NAME}" -P "${OTL_HOME}/module/${1}"
+    finish "install finish"
+  fi
 }
 
 # shellcheck disable=SC2162 disable=SC2039
@@ -94,7 +117,7 @@ update0() {
   wget https://github.com/OTLanguage/download-tool/raw/main/analyzer.zip -P "${OTL_HOME}"
   unzip "${OTL_HOME}/analyzer.zip" -d "${OTL_HOME}/analyzer"
   rm -f "${OTL_HOME}/analyzer.zip"
-  exit 0
+  finish "finish update"
 }
 
 # shellcheck disable=SC2162 disable=SC2039
@@ -110,14 +133,53 @@ update1() {
 
     mkdir "${modulePath}"
     install1 "${1}"
-    exit 0
+    finish "finish update ${1}"
   else
     abort "This module is not downloaded"
   fi
 }
 
+# shellcheck disable=SC2162 disable=SC2039 disable=SC2016 disable=SC2157 disable=SC1090
+remove0() {
+  read -p "Are you sure you want to remove this OTLanguage file? (y/n) : " CHECK
+  if [ "${CHECK}" != "y" ]; then
+    finish "Cancel the remove"
+  fi
+  if [ "$(basename "${OTL_HOME}")" != "OTLanguage" ] || ! [ -f "${OTL_HOME}/.otl/$(basename "${0}")" ]; then
+    abort "file path error: ${OTL_HOME}"
+  fi
+  rm -rf "${OTL_HOME}"
+  # check otl path and delete
+  if [[ "$(cat ${ALIAS})" == *'export PATH="${OTL_HOME}/.otl:${PATH}"'* ]]; then
+    sed -i '/export PATH="${OTL_HOME}\/.otl:${PATH}"/d' ${ALIAS}
+  elif [[ "$(cat ${ALIAS})" == *'export PATH="${PATH}:${OTL_HOME}/.otl"'* ]]; then
+    sed -i '/export PATH="${PATH}:${OTL_HOME}\/.otl"/d' ${ALIAS}
+  fi
+  # check OTL_HOME and delete
+  if [[ "$(cat ${ALIAS})" == *"export OTL_HOME="* ]]; then
+    sed -i '/export OTL_HOME=/d' ${ALIAS}
+  fi
+  source "${ALIAS}"
+  finsh "finish remove OTLanguage"
+}
+
+# shellcheck disable=SC2039 disable=SC2162
+remove1() {
+  if [ -d "${OTL_HOME}/analyzer/cos/${1}" ] || [ -d "${OTL_HOME}/module/${1}" ]; then
+    read -p "Are you sure you want to remove this ${1} file? (y/n) : " CHECK
+    if [ "${CHECK}" != "y" ]; then
+      finish "Cancel the remove module"
+    fi
+    rm -rf "${OTL_HOME}/analyzer/cos/${1}"
+    rm -rf "${OTL_HOME}/module/${1}"
+    finish "finish remove ${1} module"
+  else
+    abort "error: do not find ${1}"
+  fi
+}
+
 # 1 : module name, 2 : add name
-io="install"
+in="install"
 up="update"
 re="remove"
 
@@ -126,7 +188,7 @@ option="${1}"
 shift
 # shellcheck disable=SC2039
 case "${option}" in
-    "${io}")
+    "${in}")
       case ${#@} in
         1) install1 "${1}" ;;
         2) install2 "${1}" "${2}" ;;
@@ -140,8 +202,13 @@ case "${option}" in
       ;;
     "${re}")
       case ${#@} in
+        0) remove0 ;;
+        1) remove1 "${1}" ;;
       esac
       ;;
 esac
 
-abort "option : ${io}, ${up}, ${re}"
+filename="$(basename "${0}")"
+abort "Usage: ${filename} <${in}> <module name> [add file]" \
+"   or  ${filename} <${up}> [module name]" \
+"   or  ${filename} <${re}> [module name]"
