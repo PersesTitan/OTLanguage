@@ -46,6 +46,7 @@ public class CreateMap extends HashMap<String, CountMap> {
     }
 
     public CreateWork<?> get(String key) {
-        return super.get(key).get();
+        if (super.containsKey(key)) return super.get(key).get();
+        else throw VariableException.TYPE_ERROR.getThrow(key);
     }
 }
