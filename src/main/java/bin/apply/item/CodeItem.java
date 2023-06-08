@@ -3,7 +3,6 @@ package bin.apply.item;
 import bin.apply.line.LineTool;
 import bin.exception.Error;
 import bin.exception.SystemException;
-import lombok.RequiredArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,6 +13,8 @@ public class CodeItem implements Serializable {
     @Serial
     private static final long serialVersionUID = -3491013047653565560L;
     public static final AtomicReference<CodeItem> MAIN = new AtomicReference<>();
+    public static final AtomicReference<String> RUN_PATH = new AtomicReference<>();
+    public static final String VERSION = "5.0.0";
 
     private final List<String> IMPORT = new ArrayList<>();
     protected final String PATH;
