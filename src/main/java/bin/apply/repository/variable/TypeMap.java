@@ -5,6 +5,7 @@ import bin.exception.VariableException;
 import bin.token.check.CheckToken;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class TypeMap extends HashMap<String, HpMap> {
     public void create(ParamItem paramItem, Object value) {
@@ -62,6 +63,10 @@ public class TypeMap extends HashMap<String, HpMap> {
         throw VariableException.NO_CREATE_VARIABLE.getThrow(name);
     }
 
+    public Object find(ParamItem item) {
+        return find(item.type(), item.name());
+    }
+
     public Object find(String type, String name) {
         return this.get(type).get(name);
     }
@@ -82,6 +87,12 @@ public class TypeMap extends HashMap<String, HpMap> {
 
     public boolean contains(String type, String name) {
         return super.containsKey(type) && super.get(type).containsKey(name);
+    }
+
+    // get Entry
+    public Map.Entry<String, Object> getEntry(String name) {
+        for (HpMap map : super.values()) if (map.containsKey(name)) return map.getEntry(name);
+        throw VariableException.NO_CREATE_VARIABLE.getThrow(name);
     }
 
     @Override
