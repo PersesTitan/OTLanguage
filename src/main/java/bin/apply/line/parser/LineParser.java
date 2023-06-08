@@ -11,7 +11,7 @@ import bin.apply.line.variable.CreateLine;
 import bin.apply.line.variable.UpdateLine;
 import bin.apply.mode.LoopMode;
 import bin.apply.work.system.Import;
-import bin.apply.work.SystemToken;
+import bin.token.work.SystemToken;
 import bin.exception.Error;
 import bin.exception.MatchException;
 import bin.parser.param.ParamToken;
