@@ -7,14 +7,15 @@ import bin.exception.SystemException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class CodeItem implements Serializable {
     @Serial
     private static final long serialVersionUID = -3491013047653565560L;
-    public static final AtomicReference<CodeItem> MAIN = new AtomicReference<>();
-    public static final AtomicReference<String> RUN_PATH = new AtomicReference<>();
     public static final String VERSION = "5.0.0";
+    public static CodeItem MAIN = null;
+    public static String RUT_PATH = null;
+//    public static final AtomicReference<CodeItem> MAIN = new AtomicReference<>();
+//    public static final AtomicReference<String> RUN_PATH = new AtomicReference<>();
 
     private final List<String> IMPORT = new ArrayList<>();
     protected final String PATH;
@@ -25,7 +26,7 @@ public class CodeItem implements Serializable {
         this.PATH = PATH;
         this.FILES = FILES;
         this.LINES = LINES;
-        MAIN.set(this);
+        MAIN = this;
     }
 
     public void start() {
@@ -56,14 +57,14 @@ public class CodeItem implements Serializable {
 
     // static
     public static void addModule(String module) {
-        CodeItem item = MAIN.get();
-        if (item != null) item.IMPORT.add(module);
+//        CodeItem item = MAIN.get();
+        if (MAIN != null) MAIN.IMPORT.add(module);
         else throw SystemException.CREATE_ERROR.getThrow(module);
     }
 
     public static boolean contains(String module) {
-        CodeItem item = MAIN.get();
-        if (item != null) return item.IMPORT.contains(module);
+//        CodeItem item = MAIN.get();
+        if (MAIN != null) return MAIN.IMPORT.contains(module);
         else throw SystemException.CREATE_ERROR.getThrow(module);
     }
 }
