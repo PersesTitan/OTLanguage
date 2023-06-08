@@ -1,7 +1,7 @@
 package bin.apply.work.error;
 
 import bin.apply.item.Item;
-import bin.apply.work.ThrowToken;
+import bin.token.work.ThrowToken;
 import bin.exception.Error;
 import bin.token.SepToken;
 import lombok.AccessLevel;
