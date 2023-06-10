@@ -1,106 +1,80 @@
 package bin.exception;
 
-import bin.apply.sys.item.SystemSetting;
+import bin.apply.mode.DebugMode;
+import bin.apply.mode.FileMode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import java.io.File;
+@Getter
+@RequiredArgsConstructor
+public enum FileException implements ErrorTool {
+    DO_NOT_INCLUDE("클래스 추가에 실패하였습니다."),
+    ADD_FAIL_ERROR("모듈을 추가하는데 실패하였습니다."),
+    DO_NOT_READ("파일을 읽을 수 없습니다."),
+    CREATE_FILE_ERROR("파일 생성하는데 실패하였습니다."),
+    CREATE_ICON_ERROR("아이콘을 생성에 실패하였습니다."),
+    DO_NOT_SUPPORT("지원하지 않는 확장자 입니다."),
+    DO_NOT_PATH("해당 경로에 파일 및 디렉토리가 존재하지 않습니다."),
+    FILE_TYPE_ERROR("파일 타입만 열 수 있습니다."),
+    DO_NOT_FIND("파일을 찾을 수 없습니다."),
+    ;
 
-import static bin.apply.sys.item.Separator.SYSTEM_PATH;
+    private final String message;
 
-public class FileException extends RuntimeException {
-    private final String noFindError = "파일을 찾을 수 없습니다.";
-    private final String pathNoHaveError = "해당 경로에 파일 및 디렉토리가 존재하지 않습니다.";
-    private final String noReadError = "파일을 읽을 수 없습니다.";
-    private final String isNotFileError = "파일만 열 수 있습니다.";
-    private final String rightExtension = "해당 확장자 형식을 읽을 수 없습니다.";
-    private final String alreadyExistsFileName = "이미 존재하는 파일명입니다.";
-    private final String addModuleError = "모듈 추가에 실패하였습니다.";
-    private final String noValidValues = "유효한 값을 받지 못하였습니다.";
-    private final String didNotReadSystemFile = "system.otls파일을 읽어올 수 없습니다.";
-    private final String compileError = "컴파일 할 수 없습니다.";
-    private final String didNotReadURL = "해당 URL를 읽을 수 없습니다.";
-    private final String didCreateTemp = "임시 파일 생성에 실패하였습니다.";
 
-    public FileException() {}
-
-    public FileException(String message) {
-        super(message);
-    }
-
-    public void printErrorMessage(FileException e, String path) {
-        String subMessage = switch (e.getMessage()) {
-            case noFindError -> "File not found.\nPlease check the file location and path.";
-            case noReadError -> "The file could not be read.\nPlease check if the contents of the file are corrupted.";
-            case isNotFileError -> "Only files can be opened.\nPlease check if the path is a file.";
-            case pathNoHaveError -> "The file and directory do not exist in that path.\nPlease check the path.";
-            case rightExtension -> "The extension currently readable by OTLanguage is (" + SystemSetting.getExtension() + ").";
-            case alreadyExistsFileName -> "This is a file name that already exists.\nPlease change the file name.";
-            case addModuleError -> "Failed to add module.\nPlease check if there is a module file.";
-            case noValidValues -> "No valid values were received.\nPlease try again or reinstall.";
-            case didNotReadSystemFile -> "Unable to read system.otls file.\nPlease check if the file is present and check if it is damaged.\nPath : " + SYSTEM_PATH;
-            case compileError -> "Unable to compile. \nPlease solve the error and try again.";
-            case didNotReadURL -> String.join("The URL could not be read.\nPlease check the link. (%s)", url);
-            case didCreateTemp -> "Temporary file creation failed.\nPlease check the file settings and path.";
-            default -> "";
+    @Override
+    public String getSubMessage() {
+        return switch (this) {
+            case DO_NOT_FIND ->
+                    """
+                    File not found.
+                    Please check the file location and path.
+                    """;
+            case FILE_TYPE_ERROR ->
+                    """
+                    Only files can be opened.
+                    Please check if the path is a file.
+                    """;
+            case DO_NOT_PATH ->
+                    """
+                    The file and directory do not exist in that path.
+                    Please check the path.
+                    """;
+            case DO_NOT_SUPPORT ->
+                    """
+                    Unsupported extension.
+                    Please make sure that it matches the following extensions.
+                    """.strip() + FileMode.extensionList();
+            case CREATE_ICON_ERROR ->
+                    """
+                    Failed to create icon.
+                    Please check the "icon.otlm" file.
+                    """;
+            case CREATE_FILE_ERROR ->
+                    """
+                    Failed to create file.
+                    Please check the file location and path.
+                    """;
+            case DO_NOT_READ ->
+                    """
+                    The file could not be read.
+                    Please check if the contents of the file are corrupted.
+                    """;
+            case DO_NOT_INCLUDE ->
+                    """
+                    Failed to add class.
+                    Please download the file again or try again.
+                    """;
+            case ADD_FAIL_ERROR ->
+                    """
+                    Failed to add module.
+                    Please try again.
+                    """;
         };
-        if (path == null || path.isBlank()) ErrorMessage.printErrorMessage(e, subMessage);
-        else ErrorMessage.printErrorMessage(e, subMessage, path);
     }
 
-    public void printErrorMessage(FileException e, String path, String line, long position) {
-        if (e.getMessage().equals(pathNoHaveError))
-            ErrorMessage.printErrorMessage(e,
-                    "The file and directory do not exist in that path.\n" +
-                    "Please check the path.", path, line, position);
-        else printErrorMessage(e, path);
-    }
-
-    public FileException didCreateTemp() {
-        return new FileException(didCreateTemp);
-    }
-
-    private String url;
-    public FileException didNotReadURL(String url) {
-        this.url = url;
-        return new FileException(didNotReadURL);
-    }
-
-    public FileException compileError() {
-        return new FileException(compileError);
-    }
-
-    public FileException didNotReadSystemFile() {
-        return new FileException(didNotReadSystemFile);
-    }
-
-    public FileException noValidValues() {
-        return new FileException(noValidValues);
-    }
-
-    public FileException addModuleError() {
-        return new FileException(addModuleError);
-    }
-
-    public FileException alreadyExistsFileName() {
-        return new FileException(alreadyExistsFileName);
-    }
-
-    public FileException noFindError() {
-        return new FileException(noFindError);
-    }
-
-    public FileException pathNoHaveError() {
-        return new FileException(pathNoHaveError);
-    }
-
-    public FileException noReadError() {
-        return new FileException(noReadError);
-    }
-
-    public FileException isNotFileError() {
-        return new FileException(isNotFileError);
-    }
-
-    public FileException rightExtension() {
-        return new FileException(rightExtension);
+    @Override
+    public Error getThrow(String error) {
+        return new Error(this, error);
     }
 }
