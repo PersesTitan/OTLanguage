@@ -1,101 +1,59 @@
 package bin.exception;
 
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Pattern;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import static bin.calculator.tool.CalculatorTool.compare;
-import static bin.token.LoopToken.ELSE_IF;
-import static bin.token.cal.BoolToken.*;
+@Getter
+@RequiredArgsConstructor
+public enum MatchException implements ErrorTool {
+    GRAMMAR_ERROR("문법이 일치하지 않습니다."),
+    NUMBER_GRAMMAR_ERROR("계산 문법이 유효하지 않습니다."),
+    ZONE_MATCH_ERROR("괄호가 일치하지 않아 존을 사용할 수 없습니다."),
+    PARAM_COUNT_ERROR("파라미터 길이가 유효하지 않습니다."),
+    CREATE_KLASS_ERROR("해당 위치에서 클래스를 생성할 수 없습니다."),
+    CREATE_METHOD_ERROR("해당 위치에서 메소드를 생성 할 수 없습니다."),
+    ;
 
-public class MatchException extends RuntimeException implements ExceptionMessage {
-    private final String grammarError = "문법이 일치하지 않습니다.";
-    private final String bracketMatchError = "중괄호 짝이 일치하지 않습니다.";
-    private final String loopStyleError = "해당 문법은 마지막에 '{'가 들어가야 합니다.";
-    private final String patternMatchError1 = "%s는 이미 존재하거나 규칙에 일치하지 않기 때문에 사용할 수 없습니다.";
-    private final String patternMatchError2 = "규칙에 일치하지 않기 때문에 사용할 수 없습니다.";
-    private final String dateFormatError = "Date Format 형식에 일치하지 않습니다.";
-    private final String timeFormatError = "Time Format 형식에 일치하지 않습니다.";
-    private final String grammarTypeError = "타입 또는 문법이 유효하지 않습니다.";
-    private String grammarTypeToken = null;
-    private GrammarTypeClass grammarTypeClass;
+    private final String message;
 
-    public MatchException() {}
-
-    public MatchException(String message) {
-        super(message);
+    @Override
+    public String getSubMessage() {
+        return switch (this) {
+            case NUMBER_GRAMMAR_ERROR ->
+                    """
+                    Calculation grammar is not valid.
+                    Please check the grammar again.
+                    """;
+            case CREATE_METHOD_ERROR ->
+                    """
+                    Cannot create a method from that location.
+                    Please check the grammar again.
+                    """;
+            case CREATE_KLASS_ERROR ->
+                    """
+                    Cannot create a class from that location.
+                    Please check the grammar again.
+                    """;
+            case GRAMMAR_ERROR ->
+                    """
+                    The grammar does not match.
+                    Please check the grammar.
+                    """;
+            case PARAM_COUNT_ERROR ->
+                    """
+                    Parameter length is invalid.
+                    Please check the parameter length.
+                    """;
+            case ZONE_MATCH_ERROR ->
+                    """
+                    Zone is not available because parentheses do not match.
+                    Please check the grammar.
+                    """;
+        };
     }
 
     @Override
-    public void errorMessage(RuntimeException e, String path, String line, long position) {
-        String subMessage = switch (e.getMessage()) {
-            case grammarError -> "The grammar does not match.\nPlease check the grammar.";
-            case bracketMatchError -> "Curly braces don't match.\nPlease match the pair.";
-            case loopStyleError -> "The grammar must have '{' at the end.\nPlease check the grammar again.";
-            case dateFormatError -> "Date Format does not match the format.\nPlease check the format.";
-            case timeFormatError -> "Time Format does not match the format.\nPlease check the format.";
-            case grammarTypeError -> grammarTypeErrorMessage(grammarTypeClass);
-            default -> (e.getMessage().equals(patternMatchError2) ? ""
-                    : "Error Pattern (" + e.getMessage().replaceFirst(Pattern.quote(patternMatchError1.substring("%s".length())), "") + ")\n")
-                        + "Hint: Cannot use special characters (url에서는 특수문자는 사용할 수 없습니다.)\n"
-                        + "It cannot be used because it already exists or does not match the rule.\n"
-                        + "Please try to change the name.";
-        };
-        ErrorMessage.printErrorMessage(e, subMessage, path, line, position);
-    }
-
-    public MatchException patternMatchError(String error) {
-        return new MatchException(
-                error == null
-                ? patternMatchError2
-                : String.format(patternMatchError1, error));
-    }
-
-    public MatchException grammarTypeError(String token, GrammarTypeClass grammarTypeClass) {
-        this.grammarTypeToken = token;
-        this.grammarTypeClass = grammarTypeClass;
-        return new MatchException(grammarTypeError);
-    }
-
-    private String grammarTypeErrorMessage(GrammarTypeClass grammarTypeClass) {
-        String message = "The type or grammar is invalid.\nPlease check the price.";
-        if (grammarTypeToken != null) {
-            message = message
-                    .concat("\nDoesn't match (" + grammarTypeToken + ")\n")
-                    .concat(switch (grammarTypeClass) {
-                        case OR_AND -> String.format("Does not match token (%s, %s).", OR, AND);
-                        case TRUE_FALSE -> String.format("Does not match token (%s, %s).", TRUE, FALSE);
-                        case COMPARE -> String.format("Does not match token (%s).", String.join(", ", compare.keySet()));
-                        case NO_ELSE_IF -> String.format("Does not match token (%s).", ELSE_IF);
-                        case TOKEN -> "Incomprehensible token";
-                        case NUMBER -> "It's not a number.";
-                        case VALID -> "The form is not valid.";
-                    });
-            grammarTypeToken = null;
-        }
-        return message;
-    }
-
-    public enum GrammarTypeClass {
-        OR_AND, NUMBER, TRUE_FALSE, COMPARE, TOKEN, VALID, NO_ELSE_IF
-    }
-
-    public MatchException dateFormatError() {
-        return new MatchException(dateFormatError);
-    }
-
-    public MatchException timeFormatError() {
-        return new MatchException(timeFormatError);
-    }
-
-    public MatchException loopStyleError() {
-        return new MatchException(loopStyleError);
-    }
-
-    public MatchException bracketMatchError() {
-        return new MatchException(bracketMatchError);
-    }
-
-    public MatchException grammarError() {
-        return new MatchException(grammarError);
+    public Error getThrow(String error) {
+        return new Error(this, error);
     }
 }
