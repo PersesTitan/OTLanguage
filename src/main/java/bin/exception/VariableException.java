@@ -1,107 +1,119 @@
 package bin.exception;
 
-import java.util.Arrays;
+import bin.token.KlassToken;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import static bin.token.cal.BoolToken.*;
+@Getter
+@RequiredArgsConstructor
+public enum VariableException implements ErrorTool {
+    VALUE_ERROR("변수 값이 유효하지 않습니다."),
+    DEFINE_NAME("이미 정의된 이름 입니다."),
+    NO_DEFINE_TYPE("정의되지 않은 변수타입입니다."),
+    NO_DEFINE_NAME("생성할 수 없는 이름입니다."),
+    NO_CREATE_VARIABLE("정의되지 않는 변수입니다."),
+    NO_METHOD("정의되지 않는 메소드입니다."),
+    NO_CLASS("정의되지 않는 클래스입니다."),
+    ACCESS_ERROR("해당 위치에 접근할 수 없습니다."),
+    TYPE_DIFFERENT("타입이 일치하지 않습니다."),
+    TYPE_ERROR("변수 타입이 유효하지 않습니다."),
+    KLASS_NAME("변수명이 클래스명과 동일합니다."),
+    RESERVED_USE("예약어를 이름으로 사용할 수 없습니다."),
+    INPUT_VALUE_ERROR("입력 받은 값이 유효하지 않습니다."),
+    NO_RETURN_TYPE("리턴 값이 존재하지 않습니다."),
+    STATIC_NAME_ERROR(KlassToken.STATIC_METHOD + "메소드 이름과 동일할 수 없습니다."),
+    DO_NOT_CREATE_KLASS("생성할 수 없는 클래스입니다."),
+    ;
 
-public class VariableException extends RuntimeException implements ExceptionMessage {
-    private final String typeMatch = "변수 값이 유효하지 않습니다.";
-    private final String variableNameMatch = "변수명이 유효하지 않습니다.";
-    private final String sameVariable = "이미 존재하는 변수명입니다.";
-    private final String localNoVariable = "해당 위치의 변수에 접근할 수 없습니다.";
-    private final String reservedWorks = "예약된 단어를 사용할 수 없습니다.";
-    private final String noDefine = "정의되지 않은 변수 타입 입니다.";
-    private final String noGrammar = "문법이 올바르지 않습니다.";
-    private final String forTypeMatchError = "^^문의 타입으로 유효하지 않습니다.";
-    private final String definedMethodName = "이미 정의된 메소드 이름입니다.";
-    private final String methodParamsCount = "매개변수 갯수가 일치하지 않습니다.";
-    private final String methodTypeMatch = "메소드 타입이 일치하지 않습니다.";
-    private final String cannotInclude = "사용할 수 없는 문자가 포함되어 있습니다.";
-    private final String methodParamsError = "메소드의 파리미터 길이가 유효하지 않습니다.";
-    private final String noDefineMethod = "정의되지 않은 메소드명 입니다.";
+    private final String message;
 
-    public VariableException() {}
-
-    public VariableException(String message) {
-        super(message);
+    @Override
+    public String getSubMessage() {
+        return switch (this) {
+            case DO_NOT_CREATE_KLASS ->
+                    """
+                    The class cannot be created.
+                    Please remove the code you are generating.
+                    """;
+            case NO_RETURN_TYPE ->
+                    """
+                    Return value does not exist.
+                    Please check the return type.
+                    """;
+            case INPUT_VALUE_ERROR ->
+                    """
+                    The value entered is invalid.
+                    """;
+            case RESERVED_USE ->
+                    """
+                    Reservation cannot be used as a name.
+                    Please change the name.
+                    """;
+            case KLASS_NAME ->
+                    """
+                    The variable name is the same as the class name.
+                    Please check your name.
+                    """;
+            case STATIC_NAME_ERROR ->
+                    """
+                    The method name cannot be the same.
+                    Please change the name.
+                    """;
+            case TYPE_ERROR ->
+                    """
+                    The variable type is invalid.
+                    Please check the variable type.
+                    """;
+            case TYPE_DIFFERENT ->
+                    """
+                    Type does not match.
+                    Classes with different parameters must match in type.
+                    """;
+            case VALUE_ERROR ->
+                    """
+                    The variable value is invalid.
+                    Please check the variable type.
+                    """;
+            case DEFINE_NAME ->
+                    """
+                    Name already defined.
+                    Reserved words or already used names cannot be reused.
+                    """;
+            case NO_DEFINE_TYPE ->
+                    """
+                    Undefined variable type.
+                    Please check the variable type.
+                    """;
+            case NO_METHOD ->
+                    """
+                    Undefined method name.
+                    Please check the method name.
+                    """;
+            case NO_CLASS ->
+                    """
+                    Undefined class name.
+                    Please check the class name.
+                    """;
+            case NO_CREATE_VARIABLE ->
+                    """
+                    Undefined variable name.
+                    Please check the variable name.
+                    """;
+            case NO_DEFINE_NAME ->
+                    """
+                    The name cannot be created.
+                    Reserved words or already used names cannot be reused.
+                    """;
+            case ACCESS_ERROR ->
+                    """
+                    The location is inaccessible.
+                    Please check your current location.
+                    """;
+        };
     }
 
     @Override
-    public void errorMessage(RuntimeException e, String path, String line, long position) {
-        String subMessage = switch (e.getMessage()) {
-            case typeMatch -> "The variable value is invalid.\nPlease check the variable type.";
-            case sameVariable -> "Variable name that already exists.\nReserved words or already used variable names cannot be reused.";
-            case localNoVariable -> "You cannot access the variable at that location.\nPlease check your current location.";
-            case reservedWorks -> "Reserved words cannot be used.";
-            case noDefine -> "Undefined variable name.\nPlease check the variable name.";
-            case noGrammar -> "The grammar does not match.\nPlease check the grammar.";
-            case forTypeMatchError -> "^^ It is not valid as a return value of the query.\nPlease check the variable type";
-            case definedMethodName -> "The method name already defined.\nPlease check the defined name.";
-            case methodParamsCount -> "The number of parameters does not match.\nPlease check the number of parameters.";
-            case methodTypeMatch -> "Method types do not match.\nPlease check the corresponding method type.";
-            case variableNameMatch -> "Variable name is not valid.\nPlease check the variable name.";
-            case cannotInclude -> "Didn't use : " + String.join(", ", Arrays.asList(OR, AND, NOT, TRUE, FALSE)) + "\nContains characters that cannot be included\nPlease change the variable name.";
-            case methodParamsError -> "The parameter length of the method is not valid.\nPlease check the method parameters.";
-            case noDefineMethod -> "Undefined method name.\nPlease check the method name.";
-            default -> "";
-        };
-        ErrorMessage.printErrorMessage(e, subMessage, path, line, position);
+    public Error getThrow(String error) {
+        return new Error(this, error);
     }
-
-    public VariableException noDefineMethod() {
-        return new VariableException(noDefineMethod);
-    }
-
-    public VariableException methodParamsError() {
-        return new VariableException(methodParamsError);
-    }
-
-    public VariableException cannotInclude() {
-        return new VariableException(cannotInclude);
-    }
-
-    public VariableException variableNameMatch() {
-        return new VariableException(variableNameMatch);
-    }
-
-    public VariableException methodTypeMatch() {
-        return new VariableException(methodTypeMatch);
-    }
-
-    public VariableException methodParamsCount() {
-        return new VariableException(methodParamsCount);
-    }
-
-    public VariableException definedMethodName() {
-        return new VariableException(definedMethodName);
-    }
-
-    public VariableException forTypeMatchError() {
-        return new VariableException(forTypeMatchError);
-    }
-
-    public VariableException noGrammar() {
-        return new VariableException(noGrammar);
-    }
-
-    public VariableException typeMatch() {
-        return new VariableException(typeMatch);
-    }
-
-    public VariableException sameVariable() {
-        return new VariableException(sameVariable);
-    }
-
-    public VariableException localNoVariable() {
-        return new VariableException(localNoVariable);
-    }
-
-    public VariableException reservedWorks() {
-        return new VariableException(reservedWorks);
-    }
-
-    public VariableException noDefine() {
-        return new VariableException(noDefine);
-    }
-
 }
