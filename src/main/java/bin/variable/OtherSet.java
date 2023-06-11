@@ -33,16 +33,14 @@ public class OtherSet<T> extends LinkedHashSet<T> {
         } else throw VariableException.TYPE_ERROR.getThrow(v);
     }
 
-    public T get(Object index) {
-        if (index instanceof Integer i) {
-            int count = 0;
-            Iterator<T> iterator = super.iterator();
-            while (iterator.hasNext()) {
-                T t = iterator.next();
-                if (count++ == i) return t;
-            }
-            throw VariableException.ACCESS_ERROR.getThrow(i);
-        } else throw VariableException.TYPE_ERROR.getThrow(index);
+    public T get(int index) {
+        int count = 0;
+        Iterator<T> iterator = super.iterator();
+        while (iterator.hasNext()) {
+            T t = iterator.next();
+            if (count++ == index) return t;
+        }
+        throw VariableException.ACCESS_ERROR.getThrow(index);
     }
 
     @Override
