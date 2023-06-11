@@ -1,50 +1,52 @@
 package bin.token;
 
- public interface Token extends MergeToken {
-    String TOKEN = "ㅇ";
-    String NO_TOKEN = "ㄴ";
+import bin.apply.calculator.number.NumberToken;
 
-    String START = "^";
-    String END = "$";
-    String BLANK = "\\s*";
-    String BLANKS = "\\s+";
+import java.util.Set;
+import java.util.regex.Pattern;
 
-    // SING
-    String STAR = "\\*";
-    String PIPE = "\\|";
-    String HYPHEN = "\\-";
-    String HYPHEN_ = "-";
-    String PLUS = "\\+";
-    String CARET = "\\^";
-    String DOT = "\\.";
-    String QUESTION = "\\?";
-    String QUESTION_S = "?";
-    String SL = "\\(";
-    String SR = "\\)";
-    String ML = "\\{";
-    String MR = "\\}";
+public interface Token {
+    String VARIABLE = "[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z]+([_-]?[0-9ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z])*";
 
-    String ML_ = "{";
-    String MR_ = "}";
-
-    String BL = "\\[";
-    String BR = "\\]";
-    String BL_ = "[";
-    String BR_ = "]";
-    String BACKSLASH = "\\\\";
-    String PESO = "\\$";
-    String SINGLE_Q = "'";
-
-    String NO_PATTERN = "(?<=(^|[^\\\\])(\\\\\\\\)?+)";
-    String YES_PATTERN = "(?<=(^|[^\\\\])(\\\\\\\\)?+)\\\\";
-
+    String RETURN_TOKEN = "=>";
+    String PUT_TOKEN = "<=";
     String COMMA = ",";
-    String MAP_EQUAL = NO_PATTERN + "=";
 
-    String ACCESS = "~";
-    String LESS_SIGN = "<";
-    String GREATER_SIGN = ">";
-    String EXCLAMATION = "!";
-    String AMPERSAND = "&";
-    String REMARK = "#";
+    char CLEAR = '!';
+    char IS_EMPTY = '?';
+    char MAX = '>', MIN = '<';
+    String GET = ">>";
+    String ADD = "<<";
+    String CONTAINS = "?";
+    String CONTAINS_V = "??";
+    String SUM = "++";
+
+    char FOR = '^';
+    char PUT = ':';
+    char REMARK = '#';
+    char REPLACE_S = ':';
+    char REPLACE_E = '_';
+    char REPLACE_D = ';';
+
+    char ACCESS = '~';
+    char PARAM_S = '[', PARAM_E = ']';
+    char LOOP_S = '{', LOOP_E = '}';
+    char SET_S = '(', SET_E = ')';
+    char LIST_S = '[', LIST_E = ']';
+    char MAP_S = '{', MAP_E = '}';
+
+    String PARAM = "][";
+    String TRUE = "ㅇㅇ";
+    String FALSE = "ㄴㄴ";
+    String NOT = "ㅇㄴ";
+    char TOKEN = 'ㅇ';
+    char OR = 'ㄸ', AND = 'ㄲ';
+
+    Set<Character> BLANKS = Set.of(' ', '\t', '\n', '\r', '\f');
+    Set<String> RESERVE = Set.of(
+            Token.TRUE, Token.FALSE, Token.NOT,
+            Character.toString(TOKEN) + NumberToken.SUB + TOKEN,
+            Character.toString(OR),
+            Character.toString(AND)
+    );
 }
