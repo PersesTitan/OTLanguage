@@ -46,20 +46,17 @@ public class CustomList<V> extends LinkedList<V> implements CustomTool {
     @Override
     public boolean add(Object v) {
         if (types.check(v)) return super.add((V) v);
-        else if (v instanceof CustomList<?> list) {
-            if (list.types == types) return super.addAll((Collection<? extends V>) list);
-            else throw VariableException.TYPE_ERROR.getThrow(list);
+        else if (v instanceof CustomList<?> list && list.types == types) {
+            return super.addAll((Collection<? extends V>) list);
         } else throw VariableException.TYPE_ERROR.getThrow(v);
     }
 
-    public V get(Object index) {
-        if (index instanceof Integer i) {
-            try {
-                return super.get(i);
-            } catch (IndexOutOfBoundsException e) {
-                throw VariableException.ACCESS_ERROR.getThrow(e.getMessage());
-            }
-        } else throw VariableException.TYPE_ERROR.getThrow(index);
+    public V get(int index) {
+        try {
+            return super.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            throw VariableException.ACCESS_ERROR.getThrow(e.getMessage());
+        }
     }
 
     public Object sum() {
