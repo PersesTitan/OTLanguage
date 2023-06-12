@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum AudioException implements ErrorTool {
+enum AudioException implements ErrorTool {
     LOOP_VALUE_ERROR("반복은 1번 이상만 가능합니다."),
     ASSERTION_ERROR("값이 유효하지 않습니다.")
     ;
