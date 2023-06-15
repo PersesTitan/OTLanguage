@@ -1,115 +1,171 @@
-import bin.apply.Controller;
-import bin.apply.Setting;
-import bin.apply.sys.compile.Decompile;
-import bin.apply.sys.item.RunType;
-import bin.apply.sys.make.Bracket;
-import bin.apply.sys.make.StartLine;
+import bin.apply.item.CodeItem;
+import bin.apply.item.ShellCodeItem;
+import bin.apply.line.LineTool;
+import bin.apply.line.parser.LineParser;
+import bin.apply.line.parser.ShellLineParser;
+import bin.apply.mode.DebugMode;
+import bin.apply.mode.FileMode;
+import bin.apply.mode.RunMode;
+import bin.token.work.SystemToken;
+import bin.apply.work.system.Import;
+import bin.exception.Error;
 import bin.exception.FileException;
+import bin.exception.SystemException;
+import bin.token.Token;
+import bin.token.check.CheckToken;
 
 import java.io.*;
+import java.util.*;
 
-import static bin.apply.Controller.*;
-import static bin.apply.sys.item.Separator.*;
-import static bin.apply.sys.item.SystemSetting.extension;
-import static bin.apply.sys.item.SystemSetting.extensionCheck;
-import static bin.token.LoopToken.LOOP_TOKEN;
+public class Main {
+    /**
+     * file information
+     * <br> - version
+     * <br> - path
+     * @see bin.apply.item.CodeItem
+     */
 
-public class Main extends Setting {
     public static void main(String[] args) {
+
+        DebugMode.DEVELOPMENT.set();
+
         try {
-            if (isWindow) startWindow(args);
-            else new Main(args);
-        } catch (FileException e) {
-            new FileException().printErrorMessage(e, Setting.mainPath);
-            if (isWindow) {
-                try {System.in.read();}
-                catch (IOException ignored) {}
-            }
-        } finally {try {br.close(); bw.close();} catch (IOException ignored) {}}
-    }
-
-    // OS : window
-    private static void startWindow(String[] args) {
-        new Main(args.length == 0
-                ? new String[]{INSTALL_PATH}
-                : new String[]{INSTALL_PATH, args[0]});
-    }
-
-    public Main(String[] args) {
-        if (args.length <= 0) throw new FileException().noFindError();
-        else if (args.length == 1) runType = RunType.Shell;     // 현재 파일 위치
-        else if (args.length == 2) runType = RunType.Normal;    // 현재 파일 이름
-        else throw new FileException().noValidValues();
-
-        if (runType.equals(RunType.Normal)) normal(args);
-        else {
-            try {
-                // 임시 파일 생성
-                File file = File.createTempFile("otl_", extension[0]);
-                // 프로그램이 종료되면 임시파일 삭제
-                file.deleteOnExit();
-                Setting.mainPath = file.getAbsolutePath();
-                Setting.path = file.getAbsoluteFile().getParent();
-                shell(file);
-            } catch (NullPointerException | IOException e) {
-                if (StartLine.developmentMode) e.printStackTrace();
-            }
-        }
-    }
-
-    private void normal(String[] args) {
-        File file = new File(args[1]); //파일 생성
-        Setting.mainPath = file.getAbsolutePath();
-        Setting.path = file.getAbsoluteFile().getParent();
-        if (!file.exists()) throw new FileException().pathNoHaveError();
-        else if (!file.isFile()) throw new FileException().isNotFileError();
-        else if (!file.canRead()) throw new FileException().noReadError();
-        else if (extensionCheck(file.getName())) {
-            // 파일을 읽고 Setting.total 에 값을 넣는 작업
-            Controller.readFile(mainPath, Setting.total);
-            StartLine.startLine(Setting.total.toString(), mainPath, repository);
-        } else {
-            if (extensionCheck(file.getName(), "c")) {
-                new Decompile(file); // 컴파일 된 파일 실행
-            } else throw new FileException().rightExtension();
-        }
-    }
-
-    private void shell(File file) {
-        Bracket.getInstance().bracket("", file);
-        String fileName = file.getName().substring(0, file.getName().indexOf('.'));
-
-        StringBuilder total = new StringBuilder();
-        while (true) {
-            System.out.print(">>> ");
-            String line = scanner().strip();
-
-            if (line.equals("끝")) break;
-            else if (line.endsWith("{")) {
-                boolean check = false;
-                int count = 0;
-                int bracketCount = 1;
-                total.setLength(0);
-                total.append(++count).append(" ").append(line).append("\n");
-                while (true) {
-                    System.out.print("--- ");
-                    line = scanner().strip();
-                    total.append(++count).append(" ").append(line).append("\n");
-                    if (line.endsWith("{")) bracketCount++;
-                    else if (line.startsWith("}")) bracketCount--;
-
-                    if (bracketCount < 0) break;
-                    else if (bracketCount == 0) {
-                        if (check) break;
-                        else {
-                            System.out.print("--- ");
-                            check = scanner().strip().equals("");
-                        }
+            // version mode
+            if (args[0].equals("-v")) System.out.print(CodeItem.VERSION);
+            // compile mode
+            else if (args[0].equals("-c")) {
+                if (args.length == 2) {
+                    File file = new File(args[1]);
+                    System.out.print(switch (FileMode.checkFile(file)) {
+                        case OTLC -> readCompile(file).getShell();
+                        case OTL -> Import.readImport(file);
+                    });
+                } else throw SystemException.SYSTEM_ERROR.getThrow(null);
+            } else {
+                // SET RUN PATH
+                CodeItem.RUT_PATH = args[0];
+                switch (args.length) {
+                    case 1 -> { RunMode.SHELL.set(); new Main(); }
+                    case 2 -> new Main(new File(args[1]));
+                    case 3 -> new Main(new File(args[1]), args[2]);
+                    default -> {
+                        String message = Arrays.toString(Arrays.copyOfRange(args, 1, args.length));
+                        throw SystemException.VALID_VALUES_ERROR.getThrow(message);
                     }
                 }
-                LOOP_TOKEN.put(fileName, total.toString());
-                StartLine.startLine(total.toString(), fileName, repository);
-            } else Setting.start(line, line, repository);
+            }
+        } catch (Error error) {
+            if (DebugMode.isDevelopment()) error.printStackTrace();
+            error.print();
+        } catch (Exception e) {
+            if (DebugMode.isDevelopment()) e.printStackTrace();
+            SystemException.SYSTEM_ERROR.getThrow(e.getMessage()).print();
+        }
+    }
+
+    // compile constructor
+    private Main(File originFile, String compilePath) {
+        fileCheck(originFile);
+        if (!FileMode.OTL.check(originFile)) throw FileException.DO_NOT_SUPPORT.getThrow(originFile);
+        if (compilePath == null || compilePath.isEmpty()) {
+            String originPath = originFile.getAbsolutePath();
+            compilePath = originPath
+                    .substring(0, originPath.lastIndexOf('.'))
+                    .concat(FileMode.OTLC.getExtension());
+        } else if (!FileMode.OTLC.check(compilePath)) throw FileException.DO_NOT_SUPPORT.getThrow(compilePath);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(compilePath))) {
+            oos.writeObject(readOrigin(originFile));
+        } catch (FileNotFoundException e) {
+            throw FileException.DO_NOT_PATH.getThrow(compilePath);
+        } catch (IOException e) {
+            throw FileException.CREATE_FILE_ERROR.getThrow(compilePath);
+        }
+    }
+
+    // file run constructor
+    private Main(File originFile) {
+        fileCheck(originFile);
+        (switch (FileMode.checkFile(originFile)) {
+            case OTL -> readOrigin(originFile);
+            case OTLC -> Main.readCompile(originFile);
+        }).start();
+    }
+
+    // Shell run constructor
+    private Main() {
+        String line;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out))) {
+            int i = 0;
+            ShellCodeItem SCI = new ShellCodeItem();
+            Map<Integer, String> map = new HashMap<>();
+            while (true) {
+                writer.append(">>> ").flush();
+                line = reader.readLine().strip();
+                if (line.equals(SystemToken.QUIT)) break;
+                map.put(i++, line);
+                if (line.isEmpty() || CheckToken.startWith(line, Token.REMARK)) {
+                    SCI.add(null, line);
+                    continue;
+                } else SCI.add(line);
+                if (CheckToken.endWith(line, Token.LOOP_S)) {
+                    int startLine = i-1;
+                    int stack = 1;
+                    do {
+                        writer.append("--- ").flush();
+                        line = reader.readLine().strip();
+                        map.put(i++, line);
+                        if (line.isEmpty()) {
+                            SCI.add(null, line);
+                            continue;
+                        } else SCI.add(line);
+                        if (CheckToken.startWith(line, Token.LOOP_E)) stack--;
+                        if (CheckToken.endWith(line, Token.LOOP_S)) stack++;
+                    } while (stack>0);
+                    new ShellLineParser(map, SCI, startLine);
+                    SCI.start(startLine, i);
+                } else {
+                    LineTool lineTool = LineParser.createParser(line);
+                    SCI.add(lineTool, line);
+                    lineTool.start(i);
+                }
+            }
+        } catch (IOException e) {
+            throw SystemException.SYSTEM_ERROR.getThrow(null);
+        }
+    }
+
+    // file state check method
+    private void fileCheck(File file) {
+        if (!file.exists()) throw FileException.DO_NOT_PATH.getThrow(file.getPath());
+        else if (!file.isFile()) throw FileException.FILE_TYPE_ERROR.getThrow(file.getPath());
+        else if (!file.canRead()) throw FileException.DO_NOT_READ.getThrow(file.getPath());
+    }
+
+    // .otl file read
+    private static CodeItem readCompile(File file) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            return (CodeItem) ois.readObject();
+        } catch (FileNotFoundException e) {
+            throw FileException.DO_NOT_PATH.getThrow(file);
+        } catch (IOException | ClassNotFoundException e) {
+            throw SystemException.CREATE_ERROR.getThrow(file);
+        }
+    }
+
+    // .otlc file read
+    private CodeItem readOrigin(File file) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String path = file.getPath();
+            Map<Integer, String> map = new HashMap<>();
+            int i=0; String line;
+            while ((line=reader.readLine()) != null) map.put(i++, line.strip());
+            LineParser lineParser = new LineParser(path, map);
+            return new CodeItem(path, lineParser.getFILES(), lineParser.getLINES());
+        } catch (FileNotFoundException e) {
+            throw FileException.DO_NOT_PATH.getThrow(file);
+        } catch (IOException e) {
+            throw FileException.DO_NOT_READ.getThrow(file);
         }
     }
 }
