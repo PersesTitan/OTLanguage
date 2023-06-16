@@ -64,6 +64,6 @@ class TimeItem implements Item {
         int minute = time.getMinute();
         int second = time.getSecond();
         int nano = time.getNano();
-        return this.toString(TimeToken.TIME, hour, minute, second, nano);
+        return this.itemToString(TimeToken.TIME, hour, minute, second, nano);
     }
 }
