@@ -45,6 +45,6 @@ public class ThrowItem implements Item {
 
     @Override
     public String toString() {
-        return toString(ThrowToken.THROW, big, mes, sub);
+        return itemToString(ThrowToken.THROW, big, mes, sub);
     }
 }
