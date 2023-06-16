@@ -67,6 +67,6 @@ class MathItem extends Random implements Item {
 
     @Override
     public String toString() {
-        return this.toString(MathToken.MATH);
+        return this.itemToString(MathToken.MATH);
     }
 }
