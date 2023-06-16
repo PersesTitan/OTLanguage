@@ -4,6 +4,7 @@ import bin.apply.Repository;
 import bin.apply.item.CodeItem;
 import bin.apply.item.Item;
 import bin.apply.repository.create.CountMap;
+import bin.apply.repository.work.function.BiFunctionWork;
 import bin.apply.work.system.Import;
 import bin.exception.SystemException;
 import bin.token.KlassToken;
@@ -53,8 +54,7 @@ public interface ResetWork {
 
     void reset();
 
-    default <T extends Item> void create(String name, Class<T> klass,
-                                         Function<Object[], T> function, String... types) {
+    default <T extends Item> void create(String name, Class<T> klass, Function<Object[], T> function, String... types) {
         Repository.createWorks.put(name, new CreateWork<>(klass, types) {
             @Override
             protected T createItem(Object[] params) {
@@ -62,6 +62,7 @@ public interface ResetWork {
             }
         });
     }
+
     default <T, R> void add(String klass, String method, BiFunction<T, Object[], R> function, String r, String... types) {
         Repository.methodWorks.put(klass, method, new MethodWork(r, klass, false, types) {
             @Override
