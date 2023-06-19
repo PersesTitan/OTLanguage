@@ -5,6 +5,11 @@ import work.ResetWork;
 
 public class Reset implements ResetWork, DatabaseToken, Repository {
     @Override
+    public String version() {
+        return "1.0.0";
+    }
+
+    @Override
     public void reset() {
         create(DATABASE, DatabaseItem.class, v -> new DatabaseItem((String) v[0]), s);
         create(DATABASE, DatabaseItem.class, v -> new DatabaseItem((String) v[0], (String) v[1], (String) v[2]), s, s, s);
