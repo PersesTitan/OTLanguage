@@ -3,7 +3,7 @@ package cos.database;
 import bin.apply.Repository;
 import bin.apply.item.CodesItem;
 import bin.apply.item.ParamItem;
-import bin.apply.repository.function.OSConsumer;
+import bin.apply.OSConsumer;
 import bin.parser.param.ParamToken;
 import bin.token.KlassToken;
 import bin.token.check.CheckToken;
