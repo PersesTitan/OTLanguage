@@ -93,6 +93,6 @@ public class FileItem implements Item {
 
     @Override
     public String toString() {
-        return this.toString(FileToken.FILE, filePath);
+        return this.itemToString(FileToken.FILE, filePath);
     }
 }
