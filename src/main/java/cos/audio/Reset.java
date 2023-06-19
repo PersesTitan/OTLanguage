@@ -7,6 +7,11 @@ import work.ResetWork;
 
 public class Reset implements ResetWork, AudioToken, Repository {
     @Override
+    public String version() {
+        return "1.0.0";
+    }
+
+    @Override
     public void reset() {
         checkModuleError("file");
         create(AUDIO, AudioItem.class, v -> new AudioItem((FileItem) v[0]), FileToken.FILE);
