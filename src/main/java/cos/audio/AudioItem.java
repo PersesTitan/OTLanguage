@@ -67,6 +67,6 @@ class AudioItem implements Item {
 
     @Override
     public String toString() {
-        return this.toString(AudioToken.AUDIO);
+        return this.itemToString(AudioToken.AUDIO);
     }
 }
