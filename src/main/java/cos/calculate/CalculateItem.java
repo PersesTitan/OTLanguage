@@ -58,6 +58,6 @@ class CalculateItem implements Item, CalculateToken {
 
     @Override
     public String toString() {
-        return toString(CalculateToken.CALCULATE);
+        return itemToString(CalculateToken.CALCULATE);
     }
 }
