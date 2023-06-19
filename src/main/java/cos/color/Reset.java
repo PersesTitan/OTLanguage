@@ -5,6 +5,11 @@ import work.ResetWork;
 
 public class Reset implements ResetWork, Repository, ColorToken {
     @Override
+    public String version() {
+        return "1.0.0";
+    }
+
+    @Override
     public void reset() {
         create(COLOR, ColorItem.class, v -> new ColorItem((int) v[0]), i);
         create(COLOR, ColorItem.class, v -> new ColorItem((int) v[0], (int) v[1], (int) v[2]), i, i, i);
