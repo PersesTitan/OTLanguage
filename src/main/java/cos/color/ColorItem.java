@@ -77,6 +77,6 @@ public class ColorItem implements Item {
 
     @Override
     public String toString() {
-        return this.toString(ColorToken.COLOR, getR(), getG(), getB(), getA());
+        return this.itemToString(ColorToken.COLOR, getR(), getG(), getB(), getA());
     }
 }
