@@ -4,9 +4,6 @@ import bin.apply.Repository;
 import bin.apply.item.Item;
 import bin.token.KlassToken;
 import bin.token.Token;
-import bin.variable.OtherList;
-import bin.variable.OtherMap;
-import bin.variable.custom.CustomList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -87,6 +84,6 @@ class DatabaseItem implements Item {
 
     @Override
     public String toString() {
-        return toString(DatabaseToken.DATABASE);
+        return itemToString(DatabaseToken.DATABASE);
     }
 }
