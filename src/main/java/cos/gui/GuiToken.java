@@ -3,6 +3,8 @@ package cos.gui;
 import cos.color.ColorToken;
 
 interface GuiToken {
+    String ICON = "icon.otlm";
+
     String GUI = "ㄱㅁㄱ";
     String EVENT = GUI + "-ㅇㅃㅇ";
 
