@@ -1,5 +1,6 @@
 package cos.gui;
 
+import bin.apply.item.CodeItem;
 import bin.apply.mode.DebugMode;
 import bin.exception.FileException;
 import bin.token.KlassToken;
@@ -22,13 +23,11 @@ class CreateGUI extends CreateWork<ComponentTool> implements GuiToken {
     @Override
     protected ComponentTool createItem(Object[] params) {
         if (CreateGUI.USE_GUI) {
-            CreateGUI.USE_GUI = false;
             System.setProperty("java.awt.headless", "false");
-            String iconPath = DebugMode.isDevelopment()
-                    ? SepToken.getPath(SepToken.getResource("gui"), "icon.otlm")
-                    : SepToken.getPath(SepToken.INSTALL_PATH, SepToken.MODULE, "gui", "icon.otlm");
+            String iconPath = CodeItem.getModulePath("gui", ICON);
             try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(iconPath))) {
                 Taskbar.getTaskbar().setIconImage(((ImageIcon) inputStream.readObject()).getImage());
+                CreateGUI.USE_GUI = false;
             } catch (IOException | ClassNotFoundException e) {
                 throw FileException.CREATE_ICON_ERROR.getThrow(null);
             }
