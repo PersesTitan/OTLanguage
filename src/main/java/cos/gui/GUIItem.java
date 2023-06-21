@@ -10,66 +10,53 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-interface GUIItem {
+interface GUIItem extends GuiToken {
+    // create item button
     final class ButtonItem extends JButton implements ComponentTool, Item {
-        @Override
-        public String toString() {
-            return itemToString(GuiToken.GUI, GuiToken.BUTTON);
-        }
+        @Override public String toString() {return itemToString(GUI, BUTTON);}
     }
 
+    // create item checkBox
     final class CheckBoxItem extends JCheckBox implements ComponentTool, Item {
-        @Override
-        public String toString() {
-            return itemToString(GuiToken.GUI, GuiToken.CHECK_BOX);
-        }
+        @Override public String toString() {return itemToString(GUI, CHECK_BOX);}
     }
 
-    final class PasswordFiledItem extends JPasswordField implements Item, ComponentTool {
-        @Override
-        public String toString() {
-            return itemToString(GuiToken.GUI, GuiToken.PASSWORD_FILED);
-        }
+    // create item passwordFiled
+    final class PasswordFiledItem extends JPasswordField implements ComponentTool, Item {
+        @Override public String toString() {return itemToString(GUI, PASSWORD_FILED);}
     }
 
-    final class RadioButtonItem extends JRadioButton implements Item, ComponentTool {
-        @Override
-        public String toString() {
-            return itemToString(GuiToken.GUI, GuiToken.RADIO_BUTTON);
-        }
+    // create item radioButton
+    final class RadioButtonItem extends JRadioButton implements ComponentTool, Item {
+        @Override public String toString() {return itemToString(GUI, RADIO_BUTTON);}
     }
 
-    final class TextFieldItem extends JTextField implements Item, ComponentTool {
-        @Override
-        public String toString() {
-            return itemToString(GuiToken.GUI, GuiToken.TEXT_FIELD);
-        }
+    // create item textField
+    final class TextFieldItem extends JTextField implements ComponentTool, Item {
+        @Override public String toString() {return itemToString(GUI, TEXT_FIELD);}
     }
 
-    final class TextAreaItem extends TextArea implements ComponentTool, Item {
-        @Override
-        public Component add(Component component) {
-            throw GuiException.DO_NOT_USE_TYPE.getThrow(GuiToken.ADD);
-        }
-        @Override
-        public void addActionListener(ActionListener l) {
-            throw GuiException.DO_NOT_USE_TYPE.getThrow(GuiToken.ADD_EVENT);
-        }
+    // create item textArea
+    final class TextAreaItem extends JTextArea implements ComponentTool, Item {
+        @Override public void addActionListener(ActionListener l) {
+            throw GuiException.DO_NOT_USE_TYPE.getThrow(ADD_EVENT);}
+        @Override public String toString() {return itemToString(GUI, TEXT_AREA);}
+    }
 
-        @Override
-        public String toString() {
-            return itemToString(GuiToken.GUI, GuiToken.TEXT_AREA);
-        }
+    // create item frame
+    final class FrameItem extends JFrame implements ComponentTool, Item {
+        public FrameItem() throws HeadlessException {super(); setDefaultCloseOperation(EXIT_ON_CLOSE);}
+        @Override public String getText() {return super.getTitle();}
+        @Override public void setText(String text) {super.setTitle(text);}
+        @Override public void addActionListener(ActionListener l) {
+            throw GuiException.DO_NOT_USE_TYPE.getThrow(FRAME);}
+        @Override public String toString() {return itemToString(GUI, FRAME);}
     }
 
     // create
     final class AddEvent extends LoopWork {
-        public AddEvent() {
-            super(GuiToken.GUI, false, 1, new String[] {GuiToken.EVENT});
-        }
-
-        @Override
-        protected void loopItem(Object klass, Object[] params, OSConsumer consumer) {
+        public AddEvent() {super(GUI, false, 1, new String[] {EVENT});}
+        @Override protected void loopItem(Object klass, Object[] params, OSConsumer consumer) {
             ((ComponentTool) klass).addActionListener(consumer::accept);
         }
     }
@@ -77,18 +64,8 @@ interface GUIItem {
     @RequiredArgsConstructor
     final class ActionEventItem implements Item {
         private final ActionEvent event;
-
-        public Object getSource() {
-            return event.getSource();
-        }
-
-        public String getActionCommand() {
-            return event.getActionCommand();
-        }
-
-        @Override
-        public String toString() {
-            return this.itemToString(GuiToken.EVENT);
-        }
+        public Object getSource() {return event.getSource();}
+        public String getActionCommand() {return event.getActionCommand();}
+        @Override public String toString() {return this.itemToString(EVENT);}
     }
 }
