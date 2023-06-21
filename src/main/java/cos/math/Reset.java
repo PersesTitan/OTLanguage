@@ -5,6 +5,11 @@ import work.ResetWork;
 
 public class Reset implements ResetWork, Repository, MathToken {
     @Override
+    public String version() {
+        return "1.0.0";
+    }
+
+    @Override
     public void reset() {
         create(MATH, MathItem.class, v -> new MathItem());
 
