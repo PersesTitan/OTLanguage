@@ -33,14 +33,19 @@ class CreateGUI extends CreateWork<ComponentTool> implements GuiToken {
             }
         }
 
-        return switch (params[0].toString()) {
-            case BUTTON -> new GUIItem.ButtonItem();
-            case CHECK_BOX -> new GUIItem.CheckBoxItem();
-            case RADIO_BUTTON -> new GUIItem.RadioButtonItem();
-            case TEXT_FIELD -> new GUIItem.TextFieldItem();
-            case PASSWORD_FILED -> new GUIItem.PasswordFiledItem();
-            case TEXT_AREA -> new GUIItem.TextAreaItem();
-            default -> throw GuiException.DO_NOT_SUPPORT_TYPE.getThrow(params[0]);
-        };
+        try {
+            return switch (params[0].toString()) {
+                case BUTTON -> new GUIItem.ButtonItem();
+                case CHECK_BOX -> new GUIItem.CheckBoxItem();
+                case RADIO_BUTTON -> new GUIItem.RadioButtonItem();
+                case TEXT_FIELD -> new GUIItem.TextFieldItem();
+                case PASSWORD_FILED -> new GUIItem.PasswordFiledItem();
+                case TEXT_AREA -> new GUIItem.TextAreaItem();
+                case FRAME -> new GUIItem.FrameItem();
+                default -> throw GuiException.DO_NOT_SUPPORT_TYPE.getThrow(params[0]);
+            };
+        } catch (HeadlessException e) {
+            throw GuiException.DO_NOT_INPUT_DEVICE.getThrow(e.getMessage());
+        }
     }
 }
