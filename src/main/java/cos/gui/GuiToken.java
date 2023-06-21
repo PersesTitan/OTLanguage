@@ -10,6 +10,7 @@ interface GuiToken {
 
     String COLOR = ColorToken.COLOR;
 
+    String FRAME            = "ㅍㄹㅍ";
     String BUTTON           = "ㅂㅇㅂ";
     String CHECK_BOX        = "ㅊㅋㅊ";
     String RADIO_BUTTON     = "ㄹㅂㄹ";
