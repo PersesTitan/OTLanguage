@@ -182,6 +182,6 @@ public class PoisonItem implements Item {
 
     @Override
     public String toString() {
-        return toString(PoisonToken.POISON);
+        return itemToString(PoisonToken.POISON);
     }
 }
