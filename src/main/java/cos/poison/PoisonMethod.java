@@ -3,7 +3,7 @@ package cos.poison;
 import bin.apply.Repository;
 import bin.apply.item.CodesItem;
 import bin.apply.item.ParamItem;
-import bin.apply.repository.function.OSConsumer;
+import bin.apply.OSConsumer;
 import bin.apply.repository.variable.TypeMap;
 import bin.exception.MatchException;
 import bin.exception.VariableException;
