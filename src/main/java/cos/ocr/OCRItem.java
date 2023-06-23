@@ -16,7 +16,7 @@ import java.io.File;
 
 @Getter
 class OCRItem extends TessBaseAPI implements Item {
-    private final static String MODULE_PATH = SepToken.getPath(CodeItem.RUT_PATH, "module", "ocr");
+    private final static String MODULE_PATH = CodeItem.getModulePath("ocr");
     private final static String EXT = ".traineddata";
 
     private final CustomSet<String> languages = new CustomSet<>(TypeMode.STRING);
@@ -64,6 +64,6 @@ class OCRItem extends TessBaseAPI implements Item {
 
     @Override
     public String toString() {
-        return toString(OCRToken.OCR);
+        return itemToString(OCRToken.OCR);
     }
 }
