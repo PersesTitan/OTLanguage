@@ -7,6 +7,11 @@ import work.ResetWork;
 
 public class Reset implements ResetWork, PoisonToken, Repository {
     @Override
+    public String version() {
+        return "1.0.0";
+    }
+
+    @Override
     public void reset() {
         checkModuleError("file");
 
@@ -32,7 +37,7 @@ public class Reset implements ResetWork, PoisonToken, Repository {
         methodWorks.<PoisonItem, String, String>add(POISON, SET_COOKIE, s, s, PoisonItem::setCookie);
         this.<PoisonItem>add(POISON, SET_COOKIE,
                 (p, v) -> p.setCookie((String)v[0],(String)v[1],(String)v[2]), s, s, s);
-        this.<PoisonItem>add(POISON, SET_COOKIE, (
-                p, v) -> p.setCookie((String)v[0],(String)v[1],(String)v[2],(int)v[3]), s, s, s, i);
+        this.<PoisonItem>add(POISON, SET_COOKIE,
+                (p, v) -> p.setCookie((String)v[0],(String)v[1],(String)v[2],(int)v[3]), s, s, s, i);
     }
 }
