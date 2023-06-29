@@ -3,7 +3,7 @@
 # shellcheck disable=SC2046
 OTL_HOME="$(dirname $(dirname "$0"))"
 OTL_START="${OTL_HOME}/run-tool/bin/otl"
-#OTL_RUN="${OTL_START} -Dfile.encoding=UTF-8 -classpath"
+OTL_RUN="${OTL_START} -Dfile.encoding=UTF-8 -classpath"
 
 abort() {
   printf "%s\n" "$@" >&2
@@ -39,7 +39,7 @@ version() {
   if [ ${#@} != 1 ]; then
     abort "option error"
   else
-    finish "OTLanguage version $(${OTL_START} -Dfile.encoding=UTF-8 -classpath "${JAR_FILES[0]}" Main "${1}")"
+    finish "OTLanguage version $(${OTL_RUN} "${JAR_FILES[0]}" Main "${1}")"
   fi
 }
 
@@ -80,12 +80,12 @@ if [ ${#ARGS[@]} = 0 ]; then
     JAR_FILES+=(`findJar "${module}"`)
   done
   JAR_PATH=$(IFS=: ; echo "${JAR_FILES[*]}")
-  $OTL_START -Dfile.encoding=UTF-8 -classpath "${JAR_PATH}" Main ""
+  $OTL_RUN "${JAR_PATH}" Main "${OTL_HOME}"
 else
   # compile shell
-  for module in `${OTL_START} -Dfile.encoding=UTF-8 -classpath "${JAR_PATH[0]}" Main "-c" "${ARGS[0]}"` ; do
+  for module in `${OTL_RUN} "${JAR_PATH[0]}" Main "-c" "${ARGS[0]}"` ; do
     JAR_FILES+=(`findJar "${module}"`)
   done
   JAR_PATH=$(IFS=: ; echo "${JAR_FILES[*]}")
-  $OTL_START -Dfile.encoding=UTF-8 -classpath "${JAR_PATH}" Main "" "${ARGS[@]}"
+  $OTL_RUN "${JAR_PATH}" Main "${OTL_HOME}" "${ARGS[@]}"
 fi
