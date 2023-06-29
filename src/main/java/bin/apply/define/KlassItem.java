@@ -33,6 +33,6 @@ public class KlassItem implements Item {
     public String toString() {
         Object[] param = new Object[NAMES.length];
         for (int i = 0; i<NAMES.length; i++) param[i] = repository.find(NAMES[i]);
-        return toString(klassName, param);
+        return itemToString(klassName, param);
     }
 }
