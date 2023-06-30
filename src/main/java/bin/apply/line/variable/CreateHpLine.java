@@ -3,9 +3,9 @@ package bin.apply.line.variable;
 import bin.apply.Repository;
 import bin.apply.item.ParamItem;
 import bin.apply.line.LineTool;
-import bin.exception.VariableException;
 import bin.parser.param.ParamToken;
 import bin.parser.param.ParserParamItem;
+import bin.token.CastingToken;
 import bin.token.check.CheckToken;
 
 public class CreateHpLine implements LineTool {
@@ -21,8 +21,6 @@ public class CreateHpLine implements LineTool {
 
     @Override
     public void startItem() {
-        if (HP.replace() instanceof Integer hp) {
-            Repository.repositoryArray.create(TYPE, PARAMS, hp);
-        } else throw VariableException.TYPE_ERROR.getThrow(HP.getReplace());
+        Repository.repositoryArray.create(TYPE, PARAMS, CastingToken.getInt(HP.replace()));
     }
 }
