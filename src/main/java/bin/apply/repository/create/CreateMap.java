@@ -12,9 +12,6 @@ import java.io.Serial;
 import java.util.HashMap;
 
 public class CreateMap extends HashMap<String, CountMap> {
-    @Serial
-    private static final long serialVersionUID = -8950753384234554518L;
-
     protected void create(String klass, CreateWork<?> work) {
         super.put(klass, new CountMap(work));
     }
