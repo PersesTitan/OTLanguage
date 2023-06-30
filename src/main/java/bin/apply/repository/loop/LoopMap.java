@@ -7,9 +7,6 @@ import java.io.Serial;
 import java.util.HashMap;
 
 public class LoopMap extends HashMap<String, MethodMap> {
-    @Serial
-    private static final long serialVersionUID = -4460826311801706685L;
-
     public <T extends LoopCountMap> void put(String klass, String method, T map) {
         if (super.containsKey(klass)) super.get(klass).put(method, map);
         else super.put(klass, new MethodMap(method, map));
