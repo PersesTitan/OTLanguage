@@ -24,20 +24,18 @@ public class ShellCodeItem extends CodeItem {
     }
 
     @Override
-    public void start(int s, int e) {
-        for (int i = s; i < e;) {
-            try {
-                i = start(i);
-            } catch (Error error) {
-                error.print(super.PATH, FILES.get(i), i+1);
-                throw error;
-            }
+    public void start(int s, final int e) {
+        try {
+            while (s<e) s=start(s);
+        } catch (Error error) {
+            error.print(super.PATH, FILES.get(s), s+1);
+            throw error;
         }
     }
 
     @Override
-    public void startTry(int s, int e) {
-        for (int i = s; i < e;) i = start(i);
+    public void startTry(int s, final int e) {
+        while (s<e) s=start(s);
     }
 
     @Override
