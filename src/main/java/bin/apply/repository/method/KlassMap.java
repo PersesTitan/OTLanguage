@@ -1,25 +1,17 @@
 package bin.apply.repository.method;
 
 import bin.apply.Repository;
-import bin.apply.repository.function.BiSupplier;
-import bin.apply.repository.function.CiConsumer;
-import bin.apply.repository.function.CiFunction;
-import bin.apply.repository.function.NoConsumer;
 import bin.exception.VariableException;
+import bin.parser.param.ParamToken;
 import bin.token.check.CheckToken;
 import bin.token.KlassToken;
 import work.CreateWork;
 import work.MethodWork;
-import work.StartWork;
 
-import java.io.Serial;
 import java.util.HashMap;
 import java.util.function.*;
 
-public class KlassMap extends HashMap<String, MethodMap> {
-    @Serial
-    private static final long serialVersionUID = -9155785077476834413L;
-
+public class KlassMap extends HashMap<String, MethodMap> implements FunctionTool {
     public void put(String klass, String method, MethodWork work) {
         if (super.containsKey(klass)) super.get(klass).put(method, work);
         else super.put(klass, new MethodMap(method, work));
@@ -56,28 +48,15 @@ public class KlassMap extends HashMap<String, MethodMap> {
 
     ////////////////////////////////////////////////////////////////////////
     public void addStatic(String klass, String method, NoConsumer consumer) {
-        this.put(klass, method, new StartWork(klass, true) {
+        this.put(klass, method, new MethodWork(null, klass, true) {
             @Override
-            protected void startItem(Object klassItem, Object[] params) {
+            protected Object methodItem(Object klassItem, Object[] params) {return null;}
+            @Override
+            public Object method(Object klassItem, ParamToken[] param) {
+                getKlassItem(klassItem);
+                casting(param);
                 consumer.accept();
-            }
-        });
-    }
-
-    public <A> void addStatic(String klass, String method, String a, Consumer<A> consumer) {
-        this.put(klass, method, new StartWork(klass, true, a) {
-            @Override
-            protected void startItem(Object klassItem, Object[] params) {
-                consumer.accept((A) params[0]);
-            }
-        });
-    }
-
-    public <A, B> void addStatic(String klass, String method, String a, String b, BiConsumer<A, B> consumer) {
-        this.put(klass, method, new StartWork(klass, true, a, b) {
-            @Override
-            protected void startItem(Object klassItem, Object[] params) {
-                consumer.accept((A) params[0], (B) params[1]);
+                return null;
             }
         });
     }
@@ -85,7 +64,11 @@ public class KlassMap extends HashMap<String, MethodMap> {
     public <R> void addStatic(String klass, String method, Supplier<R> supplier, String r) {
         this.put(klass, method, new MethodWork(r, klass, true) {
             @Override
-            protected Object methodItem(Object klassItem, Object[] params) {
+            protected Object methodItem(Object klassItem, Object[] params) {return null;}
+            @Override
+            public Object method(Object klassItem, ParamToken[] param) {
+                getKlassItem(klassItem);
+                casting(param);
                 return supplier.get();
             }
         });
@@ -94,8 +77,11 @@ public class KlassMap extends HashMap<String, MethodMap> {
     public <R, A> void addStatic(String klass, String method, String a, BiSupplier<R, A> supplier, String r) {
         this.put(klass, method, new MethodWork(r, klass, true, a) {
             @Override
-            protected Object methodItem(Object klassItem, Object[] params) {
-                return supplier.get((A) params[0]);
+            protected Object methodItem(Object klassItem, Object[] params) {return null;}
+            @Override
+            public Object method(Object klassItem, ParamToken[] param) {
+                getKlassItem(klassItem);
+                return supplier.get((A) casting(param)[0]);
             }
         });
     }
@@ -103,44 +89,73 @@ public class KlassMap extends HashMap<String, MethodMap> {
     public <R, A, B> void addStatic(String klass, String method, String a, String b, BiFunction<A, B, R> function, String r) {
         this.put(klass, method, new MethodWork(r, klass, true, a, b) {
             @Override
-            protected Object methodItem(Object klassItem, Object[] params) {
-                return function.apply((A) params[0], (B) params[1]);
+            protected Object methodItem(Object klassItem, Object[] params) {return null;}
+            @Override
+            public Object method(Object klassItem, ParamToken[] param) {
+                return function.apply((A) getKlassItem(klassItem), (B) casting(param)[0]);
             }
         });
     }
 
+    // consumer
     public <R> void add(String klass, String method, Consumer<R> consumer) {
-        this.put(klass, method, new StartWork(klass, false) {
+        this.put(klass, method, new MethodWork(null, klass, false) {
             @Override
-            protected void startItem(Object klassItem, Object[] params) {
-                consumer.accept((R) klassItem);
+            protected Object methodItem(Object klassItem, Object[] params) {return null;}
+            @Override
+            public Object method(Object klassItem, ParamToken[] param) {
+                casting(param);
+                consumer.accept((R) getKlassItem(klassItem));
+                return null;
             }
         });
     }
 
     public <R, A> void add(String klass, String method, String a, BiConsumer<R, A> consumer) {
-        this.put(klass, method, new StartWork(klass, false, a) {
+        this.put(klass, method, new MethodWork(null, klass, false, a) {
             @Override
-            protected void startItem(Object klassItem, Object[] params) {
-                consumer.accept((R) klassItem, (A) params[0]);
+            protected Object methodItem(Object klassItem, Object[] params) {return null;}
+            @Override
+            public Object method(Object klassItem, ParamToken[] param) {
+                consumer.accept((R) getKlassItem(klassItem), (A) casting(param)[0]);
+                return null;
             }
         });
     }
 
     public <R, A, B> void add(String klass, String method, String a, String b, CiConsumer<R, A, B> consumer) {
-        this.put(klass, method, new StartWork(klass, false, a, b) {
+        this.put(klass, method, new MethodWork(null, klass, false, a, b) {
             @Override
-            protected void startItem(Object klassItem, Object[] params) {
-                consumer.accept((R) klassItem, (A) params[0], (B) params[1]);
+            protected Object methodItem(Object klassItem, Object[] params) {return null;}
+            @Override
+            public Object method(Object klassItem, ParamToken[] param) {
+                Object[] params = casting(param);
+                consumer.accept((R) getKlassItem(klassItem), (A) params[0], (B) params[1]);
+                return null;
+            }
+        });
+    }
+
+    // function
+    public <K, R> void add(String klass, String method, Function<K, R> function, String r) {
+        this.put(klass, method, new MethodWork(r, klass, false) {
+            @Override
+            protected Object methodItem(Object klassItem, Object[] params) {return null;}
+            @Override
+            public Object method(Object klassItem, ParamToken[] param) {
+                casting(param);
+                return function.apply((K) getKlassItem(klassItem));
             }
         });
     }
 
     public <K, A, R> void add(String klass, String method, String a, BiFunction<K, A, R> function, String r) {
-        this.put(klass, method, new MethodWork(r, klass, false, a) {
+        this.put(klass, method, new MethodWork(r, klass, true, a) {
             @Override
-            protected Object methodItem(Object klassItem, Object[] params) {
-                return function.apply((K) klassItem, (A) params[0]);
+            protected Object methodItem(Object klassItem, Object[] params) {return null;}
+            @Override
+            public Object method(Object klassItem, ParamToken[] param) {
+                return function.apply((K) getKlassItem(klassItem), (A) casting(param)[0]);
             }
         });
     }
@@ -148,17 +163,11 @@ public class KlassMap extends HashMap<String, MethodMap> {
     public <K, A, B, R> void add(String klass, String method, String a, String b, CiFunction<K, A, B, R> function, String r) {
         this.put(klass, method, new MethodWork(r, klass, false, a, b) {
             @Override
-            protected Object methodItem(Object klassItem, Object[] params) {
-                return function.apply((K) klassItem, (A) params[0], (B) params[1]);
-            }
-        });
-    }
-
-    public <K, R> void add(String klass, String method, Function<K, R> function, String r) {
-        this.put(klass, method, new MethodWork(r, klass, false) {
+            protected Object methodItem(Object klassItem, Object[] params) {return null;}
             @Override
-            protected Object methodItem(Object klassItem, Object[] params) {
-                return function.apply((K) klassItem);
+            public Object method(Object klassItem, ParamToken[] param) {
+                Object[] params = casting(param);
+                return function.apply((K) getKlassItem(klassItem), (A) params[0], (B) params[1]);
             }
         });
     }
