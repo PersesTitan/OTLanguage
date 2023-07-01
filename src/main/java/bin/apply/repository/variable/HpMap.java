@@ -7,6 +7,7 @@ import bin.parser.param.ParamToken;
 import bin.token.Token;
 import bin.token.check.CheckToken;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import work.CreateWork;
 
 import java.util.HashMap;
