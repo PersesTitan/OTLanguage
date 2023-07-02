@@ -1,6 +1,6 @@
 package bin.apply.work.loop;
 
-import bin.apply.repository.function.OSConsumer;
+import bin.apply.OSConsumer;
 import bin.token.EditToken;
 import bin.token.KlassToken;
 import work.LoopWork;
