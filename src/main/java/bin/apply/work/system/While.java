@@ -2,13 +2,11 @@ package bin.apply.work.system;
 
 import bin.apply.item.CodesItem;
 import bin.apply.item.ParamItem;
-import bin.apply.repository.function.OSConsumer;
+import bin.apply.OSConsumer;
 import bin.parser.param.ParamToken;
 import bin.token.CastingToken;
 import bin.token.KlassToken;
 import work.LoopWork;
-
-import java.util.function.Consumer;
 
 public class While extends LoopWork {
     public While() {
