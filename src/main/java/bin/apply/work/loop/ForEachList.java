@@ -1,7 +1,7 @@
 package bin.apply.work.loop;
 
 import bin.apply.mode.TypeMode;
-import bin.apply.repository.function.OSConsumer;
+import bin.apply.OSConsumer;
 import bin.variable.custom.CustomList;
 import work.LoopWork;
 
