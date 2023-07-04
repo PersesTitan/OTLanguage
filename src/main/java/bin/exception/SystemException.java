@@ -11,6 +11,7 @@ public enum SystemException implements ErrorTool {
     CREATE_ERROR("객체 생성에 실패하였습니다."),
     IMPORT_ERROR("해당 기능을 사용하기 위해서 필요한 모듈을 찾을 수 없습니다."),
     VALID_VALUES_ERROR("유효한 값을 받지 못하였습니다."),
+    FILE_ERROR("시작 파일 위치를 찾을 수 없습니다.")
     ;
 
     private final String message;
@@ -18,6 +19,11 @@ public enum SystemException implements ErrorTool {
     @Override
     public String getSubMessage() {
         return switch (this) {
+            case FILE_ERROR ->
+                    """
+                    The location of the startup file could not be found.
+                    Please check the execution location.
+                    """;
             case VALID_VALUES_ERROR ->
                     """
                     No valid values were received.
