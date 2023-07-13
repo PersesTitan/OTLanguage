@@ -1,6 +1,8 @@
 package cos.ocr;
 
 interface OCRToken {
+    String EXT = ".traineddata";
+
     String OCR = "ㅌㅆㅌ";
 
     String ADD = "<ㅇㄴㅇ";
