@@ -16,10 +16,7 @@ import bin.token.check.CheckToken;
 import cos.file.FileItem;
 import cos.file.FileToken;
 import cos.poison.tool.RexMap;
-import cos.poison.type.DataType;
-import cos.poison.type.MethodType;
-import cos.poison.type.ResponseType;
-import cos.poison.type.URLType;
+import cos.poison.type.*;
 import work.LoopWork;
 
 import java.util.*;
@@ -54,15 +51,18 @@ public class PoisonMethod extends LoopWork {
         if (params.length == 0) throw PoisonException.PARAMS_SIZE_ERROR.getThrow(params.length);
         ResponseType response = ResponseType.TEXT;
         DataType data = DataType.URL;
+        CharsetType charset = null;
         int i = 0;
         String path = params[i++].toString();
         for (; i<params.length; i++) {
             String token = params[i].toString();
             if (CheckToken.startWith(token, PoisonToken.RESPONSE_TYPE))
                 response = ResponseType.getType(token.substring(1));
-            else if (CheckToken.startWith(token, PoisonToken.DATA_TYPE)) {
+            else if (CheckToken.startWith(token, PoisonToken.DATA_TYPE))
                 data = DataType.getType(token.substring(1));
-            } else break;
+            else if (CheckToken.startWith(token, PoisonToken.CHARSET_TYPE))
+                charset = CharsetType.getType(token.substring(1));
+            else break;
         }
         // 변수명을 저장하는 임시 저장소
         Set<String> name = new HashSet<>();
@@ -107,6 +107,7 @@ public class PoisonMethod extends LoopWork {
         // final data set
         final DataType finalData = data;
         final ResponseType finalResponse = response;
+        final CharsetType finalCharset = charset;
 
         // finally set define
         ParamItem[] PARAMS = new ParamItem[dataMap.size()];
@@ -129,11 +130,8 @@ public class PoisonMethod extends LoopWork {
                     }
                 }};
                 Repository.repositoryArray.addFirst(repository);
-                try {
-                    consumer.accept();
-                } finally {
-                    Repository.repositoryArray.removeFirst();
-                }
+                try {consumer.accept();}
+                finally {Repository.repositoryArray.removeFirst();}
                 // set content type
                 exchange.getResponseHeaders().add("Content-Type", finalResponse.getMime());
                 METHOD.print(path, map.isEmpty() ? "" : map.toString());
@@ -144,7 +142,9 @@ public class PoisonMethod extends LoopWork {
                     if (ITEM[0].type().equals(FileToken.FILE)) responseData = ((FileItem) value).readAll();
                     else responseData = EditToken.toString(value);
                 }
-                return finalResponse.getBody(responseData);
+                // return body type
+                if (finalCharset == null) return finalResponse.getBody(responseData);
+                else return finalResponse.getBody(responseData, finalCharset);
             });
         } else {
             URLType[] TYPES = new URLType[rexMap.size()];
@@ -170,11 +170,8 @@ public class PoisonMethod extends LoopWork {
                     }
                 }};
                 Repository.repositoryArray.addFirst(repository);
-                try {
-                    consumer.accept();
-                } finally {
-                    Repository.repositoryArray.removeFirst();
-                }
+                try {consumer.accept();}
+                finally {Repository.repositoryArray.removeFirst();}
                 // set content type
                 exchange.getResponseHeaders().add("Content-Type", finalResponse.getMime());
                 METHOD.print(exchange.getRequestURI().getPath(), map.isEmpty() ? "" : map.toString());
@@ -185,7 +182,9 @@ public class PoisonMethod extends LoopWork {
                     if (ITEM[0].type().equals(FileToken.FILE)) responseData = ((FileItem) value).readAll();
                     else responseData = EditToken.toString(value);
                 }
-                return finalResponse.getBody(responseData);
+                // return body type
+                if (finalCharset == null) return finalResponse.getBody(responseData);
+                else return finalResponse.getBody(responseData, finalCharset);
             });
         }
     }
