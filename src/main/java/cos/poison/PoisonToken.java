@@ -10,6 +10,7 @@ public interface PoisonToken {
 
     char RESPONSE_TYPE    = '>';  // json, text, html, ...
     char DATA_TYPE        = '<';  // json, url
+    char CHARSET_TYPE     = '=';  // utf-8, ...
 
     String CREATE = "ㅅㅇㅅ";
     String START = "ㅅㅌㅅ";
