@@ -15,6 +15,7 @@ public enum PoisonException implements ErrorTool {
     URL_USE_ERROR("사용되지 않은 URL 변수명이 존재합니다."),
     RESPONSE_TYPE_ERROR("전송 타입이 유효하지 않습니다."),
     DATA_TYPE_ERROR("데이터 타입이 유효하지 않습니다."),
+    CHARSET_TYPE_ERROR("문자 인코딩 타입이 유효하지 않습니다."),
 
     CREATE_SERVER_ERROR("서버 생성에 실패하였습니다."),
     NO_CREATE_SERVER("서버가 생성되어 있지 않습니다."),
@@ -33,6 +34,11 @@ public enum PoisonException implements ErrorTool {
     @Override
     public String getSubMessage() {
         return switch (this) {
+            case CHARSET_TYPE_ERROR ->
+                    """
+                    Invalid charset type.
+                    Please check the charset type.
+                    """;
             case DATA_TYPE_ERROR ->
                     """
                     Invalid data type.
