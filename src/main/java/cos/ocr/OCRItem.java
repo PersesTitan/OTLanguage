@@ -17,7 +17,6 @@ import java.io.File;
 @Getter
 class OCRItem extends TessBaseAPI implements Item {
     private final static String MODULE_PATH = CodeItem.getModulePath("ocr");
-    private final static String EXT = ".traineddata";
 
     private final CustomSet<String> languages = new CustomSet<>(TypeMode.STRING);
     private boolean isInit = false;
@@ -37,7 +36,7 @@ class OCRItem extends TessBaseAPI implements Item {
 
     // add language
     public void addLanguage(String language) {
-        File file = new File(MODULE_PATH + SepToken.FILE + language + EXT);
+        File file = new File(MODULE_PATH + SepToken.FILE + language + OCRToken.EXT);
         if (file.exists() && file.isFile()) this.languages.add(language);
         else throw FileException.DO_NOT_FIND.getThrow(language + " language file");
     }
