@@ -3,21 +3,14 @@ package work;
 import bin.apply.Repository;
 import bin.apply.item.CodeItem;
 import bin.apply.item.Item;
-import bin.apply.repository.create.CountMap;
-import bin.apply.repository.work.function.BiFunctionWork;
-import bin.apply.work.system.Import;
 import bin.exception.SystemException;
 import bin.token.KlassToken;
 
-import java.io.Serial;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public interface ResetWork {
     String s = KlassToken.STRING_VARIABLE;
@@ -52,6 +45,7 @@ public interface ResetWork {
     String mf = KlassToken.MAP_FLOAT;
     String md = KlassToken.MAP_DOUBLE;
 
+    String version();
     void reset();
 
     default <T extends Item> void create(String name, Class<T> klass, Function<Object[], T> function, String... types) {
