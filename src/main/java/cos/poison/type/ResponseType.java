@@ -1,6 +1,5 @@
 package cos.poison.type;
 
-import bin.parser.param.ParserParamItem;
 import cos.poison.PoisonException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +32,12 @@ public enum ResponseType {
     }
 
     public byte[] getBody(String value) {
-        return switch (this) {
-            case TEXT -> value.getBytes(StandardCharsets.UTF_16);
-            default -> value.getBytes(StandardCharsets.UTF_8);
-        };
+        if (this.equals(TEXT)) return value.getBytes(StandardCharsets.UTF_16);
+        else return value.getBytes(StandardCharsets.UTF_8);
+    }
+
+    public byte[] getBody(String value, CharsetType charsetType) {
+        return value.getBytes(charsetType.charset);
     }
 
     public static ResponseType getFileType(String fileName) {
