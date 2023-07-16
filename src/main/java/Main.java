@@ -43,7 +43,7 @@ public class Main {
                 } else throw SystemException.SYSTEM_ERROR.getThrow(null);
             } else {
                 // SET RUN PATH
-                CodeItem.RUT_PATH = args[0];
+                CodeItem.RUN_PATH = args[0];
                 switch (args.length) {
                     case 1 -> { RunMode.SHELL.set(); new Main(); }
                     case 2 -> new Main(new File(args[1]));
