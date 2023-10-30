@@ -1,0 +1,225 @@
+﻿﻿Tess4J Change Summary
+
+Version 0.1 - initial release (14 Aug 2010):
+- Java JNA-based wrapper for Tesseract OCR DLL 2.04
+- Support uncompressed, binary TIFF images
+
+Version 0.2 (16 Aug 2010):
+- Add support for more image formats (PNG, BMP, GIF, PDF, JPEG)
+- Add support for compressed, grayscale and colored images
+
+Version 0.3 (22 Aug 2010):
+- Include API support for BufferedImage
+- Clean up codes. Remove unsupported API and files
+- Document the API
+
+Version 0.3.1 (26 Aug 2010):
+- Send only pixel data, not whole image data, to Tesseract engine, to fix a bug that has erroneously put some words at beginning of line towards end of line
+
+Version 0.4 (1 Nov 2010):
+- Add JNA Direct Mapping calls, which can provide performance near that of custom JNI
+
+Version 1.0 (30 October 2012):
+- Upgrade to Tesseract 3.02 (r798), which is not backward compatible with Tesseract 2.04. 
+- Implement a new JNA wrapper for the new Tesseract OCR API
+- Add more unit test cases
+- Update documentation
+
+Version 1.1 (3 March 2013)
+- Update Tesseract DLL to r828
+- Additional API methods, image helper methods, and unit test cases
+- Improve handling of Unicode character encoding
+- Fix memory leaks
+- Add support for determining skew angle and image rotation
+
+Version 1.2 (22 September 2013)
+- Update Tesseract DLL to r866
+- More efficient OCR of multiple images
+- Various minor improvements
+- Update JNA to v4.0
+
+Version 1.3 (31 May 2014)
+- Update JNA to v4.1.0
+- Update Ghost4J to v0.5.1
+- Refactoring
+- Bundle Tesseract and Leptonica 64-bit DLLs
+
+Version 1.4 (18 January 2015)
+- Refactor to reduce code duplication
+- Embed Windows native resources in JAR
+- Autoload Windows native libraries
+
+Version 1.4.1 (24 January 2015)
+- Enable use of jna.library.path system property for user-customizable path
+
+Version 1.5 (13 March 2015)
+- Add UNLV zone file support
+- Refactor
+
+Version 2.0 (29 March 2015)
+- Upgrade to Tesseract 3.03 (r1050), which is compatible with Tesseract 3.03RC on Linux
+- Refactor Tesseract class for extensibility and thread-safety
+- Update English language data for Tesseract 3.02
+
+Version 3.0 (25 December 2015)
+- Upgrade to Tesseract 3.04 (953523b)
+- Include Lept4J library
+- Incorporate slf4j and logback libraries for logging
+- Make GhostScript calls thread safe
+
+Version 3.1 (21 March 2016)
+- Update Tesseract to 3.04.01 (4ef68a0)
+- Use Lept4J-1.1.2 (Leptonica 1.72)
+- Update JNA to 4.2.2
+- Update Ghost4J to 1.0.1
+- Delete ResultRenderer after use to release PDF file handler
+
+Version 3.2 (15 May 2016)
+- Revert JNA to 4.1.0 due to "Invalid calling convention 63" errors invoking GhostScript via Ghost4J on Linux
+- Update Lept4J to 1.2.2 (Leptonica 1.73)
+- Recompile Tesseract 3.04.01 DLL against Leptonica 1.73
+- Update GhostScript Windows binary to 9.19
+
+Version 3.2.1 (29 May 2016)
+- Properly release Box and Boxa resources
+- Update Lept4J to 1.2.3
+
+Version 3.2.2 (16 February 2017)
+- Update GhostScript to 9.20
+- Fix possible NPE with PDF-related codes
+- Update dependencies
+- Additional image utility methods
+
+Version 3.3.0 (16 February 2017)
+- Upgrade to Tesseract 3.05 (2ca5d0a)
+- Update Lept4J to 1.3.0 (Leptonica 1.74.1)
+
+Version 3.3.1 (23 March 2017)
+- Update Lept4J to 1.3.1
+- Update other dependencies
+
+Version 3.4.0 (1 June 2017)
+- Upgrade to Tesseract 3.05.01 (2158661)
+- Update Lept4J to 1.4.0
+- Add support for jboss-vfs protocol
+
+Version 3.4.1 (22 September 2017)
+- Not extract/copy native resource if it exists and has same file size
+- Update Tesseract 3.05.01 (e2e79c4); link against Leptonica 1.74.4
+- Update Lept4J to 1.6.1
+
+Version 3.4.2 (14 November 2017)
+- Update Lept4J to 1.6.2
+- Update GhostScript to 9.22
+- Improve handling of PDF files in multi-threaded environment
+- Lift limits on number of pages in PDF
+- Use TESSDATA_PREFIX environment variable by default, if defined
+
+Version 3.4.3 (14 January 2018)
+- Not extract/copy resource if it exists and has same file size
+
+Version 3.4.4 (22 February 2018)
+- Exclude logback.xml from JAR
+- Add image rotate and deskew methods
+- Update Lept4J to 1.6.3
+
+Version 3.4.5 (21 March 2018)
+- Remove GS DLL due to license incompatibility
+- Use PDFBox
+
+Version 3.4.6 (25 March 2018)
+- Update PDFBox dependencies
+
+Version 3.4.7 (16 April 2018)
+- Update dependencies for Java 9 fixes
+
+Version 3.4.8 (2 May 2018)
+- Fix a path issue when extracting resources from JAR to temp directory on Windows server
+
+Version 4.0.0 (28 April 2018)
+- Upgrade to Tesseract 4.0.0-beta.1 (45bb942)
+- Update Lept4J to 1.9.3 (Leptonica 1.75.3)
+
+Version 4.0.1 (2 May 2018)
+- Fix a path issue when extracting resources from JAR to temp directory on Windows server
+
+Version 4.0.2 (3 May 2018)
+- Replace JNA string constant Platform.RESOURCE_PREFIX
+- Update jai-imageio url
+- Update Lept4J to 1.9.4
+
+Version 4.1.0 (20 July 2018)
+- Upgrade to Tesseract 4.0.0-beta.3 (b502bbf)
+- Update Lept4J to 1.10.0
+- Improve handling of PDF
+- Refactor
+
+Version 4.1.1 (28 July 2018)
+- Properly dispose of resources and temporary image files
+- Clean up code and test output resources
+- Fix NPE in Java 10
+
+Version 4.2.0 (11 August 2018)
+- Upgrade to Tesseract 4.0.0-beta.4 (fd49206)
+
+Version 4.2.1 (11 August 2018)
+- Recompile using JDK8 to avoid NoSuchMethodError: Method flip() does not exist in class java.nio.ByteBuffer
+- Use explicit cast for compatibility with covariant return type on JDK 9's ByteBuffer methods, e.g., flip()
+
+Version 4.2.2 (3 September 2018)
+- Fix Invalid memory access exception due of incorrect bit depth value
+
+Version 4.2.3 (17 October 2018)
+- Update pdfbox dependencies
+
+Version 4.3.0 (29 October 2018)
+- Upgrade to Tesseract 4.0.0 (5131699)
+
+Version 4.3.1 (26 December 2018)
+- Fix Windows build
+- Improve RenderedImage to ByteBuffer conversion
+
+Version 4.4.0 (13 July 2019)
+- Upgrade to Tesseract 4.1.0 (5280bbc)
+- Upgrade to Leptonica 1.78.0 (lept4j-1.12.2)
+- Update dependencies
+
+Version 4.4.1 (7 October 2019)
+- Use tessdata_fast data
+- Use Native.loadLibrary method for backward compatibility with older JNA versions
+
+Version 4.5.0 (27 December 2019)
+- Upgrade to Tesseract 4.1.1 (7510304)
+
+Version 4.5.1 (3 January 2020)
+- Update Leptonica 1.79.0 (lept4j-1.13.0)
+- Fix Permission denied issue with Ghostscript 9.50
+
+Version 5.0.0 (30 November 2021)
+- Upgrade to Tesseract 5.0.0 (924b746)
+- Update Leptonica 1.82.0 (lept4j-1.16.1)
+- Update dependencies
+
+Version 5.1.0 (11 January 2022)
+- Update Tesseract 5.0.1 (853aa66)
+- Update dependencies
+
+Version 5.1.1 (26 January 2022)
+- Remove ghost4j dependency due to log4j vulnerabilities
+
+Version 5.2.0 (4 March 2022)
+- Upgrade to Tesseract 5.1.0 (d737372)
+- Update dependencies
+
+Version 5.2.1 (26 April 2022)
+- Only extract resources appropriate to the platform
+- Update dependencies
+
+Version 5.3.0 (7 July 2022)
+- Upgrade to Tesseract 5.2.0 (5ad5325)
+- Update dependencies
+
+Version 5.4.0 (24 July 2022)
+- Fix createDocumentsWithResults for multi-page image (Issue #233)
+- Fix TessResultRendererBeginDocument exception with null input (Issue #234)
+- New API method
